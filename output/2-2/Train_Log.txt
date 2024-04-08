@@ -1,0 +1,1294 @@
+(WARNING) 2024-03-15 14:00:09,471  - accelerate.utils.other:
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+(INFO) 2024-03-15 14:00:19,298  - RLHF_Logger:
+Episode: 0 Timestep: 8
+Policy_Loss: -0.1154 Critic_Loss: 0.4922 Reward: -6.696 RM_Reward: -5.992 Ref_Reward: -0.7042
+(INFO) 2024-03-15 14:00:28,522  - RLHF_Logger:
+Episode: 0 Timestep: 16
+Policy_Loss: -0.1061 Critic_Loss: 0.3221 Reward: -5.952 RM_Reward: -5.424 Ref_Reward: -0.5278
+(INFO) 2024-03-15 14:00:37,307  - RLHF_Logger:
+Episode: 0 Timestep: 24
+Policy_Loss: -0.09565 Critic_Loss: 0.3449 Reward: -6.481 RM_Reward: -5.609 Ref_Reward: -0.8722
+(INFO) 2024-03-15 14:00:44,711  - RLHF_Logger:
+Episode: 0 Timestep: 32
+Policy_Loss: -0.09338 Critic_Loss: 0.4078 Reward: -5.905 RM_Reward: -5.338 Ref_Reward: -0.5667
+(INFO) 2024-03-15 14:00:53,528  - RLHF_Logger:
+Current Ratio(20.84) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:00:53,640  - RLHF_Logger:
+Episode: 1 Timestep: 40
+Policy_Loss: -0.07053 Critic_Loss: 0.2287 Reward: -6.34 RM_Reward: -5.684 Ref_Reward: -0.6559
+(INFO) 2024-03-15 14:01:04,074  - RLHF_Logger:
+Episode: 1 Timestep: 48
+Policy_Loss: -0.09128 Critic_Loss: 0.2884 Reward: -6.128 RM_Reward: -5.843 Ref_Reward: -0.2851
+(INFO) 2024-03-15 14:01:15,197  - RLHF_Logger:
+Current Ratio(20.39) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:01:15,373  - RLHF_Logger:
+Current Ratio(69.01) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:01:15,465  - RLHF_Logger:
+Episode: 1 Timestep: 56
+Policy_Loss: -0.05167 Critic_Loss: 0.1848 Reward: -6.007 RM_Reward: -5.308 Ref_Reward: -0.6992
+(INFO) 2024-03-15 14:01:21,322  - RLHF_Logger:
+Episode: 1 Timestep: 64
+Policy_Loss: -0.1043 Critic_Loss: 0.4954 Reward: -5.631 RM_Reward: -4.692 Ref_Reward: -0.9385
+(INFO) 2024-03-15 14:01:22,533  - RLHF_Logger:
+Episode: 2 Timestep: 72
+Policy_Loss: -7.238e-05 Critic_Loss: 1.486 Reward: -4.721 RM_Reward: -3.272 Ref_Reward: -1.449
+(INFO) 2024-03-15 14:01:23,429  - RLHF_Logger:
+Episode: 2 Timestep: 80
+Policy_Loss: 5.925e-06 Critic_Loss: 0.3579 Reward: -3.794 RM_Reward: -2.403 Ref_Reward: -1.391
+(INFO) 2024-03-15 14:01:24,099  - RLHF_Logger:
+Current Ratio(53.23) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:01:24,212  - RLHF_Logger:
+Current Ratio(222.4) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:01:24,324  - RLHF_Logger:
+Current Ratio(256.5) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:01:24,436  - RLHF_Logger:
+Current Ratio(270.7) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:01:24,491  - RLHF_Logger:
+Episode: 2 Timestep: 88
+Policy_Loss: 1.401e-07 Critic_Loss: 0.04472 Reward: -4.446 RM_Reward: -2.576 Ref_Reward: -1.87
+(INFO) 2024-03-15 14:01:25,652  - RLHF_Logger:
+Episode: 2 Timestep: 96
+Policy_Loss: -9.41e-06 Critic_Loss: 0.08802 Reward: -3.807 RM_Reward: -2.154 Ref_Reward: -1.653
+(INFO) 2024-03-15 14:01:26,816  - RLHF_Logger:
+Episode: 3 Timestep: 104
+Policy_Loss: -0.03839 Critic_Loss: 0.05622 Reward: -3.493 RM_Reward: -2.02 Ref_Reward: -1.473
+(INFO) 2024-03-15 14:01:27,787  - RLHF_Logger:
+Episode: 3 Timestep: 112
+Policy_Loss: -0.0191 Critic_Loss: 0.08117 Reward: -3.99 RM_Reward: -2.276 Ref_Reward: -1.715
+(INFO) 2024-03-15 14:01:29,142  - RLHF_Logger:
+Episode: 3 Timestep: 120
+Policy_Loss: 2.961e-06 Critic_Loss: 0.08698 Reward: -4.913 RM_Reward: -3.294 Ref_Reward: -1.619
+(INFO) 2024-03-15 14:01:30,369  - RLHF_Logger:
+Episode: 3 Timestep: 128
+Policy_Loss: 1.14e-07 Critic_Loss: 0.04791 Reward: -4.603 RM_Reward: -3.057 Ref_Reward: -1.546
+(INFO) 2024-03-15 14:01:31,326  - RLHF_Logger:
+Episode: 4 Timestep: 136
+Policy_Loss: 3.129e-08 Critic_Loss: 0.06496 Reward: -3.966 RM_Reward: -2.519 Ref_Reward: -1.448
+(INFO) 2024-03-15 14:01:32,667  - RLHF_Logger:
+Episode: 4 Timestep: 144
+Policy_Loss: 7.451e-09 Critic_Loss: 0.04546 Reward: -4.792 RM_Reward: -3.155 Ref_Reward: -1.637
+(INFO) 2024-03-15 14:01:33,548  - RLHF_Logger:
+Episode: 4 Timestep: 152
+Policy_Loss: 1.788e-08 Critic_Loss: 0.1779 Reward: -4.284 RM_Reward: -2.839 Ref_Reward: -1.444
+(INFO) 2024-03-15 14:01:34,964  - RLHF_Logger:
+Episode: 4 Timestep: 160
+Policy_Loss: -2.384e-08 Critic_Loss: 0.1216 Reward: -5.09 RM_Reward: -3.49 Ref_Reward: -1.6
+(INFO) 2024-03-15 14:01:35,852  - RLHF_Logger:
+Episode: 5 Timestep: 168
+Policy_Loss: 1.192e-08 Critic_Loss: 0.2198 Reward: -4.72 RM_Reward: -3.35 Ref_Reward: -1.37
+(INFO) 2024-03-15 14:01:37,276  - RLHF_Logger:
+Episode: 5 Timestep: 176
+Policy_Loss: -5.618e-07 Critic_Loss: 0.1079 Reward: -4.845 RM_Reward: -3.286 Ref_Reward: -1.559
+(INFO) 2024-03-15 14:01:39,265  - RLHF_Logger:
+Episode: 5 Timestep: 184
+Policy_Loss: 1.192e-08 Critic_Loss: 0.1445 Reward: -3.46 RM_Reward: -2.231 Ref_Reward: -1.23
+(INFO) 2024-03-15 14:01:40,832  - RLHF_Logger:
+Episode: 5 Timestep: 192
+Policy_Loss: 2.831e-08 Critic_Loss: 0.05717 Reward: -3.937 RM_Reward: -2.582 Ref_Reward: -1.355
+(INFO) 2024-03-15 14:01:42,759  - RLHF_Logger:
+Episode: 6 Timestep: 200
+Policy_Loss: -1.071e-08 Critic_Loss: 0.06145 Reward: -4.435 RM_Reward: -2.719 Ref_Reward: -1.717
+(INFO) 2024-03-15 14:01:43,848  - RLHF_Logger:
+Episode: 6 Timestep: 208
+Policy_Loss: 8.941e-08 Critic_Loss: 0.07479 Reward: -4.141 RM_Reward: -2.604 Ref_Reward: -1.537
+(INFO) 2024-03-15 14:01:44,937  - RLHF_Logger:
+Episode: 6 Timestep: 216
+Policy_Loss: 1.594e-07 Critic_Loss: 0.1816 Reward: -4.632 RM_Reward: -3.123 Ref_Reward: -1.509
+(INFO) 2024-03-15 14:01:45,903  - RLHF_Logger:
+Episode: 6 Timestep: 224
+Policy_Loss: 4.143e-07 Critic_Loss: 0.09416 Reward: -4.53 RM_Reward: -3.029 Ref_Reward: -1.501
+(INFO) 2024-03-15 14:01:46,915  - RLHF_Logger:
+Episode: 7 Timestep: 232
+Policy_Loss: 1.654e-07 Critic_Loss: 0.02553 Reward: -5.519 RM_Reward: -3.731 Ref_Reward: -1.788
+(INFO) 2024-03-15 14:01:48,026  - RLHF_Logger:
+Episode: 7 Timestep: 240
+Policy_Loss: -9.909e-08 Critic_Loss: 0.103 Reward: -4.586 RM_Reward: -3.058 Ref_Reward: -1.528
+(INFO) 2024-03-15 14:01:49,353  - RLHF_Logger:
+Episode: 7 Timestep: 248
+Policy_Loss: 2.268e-08 Critic_Loss: 0.02803 Reward: -4.919 RM_Reward: -3.287 Ref_Reward: -1.632
+(INFO) 2024-03-15 14:01:50,494  - RLHF_Logger:
+Episode: 7 Timestep: 256
+Policy_Loss: 3.081e-07 Critic_Loss: 0.05712 Reward: -4.568 RM_Reward: -2.834 Ref_Reward: -1.734
+(INFO) 2024-03-15 14:01:51,550  - RLHF_Logger:
+Episode: 8 Timestep: 264
+Policy_Loss: -4.649e-07 Critic_Loss: 0.1107 Reward: -4.506 RM_Reward: -2.958 Ref_Reward: -1.548
+(INFO) 2024-03-15 14:01:52,799  - RLHF_Logger:
+Episode: 8 Timestep: 272
+Policy_Loss: -7.243e-06 Critic_Loss: 0.1953 Reward: -4.693 RM_Reward: -3.19 Ref_Reward: -1.503
+(INFO) 2024-03-15 14:01:53,795  - RLHF_Logger:
+Episode: 8 Timestep: 280
+Policy_Loss: 4.061e-07 Critic_Loss: 0.04099 Reward: -4.851 RM_Reward: -3.107 Ref_Reward: -1.744
+(INFO) 2024-03-15 14:01:55,065  - RLHF_Logger:
+Episode: 8 Timestep: 288
+Policy_Loss: -2.313e-06 Critic_Loss: 0.03521 Reward: -4.685 RM_Reward: -3.114 Ref_Reward: -1.57
+(INFO) 2024-03-15 14:01:57,060  - RLHF_Logger:
+Episode: 9 Timestep: 296
+Policy_Loss: 3.113e-06 Critic_Loss: 0.09565 Reward: -3.813 RM_Reward: -2.21 Ref_Reward: -1.604
+(INFO) 2024-03-15 14:01:58,397  - RLHF_Logger:
+Episode: 9 Timestep: 304
+Policy_Loss: -2.183e-07 Critic_Loss: 0.02298 Reward: -3.309 RM_Reward: -1.682 Ref_Reward: -1.627
+(INFO) 2024-03-15 14:01:59,393  - RLHF_Logger:
+Episode: 9 Timestep: 312
+Policy_Loss: -1.372e-06 Critic_Loss: 0.04471 Reward: -4.129 RM_Reward: -2.484 Ref_Reward: -1.644
+(INFO) 2024-03-15 14:02:00,388  - RLHF_Logger:
+Episode: 9 Timestep: 320
+Policy_Loss: 1.04e-06 Critic_Loss: 0.05931 Reward: -4.189 RM_Reward: -2.713 Ref_Reward: -1.476
+(INFO) 2024-03-15 14:02:01,455  - RLHF_Logger:
+Episode: 10 Timestep: 328
+Policy_Loss: -1.863e-08 Critic_Loss: 0.02084 Reward: -4.988 RM_Reward: -3.24 Ref_Reward: -1.748
+(INFO) 2024-03-15 14:02:02,409  - RLHF_Logger:
+Episode: 10 Timestep: 336
+Policy_Loss: 5.752e-07 Critic_Loss: 0.03579 Reward: -3.844 RM_Reward: -2.362 Ref_Reward: -1.482
+(INFO) 2024-03-15 14:02:03,497  - RLHF_Logger:
+Episode: 10 Timestep: 344
+Policy_Loss: -3.076e-06 Critic_Loss: 0.02155 Reward: -4.594 RM_Reward: -2.765 Ref_Reward: -1.829
+(INFO) 2024-03-15 14:02:05,084  - RLHF_Logger:
+Episode: 10 Timestep: 352
+Policy_Loss: 2.289e-06 Critic_Loss: 0.03014 Reward: -4.125 RM_Reward: -2.524 Ref_Reward: -1.601
+(INFO) 2024-03-15 14:02:06,140  - RLHF_Logger:
+Episode: 11 Timestep: 360
+Policy_Loss: 1.409e-06 Critic_Loss: 0.07168 Reward: -4.497 RM_Reward: -2.813 Ref_Reward: -1.684
+(INFO) 2024-03-15 14:02:07,243  - RLHF_Logger:
+Episode: 11 Timestep: 368
+Policy_Loss: -2.369e-06 Critic_Loss: 0.1614 Reward: -3.716 RM_Reward: -2.082 Ref_Reward: -1.633
+(INFO) 2024-03-15 14:02:09,194  - RLHF_Logger:
+Episode: 11 Timestep: 376
+Policy_Loss: -1.553e-06 Critic_Loss: 0.08953 Reward: -4.485 RM_Reward: -2.815 Ref_Reward: -1.669
+(INFO) 2024-03-15 14:02:10,409  - RLHF_Logger:
+Episode: 11 Timestep: 384
+Policy_Loss: -8.262e-06 Critic_Loss: 0.126 Reward: -4.505 RM_Reward: -3.197 Ref_Reward: -1.308
+(INFO) 2024-03-15 14:02:11,343  - RLHF_Logger:
+Episode: 12 Timestep: 392
+Policy_Loss: -7.674e-07 Critic_Loss: 0.0351 Reward: -4.732 RM_Reward: -3.078 Ref_Reward: -1.654
+(INFO) 2024-03-15 14:02:12,336  - RLHF_Logger:
+Episode: 12 Timestep: 400
+Policy_Loss: 4.038e-07 Critic_Loss: 0.05834 Reward: -4.156 RM_Reward: -2.847 Ref_Reward: -1.309
+(INFO) 2024-03-15 14:02:14,254  - RLHF_Logger:
+Episode: 12 Timestep: 408
+Policy_Loss: -9.306e-07 Critic_Loss: 0.05555 Reward: -5.094 RM_Reward: -3.239 Ref_Reward: -1.855
+(INFO) 2024-03-15 14:02:15,607  - RLHF_Logger:
+Episode: 12 Timestep: 416
+Policy_Loss: 4.15e-07 Critic_Loss: 0.05834 Reward: -4.837 RM_Reward: -3.162 Ref_Reward: -1.676
+(INFO) 2024-03-15 14:02:16,851  - RLHF_Logger:
+Episode: 13 Timestep: 424
+Policy_Loss: 1.464e-06 Critic_Loss: 0.09257 Reward: -4.464 RM_Reward: -2.847 Ref_Reward: -1.618
+(INFO) 2024-03-15 14:02:18,222  - RLHF_Logger:
+Episode: 13 Timestep: 432
+Policy_Loss: 1.317e-06 Critic_Loss: 0.07235 Reward: -5.137 RM_Reward: -3.532 Ref_Reward: -1.605
+(INFO) 2024-03-15 14:02:19,148  - RLHF_Logger:
+Episode: 13 Timestep: 440
+Policy_Loss: -5.636e-06 Critic_Loss: 0.051 Reward: -4.606 RM_Reward: -3.029 Ref_Reward: -1.576
+(INFO) 2024-03-15 14:02:20,322  - RLHF_Logger:
+Episode: 13 Timestep: 448
+Policy_Loss: -5.826e-06 Critic_Loss: 0.08488 Reward: -4.363 RM_Reward: -2.556 Ref_Reward: -1.807
+(INFO) 2024-03-15 14:02:22,320  - RLHF_Logger:
+Episode: 14 Timestep: 456
+Policy_Loss: -7.464e-06 Critic_Loss: 0.1066 Reward: -4.713 RM_Reward: -3.059 Ref_Reward: -1.654
+(INFO) 2024-03-15 14:02:23,392  - RLHF_Logger:
+Episode: 14 Timestep: 464
+Policy_Loss: -2.033e-06 Critic_Loss: 0.01649 Reward: -4.259 RM_Reward: -2.692 Ref_Reward: -1.567
+(INFO) 2024-03-15 14:02:24,634  - RLHF_Logger:
+Episode: 14 Timestep: 472
+Policy_Loss: -0.0001519 Critic_Loss: 0.0408 Reward: -4.571 RM_Reward: -2.963 Ref_Reward: -1.608
+(INFO) 2024-03-15 14:02:25,700  - RLHF_Logger:
+Episode: 14 Timestep: 480
+Policy_Loss: -4.737e-06 Critic_Loss: 0.03588 Reward: -4.369 RM_Reward: -2.682 Ref_Reward: -1.687
+(INFO) 2024-03-15 14:02:27,643  - RLHF_Logger:
+Episode: 15 Timestep: 488
+Policy_Loss: -7.44e-05 Critic_Loss: 0.04255 Reward: -5.255 RM_Reward: -3.464 Ref_Reward: -1.792
+(INFO) 2024-03-15 14:02:28,652  - RLHF_Logger:
+Episode: 15 Timestep: 496
+Policy_Loss: -0.0001373 Critic_Loss: 0.06224 Reward: -4.835 RM_Reward: -3.146 Ref_Reward: -1.689
+(INFO) 2024-03-15 14:02:29,872  - RLHF_Logger:
+Episode: 15 Timestep: 504
+Policy_Loss: -0.0005316 Critic_Loss: 0.03861 Reward: -4.648 RM_Reward: -3.346 Ref_Reward: -1.303
+(INFO) 2024-03-15 14:02:30,981  - RLHF_Logger:
+Episode: 15 Timestep: 512
+Policy_Loss: -0.0102 Critic_Loss: 0.01581 Reward: -4.203 RM_Reward: -2.638 Ref_Reward: -1.565
+(INFO) 2024-03-15 14:02:35,239  - RLHF_Logger:
+Episode: 16 Timestep: 520
+Policy_Loss: -0.07725 Critic_Loss: 0.7689 Reward: -5.214 RM_Reward: -3.992 Ref_Reward: -1.222
+(INFO) 2024-03-15 14:02:36,354  - RLHF_Logger:
+Episode: 16 Timestep: 528
+Policy_Loss: -2.715e-05 Critic_Loss: 0.05982 Reward: -4.103 RM_Reward: -2.725 Ref_Reward: -1.377
+(INFO) 2024-03-15 14:02:37,425  - RLHF_Logger:
+Episode: 16 Timestep: 536
+Policy_Loss: -2.43e-06 Critic_Loss: 0.03725 Reward: -4.525 RM_Reward: -3.056 Ref_Reward: -1.469
+(INFO) 2024-03-15 14:02:38,386  - RLHF_Logger:
+Episode: 16 Timestep: 544
+Policy_Loss: -2.369e-07 Critic_Loss: 0.05334 Reward: -3.755 RM_Reward: -2.411 Ref_Reward: -1.344
+(INFO) 2024-03-15 14:02:39,838  - RLHF_Logger:
+Episode: 17 Timestep: 552
+Policy_Loss: -8.941e-09 Critic_Loss: 0.05325 Reward: -5.507 RM_Reward: -4.079 Ref_Reward: -1.428
+(INFO) 2024-03-15 14:02:40,894  - RLHF_Logger:
+Episode: 17 Timestep: 560
+Policy_Loss: 8.345e-08 Critic_Loss: 0.1859 Reward: -3.535 RM_Reward: -2.297 Ref_Reward: -1.238
+(INFO) 2024-03-15 14:02:42,851  - RLHF_Logger:
+Episode: 17 Timestep: 568
+Policy_Loss: 4.917e-08 Critic_Loss: 0.0312 Reward: -4.331 RM_Reward: -2.888 Ref_Reward: -1.443
+(INFO) 2024-03-15 14:02:43,834  - RLHF_Logger:
+Episode: 17 Timestep: 576
+Policy_Loss: 1.49e-09 Critic_Loss: 0.01458 Reward: -4.419 RM_Reward: -2.874 Ref_Reward: -1.545
+(INFO) 2024-03-15 14:02:44,717  - RLHF_Logger:
+Episode: 18 Timestep: 584
+Policy_Loss: 5.215e-08 Critic_Loss: 0.05495 Reward: -4.412 RM_Reward: -2.895 Ref_Reward: -1.517
+(INFO) 2024-03-15 14:02:45,782  - RLHF_Logger:
+Episode: 18 Timestep: 592
+Policy_Loss: -2.161e-08 Critic_Loss: 0.05036 Reward: -4.258 RM_Reward: -2.944 Ref_Reward: -1.314
+(INFO) 2024-03-15 14:02:47,794  - RLHF_Logger:
+Episode: 18 Timestep: 600
+Policy_Loss: 7.451e-09 Critic_Loss: 0.0957 Reward: -4.231 RM_Reward: -2.734 Ref_Reward: -1.497
+(INFO) 2024-03-15 14:02:48,711  - RLHF_Logger:
+Episode: 18 Timestep: 608
+Policy_Loss: -1.49e-09 Critic_Loss: 0.03765 Reward: -3.881 RM_Reward: -2.4 Ref_Reward: -1.481
+(INFO) 2024-03-15 14:02:49,777  - RLHF_Logger:
+Episode: 19 Timestep: 616
+Policy_Loss: -3.278e-08 Critic_Loss: 0.05257 Reward: -4.765 RM_Reward: -3.134 Ref_Reward: -1.631
+(INFO) 2024-03-15 14:02:50,844  - RLHF_Logger:
+Episode: 19 Timestep: 624
+Policy_Loss: -1.043e-08 Critic_Loss: 0.02333 Reward: -3.509 RM_Reward: -2.28 Ref_Reward: -1.229
+(INFO) 2024-03-15 14:02:51,953  - RLHF_Logger:
+Episode: 19 Timestep: 632
+Policy_Loss: 2.235e-08 Critic_Loss: 0.01433 Reward: -3.639 RM_Reward: -1.894 Ref_Reward: -1.745
+(INFO) 2024-03-15 14:02:53,106  - RLHF_Logger:
+Episode: 19 Timestep: 640
+Policy_Loss: -5.774e-08 Critic_Loss: 0.08433 Reward: -3.925 RM_Reward: -2.884 Ref_Reward: -1.041
+(INFO) 2024-03-15 14:02:54,088  - RLHF_Logger:
+Episode: 20 Timestep: 648
+Policy_Loss: 4.768e-08 Critic_Loss: 0.02865 Reward: -4.646 RM_Reward: -2.926 Ref_Reward: -1.72
+(INFO) 2024-03-15 14:02:55,328  - RLHF_Logger:
+Episode: 20 Timestep: 656
+Policy_Loss: -1.714e-08 Critic_Loss: 0.05779 Reward: -4.023 RM_Reward: -2.653 Ref_Reward: -1.37
+(INFO) 2024-03-15 14:02:56,260  - RLHF_Logger:
+Episode: 20 Timestep: 664
+Policy_Loss: 7.004e-08 Critic_Loss: 0.01651 Reward: -3.956 RM_Reward: -2.759 Ref_Reward: -1.197
+(INFO) 2024-03-15 14:02:57,164  - RLHF_Logger:
+Episode: 20 Timestep: 672
+Policy_Loss: -9.388e-08 Critic_Loss: 0.02574 Reward: -3.709 RM_Reward: -2.491 Ref_Reward: -1.219
+(INFO) 2024-03-15 14:02:58,191  - RLHF_Logger:
+Episode: 21 Timestep: 680
+Policy_Loss: 2.831e-08 Critic_Loss: 0.05421 Reward: -4.218 RM_Reward: -2.618 Ref_Reward: -1.6
+(INFO) 2024-03-15 14:02:59,350  - RLHF_Logger:
+Episode: 21 Timestep: 688
+Policy_Loss: 9.835e-08 Critic_Loss: 0.03379 Reward: -3.454 RM_Reward: -2.069 Ref_Reward: -1.385
+(INFO) 2024-03-15 14:03:00,787  - RLHF_Logger:
+Episode: 21 Timestep: 696
+Policy_Loss: -7.451e-10 Critic_Loss: 0.02858 Reward: -4.676 RM_Reward: -2.815 Ref_Reward: -1.861
+(INFO) 2024-03-15 14:03:01,821  - RLHF_Logger:
+Episode: 21 Timestep: 704
+Policy_Loss: 8.002e-07 Critic_Loss: 0.01052 Reward: -4.947 RM_Reward: -3.368 Ref_Reward: -1.578
+(INFO) 2024-03-15 14:03:02,867  - RLHF_Logger:
+Episode: 22 Timestep: 712
+Policy_Loss: 2.906e-08 Critic_Loss: 0.01439 Reward: -4.419 RM_Reward: -2.908 Ref_Reward: -1.511
+(INFO) 2024-03-15 14:03:03,868  - RLHF_Logger:
+Episode: 22 Timestep: 720
+Policy_Loss: 2.548e-07 Critic_Loss: 0.02449 Reward: -3.838 RM_Reward: -2.35 Ref_Reward: -1.488
+(INFO) 2024-03-15 14:03:05,314  - RLHF_Logger:
+Episode: 22 Timestep: 728
+Policy_Loss: -1.676e-08 Critic_Loss: 0.03055 Reward: -4.541 RM_Reward: -3.13 Ref_Reward: -1.41
+(INFO) 2024-03-15 14:03:06,252  - RLHF_Logger:
+Episode: 22 Timestep: 736
+Policy_Loss: 1.267e-07 Critic_Loss: 0.07404 Reward: -4.35 RM_Reward: -2.935 Ref_Reward: -1.416
+(INFO) 2024-03-15 14:03:07,176  - RLHF_Logger:
+Episode: 23 Timestep: 744
+Policy_Loss: -3.129e-07 Critic_Loss: 0.02521 Reward: -4.647 RM_Reward: -3.137 Ref_Reward: -1.51
+(INFO) 2024-03-15 14:03:08,088  - RLHF_Logger:
+Episode: 23 Timestep: 752
+Policy_Loss: 6.065e-07 Critic_Loss: 0.03244 Reward: -4.858 RM_Reward: -3.238 Ref_Reward: -1.62
+(INFO) 2024-03-15 14:03:09,034  - RLHF_Logger:
+Episode: 23 Timestep: 760
+Policy_Loss: -0.004361 Critic_Loss: 0.03544 Reward: -4.136 RM_Reward: -2.52 Ref_Reward: -1.616
+(INFO) 2024-03-15 14:03:10,002  - RLHF_Logger:
+Episode: 23 Timestep: 768
+Policy_Loss: 0.0002058 Critic_Loss: 0.05398 Reward: -4.975 RM_Reward: -3.286 Ref_Reward: -1.688
+(INFO) 2024-03-15 14:03:11,793  - RLHF_Logger:
+Episode: 24 Timestep: 776
+Policy_Loss: -0.04521 Critic_Loss: 0.3332 Reward: -5.021 RM_Reward: -3.648 Ref_Reward: -1.372
+(INFO) 2024-03-15 14:03:12,813  - RLHF_Logger:
+Episode: 24 Timestep: 784
+Policy_Loss: 7.994e-07 Critic_Loss: 0.02676 Reward: -4.818 RM_Reward: -3.135 Ref_Reward: -1.683
+(INFO) 2024-03-15 14:03:15,465  - RLHF_Logger:
+Episode: 24 Timestep: 792
+Policy_Loss: -0.03037 Critic_Loss: 1.522 Reward: -4.875 RM_Reward: -3.781 Ref_Reward: -1.094
+(INFO) 2024-03-15 14:03:17,416  - RLHF_Logger:
+Episode: 24 Timestep: 800
+Policy_Loss: -2.831e-08 Critic_Loss: 0.05482 Reward: -3.825 RM_Reward: -2.589 Ref_Reward: -1.236
+(INFO) 2024-03-15 14:03:18,428  - RLHF_Logger:
+Episode: 25 Timestep: 808
+Policy_Loss: -2.384e-08 Critic_Loss: 0.02772 Reward: -4.524 RM_Reward: -3.071 Ref_Reward: -1.454
+(INFO) 2024-03-15 14:03:20,440  - RLHF_Logger:
+Episode: 25 Timestep: 816
+Policy_Loss: 1.378e-08 Critic_Loss: 0.02461 Reward: -3.916 RM_Reward: -2.285 Ref_Reward: -1.631
+(INFO) 2024-03-15 14:03:21,678  - RLHF_Logger:
+Episode: 25 Timestep: 824
+Policy_Loss: -4.47e-08 Critic_Loss: 0.06032 Reward: -4.336 RM_Reward: -3.268 Ref_Reward: -1.067
+(INFO) 2024-03-15 14:03:23,615  - RLHF_Logger:
+Episode: 25 Timestep: 832
+Policy_Loss: -6.557e-08 Critic_Loss: 0.1053 Reward: -3.586 RM_Reward: -2.335 Ref_Reward: -1.251
+(INFO) 2024-03-15 14:03:24,849  - RLHF_Logger:
+Episode: 26 Timestep: 840
+Policy_Loss: 8.941e-09 Critic_Loss: 0.05139 Reward: -3.962 RM_Reward: -3.063 Ref_Reward: -0.8987
+(INFO) 2024-03-15 14:03:26,207  - RLHF_Logger:
+Episode: 26 Timestep: 848
+Policy_Loss: 4.843e-09 Critic_Loss: 0.03338 Reward: -3.953 RM_Reward: -3.072 Ref_Reward: -0.8808
+(INFO) 2024-03-15 14:03:27,095  - RLHF_Logger:
+Episode: 26 Timestep: 856
+Policy_Loss: 5.96e-09 Critic_Loss: 0.09548 Reward: -3.275 RM_Reward: -2.615 Ref_Reward: -0.66
+(INFO) 2024-03-15 14:03:28,528  - RLHF_Logger:
+Episode: 26 Timestep: 864
+Policy_Loss: 2.086e-08 Critic_Loss: 0.0656 Reward: -3.927 RM_Reward: -2.875 Ref_Reward: -1.052
+(INFO) 2024-03-15 14:03:30,526  - RLHF_Logger:
+Episode: 27 Timestep: 872
+Policy_Loss: 1.341e-08 Critic_Loss: 0.03181 Reward: -3.857 RM_Reward: -2.806 Ref_Reward: -1.051
+(INFO) 2024-03-15 14:03:31,504  - RLHF_Logger:
+Current Ratio(15.09) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:03:31,556  - RLHF_Logger:
+Episode: 27 Timestep: 880
+Policy_Loss: -1.937e-08 Critic_Loss: 0.03213 Reward: -3.354 RM_Reward: -2.809 Ref_Reward: -0.5446
+(INFO) 2024-03-15 14:03:33,557  - RLHF_Logger:
+Episode: 27 Timestep: 888
+Policy_Loss: -4.098e-08 Critic_Loss: 0.04713 Reward: -3.471 RM_Reward: -2.686 Ref_Reward: -0.7858
+(INFO) 2024-03-15 14:03:34,659  - RLHF_Logger:
+Episode: 27 Timestep: 896
+Policy_Loss: -8.941e-09 Critic_Loss: 0.01711 Reward: -4.075 RM_Reward: -3 Ref_Reward: -1.075
+(INFO) 2024-03-15 14:03:36,592  - RLHF_Logger:
+Episode: 28 Timestep: 904
+Policy_Loss: 1.49e-08 Critic_Loss: 0.04027 Reward: -4.042 RM_Reward: -2.925 Ref_Reward: -1.118
+(INFO) 2024-03-15 14:03:38,573  - RLHF_Logger:
+Episode: 28 Timestep: 912
+Policy_Loss: 3.576e-08 Critic_Loss: 0.124 Reward: -3.418 RM_Reward: -2.456 Ref_Reward: -0.9627
+(INFO) 2024-03-15 14:03:39,629  - RLHF_Logger:
+Episode: 28 Timestep: 920
+Policy_Loss: -1.341e-08 Critic_Loss: 0.02833 Reward: -4.222 RM_Reward: -2.977 Ref_Reward: -1.245
+(INFO) 2024-03-15 14:03:40,560  - RLHF_Logger:
+Episode: 28 Timestep: 928
+Policy_Loss: -3.092e-08 Critic_Loss: 0.02383 Reward: -4.355 RM_Reward: -3.372 Ref_Reward: -0.9826
+(INFO) 2024-03-15 14:03:41,740  - RLHF_Logger:
+Episode: 29 Timestep: 936
+Policy_Loss: 9.686e-09 Critic_Loss: 0.02425 Reward: -3.688 RM_Reward: -2.468 Ref_Reward: -1.22
+(INFO) 2024-03-15 14:03:42,773  - RLHF_Logger:
+Episode: 29 Timestep: 944
+Policy_Loss: 4.768e-08 Critic_Loss: 0.05002 Reward: -4.336 RM_Reward: -3.526 Ref_Reward: -0.8093
+(INFO) 2024-03-15 14:03:44,764  - RLHF_Logger:
+Episode: 29 Timestep: 952
+Policy_Loss: 4.321e-08 Critic_Loss: 0.04409 Reward: -3.805 RM_Reward: -2.96 Ref_Reward: -0.8457
+(INFO) 2024-03-15 14:03:45,777  - RLHF_Logger:
+Episode: 29 Timestep: 960
+Policy_Loss: 8.941e-09 Critic_Loss: 0.02683 Reward: -3.839 RM_Reward: -2.994 Ref_Reward: -0.8444
+(INFO) 2024-03-15 14:03:46,757  - RLHF_Logger:
+Episode: 30 Timestep: 968
+Policy_Loss: 2.086e-08 Critic_Loss: 0.01335 Reward: -3.643 RM_Reward: -2.759 Ref_Reward: -0.8845
+(INFO) 2024-03-15 14:03:48,013  - RLHF_Logger:
+Episode: 30 Timestep: 976
+Policy_Loss: 2.459e-08 Critic_Loss: 0.03758 Reward: -3.77 RM_Reward: -2.536 Ref_Reward: -1.235
+(INFO) 2024-03-15 14:03:48,999  - RLHF_Logger:
+Episode: 30 Timestep: 984
+Policy_Loss: -7.451e-09 Critic_Loss: 0.01308 Reward: -4.221 RM_Reward: -2.905 Ref_Reward: -1.315
+(INFO) 2024-03-15 14:03:50,918  - RLHF_Logger:
+Episode: 30 Timestep: 992
+Policy_Loss: -2.98e-09 Critic_Loss: 0.01628 Reward: -3.474 RM_Reward: -2.346 Ref_Reward: -1.128
+(INFO) 2024-03-15 14:03:51,855  - RLHF_Logger:
+Episode: 31 Timestep: 1000
+Policy_Loss: -1.937e-08 Critic_Loss: 0.02069 Reward: -3.399 RM_Reward: -2.403 Ref_Reward: -0.9956
+(INFO) 2024-03-15 14:03:52,919  - RLHF_Logger:
+Episode: 31 Timestep: 1008
+Policy_Loss: -1.49e-09 Critic_Loss: 0.04602 Reward: -3.736 RM_Reward: -2.772 Ref_Reward: -0.9645
+(INFO) 2024-03-15 14:03:53,858  - RLHF_Logger:
+Episode: 31 Timestep: 1016
+Policy_Loss: -4.47e-09 Critic_Loss: 0.04909 Reward: -4.176 RM_Reward: -3.354 Ref_Reward: -0.8222
+(INFO) 2024-03-15 14:03:55,094  - RLHF_Logger:
+Episode: 31 Timestep: 1024
+Policy_Loss: 8.196e-09 Critic_Loss: 0.0434 Reward: -4.22 RM_Reward: -3.151 Ref_Reward: -1.069
+(INFO) 2024-03-15 14:03:57,088  - RLHF_Logger:
+Episode: 32 Timestep: 1032
+Policy_Loss: 5.029e-08 Critic_Loss: 0.03863 Reward: -3.707 RM_Reward: -2.524 Ref_Reward: -1.183
+(INFO) 2024-03-15 14:03:58,151  - RLHF_Logger:
+Episode: 32 Timestep: 1040
+Policy_Loss: -5.513e-08 Critic_Loss: 0.09032 Reward: -4.458 RM_Reward: -3.568 Ref_Reward: -0.8901
+(INFO) 2024-03-15 14:03:59,019  - RLHF_Logger:
+Episode: 32 Timestep: 1048
+Policy_Loss: -1.118e-08 Critic_Loss: 0.03067 Reward: -3.348 RM_Reward: -2.151 Ref_Reward: -1.197
+(INFO) 2024-03-15 14:04:00,161  - RLHF_Logger:
+Episode: 32 Timestep: 1056
+Policy_Loss: 1.524e-07 Critic_Loss: 0.04199 Reward: -3.608 RM_Reward: -2.277 Ref_Reward: -1.33
+(INFO) 2024-03-15 14:04:02,108  - RLHF_Logger:
+Episode: 33 Timestep: 1064
+Policy_Loss: -2.012e-08 Critic_Loss: 0.02895 Reward: -3.804 RM_Reward: -2.64 Ref_Reward: -1.164
+(INFO) 2024-03-15 14:04:04,041  - RLHF_Logger:
+Episode: 33 Timestep: 1072
+Policy_Loss: -3.129e-08 Critic_Loss: 0.1009 Reward: -4.351 RM_Reward: -3.025 Ref_Reward: -1.326
+(INFO) 2024-03-15 14:04:05,191  - RLHF_Logger:
+Episode: 33 Timestep: 1080
+Policy_Loss: -7.451e-08 Critic_Loss: 0.04013 Reward: -3.504 RM_Reward: -2.308 Ref_Reward: -1.196
+(INFO) 2024-03-15 14:04:06,340  - RLHF_Logger:
+Episode: 33 Timestep: 1088
+Policy_Loss: 7.004e-08 Critic_Loss: 0.01095 Reward: -3.98 RM_Reward: -2.632 Ref_Reward: -1.347
+(INFO) 2024-03-15 14:04:07,765  - RLHF_Logger:
+Episode: 34 Timestep: 1096
+Policy_Loss: -8.736e-08 Critic_Loss: 0.01981 Reward: -4.976 RM_Reward: -3.542 Ref_Reward: -1.435
+(INFO) 2024-03-15 14:04:08,726  - RLHF_Logger:
+Episode: 34 Timestep: 1104
+Policy_Loss: 6.855e-08 Critic_Loss: 0.03552 Reward: -5.345 RM_Reward: -3.955 Ref_Reward: -1.39
+(INFO) 2024-03-15 14:04:10,716  - RLHF_Logger:
+Episode: 34 Timestep: 1112
+Policy_Loss: 3.725e-09 Critic_Loss: 0.04722 Reward: -3.945 RM_Reward: -2.652 Ref_Reward: -1.293
+(INFO) 2024-03-15 14:04:11,664  - RLHF_Logger:
+Episode: 34 Timestep: 1120
+Policy_Loss: -5.215e-08 Critic_Loss: 0.01567 Reward: -4.339 RM_Reward: -3.248 Ref_Reward: -1.091
+(INFO) 2024-03-15 14:04:13,091  - RLHF_Logger:
+Episode: 35 Timestep: 1128
+Policy_Loss: -1.475e-07 Critic_Loss: 0.01997 Reward: -4.595 RM_Reward: -3.39 Ref_Reward: -1.205
+(INFO) 2024-03-15 14:04:13,985  - RLHF_Logger:
+Episode: 35 Timestep: 1136
+Policy_Loss: 4.47e-09 Critic_Loss: 0.01635 Reward: -4.173 RM_Reward: -2.897 Ref_Reward: -1.276
+(INFO) 2024-03-15 14:04:15,351  - RLHF_Logger:
+Episode: 35 Timestep: 1144
+Policy_Loss: 3.219e-07 Critic_Loss: 0.05702 Reward: -4.443 RM_Reward: -2.85 Ref_Reward: -1.593
+(INFO) 2024-03-15 14:04:17,406  - RLHF_Logger:
+Episode: 35 Timestep: 1152
+Policy_Loss: -1.319e-07 Critic_Loss: 0.02144 Reward: -4.115 RM_Reward: -2.907 Ref_Reward: -1.207
+(INFO) 2024-03-15 14:04:18,636  - RLHF_Logger:
+Episode: 36 Timestep: 1160
+Policy_Loss: 2.123e-08 Critic_Loss: 0.03576 Reward: -4.432 RM_Reward: -3.22 Ref_Reward: -1.213
+(INFO) 2024-03-15 14:04:19,501  - RLHF_Logger:
+Episode: 36 Timestep: 1168
+Policy_Loss: -6.258e-08 Critic_Loss: 0.01391 Reward: -4.344 RM_Reward: -3.113 Ref_Reward: -1.231
+(INFO) 2024-03-15 14:04:20,466  - RLHF_Logger:
+Episode: 36 Timestep: 1176
+Policy_Loss: 3.912e-08 Critic_Loss: 0.06133 Reward: -4.178 RM_Reward: -3.246 Ref_Reward: -0.9321
+(INFO) 2024-03-15 14:04:21,812  - RLHF_Logger:
+Episode: 36 Timestep: 1184
+Policy_Loss: -5.215e-08 Critic_Loss: 0.08162 Reward: -4.865 RM_Reward: -3.564 Ref_Reward: -1.3
+(INFO) 2024-03-15 14:04:22,957  - RLHF_Logger:
+Episode: 37 Timestep: 1192
+Policy_Loss: 3.853e-07 Critic_Loss: 0.005897 Reward: -4.239 RM_Reward: -3.239 Ref_Reward: -0.9997
+(INFO) 2024-03-15 14:04:24,295  - RLHF_Logger:
+Episode: 37 Timestep: 1200
+Policy_Loss: -6.482e-08 Critic_Loss: 0.04919 Reward: -4.649 RM_Reward: -3.242 Ref_Reward: -1.408
+(INFO) 2024-03-15 14:04:25,178  - RLHF_Logger:
+Episode: 37 Timestep: 1208
+Policy_Loss: -1.788e-08 Critic_Loss: 0.01314 Reward: -4.356 RM_Reward: -3.211 Ref_Reward: -1.146
+(INFO) 2024-03-15 14:04:26,253  - RLHF_Logger:
+Episode: 37 Timestep: 1216
+Policy_Loss: -7.451e-09 Critic_Loss: 0.03859 Reward: -3.63 RM_Reward: -2.395 Ref_Reward: -1.235
+(INFO) 2024-03-15 14:04:27,311  - RLHF_Logger:
+Episode: 38 Timestep: 1224
+Policy_Loss: 5.454e-07 Critic_Loss: 0.01613 Reward: -4.146 RM_Reward: -2.69 Ref_Reward: -1.455
+(INFO) 2024-03-15 14:04:28,690  - RLHF_Logger:
+Episode: 38 Timestep: 1232
+Policy_Loss: 1.319e-07 Critic_Loss: 0.01045 Reward: -4.545 RM_Reward: -2.95 Ref_Reward: -1.594
+(INFO) 2024-03-15 14:04:30,032  - RLHF_Logger:
+Episode: 38 Timestep: 1240
+Policy_Loss: 7.376e-08 Critic_Loss: 0.0171 Reward: -3.811 RM_Reward: -2.512 Ref_Reward: -1.299
+(INFO) 2024-03-15 14:04:31,012  - RLHF_Logger:
+Episode: 38 Timestep: 1248
+Policy_Loss: 4.619e-08 Critic_Loss: 0.009112 Reward: -4.214 RM_Reward: -2.701 Ref_Reward: -1.513
+(INFO) 2024-03-15 14:04:32,083  - RLHF_Logger:
+Episode: 39 Timestep: 1256
+Policy_Loss: 2.071e-07 Critic_Loss: 0.01538 Reward: -4.443 RM_Reward: -3.105 Ref_Reward: -1.338
+(INFO) 2024-03-15 14:04:33,310  - RLHF_Logger:
+Episode: 39 Timestep: 1264
+Policy_Loss: 4.217e-07 Critic_Loss: 0.02603 Reward: -4.415 RM_Reward: -3.153 Ref_Reward: -1.262
+(INFO) 2024-03-15 14:04:35,218  - RLHF_Logger:
+Episode: 39 Timestep: 1272
+Policy_Loss: -3.502e-08 Critic_Loss: 0.01294 Reward: -3.8 RM_Reward: -2.484 Ref_Reward: -1.316
+(INFO) 2024-03-15 14:04:36,064  - RLHF_Logger:
+Episode: 39 Timestep: 1280
+Policy_Loss: 2.094e-07 Critic_Loss: 0.02739 Reward: -3.97 RM_Reward: -2.805 Ref_Reward: -1.165
+(INFO) 2024-03-15 14:04:37,972  - RLHF_Logger:
+Episode: 40 Timestep: 1288
+Policy_Loss: 1.094e-06 Critic_Loss: 0.005302 Reward: -3.643 RM_Reward: -2.405 Ref_Reward: -1.237
+(INFO) 2024-03-15 14:04:39,531  - RLHF_Logger:
+Episode: 40 Timestep: 1296
+Policy_Loss: 1.194e-06 Critic_Loss: 0.01883 Reward: -4.072 RM_Reward: -2.853 Ref_Reward: -1.219
+(INFO) 2024-03-15 14:04:41,133  - RLHF_Logger:
+Episode: 40 Timestep: 1304
+Policy_Loss: 7.533e-07 Critic_Loss: 0.03327 Reward: -3.666 RM_Reward: -2.408 Ref_Reward: -1.258
+(INFO) 2024-03-15 14:04:42,356  - RLHF_Logger:
+Episode: 40 Timestep: 1312
+Policy_Loss: -3.557e-06 Critic_Loss: 0.01537 Reward: -4.092 RM_Reward: -2.776 Ref_Reward: -1.316
+(INFO) 2024-03-15 14:04:43,338  - RLHF_Logger:
+Episode: 41 Timestep: 1320
+Policy_Loss: 1.086e-06 Critic_Loss: 0.04676 Reward: -4.111 RM_Reward: -2.715 Ref_Reward: -1.396
+(INFO) 2024-03-15 14:04:45,283  - RLHF_Logger:
+Episode: 41 Timestep: 1328
+Policy_Loss: 2.936e-07 Critic_Loss: 0.02758 Reward: -4.347 RM_Reward: -3.058 Ref_Reward: -1.289
+(INFO) 2024-03-15 14:04:46,404  - RLHF_Logger:
+Episode: 41 Timestep: 1336
+Policy_Loss: 1.621e-06 Critic_Loss: 0.02598 Reward: -4.196 RM_Reward: -2.734 Ref_Reward: -1.463
+(INFO) 2024-03-15 14:04:47,515  - RLHF_Logger:
+Episode: 41 Timestep: 1344
+Policy_Loss: 2.369e-07 Critic_Loss: 0.01402 Reward: -3.471 RM_Reward: -2.467 Ref_Reward: -1.004
+(INFO) 2024-03-15 14:04:48,974  - RLHF_Logger:
+Episode: 42 Timestep: 1352
+Policy_Loss: 6.735e-07 Critic_Loss: 0.04777 Reward: -4.327 RM_Reward: -2.925 Ref_Reward: -1.402
+(INFO) 2024-03-15 14:04:50,407  - RLHF_Logger:
+Episode: 42 Timestep: 1360
+Policy_Loss: -1.453e-07 Critic_Loss: 0.01577 Reward: -4.843 RM_Reward: -3.538 Ref_Reward: -1.305
+(INFO) 2024-03-15 14:04:51,993  - RLHF_Logger:
+Episode: 42 Timestep: 1368
+Policy_Loss: -8.419e-08 Critic_Loss: 0.03491 Reward: -4.361 RM_Reward: -2.76 Ref_Reward: -1.601
+(INFO) 2024-03-15 14:04:52,924  - RLHF_Logger:
+Episode: 42 Timestep: 1376
+Policy_Loss: 5.215e-07 Critic_Loss: 0.01556 Reward: -3.882 RM_Reward: -2.672 Ref_Reward: -1.211
+(INFO) 2024-03-15 14:04:53,904  - RLHF_Logger:
+Episode: 43 Timestep: 1384
+Policy_Loss: 5.282e-07 Critic_Loss: 0.01427 Reward: -4.515 RM_Reward: -3.166 Ref_Reward: -1.349
+(INFO) 2024-03-15 14:04:54,924  - RLHF_Logger:
+Episode: 43 Timestep: 1392
+Policy_Loss: 4.288e-07 Critic_Loss: 0.01036 Reward: -4.494 RM_Reward: -3.163 Ref_Reward: -1.33
+(INFO) 2024-03-15 14:04:55,978  - RLHF_Logger:
+Episode: 43 Timestep: 1400
+Policy_Loss: 8.97e-07 Critic_Loss: 0.006783 Reward: -4.467 RM_Reward: -2.89 Ref_Reward: -1.577
+(INFO) 2024-03-15 14:04:57,209  - RLHF_Logger:
+Episode: 43 Timestep: 1408
+Policy_Loss: 3.487e-07 Critic_Loss: 0.01239 Reward: -4.856 RM_Reward: -3.476 Ref_Reward: -1.38
+(INFO) 2024-03-15 14:04:58,348  - RLHF_Logger:
+Episode: 44 Timestep: 1416
+Policy_Loss: 7.506e-07 Critic_Loss: 0.01813 Reward: -3.873 RM_Reward: -2.632 Ref_Reward: -1.241
+(INFO) 2024-03-15 14:04:59,581  - RLHF_Logger:
+Episode: 44 Timestep: 1424
+Policy_Loss: 8.155e-07 Critic_Loss: 0.01113 Reward: -4.002 RM_Reward: -2.757 Ref_Reward: -1.246
+(INFO) 2024-03-15 14:05:00,536  - RLHF_Logger:
+Episode: 44 Timestep: 1432
+Policy_Loss: 1.465e-06 Critic_Loss: 0.008908 Reward: -4.173 RM_Reward: -3.211 Ref_Reward: -0.9623
+(INFO) 2024-03-15 14:05:01,498  - RLHF_Logger:
+Episode: 44 Timestep: 1440
+Policy_Loss: -2.357e-06 Critic_Loss: 0.01278 Reward: -4.694 RM_Reward: -3.118 Ref_Reward: -1.577
+(INFO) 2024-03-15 14:05:02,390  - RLHF_Logger:
+Episode: 45 Timestep: 1448
+Policy_Loss: 9.276e-07 Critic_Loss: 0.02109 Reward: -3.558 RM_Reward: -2.213 Ref_Reward: -1.345
+(INFO) 2024-03-15 14:05:03,616  - RLHF_Logger:
+Episode: 45 Timestep: 1456
+Policy_Loss: 7.123e-07 Critic_Loss: 0.0209 Reward: -3.971 RM_Reward: -2.406 Ref_Reward: -1.565
+(INFO) 2024-03-15 14:05:05,548  - RLHF_Logger:
+Episode: 45 Timestep: 1464
+Policy_Loss: 6.139e-07 Critic_Loss: 0.01918 Reward: -3.869 RM_Reward: -2.462 Ref_Reward: -1.407
+(INFO) 2024-03-15 14:05:06,761  - RLHF_Logger:
+Episode: 45 Timestep: 1472
+Policy_Loss: -5.744e-07 Critic_Loss: 0.01416 Reward: -4.307 RM_Reward: -2.952 Ref_Reward: -1.355
+(INFO) 2024-03-15 14:05:07,612  - RLHF_Logger:
+Episode: 46 Timestep: 1480
+Policy_Loss: 1.945e-07 Critic_Loss: 0.01551 Reward: -4.133 RM_Reward: -3.066 Ref_Reward: -1.067
+(INFO) 2024-03-15 14:05:08,832  - RLHF_Logger:
+Episode: 46 Timestep: 1488
+Policy_Loss: 4.642e-07 Critic_Loss: 0.01651 Reward: -3.711 RM_Reward: -2.75 Ref_Reward: -0.9601
+(INFO) 2024-03-15 14:05:10,737  - RLHF_Logger:
+Episode: 46 Timestep: 1496
+Policy_Loss: 3.785e-07 Critic_Loss: 0.01689 Reward: -3.931 RM_Reward: -2.732 Ref_Reward: -1.199
+(INFO) 2024-03-15 14:05:11,772  - RLHF_Logger:
+Episode: 46 Timestep: 1504
+Policy_Loss: 8.911e-07 Critic_Loss: 0.0202 Reward: -3.841 RM_Reward: -2.813 Ref_Reward: -1.028
+(INFO) 2024-03-15 14:05:12,999  - RLHF_Logger:
+Episode: 47 Timestep: 1512
+Policy_Loss: 2.551e-06 Critic_Loss: 0.008941 Reward: -3.962 RM_Reward: -2.581 Ref_Reward: -1.38
+(INFO) 2024-03-15 14:05:13,932  - RLHF_Logger:
+Episode: 47 Timestep: 1520
+Policy_Loss: 3.792e-07 Critic_Loss: 0.007623 Reward: -3.505 RM_Reward: -2.331 Ref_Reward: -1.174
+(INFO) 2024-03-15 14:05:15,264  - RLHF_Logger:
+Episode: 47 Timestep: 1528
+Policy_Loss: 2.384e-07 Critic_Loss: 0.01354 Reward: -3.906 RM_Reward: -2.4 Ref_Reward: -1.506
+(INFO) 2024-03-15 14:05:16,171  - RLHF_Logger:
+Episode: 47 Timestep: 1536
+Policy_Loss: 1.952e-07 Critic_Loss: 0.01062 Reward: -4.408 RM_Reward: -3.178 Ref_Reward: -1.231
+(INFO) 2024-03-15 14:05:17,529  - RLHF_Logger:
+Episode: 48 Timestep: 1544
+Policy_Loss: 6.074e-06 Critic_Loss: 0.02397 Reward: -4.102 RM_Reward: -2.602 Ref_Reward: -1.499
+(INFO) 2024-03-15 14:05:19,108  - RLHF_Logger:
+Episode: 48 Timestep: 1552
+Policy_Loss: -7.376e-07 Critic_Loss: 0.00918 Reward: -4.197 RM_Reward: -3.032 Ref_Reward: -1.165
+(INFO) 2024-03-15 14:05:20,182  - RLHF_Logger:
+Episode: 48 Timestep: 1560
+Policy_Loss: -7.346e-07 Critic_Loss: 0.01503 Reward: -3.923 RM_Reward: -2.681 Ref_Reward: -1.242
+(INFO) 2024-03-15 14:05:21,403  - RLHF_Logger:
+Episode: 48 Timestep: 1568
+Policy_Loss: 9.745e-07 Critic_Loss: 0.01462 Reward: -4.489 RM_Reward: -3.39 Ref_Reward: -1.098
+(INFO) 2024-03-15 14:05:23,342  - RLHF_Logger:
+Episode: 49 Timestep: 1576
+Policy_Loss: 3.859e-07 Critic_Loss: 0.01098 Reward: -4.472 RM_Reward: -2.92 Ref_Reward: -1.551
+(INFO) 2024-03-15 14:05:24,416  - RLHF_Logger:
+Episode: 49 Timestep: 1584
+Policy_Loss: -1.931e-06 Critic_Loss: 0.01627 Reward: -4.181 RM_Reward: -2.763 Ref_Reward: -1.417
+(INFO) 2024-03-15 14:05:25,424  - RLHF_Logger:
+Episode: 49 Timestep: 1592
+Policy_Loss: 6.404e-07 Critic_Loss: 0.007857 Reward: -5.019 RM_Reward: -3.499 Ref_Reward: -1.52
+(INFO) 2024-03-15 14:05:27,329  - RLHF_Logger:
+Episode: 49 Timestep: 1600
+Policy_Loss: -9.546e-05 Critic_Loss: 0.009472 Reward: -3.753 RM_Reward: -2.345 Ref_Reward: -1.409
+(INFO) 2024-03-15 14:05:28,887  - RLHF_Logger:
+Episode: 50 Timestep: 1608
+Policy_Loss: 9.032e-06 Critic_Loss: 0.02189 Reward: -4.081 RM_Reward: -2.567 Ref_Reward: -1.514
+(INFO) 2024-03-15 14:05:30,203  - RLHF_Logger:
+Episode: 50 Timestep: 1616
+Policy_Loss: -1.955e-06 Critic_Loss: 0.006211 Reward: -4.445 RM_Reward: -3.072 Ref_Reward: -1.373
+(INFO) 2024-03-15 14:05:32,158  - RLHF_Logger:
+Episode: 50 Timestep: 1624
+Policy_Loss: 1.185e-07 Critic_Loss: 0.01066 Reward: -5.046 RM_Reward: -3.447 Ref_Reward: -1.599
+(INFO) 2024-03-15 14:05:34,104  - RLHF_Logger:
+Episode: 50 Timestep: 1632
+Policy_Loss: -1.393e-06 Critic_Loss: 0.0396 Reward: -4.063 RM_Reward: -2.567 Ref_Reward: -1.496
+(INFO) 2024-03-15 14:05:34,988  - RLHF_Logger:
+Episode: 51 Timestep: 1640
+Policy_Loss: -3.947e-06 Critic_Loss: 0.0134 Reward: -4.141 RM_Reward: -2.914 Ref_Reward: -1.226
+(INFO) 2024-03-15 14:05:35,975  - RLHF_Logger:
+Episode: 51 Timestep: 1648
+Policy_Loss: 1.601e-06 Critic_Loss: 0.01978 Reward: -4.76 RM_Reward: -3.738 Ref_Reward: -1.022
+(INFO) 2024-03-15 14:05:36,834  - RLHF_Logger:
+Episode: 51 Timestep: 1656
+Policy_Loss: 1.509e-06 Critic_Loss: 0.006073 Reward: -4.476 RM_Reward: -3.22 Ref_Reward: -1.256
+(INFO) 2024-03-15 14:05:38,057  - RLHF_Logger:
+Episode: 51 Timestep: 1664
+Policy_Loss: 2.112e-06 Critic_Loss: 0.008922 Reward: -4.443 RM_Reward: -3.116 Ref_Reward: -1.327
+(INFO) 2024-03-15 14:05:39,032  - RLHF_Logger:
+Episode: 52 Timestep: 1672
+Policy_Loss: 3.934e-07 Critic_Loss: 0.01151 Reward: -5.04 RM_Reward: -3.861 Ref_Reward: -1.179
+(INFO) 2024-03-15 14:05:39,904  - RLHF_Logger:
+Episode: 52 Timestep: 1680
+Policy_Loss: 2.941e-06 Critic_Loss: 0.01121 Reward: -3.242 RM_Reward: -2.064 Ref_Reward: -1.178
+(INFO) 2024-03-15 14:05:40,809  - RLHF_Logger:
+Episode: 52 Timestep: 1688
+Policy_Loss: -4.977e-07 Critic_Loss: 0.006431 Reward: -3.576 RM_Reward: -2.344 Ref_Reward: -1.232
+(INFO) 2024-03-15 14:05:41,742  - RLHF_Logger:
+Episode: 52 Timestep: 1696
+Policy_Loss: -2.673e-06 Critic_Loss: 0.008107 Reward: -4.325 RM_Reward: -2.85 Ref_Reward: -1.475
+(INFO) 2024-03-15 14:05:42,712  - RLHF_Logger:
+Episode: 53 Timestep: 1704
+Policy_Loss: -4.277e-07 Critic_Loss: 0.01585 Reward: -4.335 RM_Reward: -3.045 Ref_Reward: -1.289
+(INFO) 2024-03-15 14:05:43,687  - RLHF_Logger:
+Episode: 53 Timestep: 1712
+Policy_Loss: -1.907e-06 Critic_Loss: 0.006005 Reward: -4.364 RM_Reward: -2.786 Ref_Reward: -1.578
+(INFO) 2024-03-15 14:05:44,734  - RLHF_Logger:
+Episode: 53 Timestep: 1720
+Policy_Loss: -5.715e-07 Critic_Loss: 0.009316 Reward: -4.155 RM_Reward: -2.795 Ref_Reward: -1.361
+(INFO) 2024-03-15 14:05:46,313  - RLHF_Logger:
+Episode: 53 Timestep: 1728
+Policy_Loss: 5.454e-07 Critic_Loss: 0.009245 Reward: -4.357 RM_Reward: -2.9 Ref_Reward: -1.457
+(INFO) 2024-03-15 14:05:47,214  - RLHF_Logger:
+Episode: 54 Timestep: 1736
+Policy_Loss: -6.497e-07 Critic_Loss: 0.01228 Reward: -4.28 RM_Reward: -3.024 Ref_Reward: -1.255
+(INFO) 2024-03-15 14:05:48,382  - RLHF_Logger:
+Episode: 54 Timestep: 1744
+Policy_Loss: 4.143e-07 Critic_Loss: 0.008991 Reward: -4.035 RM_Reward: -2.661 Ref_Reward: -1.374
+(INFO) 2024-03-15 14:05:49,721  - RLHF_Logger:
+Episode: 54 Timestep: 1752
+Policy_Loss: 4.187e-07 Critic_Loss: 0.008858 Reward: -4.302 RM_Reward: -2.798 Ref_Reward: -1.504
+(INFO) 2024-03-15 14:05:50,826  - RLHF_Logger:
+Episode: 54 Timestep: 1760
+Policy_Loss: 4.679e-07 Critic_Loss: 0.01647 Reward: -4.235 RM_Reward: -2.96 Ref_Reward: -1.275
+(INFO) 2024-03-15 14:05:52,170  - RLHF_Logger:
+Episode: 55 Timestep: 1768
+Policy_Loss: 1.565e-07 Critic_Loss: 0.008348 Reward: -4.519 RM_Reward: -2.793 Ref_Reward: -1.726
+(INFO) 2024-03-15 14:05:53,064  - RLHF_Logger:
+Episode: 55 Timestep: 1776
+Policy_Loss: 1.024e-06 Critic_Loss: 0.007642 Reward: -4.443 RM_Reward: -3.131 Ref_Reward: -1.312
+(INFO) 2024-03-15 14:05:54,224  - RLHF_Logger:
+Episode: 55 Timestep: 1784
+Policy_Loss: 1.501e-06 Critic_Loss: 0.01222 Reward: -4.943 RM_Reward: -3.457 Ref_Reward: -1.487
+(INFO) 2024-03-15 14:05:55,567  - RLHF_Logger:
+Episode: 55 Timestep: 1792
+Policy_Loss: 2.31e-06 Critic_Loss: 0.005632 Reward: -4.55 RM_Reward: -3.132 Ref_Reward: -1.418
+(INFO) 2024-03-15 14:05:57,513  - RLHF_Logger:
+Episode: 56 Timestep: 1800
+Policy_Loss: -1.706e-06 Critic_Loss: 0.014 Reward: -4.599 RM_Reward: -3.408 Ref_Reward: -1.19
+(INFO) 2024-03-15 14:05:58,857  - RLHF_Logger:
+Episode: 56 Timestep: 1808
+Policy_Loss: -3.698e-06 Critic_Loss: 0.01834 Reward: -4.954 RM_Reward: -3.409 Ref_Reward: -1.545
+(INFO) 2024-03-15 14:06:00,089  - RLHF_Logger:
+Episode: 56 Timestep: 1816
+Policy_Loss: -3.906e-05 Critic_Loss: 0.01926 Reward: -4.201 RM_Reward: -3.001 Ref_Reward: -1.199
+(INFO) 2024-03-15 14:06:01,350  - RLHF_Logger:
+Episode: 56 Timestep: 1824
+Policy_Loss: -2.581e-06 Critic_Loss: 0.01037 Reward: -5.091 RM_Reward: -3.417 Ref_Reward: -1.674
+(INFO) 2024-03-15 14:06:03,256  - RLHF_Logger:
+Episode: 57 Timestep: 1832
+Policy_Loss: -4.3e-06 Critic_Loss: 0.01151 Reward: -3.912 RM_Reward: -2.62 Ref_Reward: -1.293
+(INFO) 2024-03-15 14:06:05,207  - RLHF_Logger:
+Episode: 57 Timestep: 1840
+Policy_Loss: -4.413e-05 Critic_Loss: 0.01129 Reward: -4.201 RM_Reward: -2.564 Ref_Reward: -1.637
+(INFO) 2024-03-15 14:06:06,096  - RLHF_Logger:
+Episode: 57 Timestep: 1848
+Policy_Loss: -1.501e-05 Critic_Loss: 0.007752 Reward: -3.928 RM_Reward: -2.69 Ref_Reward: -1.238
+(INFO) 2024-03-15 14:06:07,146  - RLHF_Logger:
+Episode: 57 Timestep: 1856
+Policy_Loss: -2.369e-05 Critic_Loss: 0.008828 Reward: -4.444 RM_Reward: -3.101 Ref_Reward: -1.343
+(INFO) 2024-03-15 14:06:08,214  - RLHF_Logger:
+Episode: 58 Timestep: 1864
+Policy_Loss: 9.814e-06 Critic_Loss: 0.005788 Reward: -4.241 RM_Reward: -2.817 Ref_Reward: -1.423
+(INFO) 2024-03-15 14:06:09,111  - RLHF_Logger:
+Episode: 58 Timestep: 1872
+Policy_Loss: 0.09921 Critic_Loss: 0.3533 Reward: -4.49 RM_Reward: -3.535 Ref_Reward: -0.9549
+(INFO) 2024-03-15 14:06:09,973  - RLHF_Logger:
+Episode: 58 Timestep: 1880
+Policy_Loss: -6.258e-08 Critic_Loss: 0.01962 Reward: -2.333 RM_Reward: -2.484 Ref_Reward: 0.1513
+(INFO) 2024-03-15 14:06:11,191  - RLHF_Logger:
+Episode: 58 Timestep: 1888
+Policy_Loss: 0 Critic_Loss: 0.06425 Reward: -0.4906 RM_Reward: -2.856 Ref_Reward: 2.366
+(INFO) 2024-03-15 14:06:13,178  - RLHF_Logger:
+Episode: 59 Timestep: 1896
+Policy_Loss: -7.451e-10 Critic_Loss: 0.01196 Reward: 1.394 RM_Reward: -2.112 Ref_Reward: 3.506
+(INFO) 2024-03-15 14:06:15,064  - RLHF_Logger:
+Episode: 59 Timestep: 1904
+Policy_Loss: -1.49e-08 Critic_Loss: 0.02311 Reward: 1.293 RM_Reward: -2.964 Ref_Reward: 4.257
+(INFO) 2024-03-15 14:06:16,786  - RLHF_Logger:
+Current Ratio(169.1) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:16,952  - RLHF_Logger:
+Episode: 59 Timestep: 1912
+Policy_Loss: -6.855e-08 Critic_Loss: 0.02175 Reward: 1.505 RM_Reward: -2.507 Ref_Reward: 4.012
+(INFO) 2024-03-15 14:06:17,990  - RLHF_Logger:
+Episode: 59 Timestep: 1920
+Policy_Loss: -5.96e-09 Critic_Loss: 0.01637 Reward: 1.156 RM_Reward: -2.447 Ref_Reward: 3.602
+(INFO) 2024-03-15 14:06:19,237  - RLHF_Logger:
+Episode: 60 Timestep: 1928
+Policy_Loss: 4.47e-09 Critic_Loss: 0.01353 Reward: 0.4564 RM_Reward: -2.496 Ref_Reward: 2.953
+(INFO) 2024-03-15 14:06:20,653  - RLHF_Logger:
+Episode: 60 Timestep: 1936
+Policy_Loss: 1.043e-08 Critic_Loss: 0.04161 Reward: 0.2072 RM_Reward: -3.286 Ref_Reward: 3.493
+(INFO) 2024-03-15 14:06:21,368  - RLHF_Logger:
+Current Ratio(16.15) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:21,454  - RLHF_Logger:
+Current Ratio(3.882e+04) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:21,540  - RLHF_Logger:
+Current Ratio(1.032e+08) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:21,577  - RLHF_Logger:
+Episode: 60 Timestep: 1944
+Policy_Loss: 5.96e-09 Critic_Loss: 0.02351 Reward: 1.478 RM_Reward: -2.676 Ref_Reward: 4.153
+(INFO) 2024-03-15 14:06:23,483  - RLHF_Logger:
+Episode: 60 Timestep: 1952
+Policy_Loss: 6.855e-08 Critic_Loss: 0.04296 Reward: 1.571 RM_Reward: -3.267 Ref_Reward: 4.837
+(INFO) 2024-03-15 14:06:24,803  - RLHF_Logger:
+Episode: 61 Timestep: 1960
+Policy_Loss: 5.737e-08 Critic_Loss: 0.01897 Reward: 1.36 RM_Reward: -2.395 Ref_Reward: 3.756
+(INFO) 2024-03-15 14:06:25,506  - RLHF_Logger:
+Current Ratio(2712) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:25,577  - RLHF_Logger:
+Current Ratio(1.251e+06) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:25,648  - RLHF_Logger:
+Current Ratio(1.714e+08) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:25,681  - RLHF_Logger:
+Episode: 61 Timestep: 1968
+Policy_Loss: 1.192e-08 Critic_Loss: 0.0171 Reward: 0.5782 RM_Reward: -2.866 Ref_Reward: 3.444
+(INFO) 2024-03-15 14:06:26,610  - RLHF_Logger:
+Current Ratio(75.16) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:26,656  - RLHF_Logger:
+Episode: 61 Timestep: 1976
+Policy_Loss: -2.98e-09 Critic_Loss: 0.01852 Reward: 0.9763 RM_Reward: -2.831 Ref_Reward: 3.807
+(INFO) 2024-03-15 14:06:27,744  - RLHF_Logger:
+Episode: 61 Timestep: 1984
+Policy_Loss: -2.384e-08 Critic_Loss: 0.01562 Reward: 0.4076 RM_Reward: -2.407 Ref_Reward: 2.815
+(INFO) 2024-03-15 14:06:29,078  - RLHF_Logger:
+Episode: 62 Timestep: 1992
+Policy_Loss: 1.49e-08 Critic_Loss: 0.06926 Reward: 0.4752 RM_Reward: -2.9 Ref_Reward: 3.375
+(INFO) 2024-03-15 14:06:29,970  - RLHF_Logger:
+Episode: 62 Timestep: 2000
+Policy_Loss: -1.043e-08 Critic_Loss: 0.015 Reward: -0.1288 RM_Reward: -3.126 Ref_Reward: 2.997
+(INFO) 2024-03-15 14:06:30,729  - RLHF_Logger:
+Current Ratio(705.3) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:30,806  - RLHF_Logger:
+Current Ratio(3.421e+05) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:30,836  - RLHF_Logger:
+Episode: 62 Timestep: 2008
+Policy_Loss: -4.47e-08 Critic_Loss: 0.0485 Reward: -0.2011 RM_Reward: -2.655 Ref_Reward: 2.454
+(INFO) 2024-03-15 14:06:31,678  - RLHF_Logger:
+Current Ratio(17.7) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:31,711  - RLHF_Logger:
+Episode: 62 Timestep: 2016
+Policy_Loss: -8.196e-09 Critic_Loss: 0.01081 Reward: 0.1594 RM_Reward: -2.782 Ref_Reward: 2.941
+(INFO) 2024-03-15 14:06:32,668  - RLHF_Logger:
+Episode: 63 Timestep: 2024
+Policy_Loss: -2.086e-08 Critic_Loss: 0.03797 Reward: -0.1319 RM_Reward: -2.639 Ref_Reward: 2.507
+(INFO) 2024-03-15 14:06:33,545  - RLHF_Logger:
+Current Ratio(205.5) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:33,582  - RLHF_Logger:
+Episode: 63 Timestep: 2032
+Policy_Loss: -2.459e-08 Critic_Loss: 0.01213 Reward: -0.2488 RM_Reward: -2.472 Ref_Reward: 2.224
+(INFO) 2024-03-15 14:06:34,216  - RLHF_Logger:
+Current Ratio(117.3) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:34,310  - RLHF_Logger:
+Current Ratio(1.808e+06) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:34,404  - RLHF_Logger:
+Current Ratio(4.839e+09) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:34,498  - RLHF_Logger:
+Current Ratio(8.16e+11) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:34,542  - RLHF_Logger:
+Episode: 63 Timestep: 2040
+Policy_Loss: -2.98e-09 Critic_Loss: 0.009146 Reward: 0.86 RM_Reward: -2.68 Ref_Reward: 3.54
+(INFO) 2024-03-15 14:06:35,314  - RLHF_Logger:
+Current Ratio(50.35) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:35,427  - RLHF_Logger:
+Current Ratio(2688) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:35,540  - RLHF_Logger:
+Current Ratio(6.84e+04) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:35,595  - RLHF_Logger:
+Episode: 63 Timestep: 2048
+Policy_Loss: 0 Critic_Loss: 0.004224 Reward: 0.4163 RM_Reward: -2.83 Ref_Reward: 3.246
+(INFO) 2024-03-15 14:06:36,514  - RLHF_Logger:
+Current Ratio(4665) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:36,635  - RLHF_Logger:
+Current Ratio(2.565e+06) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:36,694  - RLHF_Logger:
+Episode: 64 Timestep: 2056
+Policy_Loss: 1.192e-08 Critic_Loss: 0.01425 Reward: 0.5814 RM_Reward: -2.571 Ref_Reward: 3.152
+(INFO) 2024-03-15 14:06:37,690  - RLHF_Logger:
+Episode: 64 Timestep: 2064
+Policy_Loss: -1.49e-08 Critic_Loss: 0.01327 Reward: 0.1529 RM_Reward: -2.84 Ref_Reward: 2.993
+(INFO) 2024-03-15 14:06:39,050  - RLHF_Logger:
+Episode: 64 Timestep: 2072
+Policy_Loss: 8.941e-09 Critic_Loss: 0.04542 Reward: 0.07605 RM_Reward: -3.634 Ref_Reward: 3.71
+(INFO) 2024-03-15 14:06:41,004  - RLHF_Logger:
+Episode: 64 Timestep: 2080
+Policy_Loss: -4.47e-09 Critic_Loss: 0.01714 Reward: 0.02248 RM_Reward: -3.014 Ref_Reward: 3.036
+(INFO) 2024-03-15 14:06:42,975  - RLHF_Logger:
+Episode: 65 Timestep: 2088
+Policy_Loss: 7.451e-09 Critic_Loss: 0.02515 Reward: -0.2495 RM_Reward: -2.054 Ref_Reward: 1.805
+(INFO) 2024-03-15 14:06:44,881  - RLHF_Logger:
+Episode: 65 Timestep: 2096
+Policy_Loss: 1.639e-08 Critic_Loss: 0.009623 Reward: 0.267 RM_Reward: -2.574 Ref_Reward: 2.841
+(INFO) 2024-03-15 14:06:45,747  - RLHF_Logger:
+Episode: 65 Timestep: 2104
+Policy_Loss: -1.192e-08 Critic_Loss: 0.01459 Reward: -0.8876 RM_Reward: -2.78 Ref_Reward: 1.893
+(INFO) 2024-03-15 14:06:46,680  - RLHF_Logger:
+Episode: 65 Timestep: 2112
+Policy_Loss: 2.086e-08 Critic_Loss: 0.02009 Reward: 0.2531 RM_Reward: -2.951 Ref_Reward: 3.204
+(INFO) 2024-03-15 14:06:47,745  - RLHF_Logger:
+Episode: 66 Timestep: 2120
+Policy_Loss: 7.451e-09 Critic_Loss: 0.01376 Reward: -0.7241 RM_Reward: -2.772 Ref_Reward: 2.048
+(INFO) 2024-03-15 14:06:49,734  - RLHF_Logger:
+Episode: 66 Timestep: 2128
+Policy_Loss: -4.47e-09 Critic_Loss: 0.01068 Reward: 0.1356 RM_Reward: -2.397 Ref_Reward: 2.532
+(INFO) 2024-03-15 14:06:51,641  - RLHF_Logger:
+Episode: 66 Timestep: 2136
+Policy_Loss: -7.451e-09 Critic_Loss: 0.005771 Reward: -0.5113 RM_Reward: -2.519 Ref_Reward: 2.007
+(INFO) 2024-03-15 14:06:53,407  - RLHF_Logger:
+Current Ratio(26.8) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:06:53,577  - RLHF_Logger:
+Episode: 66 Timestep: 2144
+Policy_Loss: 1.788e-08 Critic_Loss: 0.01376 Reward: -0.1036 RM_Reward: -2.922 Ref_Reward: 2.819
+(INFO) 2024-03-15 14:06:54,793  - RLHF_Logger:
+Episode: 67 Timestep: 2152
+Policy_Loss: -2.98e-09 Critic_Loss: 0.009989 Reward: -0.7132 RM_Reward: -2.587 Ref_Reward: 1.874
+(INFO) 2024-03-15 14:06:55,849  - RLHF_Logger:
+Episode: 67 Timestep: 2160
+Policy_Loss: -1.118e-08 Critic_Loss: 0.02868 Reward: -0.9421 RM_Reward: -2.705 Ref_Reward: 1.763
+(INFO) 2024-03-15 14:06:56,818  - RLHF_Logger:
+Episode: 67 Timestep: 2168
+Policy_Loss: 1.49e-09 Critic_Loss: 0.01056 Reward: 0.2856 RM_Reward: -2.991 Ref_Reward: 3.277
+(INFO) 2024-03-15 14:06:58,228  - RLHF_Logger:
+Episode: 67 Timestep: 2176
+Policy_Loss: 4.47e-09 Critic_Loss: 0.01626 Reward: -0.9114 RM_Reward: -1.831 Ref_Reward: 0.9196
+(INFO) 2024-03-15 14:07:00,193  - RLHF_Logger:
+Episode: 68 Timestep: 2184
+Policy_Loss: -2.235e-09 Critic_Loss: 0.01068 Reward: -0.8181 RM_Reward: -2.468 Ref_Reward: 1.65
+(INFO) 2024-03-15 14:07:02,152  - RLHF_Logger:
+Episode: 68 Timestep: 2192
+Policy_Loss: 3.278e-08 Critic_Loss: 0.007491 Reward: -1.665 RM_Reward: -2.056 Ref_Reward: 0.3915
+(INFO) 2024-03-15 14:07:04,038  - RLHF_Logger:
+Episode: 68 Timestep: 2200
+Policy_Loss: -1.565e-08 Critic_Loss: 0.02027 Reward: 0.06259 RM_Reward: -3.545 Ref_Reward: 3.607
+(INFO) 2024-03-15 14:07:05,940  - RLHF_Logger:
+Episode: 68 Timestep: 2208
+Policy_Loss: -4.47e-09 Critic_Loss: 0.01331 Reward: 0.03136 RM_Reward: -3.216 Ref_Reward: 3.247
+(INFO) 2024-03-15 14:07:07,339  - RLHF_Logger:
+Episode: 69 Timestep: 2216
+Policy_Loss: -7.451e-09 Critic_Loss: 0.01378 Reward: -0.7066 RM_Reward: -3.36 Ref_Reward: 2.653
+(INFO) 2024-03-15 14:07:09,302  - RLHF_Logger:
+Episode: 69 Timestep: 2224
+Policy_Loss: -2.608e-08 Critic_Loss: 0.01561 Reward: -0.7328 RM_Reward: -3.045 Ref_Reward: 2.312
+(INFO) 2024-03-15 14:07:10,149  - RLHF_Logger:
+Current Ratio(10.5) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:07:10,185  - RLHF_Logger:
+Episode: 69 Timestep: 2232
+Policy_Loss: 2.98e-09 Critic_Loss: 0.01711 Reward: -0.6343 RM_Reward: -3.337 Ref_Reward: 2.702
+(INFO) 2024-03-15 14:07:12,167  - RLHF_Logger:
+Episode: 69 Timestep: 2240
+Policy_Loss: -1.118e-08 Critic_Loss: 0.01126 Reward: -0.4609 RM_Reward: -2.281 Ref_Reward: 1.82
+(INFO) 2024-03-15 14:07:13,308  - RLHF_Logger:
+Episode: 70 Timestep: 2248
+Policy_Loss: -1.341e-08 Critic_Loss: 0.007722 Reward: -1.115 RM_Reward: -2.64 Ref_Reward: 1.525
+(INFO) 2024-03-15 14:07:14,280  - RLHF_Logger:
+Episode: 70 Timestep: 2256
+Policy_Loss: 4.47e-09 Critic_Loss: 0.01574 Reward: -0.3318 RM_Reward: -2.958 Ref_Reward: 2.626
+(INFO) 2024-03-15 14:07:15,614  - RLHF_Logger:
+Episode: 70 Timestep: 2264
+Policy_Loss: -1.639e-08 Critic_Loss: 0.003879 Reward: -0.8093 RM_Reward: -2.486 Ref_Reward: 1.677
+(INFO) 2024-03-15 14:07:17,192  - RLHF_Logger:
+Episode: 70 Timestep: 2272
+Policy_Loss: 5.96e-09 Critic_Loss: 0.01466 Reward: -0.6356 RM_Reward: -2.846 Ref_Reward: 2.21
+(INFO) 2024-03-15 14:07:18,586  - RLHF_Logger:
+Episode: 71 Timestep: 2280
+Policy_Loss: -5.215e-09 Critic_Loss: 0.01724 Reward: -1.16 RM_Reward: -2.818 Ref_Reward: 1.658
+(INFO) 2024-03-15 14:07:19,433  - RLHF_Logger:
+Episode: 71 Timestep: 2288
+Policy_Loss: -7.451e-09 Critic_Loss: 0.02089 Reward: -1.8 RM_Reward: -2.888 Ref_Reward: 1.089
+(INFO) 2024-03-15 14:07:20,769  - RLHF_Logger:
+Episode: 71 Timestep: 2296
+Policy_Loss: -2.98e-09 Critic_Loss: 0.009718 Reward: -0.3963 RM_Reward: -2.62 Ref_Reward: 2.224
+(INFO) 2024-03-15 14:07:21,587  - RLHF_Logger:
+Current Ratio(10.58) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:07:21,682  - RLHF_Logger:
+Current Ratio(160.9) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:07:21,726  - RLHF_Logger:
+Episode: 71 Timestep: 2304
+Policy_Loss: -1.192e-08 Critic_Loss: 0.009877 Reward: -1.416 RM_Reward: -2.724 Ref_Reward: 1.309
+(INFO) 2024-03-15 14:07:22,868  - RLHF_Logger:
+Episode: 72 Timestep: 2312
+Policy_Loss: -2.012e-08 Critic_Loss: 0.01298 Reward: -0.1639 RM_Reward: -2.653 Ref_Reward: 2.489
+(INFO) 2024-03-15 14:07:24,214  - RLHF_Logger:
+Episode: 72 Timestep: 2320
+Policy_Loss: -9.686e-09 Critic_Loss: 0.01877 Reward: -1.36 RM_Reward: -2.562 Ref_Reward: 1.202
+(INFO) 2024-03-15 14:07:25,783  - RLHF_Logger:
+Episode: 72 Timestep: 2328
+Policy_Loss: 7.451e-09 Critic_Loss: 0.007641 Reward: -0.6032 RM_Reward: -2.958 Ref_Reward: 2.355
+(INFO) 2024-03-15 14:07:26,923  - RLHF_Logger:
+Episode: 72 Timestep: 2336
+Policy_Loss: 2.161e-08 Critic_Loss: 0.01222 Reward: -1.526 RM_Reward: -2.482 Ref_Reward: 0.9561
+(INFO) 2024-03-15 14:07:28,829  - RLHF_Logger:
+Episode: 73 Timestep: 2344
+Policy_Loss: -9.09e-08 Critic_Loss: 0.03461 Reward: -0.5695 RM_Reward: -3.037 Ref_Reward: 2.468
+(INFO) 2024-03-15 14:07:29,866  - RLHF_Logger:
+Episode: 73 Timestep: 2352
+Policy_Loss: -8.568e-09 Critic_Loss: 0.03546 Reward: -0.4158 RM_Reward: -2.757 Ref_Reward: 2.342
+(INFO) 2024-03-15 14:07:31,637  - RLHF_Logger:
+Current Ratio(79.39) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:07:31,806  - RLHF_Logger:
+Episode: 73 Timestep: 2360
+Policy_Loss: -2.533e-08 Critic_Loss: 0.01165 Reward: -0.4821 RM_Reward: -2.53 Ref_Reward: 2.048
+(INFO) 2024-03-15 14:07:32,767  - RLHF_Logger:
+Episode: 73 Timestep: 2368
+Policy_Loss: -4.47e-09 Critic_Loss: 0.01487 Reward: -0.9826 RM_Reward: -2.17 Ref_Reward: 1.188
+(INFO) 2024-03-15 14:07:33,665  - RLHF_Logger:
+Episode: 74 Timestep: 2376
+Policy_Loss: 6.109e-08 Critic_Loss: 0.02035 Reward: -1.303 RM_Reward: -2.773 Ref_Reward: 1.47
+(INFO) 2024-03-15 14:07:34,625  - RLHF_Logger:
+Episode: 74 Timestep: 2384
+Policy_Loss: -7.451e-09 Critic_Loss: 0.01295 Reward: -0.948 RM_Reward: -3.01 Ref_Reward: 2.062
+(INFO) 2024-03-15 14:07:35,400  - RLHF_Logger:
+Current Ratio(107.5) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:07:35,481  - RLHF_Logger:
+Current Ratio(1542) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:07:35,515  - RLHF_Logger:
+Episode: 74 Timestep: 2392
+Policy_Loss: 1.49e-09 Critic_Loss: 0.01402 Reward: -1.824 RM_Reward: -2.599 Ref_Reward: 0.775
+(INFO) 2024-03-15 14:07:36,405  - RLHF_Logger:
+Episode: 74 Timestep: 2400
+Policy_Loss: 2.235e-09 Critic_Loss: 0.01494 Reward: -1.161 RM_Reward: -2.887 Ref_Reward: 1.726
+(INFO) 2024-03-15 14:07:37,415  - RLHF_Logger:
+Episode: 75 Timestep: 2408
+Policy_Loss: -2.98e-09 Critic_Loss: 0.008289 Reward: -1.203 RM_Reward: -2.175 Ref_Reward: 0.972
+(INFO) 2024-03-15 14:07:39,043  - RLHF_Logger:
+Episode: 75 Timestep: 2416
+Policy_Loss: -2.98e-09 Critic_Loss: 0.01777 Reward: -0.3105 RM_Reward: -2.491 Ref_Reward: 2.18
+(INFO) 2024-03-15 14:07:40,264  - RLHF_Logger:
+Episode: 75 Timestep: 2424
+Policy_Loss: -1.043e-08 Critic_Loss: 0.01582 Reward: -1.001 RM_Reward: -3.297 Ref_Reward: 2.297
+(INFO) 2024-03-15 14:07:41,233  - RLHF_Logger:
+Episode: 75 Timestep: 2432
+Policy_Loss: 3.725e-08 Critic_Loss: 0.01484 Reward: -1.365 RM_Reward: -2.913 Ref_Reward: 1.547
+(INFO) 2024-03-15 14:07:42,815  - RLHF_Logger:
+Episode: 76 Timestep: 2440
+Policy_Loss: 1.341e-08 Critic_Loss: 0.01272 Reward: -1.294 RM_Reward: -3.244 Ref_Reward: 1.95
+(INFO) 2024-03-15 14:07:43,775  - RLHF_Logger:
+Episode: 76 Timestep: 2448
+Policy_Loss: -2.98e-09 Critic_Loss: 0.008204 Reward: -1.107 RM_Reward: -3.112 Ref_Reward: 2.005
+(INFO) 2024-03-15 14:07:44,764  - RLHF_Logger:
+Episode: 76 Timestep: 2456
+Policy_Loss: -9.872e-09 Critic_Loss: 0.01091 Reward: -1.101 RM_Reward: -2.617 Ref_Reward: 1.516
+(INFO) 2024-03-15 14:07:46,848  - RLHF_Logger:
+Episode: 76 Timestep: 2464
+Policy_Loss: 4.917e-07 Critic_Loss: 0.009075 Reward: -1.106 RM_Reward: -2.452 Ref_Reward: 1.347
+(INFO) 2024-03-15 14:07:47,867  - RLHF_Logger:
+Episode: 77 Timestep: 2472
+Policy_Loss: 5.96e-09 Critic_Loss: 0.01119 Reward: -1.625 RM_Reward: -2.248 Ref_Reward: 0.6231
+(INFO) 2024-03-15 14:07:48,942  - RLHF_Logger:
+Episode: 77 Timestep: 2480
+Policy_Loss: -7.451e-09 Critic_Loss: 0.01743 Reward: -1.122 RM_Reward: -3.572 Ref_Reward: 2.45
+(INFO) 2024-03-15 14:07:50,004  - RLHF_Logger:
+Episode: 77 Timestep: 2488
+Policy_Loss: 1.192e-08 Critic_Loss: 0.00799 Reward: -0.992 RM_Reward: -3.031 Ref_Reward: 2.039
+(INFO) 2024-03-15 14:07:51,197  - RLHF_Logger:
+Episode: 77 Timestep: 2496
+Policy_Loss: 4.023e-08 Critic_Loss: 0.01116 Reward: -0.9197 RM_Reward: -2.635 Ref_Reward: 1.715
+(INFO) 2024-03-15 14:07:53,229  - RLHF_Logger:
+Episode: 78 Timestep: 2504
+Policy_Loss: 4.47e-09 Critic_Loss: 0.01539 Reward: -1.23 RM_Reward: -2.376 Ref_Reward: 1.146
+(INFO) 2024-03-15 14:07:55,318  - RLHF_Logger:
+Episode: 78 Timestep: 2512
+Policy_Loss: 2.31e-08 Critic_Loss: 0.01819 Reward: -0.4692 RM_Reward: -2.711 Ref_Reward: 2.242
+(INFO) 2024-03-15 14:07:56,595  - RLHF_Logger:
+Episode: 78 Timestep: 2520
+Policy_Loss: -1.341e-08 Critic_Loss: 0.01608 Reward: -0.7696 RM_Reward: -3.437 Ref_Reward: 2.668
+(INFO) 2024-03-15 14:07:58,265  - RLHF_Logger:
+Episode: 78 Timestep: 2528
+Policy_Loss: -2.98e-09 Critic_Loss: 0.006047 Reward: -0.5598 RM_Reward: -2.929 Ref_Reward: 2.37
+(INFO) 2024-03-15 14:07:59,763  - RLHF_Logger:
+Episode: 79 Timestep: 2536
+Policy_Loss: 7.451e-10 Critic_Loss: 0.006058 Reward: -1.018 RM_Reward: -3.894 Ref_Reward: 2.875
+(INFO) 2024-03-15 14:08:00,721  - RLHF_Logger:
+Episode: 79 Timestep: 2544
+Policy_Loss: 1.49e-08 Critic_Loss: 0.004988 Reward: -0.9999 RM_Reward: -2.575 Ref_Reward: 1.576
+(INFO) 2024-03-15 14:08:01,800  - RLHF_Logger:
+Episode: 79 Timestep: 2552
+Policy_Loss: -4.023e-08 Critic_Loss: 0.003569 Reward: -0.4304 RM_Reward: -3.525 Ref_Reward: 3.095
+(INFO) 2024-03-15 14:08:03,909  - RLHF_Logger:
+Episode: 79 Timestep: 2560
+Policy_Loss: -5.96e-09 Critic_Loss: 0.02271 Reward: -1.288 RM_Reward: -2.037 Ref_Reward: 0.7488
+(INFO) 2024-03-15 14:08:05,002  - RLHF_Logger:
+Episode: 80 Timestep: 2568
+Policy_Loss: 6.706e-09 Critic_Loss: 0.002571 Reward: -1.245 RM_Reward: -2.533 Ref_Reward: 1.288
+(INFO) 2024-03-15 14:08:06,226  - RLHF_Logger:
+Episode: 80 Timestep: 2576
+Policy_Loss: 8.941e-09 Critic_Loss: 0.01211 Reward: -1.327 RM_Reward: -3.485 Ref_Reward: 2.158
+(INFO) 2024-03-15 14:08:07,551  - RLHF_Logger:
+Current Ratio(232.1) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:08:07,640  - RLHF_Logger:
+Episode: 80 Timestep: 2584
+Policy_Loss: 2.98e-09 Critic_Loss: 0.006674 Reward: -1.083 RM_Reward: -2.964 Ref_Reward: 1.881
+(INFO) 2024-03-15 14:08:08,623  - RLHF_Logger:
+Current Ratio(31.67) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:08:08,670  - RLHF_Logger:
+Episode: 80 Timestep: 2592
+Policy_Loss: 4.917e-08 Critic_Loss: 0.01233 Reward: -0.8596 RM_Reward: -2.915 Ref_Reward: 2.055
+(INFO) 2024-03-15 14:08:09,785  - RLHF_Logger:
+Episode: 81 Timestep: 2600
+Policy_Loss: 1.49e-08 Critic_Loss: 0.009917 Reward: 0.09338 RM_Reward: -3.178 Ref_Reward: 3.271
+(INFO) 2024-03-15 14:08:11,884  - RLHF_Logger:
+Episode: 81 Timestep: 2608
+Policy_Loss: -8.047e-08 Critic_Loss: 0.004314 Reward: -1.151 RM_Reward: -2.48 Ref_Reward: 1.329
+(INFO) 2024-03-15 14:08:13,896  - RLHF_Logger:
+Episode: 81 Timestep: 2616
+Policy_Loss: -2.086e-08 Critic_Loss: 0.01091 Reward: -0.6535 RM_Reward: -2.936 Ref_Reward: 2.282
+(INFO) 2024-03-15 14:08:14,912  - RLHF_Logger:
+Episode: 81 Timestep: 2624
+Policy_Loss: 3.055e-08 Critic_Loss: 0.008863 Reward: -1.153 RM_Reward: -3.088 Ref_Reward: 1.934
+(INFO) 2024-03-15 14:08:17,020  - RLHF_Logger:
+Episode: 82 Timestep: 2632
+Policy_Loss: 7.451e-09 Critic_Loss: 0.0187 Reward: -0.7592 RM_Reward: -2.703 Ref_Reward: 1.944
+(INFO) 2024-03-15 14:08:18,075  - RLHF_Logger:
+Episode: 82 Timestep: 2640
+Policy_Loss: -1.192e-08 Critic_Loss: 0.009018 Reward: -1.232 RM_Reward: -2.751 Ref_Reward: 1.52
+(INFO) 2024-03-15 14:08:20,133  - RLHF_Logger:
+Episode: 82 Timestep: 2648
+Policy_Loss: -2.086e-08 Critic_Loss: 0.012 Reward: -0.4648 RM_Reward: -2.897 Ref_Reward: 2.432
+(INFO) 2024-03-15 14:08:21,088  - RLHF_Logger:
+Current Ratio(17.18) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:08:21,267  - RLHF_Logger:
+Current Ratio(747.8) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:08:21,444  - RLHF_Logger:
+Current Ratio(2.576e+04) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:08:21,533  - RLHF_Logger:
+Episode: 82 Timestep: 2656
+Policy_Loss: 0 Critic_Loss: 0.002948 Reward: -0.5086 RM_Reward: -3.191 Ref_Reward: 2.683
+(INFO) 2024-03-15 14:08:23,059  - RLHF_Logger:
+Episode: 83 Timestep: 2664
+Policy_Loss: 1.043e-08 Critic_Loss: 0.005425 Reward: -0.2641 RM_Reward: -3.865 Ref_Reward: 3.601
+(INFO) 2024-03-15 14:08:24,207  - RLHF_Logger:
+Episode: 83 Timestep: 2672
+Policy_Loss: 0 Critic_Loss: 0.005143 Reward: -1.83 RM_Reward: -2.213 Ref_Reward: 0.383
+(INFO) 2024-03-15 14:08:25,154  - RLHF_Logger:
+Episode: 83 Timestep: 2680
+Policy_Loss: 8.941e-09 Critic_Loss: 0.01521 Reward: -1.281 RM_Reward: -2.718 Ref_Reward: 1.436
+(INFO) 2024-03-15 14:08:26,159  - RLHF_Logger:
+Episode: 83 Timestep: 2688
+Policy_Loss: -6.706e-09 Critic_Loss: 0.005749 Reward: -1.953 RM_Reward: -2.541 Ref_Reward: 0.5877
+(INFO) 2024-03-15 14:08:26,978  - RLHF_Logger:
+Current Ratio(43.74) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:08:27,059  - RLHF_Logger:
+Current Ratio(4186) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:08:27,095  - RLHF_Logger:
+Episode: 84 Timestep: 2696
+Policy_Loss: -5.96e-09 Critic_Loss: 0.004587 Reward: -1.311 RM_Reward: -3.11 Ref_Reward: 1.799
+(INFO) 2024-03-15 14:08:28,198  - RLHF_Logger:
+Episode: 84 Timestep: 2704
+Policy_Loss: -1.378e-08 Critic_Loss: 0.01208 Reward: -0.7446 RM_Reward: -2.776 Ref_Reward: 2.032
+(INFO) 2024-03-15 14:08:29,197  - RLHF_Logger:
+Episode: 84 Timestep: 2712
+Policy_Loss: 1.937e-08 Critic_Loss: 0.007506 Reward: -1.774 RM_Reward: -2.31 Ref_Reward: 0.5364
+(INFO) 2024-03-15 14:08:30,164  - RLHF_Logger:
+Episode: 84 Timestep: 2720
+Policy_Loss: -4.47e-09 Critic_Loss: 0.005962 Reward: -1.372 RM_Reward: -3.018 Ref_Reward: 1.647
+(INFO) 2024-03-15 14:08:31,390  - RLHF_Logger:
+Episode: 85 Timestep: 2728
+Policy_Loss: 8.941e-09 Critic_Loss: 0.01034 Reward: -1.751 RM_Reward: -2.655 Ref_Reward: 0.9035
+(INFO) 2024-03-15 14:08:32,618  - RLHF_Logger:
+Episode: 85 Timestep: 2736
+Policy_Loss: -5.215e-09 Critic_Loss: 0.00304 Reward: -1.59 RM_Reward: -2.676 Ref_Reward: 1.087
+(INFO) 2024-03-15 14:08:33,684  - RLHF_Logger:
+Episode: 85 Timestep: 2744
+Policy_Loss: -7.451e-10 Critic_Loss: 0.003761 Reward: -0.9845 RM_Reward: -3.531 Ref_Reward: 2.547
+(INFO) 2024-03-15 14:08:34,838  - RLHF_Logger:
+Episode: 85 Timestep: 2752
+Policy_Loss: 4.098e-08 Critic_Loss: 0.005506 Reward: -1.677 RM_Reward: -1.933 Ref_Reward: 0.2556
+(INFO) 2024-03-15 14:08:35,784  - RLHF_Logger:
+Episode: 86 Timestep: 2760
+Policy_Loss: 2.98e-09 Critic_Loss: 0.007693 Reward: -1.977 RM_Reward: -2.261 Ref_Reward: 0.2841
+(INFO) 2024-03-15 14:08:37,809  - RLHF_Logger:
+Episode: 86 Timestep: 2768
+Policy_Loss: 2.98e-09 Critic_Loss: 0.01124 Reward: -0.7308 RM_Reward: -2.898 Ref_Reward: 2.167
+(INFO) 2024-03-15 14:08:39,226  - RLHF_Logger:
+Episode: 86 Timestep: 2776
+Policy_Loss: 4.403e-07 Critic_Loss: 0.004203 Reward: -1.315 RM_Reward: -2.931 Ref_Reward: 1.617
+(INFO) 2024-03-15 14:08:40,546  - RLHF_Logger:
+Episode: 86 Timestep: 2784
+Policy_Loss: 1.565e-08 Critic_Loss: 0.01449 Reward: -1.195 RM_Reward: -1.559 Ref_Reward: 0.3643
+(INFO) 2024-03-15 14:08:41,561  - RLHF_Logger:
+Episode: 87 Timestep: 2792
+Policy_Loss: -1.267e-08 Critic_Loss: 0.006836 Reward: -0.7246 RM_Reward: -3.107 Ref_Reward: 2.382
+(INFO) 2024-03-15 14:08:43,591  - RLHF_Logger:
+Episode: 87 Timestep: 2800
+Policy_Loss: -1.639e-08 Critic_Loss: 0.006448 Reward: -1.208 RM_Reward: -2.705 Ref_Reward: 1.497
+(INFO) 2024-03-15 14:08:44,588  - RLHF_Logger:
+Episode: 87 Timestep: 2808
+Policy_Loss: -1.863e-08 Critic_Loss: 0.007231 Reward: -0.8339 RM_Reward: -3.144 Ref_Reward: 2.31
+(INFO) 2024-03-15 14:08:45,630  - RLHF_Logger:
+Episode: 87 Timestep: 2816
+Policy_Loss: 3.129e-08 Critic_Loss: 0.007288 Reward: -0.7579 RM_Reward: -3.032 Ref_Reward: 2.274
+(INFO) 2024-03-15 14:08:46,626  - RLHF_Logger:
+Episode: 88 Timestep: 2824
+Policy_Loss: 3.725e-08 Critic_Loss: 0.005583 Reward: -1.075 RM_Reward: -2.39 Ref_Reward: 1.316
+(INFO) 2024-03-15 14:08:48,731  - RLHF_Logger:
+Episode: 88 Timestep: 2832
+Policy_Loss: 5.737e-08 Critic_Loss: 0.006483 Reward: -0.3402 RM_Reward: -2.608 Ref_Reward: 2.268
+(INFO) 2024-03-15 14:08:50,775  - RLHF_Logger:
+Episode: 88 Timestep: 2840
+Policy_Loss: -7.451e-09 Critic_Loss: 0.0153 Reward: -0.7335 RM_Reward: -2.867 Ref_Reward: 2.133
+(INFO) 2024-03-15 14:08:52,074  - RLHF_Logger:
+Episode: 88 Timestep: 2848
+Policy_Loss: 5.364e-08 Critic_Loss: 0.01314 Reward: -1.538 RM_Reward: -2.15 Ref_Reward: 0.6112
+(INFO) 2024-03-15 14:08:54,102  - RLHF_Logger:
+Episode: 89 Timestep: 2856
+Policy_Loss: -1.267e-08 Critic_Loss: 0.007905 Reward: -0.2671 RM_Reward: -3.102 Ref_Reward: 2.835
+(INFO) 2024-03-15 14:08:55,201  - RLHF_Logger:
+Episode: 89 Timestep: 2864
+Policy_Loss: -8.941e-09 Critic_Loss: 0.005254 Reward: -0.9933 RM_Reward: -3.28 Ref_Reward: 2.287
+(INFO) 2024-03-15 14:08:56,498  - RLHF_Logger:
+Episode: 89 Timestep: 2872
+Policy_Loss: -4.321e-08 Critic_Loss: 0.007769 Reward: -0.9523 RM_Reward: -2.705 Ref_Reward: 1.753
+(INFO) 2024-03-15 14:08:58,524  - RLHF_Logger:
+Episode: 89 Timestep: 2880
+Policy_Loss: -1.192e-08 Critic_Loss: 0.00666 Reward: -1.26 RM_Reward: -2.983 Ref_Reward: 1.723
+(INFO) 2024-03-15 14:08:59,632  - RLHF_Logger:
+Episode: 90 Timestep: 2888
+Policy_Loss: -2.98e-09 Critic_Loss: 0.01138 Reward: -0.6623 RM_Reward: -3.441 Ref_Reward: 2.779
+(INFO) 2024-03-15 14:09:00,788  - RLHF_Logger:
+Episode: 90 Timestep: 2896
+Policy_Loss: -2.384e-08 Critic_Loss: 0.005571 Reward: -1.25 RM_Reward: -2.483 Ref_Reward: 1.233
+(INFO) 2024-03-15 14:09:02,087  - RLHF_Logger:
+Episode: 90 Timestep: 2904
+Policy_Loss: -2.757e-08 Critic_Loss: 0.007409 Reward: -1.212 RM_Reward: -3.236 Ref_Reward: 2.024
+(INFO) 2024-03-15 14:09:03,591  - RLHF_Logger:
+Episode: 90 Timestep: 2912
+Policy_Loss: -9.686e-08 Critic_Loss: 0.02197 Reward: -1.615 RM_Reward: -2.638 Ref_Reward: 1.023
+(INFO) 2024-03-15 14:09:04,701  - RLHF_Logger:
+Episode: 91 Timestep: 2920
+Policy_Loss: -3.129e-08 Critic_Loss: 0.006522 Reward: -2.3 RM_Reward: -2.28 Ref_Reward: -0.01958
+(INFO) 2024-03-15 14:09:05,608  - RLHF_Logger:
+Episode: 91 Timestep: 2928
+Policy_Loss: -1.192e-08 Critic_Loss: 0.004906 Reward: -1.593 RM_Reward: -2.531 Ref_Reward: 0.938
+(INFO) 2024-03-15 14:09:06,549  - RLHF_Logger:
+Episode: 91 Timestep: 2936
+Policy_Loss: -9.686e-09 Critic_Loss: 0.006137 Reward: -1.35 RM_Reward: -2.781 Ref_Reward: 1.431
+(INFO) 2024-03-15 14:09:08,667  - RLHF_Logger:
+Episode: 91 Timestep: 2944
+Policy_Loss: -1.043e-07 Critic_Loss: 0.007008 Reward: -0.8318 RM_Reward: -2.381 Ref_Reward: 1.549
+(INFO) 2024-03-15 14:09:10,702  - RLHF_Logger:
+Episode: 92 Timestep: 2952
+Policy_Loss: -1.639e-08 Critic_Loss: 0.01351 Reward: -1.386 RM_Reward: -2.874 Ref_Reward: 1.488
+(INFO) 2024-03-15 14:09:11,753  - RLHF_Logger:
+Episode: 92 Timestep: 2960
+Policy_Loss: -7.525e-08 Critic_Loss: 0.009503 Reward: -1.16 RM_Reward: -3.029 Ref_Reward: 1.868
+(INFO) 2024-03-15 14:09:13,060  - RLHF_Logger:
+Episode: 92 Timestep: 2968
+Policy_Loss: 1.043e-08 Critic_Loss: 0.01506 Reward: -1.236 RM_Reward: -2.872 Ref_Reward: 1.636
+(INFO) 2024-03-15 14:09:14,075  - RLHF_Logger:
+Episode: 92 Timestep: 2976
+Policy_Loss: 2.98e-09 Critic_Loss: 0.006416 Reward: -1.554 RM_Reward: -3.296 Ref_Reward: 1.741
+(INFO) 2024-03-15 14:09:15,116  - RLHF_Logger:
+Episode: 93 Timestep: 2984
+Policy_Loss: 0 Critic_Loss: 0.007549 Reward: -1.134 RM_Reward: -2.982 Ref_Reward: 1.848
+(INFO) 2024-03-15 14:09:16,250  - RLHF_Logger:
+Episode: 93 Timestep: 2992
+Policy_Loss: 5.066e-08 Critic_Loss: 0.005243 Reward: -0.9769 RM_Reward: -2.392 Ref_Reward: 1.415
+(INFO) 2024-03-15 14:09:17,479  - RLHF_Logger:
+Episode: 93 Timestep: 3000
+Policy_Loss: 2.086e-08 Critic_Loss: 0.006351 Reward: -1.199 RM_Reward: -2.363 Ref_Reward: 1.164
+(INFO) 2024-03-15 14:09:19,578  - RLHF_Logger:
+Episode: 93 Timestep: 3008
+Policy_Loss: 1.676e-08 Critic_Loss: 0.009183 Reward: -0.8987 RM_Reward: -2.536 Ref_Reward: 1.637
+(INFO) 2024-03-15 14:09:21,663  - RLHF_Logger:
+Episode: 94 Timestep: 3016
+Policy_Loss: -1.512e-07 Critic_Loss: 0.004672 Reward: -1.011 RM_Reward: -2.834 Ref_Reward: 1.823
+(INFO) 2024-03-15 14:09:22,634  - RLHF_Logger:
+Episode: 94 Timestep: 3024
+Policy_Loss: 4.47e-09 Critic_Loss: 0.006818 Reward: -1.025 RM_Reward: -2.869 Ref_Reward: 1.843
+(INFO) 2024-03-15 14:09:24,668  - RLHF_Logger:
+Episode: 94 Timestep: 3032
+Policy_Loss: -1.147e-07 Critic_Loss: 0.007978 Reward: -0.4497 RM_Reward: -2.636 Ref_Reward: 2.186
+(INFO) 2024-03-15 14:09:25,766  - RLHF_Logger:
+Episode: 94 Timestep: 3040
+Policy_Loss: 4.254e-07 Critic_Loss: 0.009652 Reward: -1.637 RM_Reward: -2.599 Ref_Reward: 0.962
+(INFO) 2024-03-15 14:09:26,758  - RLHF_Logger:
+Episode: 95 Timestep: 3048
+Policy_Loss: -3.509e-07 Critic_Loss: 0.01185 Reward: -1.413 RM_Reward: -2.301 Ref_Reward: 0.8883
+(INFO) 2024-03-15 14:09:28,787  - RLHF_Logger:
+Episode: 95 Timestep: 3056
+Policy_Loss: -3.189e-07 Critic_Loss: 0.003674 Reward: -0.5437 RM_Reward: -2.975 Ref_Reward: 2.432
+(INFO) 2024-03-15 14:09:29,754  - RLHF_Logger:
+Episode: 95 Timestep: 3064
+Policy_Loss: -8.941e-09 Critic_Loss: 0.006827 Reward: -0.8896 RM_Reward: -2.889 Ref_Reward: 1.999
+(INFO) 2024-03-15 14:09:30,788  - RLHF_Logger:
+Episode: 95 Timestep: 3072
+Policy_Loss: 1.747e-07 Critic_Loss: 0.006045 Reward: -1.379 RM_Reward: -2.63 Ref_Reward: 1.251
+(INFO) 2024-03-15 14:09:32,091  - RLHF_Logger:
+Episode: 96 Timestep: 3080
+Policy_Loss: -2.384e-08 Critic_Loss: 0.0171 Reward: -1.649 RM_Reward: -3.261 Ref_Reward: 1.612
+(INFO) 2024-03-15 14:09:33,759  - RLHF_Logger:
+Episode: 96 Timestep: 3088
+Policy_Loss: 0 Critic_Loss: 0.002015 Reward: -1.573 RM_Reward: -2.55 Ref_Reward: 0.9769
+(INFO) 2024-03-15 14:09:34,975  - RLHF_Logger:
+Episode: 96 Timestep: 3096
+Policy_Loss: -7.451e-10 Critic_Loss: 0.005823 Reward: -1.144 RM_Reward: -3.235 Ref_Reward: 2.09
+(INFO) 2024-03-15 14:09:35,813  - RLHF_Logger:
+Current Ratio(76.14) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:09:35,905  - RLHF_Logger:
+Current Ratio(1717) > Threshold(10) Skipping Batch
+(INFO) 2024-03-15 14:09:35,943  - RLHF_Logger:
+Episode: 96 Timestep: 3104
+Policy_Loss: 2.235e-08 Critic_Loss: 0.005392 Reward: -0.9652 RM_Reward: -3.073 Ref_Reward: 2.107
+(INFO) 2024-03-15 14:09:37,619  - RLHF_Logger:
+Episode: 97 Timestep: 3112
+Policy_Loss: 2.98e-08 Critic_Loss: 0.007898 Reward: -0.8254 RM_Reward: -3.291 Ref_Reward: 2.466
+(INFO) 2024-03-15 14:09:39,000  - RLHF_Logger:
+Episode: 97 Timestep: 3120
+Policy_Loss: 5.215e-09 Critic_Loss: 0.004752 Reward: -1.718 RM_Reward: -2.676 Ref_Reward: 0.9574
+(INFO) 2024-03-15 14:09:40,348  - RLHF_Logger:
+Episode: 97 Timestep: 3128
+Policy_Loss: 1.043e-08 Critic_Loss: 0.01143 Reward: -1.812 RM_Reward: -1.971 Ref_Reward: 0.1585
+(INFO) 2024-03-15 14:09:41,777  - RLHF_Logger:
+Episode: 97 Timestep: 3136
+Policy_Loss: 1.609e-07 Critic_Loss: 0.005736 Reward: -0.7282 RM_Reward: -3.356 Ref_Reward: 2.628
+(INFO) 2024-03-15 14:09:42,671  - RLHF_Logger:
+Episode: 98 Timestep: 3144
+Policy_Loss: -1.49e-09 Critic_Loss: 0.008385 Reward: -1.555 RM_Reward: -2.657 Ref_Reward: 1.102
+(INFO) 2024-03-15 14:09:43,575  - RLHF_Logger:
+Episode: 98 Timestep: 3152
+Policy_Loss: -1.49e-09 Critic_Loss: 0.007377 Reward: -1.809 RM_Reward: -2.563 Ref_Reward: 0.7543
+(INFO) 2024-03-15 14:09:44,732  - RLHF_Logger:
+Episode: 98 Timestep: 3160
+Policy_Loss: -2.682e-08 Critic_Loss: 0.003344 Reward: -0.9054 RM_Reward: -3.105 Ref_Reward: 2.2
+(INFO) 2024-03-15 14:09:46,079  - RLHF_Logger:
+Episode: 98 Timestep: 3168
+Policy_Loss: -1.49e-09 Critic_Loss: 0.00732 Reward: -1.045 RM_Reward: -2.786 Ref_Reward: 1.741
+(INFO) 2024-03-15 14:09:48,034  - RLHF_Logger:
+Episode: 99 Timestep: 3176
+Policy_Loss: 1.863e-09 Critic_Loss: 0.01449 Reward: -1.513 RM_Reward: -3.17 Ref_Reward: 1.656
+(INFO) 2024-03-15 14:09:49,606  - RLHF_Logger:
+Episode: 99 Timestep: 3184
+Policy_Loss: 6.258e-08 Critic_Loss: 0.007254 Reward: -1.367 RM_Reward: -2.445 Ref_Reward: 1.078
+(INFO) 2024-03-15 14:09:51,176  - RLHF_Logger:
+Episode: 99 Timestep: 3192
+Policy_Loss: -5.588e-09 Critic_Loss: 0.003995 Reward: -0.6506 RM_Reward: -2.891 Ref_Reward: 2.24
+(INFO) 2024-03-15 14:09:52,198  - RLHF_Logger:
+Episode: 99 Timestep: 3200
+Policy_Loss: -7.451e-09 Critic_Loss: 0.008031 Reward: -1.925 RM_Reward: -2.655 Ref_Reward: 0.7299
+(INFO) 2024-03-15 14:09:52,203  - RLHF_Logger:
+RLHF Training Complete

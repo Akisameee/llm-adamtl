@@ -1,0 +1,1208 @@
+(WARNING) 2024-04-07 14:39:56,075  - accelerate.utils.other:
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+(INFO) 2024-04-07 14:40:00,547  - RLHF_Logger:
+Episode: 1 Timestep: 8
+Policy_Loss: -0.01069 Critic_Loss: 0.2121 RM_Score: -4.785 Ref_KL: 0 Generate_Length: 73.5
+(INFO) 2024-04-07 14:40:02,564  - RLHF_Logger:
+Episode: 1 Timestep: 16
+Policy_Loss: -0.006896 Critic_Loss: 0.2591 RM_Score: -4.773 Ref_KL: 4.238e-05 Generate_Length: 53
+(INFO) 2024-04-07 14:40:06,165  - RLHF_Logger:
+Episode: 1 Timestep: 24
+Policy_Loss: -0.004332 Critic_Loss: 0.1624 RM_Score: -4.737 Ref_KL: -2.719e-05 Generate_Length: 79.88
+(INFO) 2024-04-07 14:40:09,865  - RLHF_Logger:
+Episode: 1 Timestep: 32
+Policy_Loss: -0.003151 Critic_Loss: 0.2412 RM_Score: -6.088 Ref_KL: -6.953e-05 Generate_Length: 85.5
+(INFO) 2024-04-07 14:40:12,201  - RLHF_Logger:
+Episode: 1 Timestep: 40
+Policy_Loss: -0.007422 Critic_Loss: 0.2747 RM_Score: -4.56 Ref_KL: 0.0008983 Generate_Length: 38.88
+(INFO) 2024-04-07 14:40:15,195  - RLHF_Logger:
+Episode: 1 Timestep: 48
+Policy_Loss: -0.004137 Critic_Loss: 0.2428 RM_Score: -5.282 Ref_KL: -0.0003762 Generate_Length: 65.25
+(INFO) 2024-04-07 14:40:18,065  - RLHF_Logger:
+Episode: 1 Timestep: 56
+Policy_Loss: -0.004679 Critic_Loss: 0.2851 RM_Score: -5.479 Ref_KL: 0.0002927 Generate_Length: 58.12
+(INFO) 2024-04-07 14:40:22,837  - RLHF_Logger:
+Episode: 1 Timestep: 64
+Policy_Loss: -0.003099 Critic_Loss: 0.199 RM_Score: -5.291 Ref_KL: 0.0002556 Generate_Length: 97.75
+(INFO) 2024-04-07 14:40:26,137  - RLHF_Logger:
+Episode: 1 Timestep: 72
+Policy_Loss: -0.004151 Critic_Loss: 0.2013 RM_Score: -5.46 Ref_KL: -0.0005161 Generate_Length: 83
+(INFO) 2024-04-07 14:40:29,075  - RLHF_Logger:
+Episode: 1 Timestep: 80
+Policy_Loss: -0.004295 Critic_Loss: 0.2816 RM_Score: -5.841 Ref_KL: -0.001284 Generate_Length: 66.62
+(INFO) 2024-04-07 14:40:32,878  - RLHF_Logger:
+Episode: 1 Timestep: 88
+Policy_Loss: -0.003199 Critic_Loss: 0.1811 RM_Score: -5.167 Ref_KL: -0.0009465 Generate_Length: 85.62
+(INFO) 2024-04-07 14:40:35,943  - RLHF_Logger:
+Episode: 1 Timestep: 96
+Policy_Loss: -0.008166 Critic_Loss: 0.1303 RM_Score: -3.546 Ref_KL: -0.001336 Generate_Length: 52.25
+(INFO) 2024-04-07 14:40:39,601  - RLHF_Logger:
+Episode: 1 Timestep: 104
+Policy_Loss: -0.004205 Critic_Loss: 0.1811 RM_Score: -5.569 Ref_KL: 9.218e-06 Generate_Length: 80.5
+(INFO) 2024-04-07 14:40:42,612  - RLHF_Logger:
+Episode: 1 Timestep: 112
+Policy_Loss: -0.006816 Critic_Loss: 0.2609 RM_Score: -5.559 Ref_KL: 0.00041 Generate_Length: 54.75
+(INFO) 2024-04-07 14:40:45,946  - RLHF_Logger:
+Episode: 1 Timestep: 120
+Policy_Loss: -0.003213 Critic_Loss: 0.1796 RM_Score: -5.349 Ref_KL: -0.001979 Generate_Length: 85
+(INFO) 2024-04-07 14:40:50,431  - RLHF_Logger:
+Episode: 1 Timestep: 128
+Policy_Loss: -0.00262 Critic_Loss: 0.1432 RM_Score: -5.46 Ref_KL: -0.003533 Generate_Length: 114.6
+(INFO) 2024-04-07 14:40:53,745  - RLHF_Logger:
+Episode: 1 Timestep: 136
+Policy_Loss: -0.00418 Critic_Loss: 0.199 RM_Score: -5.779 Ref_KL: -0.003101 Generate_Length: 87.62
+(INFO) 2024-04-07 14:40:55,940  - RLHF_Logger:
+Episode: 1 Timestep: 144
+Policy_Loss: -0.00968 Critic_Loss: 0.2015 RM_Score: -5.082 Ref_KL: -0.002551 Generate_Length: 49.75
+(INFO) 2024-04-07 14:40:59,577  - RLHF_Logger:
+Episode: 1 Timestep: 152
+Policy_Loss: -0.005581 Critic_Loss: 0.1738 RM_Score: -6.023 Ref_KL: -0.003416 Generate_Length: 92.88
+(INFO) 2024-04-07 14:41:03,531  - RLHF_Logger:
+Episode: 2 Timestep: 160
+Policy_Loss: -0.006603 Critic_Loss: 0.1564 RM_Score: -5.101 Ref_KL: -0.003129 Generate_Length: 76.25
+(INFO) 2024-04-07 14:41:06,586  - RLHF_Logger:
+Episode: 2 Timestep: 168
+Policy_Loss: -0.00986 Critic_Loss: 0.2135 RM_Score: -5.328 Ref_KL: -0.005479 Generate_Length: 50
+(INFO) 2024-04-07 14:41:08,504  - RLHF_Logger:
+Episode: 2 Timestep: 176
+Policy_Loss: -0.01553 Critic_Loss: 0.2507 RM_Score: -5.577 Ref_KL: -0.005196 Generate_Length: 42.5
+(INFO) 2024-04-07 14:41:12,554  - RLHF_Logger:
+Episode: 2 Timestep: 184
+Policy_Loss: -0.005692 Critic_Loss: 0.1241 RM_Score: -5.621 Ref_KL: -0.01169 Generate_Length: 104
+(INFO) 2024-04-07 14:41:14,777  - RLHF_Logger:
+Episode: 2 Timestep: 192
+Policy_Loss: -0.01117 Critic_Loss: 0.1377 RM_Score: -5.062 Ref_KL: -0.00687 Generate_Length: 58
+(INFO) 2024-04-07 14:41:18,421  - RLHF_Logger:
+Episode: 2 Timestep: 200
+Policy_Loss: -0.005903 Critic_Loss: 0.09943 RM_Score: -5.585 Ref_KL: -0.009549 Generate_Length: 89.75
+(INFO) 2024-04-07 14:41:22,470  - RLHF_Logger:
+Episode: 2 Timestep: 208
+Policy_Loss: -0.006157 Critic_Loss: 0.09289 RM_Score: -5.173 Ref_KL: -0.01618 Generate_Length: 102.6
+(INFO) 2024-04-07 14:41:26,405  - RLHF_Logger:
+Episode: 2 Timestep: 216
+Policy_Loss: -0.006523 Critic_Loss: 0.1009 RM_Score: -6.046 Ref_KL: -0.01759 Generate_Length: 103.5
+(INFO) 2024-04-07 14:41:29,447  - RLHF_Logger:
+Episode: 2 Timestep: 224
+Policy_Loss: -0.009109 Critic_Loss: 0.08226 RM_Score: -4.981 Ref_KL: -0.01357 Generate_Length: 79
+(INFO) 2024-04-07 14:41:32,830  - RLHF_Logger:
+Episode: 2 Timestep: 232
+Policy_Loss: -0.01164 Critic_Loss: 0.09148 RM_Score: -5.537 Ref_KL: -0.01584 Generate_Length: 83
+(INFO) 2024-04-07 14:41:35,761  - RLHF_Logger:
+Episode: 2 Timestep: 240
+Policy_Loss: -0.01211 Critic_Loss: 0.08691 RM_Score: -3.91 Ref_KL: -0.01846 Generate_Length: 67
+(INFO) 2024-04-07 14:41:39,184  - RLHF_Logger:
+Episode: 2 Timestep: 248
+Policy_Loss: -0.01105 Critic_Loss: 0.1154 RM_Score: -5.455 Ref_KL: -0.02437 Generate_Length: 67.62
+(INFO) 2024-04-07 14:41:42,949  - RLHF_Logger:
+Episode: 2 Timestep: 256
+Policy_Loss: -0.008649 Critic_Loss: 0.09226 RM_Score: -4.723 Ref_KL: -0.01429 Generate_Length: 72.5
+(INFO) 2024-04-07 14:41:45,969  - RLHF_Logger:
+Episode: 2 Timestep: 264
+Policy_Loss: -0.007755 Critic_Loss: 0.1331 RM_Score: -5.912 Ref_KL: -0.02386 Generate_Length: 85.5
+(INFO) 2024-04-07 14:41:49,688  - RLHF_Logger:
+Episode: 2 Timestep: 272
+Policy_Loss: -0.007898 Critic_Loss: 0.0852 RM_Score: -5.708 Ref_KL: -0.02025 Generate_Length: 85
+(INFO) 2024-04-07 14:41:51,479  - RLHF_Logger:
+Episode: 2 Timestep: 280
+Policy_Loss: -0.01708 Critic_Loss: 0.09772 RM_Score: -5.457 Ref_KL: -0.02361 Generate_Length: 43
+(INFO) 2024-04-07 14:41:53,785  - RLHF_Logger:
+Episode: 2 Timestep: 288
+Policy_Loss: -0.01258 Critic_Loss: 0.09336 RM_Score: -5.993 Ref_KL: -0.02626 Generate_Length: 59
+(INFO) 2024-04-07 14:41:56,577  - RLHF_Logger:
+Episode: 2 Timestep: 296
+Policy_Loss: -0.01244 Critic_Loss: 0.08923 RM_Score: -5.274 Ref_KL: -0.02549 Generate_Length: 77.5
+(INFO) 2024-04-07 14:41:59,049  - RLHF_Logger:
+Episode: 2 Timestep: 304
+Policy_Loss: -0.01031 Critic_Loss: 0.09019 RM_Score: -5.801 Ref_KL: -0.02728 Generate_Length: 66.5
+(INFO) 2024-04-07 14:42:01,560  - RLHF_Logger:
+Episode: 2 Timestep: 312
+Policy_Loss: -0.01355 Critic_Loss: 0.06821 RM_Score: -5.757 Ref_KL: -0.02518 Generate_Length: 60.5
+(INFO) 2024-04-07 14:42:05,083  - RLHF_Logger:
+Episode: 3 Timestep: 320
+Policy_Loss: -0.008939 Critic_Loss: 0.108 RM_Score: -5.234 Ref_KL: -0.03093 Generate_Length: 85.5
+(INFO) 2024-04-07 14:42:08,972  - RLHF_Logger:
+Episode: 3 Timestep: 328
+Policy_Loss: -0.008023 Critic_Loss: 0.09485 RM_Score: -6.107 Ref_KL: -0.03005 Generate_Length: 101.8
+(INFO) 2024-04-07 14:42:11,291  - RLHF_Logger:
+Episode: 3 Timestep: 336
+Policy_Loss: -0.02405 Critic_Loss: 0.09533 RM_Score: -6.034 Ref_KL: -0.02662 Generate_Length: 34
+(INFO) 2024-04-07 14:42:14,148  - RLHF_Logger:
+Episode: 3 Timestep: 344
+Policy_Loss: -0.006788 Critic_Loss: 0.09197 RM_Score: -6.089 Ref_KL: -0.01774 Generate_Length: 80
+(INFO) 2024-04-07 14:42:17,356  - RLHF_Logger:
+Episode: 3 Timestep: 352
+Policy_Loss: -0.007975 Critic_Loss: 0.08668 RM_Score: -5.804 Ref_KL: -0.01723 Generate_Length: 76.5
+(INFO) 2024-04-07 14:42:21,468  - RLHF_Logger:
+Episode: 3 Timestep: 360
+Policy_Loss: -0.006997 Critic_Loss: 0.08224 RM_Score: -6.12 Ref_KL: -0.02387 Generate_Length: 114
+(INFO) 2024-04-07 14:42:24,221  - RLHF_Logger:
+Episode: 3 Timestep: 368
+Policy_Loss: -0.008075 Critic_Loss: 0.06967 RM_Score: -5.241 Ref_KL: -0.01474 Generate_Length: 77
+(INFO) 2024-04-07 14:42:26,919  - RLHF_Logger:
+Episode: 3 Timestep: 376
+Policy_Loss: -0.01468 Critic_Loss: 0.06631 RM_Score: -5.49 Ref_KL: -0.02661 Generate_Length: 45.5
+(INFO) 2024-04-07 14:42:30,440  - RLHF_Logger:
+Episode: 3 Timestep: 384
+Policy_Loss: -0.006998 Critic_Loss: 0.08488 RM_Score: -5.864 Ref_KL: -0.02584 Generate_Length: 85.5
+(INFO) 2024-04-07 14:42:33,856  - RLHF_Logger:
+Episode: 3 Timestep: 392
+Policy_Loss: -0.008253 Critic_Loss: 0.09327 RM_Score: -5.999 Ref_KL: -0.01682 Generate_Length: 88.5
+(INFO) 2024-04-07 14:42:36,445  - RLHF_Logger:
+Episode: 3 Timestep: 400
+Policy_Loss: -0.01351 Critic_Loss: 0.0966 RM_Score: -5.944 Ref_KL: -0.02368 Generate_Length: 62.5
+(INFO) 2024-04-07 14:42:40,578  - RLHF_Logger:
+Episode: 3 Timestep: 408
+Policy_Loss: -0.005869 Critic_Loss: 0.08067 RM_Score: -6.029 Ref_KL: -0.01954 Generate_Length: 110.5
+(INFO) 2024-04-07 14:42:44,002  - RLHF_Logger:
+Episode: 3 Timestep: 416
+Policy_Loss: -0.006975 Critic_Loss: 0.09002 RM_Score: -5.263 Ref_KL: -0.01901 Generate_Length: 89
+(INFO) 2024-04-07 14:42:46,321  - RLHF_Logger:
+Episode: 3 Timestep: 424
+Policy_Loss: -0.009163 Critic_Loss: 0.08147 RM_Score: -5.851 Ref_KL: -0.024 Generate_Length: 57.5
+(INFO) 2024-04-07 14:42:49,924  - RLHF_Logger:
+Episode: 3 Timestep: 432
+Policy_Loss: -0.00606 Critic_Loss: 0.06285 RM_Score: -5.606 Ref_KL: -0.01461 Generate_Length: 96.5
+(INFO) 2024-04-07 14:42:53,619  - RLHF_Logger:
+Episode: 3 Timestep: 440
+Policy_Loss: -0.005277 Critic_Loss: 0.1121 RM_Score: -5.354 Ref_KL: -0.0253 Generate_Length: 76
+(INFO) 2024-04-07 14:42:55,972  - RLHF_Logger:
+Episode: 3 Timestep: 448
+Policy_Loss: -0.009247 Critic_Loss: 0.09465 RM_Score: -5.507 Ref_KL: -0.02655 Generate_Length: 62.5
+(INFO) 2024-04-07 14:42:58,743  - RLHF_Logger:
+Episode: 3 Timestep: 456
+Policy_Loss: -0.01049 Critic_Loss: 0.1137 RM_Score: -4.787 Ref_KL: -0.0223 Generate_Length: 74
+(INFO) 2024-04-07 14:43:02,325  - RLHF_Logger:
+Episode: 3 Timestep: 464
+Policy_Loss: -0.007353 Critic_Loss: 0.08582 RM_Score: -4.235 Ref_KL: -0.01798 Generate_Length: 75.5
+(INFO) 2024-04-07 14:43:05,031  - RLHF_Logger:
+Episode: 4 Timestep: 472
+Policy_Loss: -0.009269 Critic_Loss: 0.08053 RM_Score: -6.035 Ref_KL: -0.02143 Generate_Length: 75
+(INFO) 2024-04-07 14:43:08,987  - RLHF_Logger:
+Episode: 4 Timestep: 480
+Policy_Loss: -0.005053 Critic_Loss: 0.1013 RM_Score: -4.265 Ref_KL: -0.02622 Generate_Length: 107.5
+(INFO) 2024-04-07 14:43:12,214  - RLHF_Logger:
+Episode: 4 Timestep: 488
+Policy_Loss: -0.01102 Critic_Loss: 0.1183 RM_Score: -4.256 Ref_KL: -0.01901 Generate_Length: 64.5
+(INFO) 2024-04-07 14:43:15,483  - RLHF_Logger:
+Episode: 4 Timestep: 496
+Policy_Loss: -0.005828 Critic_Loss: 0.07401 RM_Score: -6.036 Ref_KL: -0.0221 Generate_Length: 86.5
+(INFO) 2024-04-07 14:43:17,430  - RLHF_Logger:
+Episode: 4 Timestep: 504
+Policy_Loss: -0.0145 Critic_Loss: 0.07079 RM_Score: -5.395 Ref_KL: -0.01003 Generate_Length: 46.5
+(INFO) 2024-04-07 14:43:21,159  - RLHF_Logger:
+Episode: 4 Timestep: 512
+Policy_Loss: -0.007069 Critic_Loss: 0.09176 RM_Score: -5.808 Ref_KL: -0.02872 Generate_Length: 78.5
+(INFO) 2024-04-07 14:43:23,319  - RLHF_Logger:
+Episode: 4 Timestep: 520
+Policy_Loss: -0.01148 Critic_Loss: 0.07734 RM_Score: -5.383 Ref_KL: -0.02668 Generate_Length: 49
+(INFO) 2024-04-07 14:43:26,031  - RLHF_Logger:
+Episode: 4 Timestep: 528
+Policy_Loss: -0.01323 Critic_Loss: 0.116 RM_Score: -4.875 Ref_KL: -0.01785 Generate_Length: 43.5
+(INFO) 2024-04-07 14:43:29,982  - RLHF_Logger:
+Episode: 4 Timestep: 536
+Policy_Loss: -0.007982 Critic_Loss: 0.0651 RM_Score: -4.724 Ref_KL: -0.01732 Generate_Length: 81
+(INFO) 2024-04-07 14:43:33,064  - RLHF_Logger:
+Episode: 4 Timestep: 544
+Policy_Loss: -0.008326 Critic_Loss: 0.08435 RM_Score: -6.024 Ref_KL: -0.02098 Generate_Length: 71.5
+(INFO) 2024-04-07 14:43:34,869  - RLHF_Logger:
+Episode: 4 Timestep: 552
+Policy_Loss: -0.01241 Critic_Loss: 0.07352 RM_Score: -5.503 Ref_KL: -0.01773 Generate_Length: 42.5
+(INFO) 2024-04-07 14:43:37,278  - RLHF_Logger:
+Episode: 4 Timestep: 560
+Policy_Loss: -0.0109 Critic_Loss: 0.08089 RM_Score: -6.049 Ref_KL: -0.009958 Generate_Length: 66
+(INFO) 2024-04-07 14:43:39,887  - RLHF_Logger:
+Episode: 4 Timestep: 568
+Policy_Loss: -0.008507 Critic_Loss: 0.1101 RM_Score: -5.303 Ref_KL: -0.0176 Generate_Length: 63
+(INFO) 2024-04-07 14:43:43,977  - RLHF_Logger:
+Episode: 4 Timestep: 576
+Policy_Loss: -0.006141 Critic_Loss: 0.07497 RM_Score: -5.528 Ref_KL: -0.01858 Generate_Length: 95.62
+(INFO) 2024-04-07 14:43:47,328  - RLHF_Logger:
+Episode: 4 Timestep: 584
+Policy_Loss: -0.00646 Critic_Loss: 0.07062 RM_Score: -5.758 Ref_KL: -0.01561 Generate_Length: 89.5
+(INFO) 2024-04-07 14:43:50,470  - RLHF_Logger:
+Episode: 4 Timestep: 592
+Policy_Loss: -0.00743 Critic_Loss: 0.08473 RM_Score: -5.299 Ref_KL: -0.01284 Generate_Length: 67.5
+(INFO) 2024-04-07 14:43:54,201  - RLHF_Logger:
+Episode: 4 Timestep: 600
+Policy_Loss: -0.006185 Critic_Loss: 0.1129 RM_Score: -5.432 Ref_KL: -0.02925 Generate_Length: 92.12
+(INFO) 2024-04-07 14:43:56,361  - RLHF_Logger:
+Episode: 4 Timestep: 608
+Policy_Loss: -0.01242 Critic_Loss: 0.0839 RM_Score: -5.241 Ref_KL: -0.01375 Generate_Length: 43.12
+(INFO) 2024-04-07 14:43:58,604  - RLHF_Logger:
+Episode: 4 Timestep: 616
+Policy_Loss: -0.01218 Critic_Loss: 0.1213 RM_Score: -4.395 Ref_KL: -0.02002 Generate_Length: 44.38
+(INFO) 2024-04-07 14:44:02,616  - RLHF_Logger:
+Episode: 4 Timestep: 624
+Policy_Loss: -0.007102 Critic_Loss: 0.07882 RM_Score: -5.241 Ref_KL: -0.01718 Generate_Length: 105.5
+(INFO) 2024-04-07 14:44:05,285  - RLHF_Logger:
+Episode: 5 Timestep: 632
+Policy_Loss: -0.01036 Critic_Loss: 0.08863 RM_Score: -5.435 Ref_KL: -0.02426 Generate_Length: 54.12
+(INFO) 2024-04-07 14:44:09,323  - RLHF_Logger:
+Episode: 5 Timestep: 640
+Policy_Loss: -0.005404 Critic_Loss: 0.08255 RM_Score: -4.06 Ref_KL: -0.01775 Generate_Length: 96.88
+(INFO) 2024-04-07 14:44:12,576  - RLHF_Logger:
+Episode: 5 Timestep: 648
+Policy_Loss: -0.005899 Critic_Loss: 0.08093 RM_Score: -5.812 Ref_KL: -0.02331 Generate_Length: 87
+(INFO) 2024-04-07 14:44:15,284  - RLHF_Logger:
+Episode: 5 Timestep: 656
+Policy_Loss: -0.006962 Critic_Loss: 0.08955 RM_Score: -5.486 Ref_KL: -0.02283 Generate_Length: 65.5
+(INFO) 2024-04-07 14:44:19,363  - RLHF_Logger:
+Episode: 5 Timestep: 664
+Policy_Loss: -0.006046 Critic_Loss: 0.09338 RM_Score: -4.273 Ref_KL: -0.01405 Generate_Length: 68.12
+(INFO) 2024-04-07 14:44:23,678  - RLHF_Logger:
+Episode: 5 Timestep: 672
+Policy_Loss: -0.004492 Critic_Loss: 0.07075 RM_Score: -5.205 Ref_KL: -0.01481 Generate_Length: 95.5
+(INFO) 2024-04-07 14:44:27,138  - RLHF_Logger:
+Episode: 5 Timestep: 680
+Policy_Loss: -0.007397 Critic_Loss: 0.08118 RM_Score: -4.738 Ref_KL: -0.01605 Generate_Length: 81.12
+(INFO) 2024-04-07 14:44:29,478  - RLHF_Logger:
+Episode: 5 Timestep: 688
+Policy_Loss: -0.01184 Critic_Loss: 0.07232 RM_Score: -5.859 Ref_KL: -0.02457 Generate_Length: 60
+(INFO) 2024-04-07 14:44:32,375  - RLHF_Logger:
+Episode: 5 Timestep: 696
+Policy_Loss: -0.008092 Critic_Loss: 0.06698 RM_Score: -5.42 Ref_KL: -0.01564 Generate_Length: 73
+(INFO) 2024-04-07 14:44:34,931  - RLHF_Logger:
+Episode: 5 Timestep: 704
+Policy_Loss: -0.007848 Critic_Loss: 0.08808 RM_Score: -5.303 Ref_KL: -0.01103 Generate_Length: 65.5
+(INFO) 2024-04-07 14:44:38,062  - RLHF_Logger:
+Episode: 5 Timestep: 712
+Policy_Loss: -0.005398 Critic_Loss: 0.0728 RM_Score: -5.524 Ref_KL: -0.01972 Generate_Length: 91.5
+(INFO) 2024-04-07 14:44:41,887  - RLHF_Logger:
+Episode: 5 Timestep: 720
+Policy_Loss: -0.008254 Critic_Loss: 0.09169 RM_Score: -5.197 Ref_KL: -0.01478 Generate_Length: 75.88
+(INFO) 2024-04-07 14:44:44,226  - RLHF_Logger:
+Episode: 5 Timestep: 728
+Policy_Loss: -0.01002 Critic_Loss: 0.07355 RM_Score: -5.291 Ref_KL: -0.0159 Generate_Length: 55
+(INFO) 2024-04-07 14:44:47,060  - RLHF_Logger:
+Episode: 5 Timestep: 736
+Policy_Loss: -0.00818 Critic_Loss: 0.06898 RM_Score: -4.978 Ref_KL: -0.01686 Generate_Length: 63.5
+(INFO) 2024-04-07 14:44:50,231  - RLHF_Logger:
+Episode: 5 Timestep: 744
+Policy_Loss: -0.008091 Critic_Loss: 0.08712 RM_Score: -6.17 Ref_KL: -0.01931 Generate_Length: 57
+(INFO) 2024-04-07 14:44:52,709  - RLHF_Logger:
+Episode: 5 Timestep: 752
+Policy_Loss: -0.01434 Critic_Loss: 0.07923 RM_Score: -5.092 Ref_KL: -0.01716 Generate_Length: 51.12
+(INFO) 2024-04-07 14:44:55,952  - RLHF_Logger:
+Episode: 5 Timestep: 760
+Policy_Loss: -0.006444 Critic_Loss: 0.06443 RM_Score: -5.754 Ref_KL: -0.01556 Generate_Length: 86
+(INFO) 2024-04-07 14:44:58,658  - RLHF_Logger:
+Episode: 5 Timestep: 768
+Policy_Loss: -0.00938 Critic_Loss: 0.0754 RM_Score: -5.348 Ref_KL: -0.02444 Generate_Length: 60.25
+(INFO) 2024-04-07 14:45:00,700  - RLHF_Logger:
+Episode: 5 Timestep: 776
+Policy_Loss: -0.01651 Critic_Loss: 0.0712 RM_Score: -5.184 Ref_KL: -0.02119 Generate_Length: 43.5
+(INFO) 2024-04-07 14:45:03,589  - RLHF_Logger:
+Episode: 6 Timestep: 784
+Policy_Loss: -0.00823 Critic_Loss: 0.08091 RM_Score: -5.063 Ref_KL: -0.02042 Generate_Length: 69.12
+(INFO) 2024-04-07 14:45:07,080  - RLHF_Logger:
+Episode: 6 Timestep: 792
+Policy_Loss: -0.008487 Critic_Loss: 0.06119 RM_Score: -4.487 Ref_KL: -0.009893 Generate_Length: 70.88
+(INFO) 2024-04-07 14:45:09,563  - RLHF_Logger:
+Episode: 6 Timestep: 800
+Policy_Loss: -0.009202 Critic_Loss: 0.0903 RM_Score: -5.31 Ref_KL: -0.01828 Generate_Length: 56
+(INFO) 2024-04-07 14:45:13,180  - RLHF_Logger:
+Episode: 6 Timestep: 808
+Policy_Loss: -0.009297 Critic_Loss: 0.1038 RM_Score: -4.759 Ref_KL: -0.0149 Generate_Length: 66
+(INFO) 2024-04-07 14:45:16,804  - RLHF_Logger:
+Episode: 6 Timestep: 816
+Policy_Loss: -0.007329 Critic_Loss: 0.08291 RM_Score: -4.459 Ref_KL: -0.01521 Generate_Length: 67.88
+(INFO) 2024-04-07 14:45:19,461  - RLHF_Logger:
+Episode: 6 Timestep: 824
+Policy_Loss: -0.008698 Critic_Loss: 0.0743 RM_Score: -5.626 Ref_KL: -0.0194 Generate_Length: 60.38
+(INFO) 2024-04-07 14:45:22,216  - RLHF_Logger:
+Episode: 6 Timestep: 832
+Policy_Loss: -0.009165 Critic_Loss: 0.06943 RM_Score: -5.647 Ref_KL: -0.02523 Generate_Length: 64.12
+(INFO) 2024-04-07 14:45:26,380  - RLHF_Logger:
+Episode: 6 Timestep: 840
+Policy_Loss: -0.009172 Critic_Loss: 0.08084 RM_Score: -4.802 Ref_KL: -0.02369 Generate_Length: 73.12
+(INFO) 2024-04-07 14:45:28,698  - RLHF_Logger:
+Episode: 6 Timestep: 848
+Policy_Loss: -0.01157 Critic_Loss: 0.06233 RM_Score: -4.941 Ref_KL: -0.01566 Generate_Length: 45
+(INFO) 2024-04-07 14:45:31,941  - RLHF_Logger:
+Episode: 6 Timestep: 856
+Policy_Loss: -0.007152 Critic_Loss: 0.06821 RM_Score: -5.496 Ref_KL: -0.01482 Generate_Length: 81.38
+(INFO) 2024-04-07 14:45:33,856  - RLHF_Logger:
+Episode: 6 Timestep: 864
+Policy_Loss: -0.01667 Critic_Loss: 0.0692 RM_Score: -5.043 Ref_KL: -0.0235 Generate_Length: 34.38
+(INFO) 2024-04-07 14:45:37,192  - RLHF_Logger:
+Episode: 6 Timestep: 872
+Policy_Loss: -0.009494 Critic_Loss: 0.09686 RM_Score: -5.424 Ref_KL: -0.01895 Generate_Length: 61
+(INFO) 2024-04-07 14:45:41,757  - RLHF_Logger:
+Episode: 6 Timestep: 880
+Policy_Loss: -0.003899 Critic_Loss: 0.07044 RM_Score: -5.182 Ref_KL: -0.02356 Generate_Length: 122.5
+(INFO) 2024-04-07 14:45:44,926  - RLHF_Logger:
+Episode: 6 Timestep: 888
+Policy_Loss: -0.008626 Critic_Loss: 0.07991 RM_Score: -5.22 Ref_KL: -0.01348 Generate_Length: 70.62
+(INFO) 2024-04-07 14:45:48,309  - RLHF_Logger:
+Episode: 6 Timestep: 896
+Policy_Loss: -0.007873 Critic_Loss: 0.07288 RM_Score: -5.657 Ref_KL: -0.0212 Generate_Length: 83.12
+(INFO) 2024-04-07 14:45:51,074  - RLHF_Logger:
+Episode: 6 Timestep: 904
+Policy_Loss: -0.0141 Critic_Loss: 0.1467 RM_Score: -4.253 Ref_KL: -0.03146 Generate_Length: 41.38
+(INFO) 2024-04-07 14:45:54,265  - RLHF_Logger:
+Episode: 6 Timestep: 912
+Policy_Loss: -0.01093 Critic_Loss: 0.05552 RM_Score: -4.707 Ref_KL: -0.02136 Generate_Length: 52.25
+(INFO) 2024-04-07 14:45:57,717  - RLHF_Logger:
+Episode: 6 Timestep: 920
+Policy_Loss: -0.008929 Critic_Loss: 0.08193 RM_Score: -4.335 Ref_KL: -0.02266 Generate_Length: 55.62
+(INFO) 2024-04-07 14:46:00,668  - RLHF_Logger:
+Episode: 6 Timestep: 928
+Policy_Loss: -0.01134 Critic_Loss: 0.07317 RM_Score: -4.818 Ref_KL: -0.01991 Generate_Length: 49.25
+(INFO) 2024-04-07 14:46:04,856  - RLHF_Logger:
+Episode: 6 Timestep: 936
+Policy_Loss: -0.008608 Critic_Loss: 0.07274 RM_Score: -4.867 Ref_KL: -0.01984 Generate_Length: 62.88
+(INFO) 2024-04-07 14:46:07,385  - RLHF_Logger:
+Episode: 7 Timestep: 944
+Policy_Loss: -0.01993 Critic_Loss: 0.06923 RM_Score: -4.688 Ref_KL: -0.01889 Generate_Length: 36.25
+(INFO) 2024-04-07 14:46:11,226  - RLHF_Logger:
+Episode: 7 Timestep: 952
+Policy_Loss: -0.00681 Critic_Loss: 0.07417 RM_Score: -5.368 Ref_KL: -0.01717 Generate_Length: 69.75
+(INFO) 2024-04-07 14:46:14,680  - RLHF_Logger:
+Episode: 7 Timestep: 960
+Policy_Loss: -0.006232 Critic_Loss: 0.07903 RM_Score: -4.394 Ref_KL: -0.01558 Generate_Length: 60
+(INFO) 2024-04-07 14:46:17,844  - RLHF_Logger:
+Episode: 7 Timestep: 968
+Policy_Loss: -0.009509 Critic_Loss: 0.09887 RM_Score: -4.225 Ref_KL: -0.02402 Generate_Length: 58.25
+(INFO) 2024-04-07 14:46:21,578  - RLHF_Logger:
+Episode: 7 Timestep: 976
+Policy_Loss: -0.01279 Critic_Loss: 0.06996 RM_Score: -4.189 Ref_KL: -0.02304 Generate_Length: 55.62
+(INFO) 2024-04-07 14:46:24,536  - RLHF_Logger:
+Episode: 7 Timestep: 984
+Policy_Loss: -0.009664 Critic_Loss: 0.04432 RM_Score: -5.252 Ref_KL: -0.0146 Generate_Length: 59
+(INFO) 2024-04-07 14:46:28,108  - RLHF_Logger:
+Episode: 7 Timestep: 992
+Policy_Loss: -0.0118 Critic_Loss: 0.07613 RM_Score: -4.782 Ref_KL: -0.02633 Generate_Length: 50.88
+(INFO) 2024-04-07 14:46:31,993  - RLHF_Logger:
+Episode: 7 Timestep: 1000
+Policy_Loss: -0.01189 Critic_Loss: 0.07418 RM_Score: -5.462 Ref_KL: -0.02255 Generate_Length: 59.25
+(INFO) 2024-04-07 14:46:34,059  - RLHF_Logger:
+Episode: 7 Timestep: 1008
+Policy_Loss: -0.01202 Critic_Loss: 0.1276 RM_Score: -4.35 Ref_KL: -0.01672 Generate_Length: 41.75
+(INFO) 2024-04-07 14:46:37,491  - RLHF_Logger:
+Episode: 7 Timestep: 1016
+Policy_Loss: -0.01146 Critic_Loss: 0.0577 RM_Score: -4.288 Ref_KL: -0.0298 Generate_Length: 35.88
+(INFO) 2024-04-07 14:46:39,377  - RLHF_Logger:
+Episode: 7 Timestep: 1024
+Policy_Loss: -0.02272 Critic_Loss: 0.05179 RM_Score: -3.843 Ref_KL: -0.02931 Generate_Length: 27
+(INFO) 2024-04-07 14:46:42,554  - RLHF_Logger:
+Episode: 7 Timestep: 1032
+Policy_Loss: -0.02134 Critic_Loss: 0.1452 RM_Score: -3.778 Ref_KL: -0.03678 Generate_Length: 28.38
+(INFO) 2024-04-07 14:46:46,437  - RLHF_Logger:
+Episode: 7 Timestep: 1040
+Policy_Loss: -0.01303 Critic_Loss: 0.07714 RM_Score: -4.369 Ref_KL: -0.03209 Generate_Length: 54.75
+(INFO) 2024-04-07 14:46:49,045  - RLHF_Logger:
+Episode: 7 Timestep: 1048
+Policy_Loss: -0.02752 Critic_Loss: 0.09341 RM_Score: -3.683 Ref_KL: -0.02681 Generate_Length: 25.88
+(INFO) 2024-04-07 14:46:52,307  - RLHF_Logger:
+Episode: 7 Timestep: 1056
+Policy_Loss: -0.0104 Critic_Loss: 0.06902 RM_Score: -4.182 Ref_KL: -0.02609 Generate_Length: 44.88
+(INFO) 2024-04-07 14:46:55,876  - RLHF_Logger:
+Episode: 7 Timestep: 1064
+Policy_Loss: -0.01062 Critic_Loss: 0.06606 RM_Score: -5.126 Ref_KL: -0.01355 Generate_Length: 50.38
+(INFO) 2024-04-07 14:46:57,810  - RLHF_Logger:
+Episode: 7 Timestep: 1072
+Policy_Loss: -0.02837 Critic_Loss: 0.1102 RM_Score: -3.778 Ref_KL: -0.03237 Generate_Length: 21
+(INFO) 2024-04-07 14:47:00,480  - RLHF_Logger:
+Episode: 7 Timestep: 1080
+Policy_Loss: -0.02918 Critic_Loss: 0.1388 RM_Score: -3.467 Ref_KL: -0.06855 Generate_Length: 17.5
+(INFO) 2024-04-07 14:47:02,577  - RLHF_Logger:
+Episode: 7 Timestep: 1088
+Policy_Loss: -0.01976 Critic_Loss: 0.05639 RM_Score: -3.893 Ref_KL: -0.03244 Generate_Length: 29.75
+(INFO) 2024-04-07 14:47:04,729  - RLHF_Logger:
+Episode: 8 Timestep: 1096
+Policy_Loss: -0.02935 Critic_Loss: 0.0752 RM_Score: -4.349 Ref_KL: -0.05369 Generate_Length: 19
+(INFO) 2024-04-07 14:47:06,981  - RLHF_Logger:
+Episode: 8 Timestep: 1104
+Policy_Loss: -0.02264 Critic_Loss: 0.1275 RM_Score: -2.932 Ref_KL: -0.0657 Generate_Length: 15.88
+(INFO) 2024-04-07 14:47:08,202  - RLHF_Logger:
+Episode: 8 Timestep: 1112
+Policy_Loss: -0.06462 Critic_Loss: 0.195 RM_Score: -2.352 Ref_KL: -0.1162 Generate_Length: 6.625
+(INFO) 2024-04-07 14:47:09,965  - RLHF_Logger:
+Episode: 8 Timestep: 1120
+Policy_Loss: -0.01855 Critic_Loss: 0.09881 RM_Score: -3.07 Ref_KL: -0.04487 Generate_Length: 18.5
+(INFO) 2024-04-07 14:47:10,666  - RLHF_Logger:
+Episode: 8 Timestep: 1128
+Policy_Loss: -0.04353 Critic_Loss: 0.08507 RM_Score: -3.612 Ref_KL: -0.2109 Generate_Length: 6.5
+(INFO) 2024-04-07 14:47:12,215  - RLHF_Logger:
+Episode: 8 Timestep: 1136
+Policy_Loss: -0.03807 Critic_Loss: 0.07987 RM_Score: -3.142 Ref_KL: -0.07688 Generate_Length: 11.25
+(INFO) 2024-04-07 14:47:13,166  - RLHF_Logger:
+Episode: 8 Timestep: 1144
+Policy_Loss: -0.04406 Critic_Loss: 0.146 RM_Score: -1.953 Ref_KL: -0.2027 Generate_Length: 6.875
+(INFO) 2024-04-07 14:47:14,858  - RLHF_Logger:
+Episode: 8 Timestep: 1152
+Policy_Loss: -0.02963 Critic_Loss: 0.07325 RM_Score: -3.217 Ref_KL: -0.1134 Generate_Length: 14.12
+(INFO) 2024-04-07 14:47:15,661  - RLHF_Logger:
+Episode: 8 Timestep: 1160
+Policy_Loss: -0.04206 Critic_Loss: 0.1534 RM_Score: -3.957 Ref_KL: -0.3441 Generate_Length: 3.875
+(INFO) 2024-04-07 14:47:16,814  - RLHF_Logger:
+Episode: 8 Timestep: 1168
+Policy_Loss: -0.04571 Critic_Loss: 0.1088 RM_Score: -3.255 Ref_KL: -0.154 Generate_Length: 7.25
+(INFO) 2024-04-07 14:47:18,779  - RLHF_Logger:
+Episode: 8 Timestep: 1176
+Policy_Loss: -0.01284 Critic_Loss: 0.09676 RM_Score: -3.642 Ref_KL: -0.06285 Generate_Length: 25.12
+(INFO) 2024-04-07 14:47:19,797  - RLHF_Logger:
+Episode: 8 Timestep: 1184
+Policy_Loss: -0.05689 Critic_Loss: 0.08965 RM_Score: -3.068 Ref_KL: -0.5192 Generate_Length: 3
+(INFO) 2024-04-07 14:47:20,704  - RLHF_Logger:
+Episode: 8 Timestep: 1192
+Policy_Loss: -0.03896 Critic_Loss: 0.1253 RM_Score: -2.367 Ref_KL: -0.2036 Generate_Length: 6.25
+(INFO) 2024-04-07 14:47:21,580  - RLHF_Logger:
+Episode: 8 Timestep: 1200
+Policy_Loss: -0.03355 Critic_Loss: 0.09993 RM_Score: -3.152 Ref_KL: -0.2441 Generate_Length: 4.5
+(INFO) 2024-04-07 14:47:23,361  - RLHF_Logger:
+Episode: 8 Timestep: 1208
+Policy_Loss: -0.0409 Critic_Loss: 0.153 RM_Score: -3.565 Ref_KL: -0.1239 Generate_Length: 11.62
+(INFO) 2024-04-07 14:47:24,447  - RLHF_Logger:
+Episode: 8 Timestep: 1216
+Policy_Loss: -0.04795 Critic_Loss: 0.1189 RM_Score: -3.449 Ref_KL: -0.1761 Generate_Length: 6
+(INFO) 2024-04-07 14:47:25,847  - RLHF_Logger:
+Episode: 8 Timestep: 1224
+Policy_Loss: -0.03957 Critic_Loss: 0.08883 RM_Score: -3.151 Ref_KL: -0.2616 Generate_Length: 4.625
+(INFO) 2024-04-07 14:47:27,282  - RLHF_Logger:
+Episode: 8 Timestep: 1232
+Policy_Loss: -0.04376 Critic_Loss: 0.1051 RM_Score: -2.429 Ref_KL: -0.2143 Generate_Length: 4.25
+(INFO) 2024-04-07 14:47:28,575  - RLHF_Logger:
+Episode: 8 Timestep: 1240
+Policy_Loss: -0.0394 Critic_Loss: 0.0728 RM_Score: -3.373 Ref_KL: -0.1923 Generate_Length: 9.375
+(INFO) 2024-04-07 14:47:30,615  - RLHF_Logger:
+Episode: 8 Timestep: 1248
+Policy_Loss: -0.02582 Critic_Loss: 0.07754 RM_Score: -3.412 Ref_KL: -0.07938 Generate_Length: 17.62
+(INFO) 2024-04-07 14:47:31,883  - RLHF_Logger:
+Episode: 9 Timestep: 1256
+Policy_Loss: -0.04577 Critic_Loss: 0.0945 RM_Score: -3.124 Ref_KL: -0.1554 Generate_Length: 7.125
+(INFO) 2024-04-07 14:47:33,723  - RLHF_Logger:
+Episode: 9 Timestep: 1264
+Policy_Loss: -0.02233 Critic_Loss: 0.1109 RM_Score: -2.977 Ref_KL: -0.1138 Generate_Length: 16.25
+(INFO) 2024-04-07 14:47:35,946  - RLHF_Logger:
+Episode: 9 Timestep: 1272
+Policy_Loss: -0.01413 Critic_Loss: 0.1041 RM_Score: -3.184 Ref_KL: -0.09002 Generate_Length: 17.88
+(INFO) 2024-04-07 14:47:37,218  - RLHF_Logger:
+Episode: 9 Timestep: 1280
+Policy_Loss: -0.04001 Critic_Loss: 0.04204 RM_Score: -3.754 Ref_KL: -0.4406 Generate_Length: 3
+(INFO) 2024-04-07 14:47:37,970  - RLHF_Logger:
+Episode: 9 Timestep: 1288
+Policy_Loss: -0.04705 Critic_Loss: 0.1195 RM_Score: -2.435 Ref_KL: -0.3742 Generate_Length: 4.5
+(INFO) 2024-04-07 14:47:38,789  - RLHF_Logger:
+Episode: 9 Timestep: 1296
+Policy_Loss: -0.0423 Critic_Loss: 0.1031 RM_Score: -2.732 Ref_KL: -0.3875 Generate_Length: 3.25
+(INFO) 2024-04-07 14:47:40,131  - RLHF_Logger:
+Episode: 9 Timestep: 1304
+Policy_Loss: -0.0313 Critic_Loss: 0.09017 RM_Score: -3.547 Ref_KL: -0.4123 Generate_Length: 3.125
+(INFO) 2024-04-07 14:47:41,337  - RLHF_Logger:
+Episode: 9 Timestep: 1312
+Policy_Loss: -0.049 Critic_Loss: 0.09981 RM_Score: -3.024 Ref_KL: -0.2008 Generate_Length: 8.25
+(INFO) 2024-04-07 14:47:42,118  - RLHF_Logger:
+Episode: 9 Timestep: 1320
+Policy_Loss: -0.03129 Critic_Loss: 0.07207 RM_Score: -2.998 Ref_KL: -0.3577 Generate_Length: 3.75
+(INFO) 2024-04-07 14:47:42,765  - RLHF_Logger:
+Episode: 9 Timestep: 1328
+Policy_Loss: -0.03433 Critic_Loss: 0.2232 RM_Score: -1.868 Ref_KL: -0.2989 Generate_Length: 3.875
+(INFO) 2024-04-07 14:47:44,975  - RLHF_Logger:
+Episode: 9 Timestep: 1336
+Policy_Loss: -0.01915 Critic_Loss: 0.1129 RM_Score: -3.472 Ref_KL: -0.1008 Generate_Length: 17.25
+(INFO) 2024-04-07 14:47:46,046  - RLHF_Logger:
+Episode: 9 Timestep: 1344
+Policy_Loss: -0.03052 Critic_Loss: 0.07347 RM_Score: -2.746 Ref_KL: -0.1837 Generate_Length: 9
+(INFO) 2024-04-07 14:47:46,598  - RLHF_Logger:
+Episode: 9 Timestep: 1352
+Policy_Loss: -0.02469 Critic_Loss: 0.1587 RM_Score: -2.947 Ref_KL: -0.4033 Generate_Length: 3.125
+(INFO) 2024-04-07 14:47:47,336  - RLHF_Logger:
+Episode: 9 Timestep: 1360
+Policy_Loss: -0.04568 Critic_Loss: 0.0982 RM_Score: -3.676 Ref_KL: -0.3172 Generate_Length: 4.875
+(INFO) 2024-04-07 14:47:48,846  - RLHF_Logger:
+Episode: 9 Timestep: 1368
+Policy_Loss: -0.02031 Critic_Loss: 0.09398 RM_Score: -3.596 Ref_KL: -0.07465 Generate_Length: 17.75
+(INFO) 2024-04-07 14:47:49,617  - RLHF_Logger:
+Episode: 9 Timestep: 1376
+Policy_Loss: -0.05118 Critic_Loss: 0.06049 RM_Score: -3.357 Ref_KL: -0.3158 Generate_Length: 4.5
+(INFO) 2024-04-07 14:47:50,562  - RLHF_Logger:
+Episode: 9 Timestep: 1384
+Policy_Loss: -0.02414 Critic_Loss: 0.0792 RM_Score: -2.552 Ref_KL: -0.2717 Generate_Length: 5.75
+(INFO) 2024-04-07 14:47:53,191  - RLHF_Logger:
+Episode: 9 Timestep: 1392
+Policy_Loss: -0.03083 Critic_Loss: 0.1204 RM_Score: -3.604 Ref_KL: -0.1099 Generate_Length: 14.88
+(INFO) 2024-04-07 14:47:54,600  - RLHF_Logger:
+Episode: 9 Timestep: 1400
+Policy_Loss: -0.03579 Critic_Loss: 0.1957 RM_Score: -1.914 Ref_KL: -0.364 Generate_Length: 4.25
+(INFO) 2024-04-07 14:47:55,122  - RLHF_Logger:
+Episode: 10 Timestep: 1408
+Policy_Loss: -0.01757 Critic_Loss: 0.1066 RM_Score: -2.294 Ref_KL: -0.505 Generate_Length: 3.125
+(INFO) 2024-04-07 14:47:56,150  - RLHF_Logger:
+Episode: 10 Timestep: 1416
+Policy_Loss: -0.04791 Critic_Loss: 0.08684 RM_Score: -2.74 Ref_KL: -0.3135 Generate_Length: 4.25
+(INFO) 2024-04-07 14:47:56,836  - RLHF_Logger:
+Episode: 10 Timestep: 1424
+Policy_Loss: -0.03242 Critic_Loss: 0.08044 RM_Score: -3.567 Ref_KL: -0.2979 Generate_Length: 3.25
+(INFO) 2024-04-07 14:47:58,110  - RLHF_Logger:
+Episode: 10 Timestep: 1432
+Policy_Loss: -0.02176 Critic_Loss: 0.0945 RM_Score: -2.544 Ref_KL: -0.3246 Generate_Length: 3.125
+(INFO) 2024-04-07 14:47:59,787  - RLHF_Logger:
+Episode: 10 Timestep: 1440
+Policy_Loss: -0.01705 Critic_Loss: 0.06768 RM_Score: -3.643 Ref_KL: -0.1521 Generate_Length: 10.38
+(INFO) 2024-04-07 14:48:00,358  - RLHF_Logger:
+Episode: 10 Timestep: 1448
+Policy_Loss: -0.03051 Critic_Loss: 0.05087 RM_Score: -2.238 Ref_KL: -0.5607 Generate_Length: 3.5
+(INFO) 2024-04-07 14:48:01,020  - RLHF_Logger:
+Episode: 10 Timestep: 1456
+Policy_Loss: -0.02662 Critic_Loss: 0.06884 RM_Score: -3.672 Ref_KL: -0.2997 Generate_Length: 4.5
+(INFO) 2024-04-07 14:48:01,808  - RLHF_Logger:
+Episode: 10 Timestep: 1464
+Policy_Loss: -0.01009 Critic_Loss: 0.03891 RM_Score: -2.82 Ref_KL: -0.4407 Generate_Length: 3
+(INFO) 2024-04-07 14:48:02,396  - RLHF_Logger:
+Episode: 10 Timestep: 1472
+Policy_Loss: -0.03177 Critic_Loss: 0.08576 RM_Score: -2.304 Ref_KL: -0.5286 Generate_Length: 3
+(INFO) 2024-04-07 14:48:02,936  - RLHF_Logger:
+Episode: 10 Timestep: 1480
+Policy_Loss: -0.03909 Critic_Loss: 0.07148 RM_Score: -3.494 Ref_KL: -0.5397 Generate_Length: 2.875
+(INFO) 2024-04-07 14:48:03,843  - RLHF_Logger:
+Episode: 10 Timestep: 1488
+Policy_Loss: -0.04606 Critic_Loss: 0.1137 RM_Score: -3.034 Ref_KL: -0.3977 Generate_Length: 3.375
+(INFO) 2024-04-07 14:48:04,453  - RLHF_Logger:
+Episode: 10 Timestep: 1496
+Policy_Loss: -0.02341 Critic_Loss: 0.09857 RM_Score: -3.053 Ref_KL: -0.4372 Generate_Length: 3.5
+(INFO) 2024-04-07 14:48:04,952  - RLHF_Logger:
+Episode: 10 Timestep: 1504
+Policy_Loss: -0.01836 Critic_Loss: 0.1434 RM_Score: -2.148 Ref_KL: -0.4689 Generate_Length: 2.75
+(INFO) 2024-04-07 14:48:05,447  - RLHF_Logger:
+Episode: 10 Timestep: 1512
+Policy_Loss: -0.02884 Critic_Loss: 0.1179 RM_Score: -2.796 Ref_KL: -0.5716 Generate_Length: 3
+(INFO) 2024-04-07 14:48:06,931  - RLHF_Logger:
+Episode: 10 Timestep: 1520
+Policy_Loss: -0.04393 Critic_Loss: 0.1803 RM_Score: -2.435 Ref_KL: -0.4034 Generate_Length: 3.875
+(INFO) 2024-04-07 14:48:07,759  - RLHF_Logger:
+Episode: 10 Timestep: 1528
+Policy_Loss: -0.02685 Critic_Loss: 0.2068 RM_Score: -1.869 Ref_KL: -0.5404 Generate_Length: 3.125
+(INFO) 2024-04-07 14:48:09,281  - RLHF_Logger:
+Episode: 10 Timestep: 1536
+Policy_Loss: -0.02741 Critic_Loss: 0.09248 RM_Score: -2.668 Ref_KL: -0.1575 Generate_Length: 9.5
+(INFO) 2024-04-07 14:48:10,552  - RLHF_Logger:
+Episode: 10 Timestep: 1544
+Policy_Loss: -0.0324 Critic_Loss: 0.0792 RM_Score: -2.582 Ref_KL: -0.1734 Generate_Length: 9.5
+(INFO) 2024-04-07 14:48:12,039  - RLHF_Logger:
+Episode: 10 Timestep: 1552
+Policy_Loss: -0.04276 Critic_Loss: 0.1726 RM_Score: -3.542 Ref_KL: -0.218 Generate_Length: 11.62
+(INFO) 2024-04-07 14:48:13,646  - RLHF_Logger:
+Episode: 10 Timestep: 1560
+Policy_Loss: -0.04024 Critic_Loss: 0.0887 RM_Score: -2.939 Ref_KL: -0.2656 Generate_Length: 5.25
+(INFO) 2024-04-07 14:48:14,339  - RLHF_Logger:
+Episode: 11 Timestep: 1568
+Policy_Loss: -0.03359 Critic_Loss: 0.0572 RM_Score: -2.904 Ref_KL: -0.3527 Generate_Length: 4.75
+(INFO) 2024-04-07 14:48:15,640  - RLHF_Logger:
+Episode: 11 Timestep: 1576
+Policy_Loss: -0.01953 Critic_Loss: 0.1009 RM_Score: -2.561 Ref_KL: -0.1564 Generate_Length: 8.875
+(INFO) 2024-04-07 14:48:18,070  - RLHF_Logger:
+Episode: 11 Timestep: 1584
+Policy_Loss: -0.01327 Critic_Loss: 0.08886 RM_Score: -3.524 Ref_KL: -0.1049 Generate_Length: 18.12
+(INFO) 2024-04-07 14:48:19,103  - RLHF_Logger:
+Episode: 11 Timestep: 1592
+Policy_Loss: -0.01616 Critic_Loss: 0.212 RM_Score: -2.681 Ref_KL: -0.3385 Generate_Length: 5.375
+(INFO) 2024-04-07 14:48:19,875  - RLHF_Logger:
+Episode: 11 Timestep: 1600
+Policy_Loss: -0.04656 Critic_Loss: 0.1134 RM_Score: -2.85 Ref_KL: -0.2774 Generate_Length: 5.25
+(INFO) 2024-04-07 14:48:21,230  - RLHF_Logger:
+Episode: 11 Timestep: 1608
+Policy_Loss: -0.00567 Critic_Loss: 0.08994 RM_Score: -3.482 Ref_KL: -0.4574 Generate_Length: 3
+(INFO) 2024-04-07 14:48:21,710  - RLHF_Logger:
+Episode: 11 Timestep: 1616
+Policy_Loss: -0.01657 Critic_Loss: 0.08 RM_Score: -2.983 Ref_KL: -0.5325 Generate_Length: 3
+(INFO) 2024-04-07 14:48:23,881  - RLHF_Logger:
+Episode: 11 Timestep: 1624
+Policy_Loss: -0.02387 Critic_Loss: 0.07634 RM_Score: -3.197 Ref_KL: -0.1687 Generate_Length: 10.75
+(INFO) 2024-04-07 14:48:24,406  - RLHF_Logger:
+Episode: 11 Timestep: 1632
+Policy_Loss: -0.01435 Critic_Loss: 0.09916 RM_Score: -2.424 Ref_KL: -0.5257 Generate_Length: 3
+(INFO) 2024-04-07 14:48:25,299  - RLHF_Logger:
+Episode: 11 Timestep: 1640
+Policy_Loss: -0.02772 Critic_Loss: 0.07752 RM_Score: -2.698 Ref_KL: -0.2393 Generate_Length: 6.625
+(INFO) 2024-04-07 14:48:26,736  - RLHF_Logger:
+Episode: 11 Timestep: 1648
+Policy_Loss: -0.03014 Critic_Loss: 0.0805 RM_Score: -2.473 Ref_KL: -0.3007 Generate_Length: 4.75
+(INFO) 2024-04-07 14:48:27,633  - RLHF_Logger:
+Episode: 11 Timestep: 1656
+Policy_Loss: -0.03134 Critic_Loss: 0.1525 RM_Score: -2.981 Ref_KL: -0.1688 Generate_Length: 8.25
+(INFO) 2024-04-07 14:48:29,092  - RLHF_Logger:
+Episode: 11 Timestep: 1664
+Policy_Loss: -0.01054 Critic_Loss: 0.06785 RM_Score: -1.969 Ref_KL: -0.1626 Generate_Length: 11.5
+(INFO) 2024-04-07 14:48:31,406  - RLHF_Logger:
+Episode: 11 Timestep: 1672
+Policy_Loss: -0.01332 Critic_Loss: 0.1406 RM_Score: -2.084 Ref_KL: -0.1535 Generate_Length: 12
+(INFO) 2024-04-07 14:48:32,890  - RLHF_Logger:
+Episode: 11 Timestep: 1680
+Policy_Loss: -0.0245 Critic_Loss: 0.09458 RM_Score: -3.709 Ref_KL: -0.1338 Generate_Length: 9.5
+(INFO) 2024-04-07 14:48:33,640  - RLHF_Logger:
+Episode: 11 Timestep: 1688
+Policy_Loss: -0.03159 Critic_Loss: 0.09915 RM_Score: -3.105 Ref_KL: -0.4057 Generate_Length: 3.875
+(INFO) 2024-04-07 14:48:34,546  - RLHF_Logger:
+Episode: 11 Timestep: 1696
+Policy_Loss: -0.04464 Critic_Loss: 0.05003 RM_Score: -2.935 Ref_KL: -0.3239 Generate_Length: 4
+(INFO) 2024-04-07 14:48:35,147  - RLHF_Logger:
+Episode: 11 Timestep: 1704
+Policy_Loss: -0.04378 Critic_Loss: 0.03904 RM_Score: -3.088 Ref_KL: -0.3501 Generate_Length: 3.75
+(INFO) 2024-04-07 14:48:36,083  - RLHF_Logger:
+Episode: 11 Timestep: 1712
+Policy_Loss: -0.02909 Critic_Loss: 0.09891 RM_Score: -3.135 Ref_KL: -0.2704 Generate_Length: 5.125
+(INFO) 2024-04-07 14:48:36,996  - RLHF_Logger:
+Episode: 12 Timestep: 1720
+Policy_Loss: -0.02522 Critic_Loss: 0.06905 RM_Score: -3.216 Ref_KL: -0.1578 Generate_Length: 7.75
+(INFO) 2024-04-07 14:48:37,546  - RLHF_Logger:
+Episode: 12 Timestep: 1728
+Policy_Loss: -0.03874 Critic_Loss: 0.0406 RM_Score: -3.425 Ref_KL: -0.4637 Generate_Length: 3.25
+(INFO) 2024-04-07 14:48:38,908  - RLHF_Logger:
+Episode: 12 Timestep: 1736
+Policy_Loss: -0.0238 Critic_Loss: 0.05079 RM_Score: -3.151 Ref_KL: -0.1166 Generate_Length: 10.38
+(INFO) 2024-04-07 14:48:39,978  - RLHF_Logger:
+Episode: 12 Timestep: 1744
+Policy_Loss: -0.02917 Critic_Loss: 0.05859 RM_Score: -3.37 Ref_KL: -0.1851 Generate_Length: 6.125
+(INFO) 2024-04-07 14:48:42,186  - RLHF_Logger:
+Episode: 12 Timestep: 1752
+Policy_Loss: -0.01524 Critic_Loss: 0.06356 RM_Score: -3.344 Ref_KL: -0.08345 Generate_Length: 17.38
+(INFO) 2024-04-07 14:48:42,896  - RLHF_Logger:
+Episode: 12 Timestep: 1760
+Policy_Loss: -0.04822 Critic_Loss: 0.04573 RM_Score: -3.396 Ref_KL: -0.2877 Generate_Length: 3.625
+(INFO) 2024-04-07 14:48:44,830  - RLHF_Logger:
+Episode: 12 Timestep: 1768
+Policy_Loss: -0.02604 Critic_Loss: 0.1096 RM_Score: -3.017 Ref_KL: -0.1429 Generate_Length: 9.625
+(INFO) 2024-04-07 14:48:46,226  - RLHF_Logger:
+Episode: 12 Timestep: 1776
+Policy_Loss: -0.01993 Critic_Loss: 0.09247 RM_Score: -3.336 Ref_KL: -0.1013 Generate_Length: 12.25
+(INFO) 2024-04-07 14:48:48,121  - RLHF_Logger:
+Episode: 12 Timestep: 1784
+Policy_Loss: -0.03854 Critic_Loss: 0.141 RM_Score: -2.261 Ref_KL: -0.1969 Generate_Length: 9.5
+(INFO) 2024-04-07 14:48:48,913  - RLHF_Logger:
+Episode: 12 Timestep: 1792
+Policy_Loss: -0.02928 Critic_Loss: 0.1351 RM_Score: -2.092 Ref_KL: -0.3543 Generate_Length: 5.5
+(INFO) 2024-04-07 14:48:49,635  - RLHF_Logger:
+Episode: 12 Timestep: 1800
+Policy_Loss: -0.03329 Critic_Loss: 0.1156 RM_Score: -2.423 Ref_KL: -0.3262 Generate_Length: 4.875
+(INFO) 2024-04-07 14:48:50,206  - RLHF_Logger:
+Episode: 12 Timestep: 1808
+Policy_Loss: -0.01826 Critic_Loss: 0.04462 RM_Score: -3.374 Ref_KL: -0.3985 Generate_Length: 3.125
+(INFO) 2024-04-07 14:48:50,950  - RLHF_Logger:
+Episode: 12 Timestep: 1816
+Policy_Loss: -0.02497 Critic_Loss: 0.1645 RM_Score: -2.577 Ref_KL: -0.3488 Generate_Length: 3.625
+(INFO) 2024-04-07 14:48:52,016  - RLHF_Logger:
+Episode: 12 Timestep: 1824
+Policy_Loss: -0.04009 Critic_Loss: 0.08275 RM_Score: -3.083 Ref_KL: -0.2273 Generate_Length: 7.125
+(INFO) 2024-04-07 14:48:52,753  - RLHF_Logger:
+Episode: 12 Timestep: 1832
+Policy_Loss: -0.02983 Critic_Loss: 0.08441 RM_Score: -2.728 Ref_KL: -0.3915 Generate_Length: 3.625
+(INFO) 2024-04-07 14:48:53,391  - RLHF_Logger:
+Episode: 12 Timestep: 1840
+Policy_Loss: -0.03012 Critic_Loss: 0.0977 RM_Score: -2.749 Ref_KL: -0.3167 Generate_Length: 4.25
+(INFO) 2024-04-07 14:48:55,320  - RLHF_Logger:
+Current Ratio(89.63) > Threshold(10) Skipping Batch
+(INFO) 2024-04-07 14:48:55,506  - RLHF_Logger:
+Current Ratio(183.9) > Threshold(10) Skipping Batch
+(INFO) 2024-04-07 14:48:55,631  - RLHF_Logger:
+Episode: 12 Timestep: 1848
+Policy_Loss: -0.005588 Critic_Loss: 0.05034 RM_Score: -3.026 Ref_KL: -0.1143 Generate_Length: 12
+(INFO) 2024-04-07 14:48:56,954  - RLHF_Logger:
+Episode: 12 Timestep: 1856
+Policy_Loss: -0.0246 Critic_Loss: 0.09123 RM_Score: -2.619 Ref_KL: -0.1202 Generate_Length: 10.38
+(INFO) 2024-04-07 14:48:59,220  - RLHF_Logger:
+Episode: 12 Timestep: 1864
+Policy_Loss: -0.01101 Critic_Loss: 0.06617 RM_Score: -2.211 Ref_KL: -0.1411 Generate_Length: 10.88
+(INFO) 2024-04-07 14:49:00,351  - RLHF_Logger:
+Episode: 12 Timestep: 1872
+Policy_Loss: -0.01901 Critic_Loss: 0.09659 RM_Score: -3.571 Ref_KL: -0.2519 Generate_Length: 5.125
+(INFO) 2024-04-07 14:49:01,223  - RLHF_Logger:
+Episode: 13 Timestep: 1880
+Policy_Loss: -0.03797 Critic_Loss: 0.05037 RM_Score: -2.964 Ref_KL: -0.2714 Generate_Length: 5.375
+(INFO) 2024-04-07 14:49:03,078  - RLHF_Logger:
+Episode: 13 Timestep: 1888
+Policy_Loss: -0.0138 Critic_Loss: 0.1062 RM_Score: -2.848 Ref_KL: -0.1167 Generate_Length: 13.75
+(INFO) 2024-04-07 14:49:03,734  - RLHF_Logger:
+Episode: 13 Timestep: 1896
+Policy_Loss: -0.03988 Critic_Loss: 0.08951 RM_Score: -3.317 Ref_KL: -0.3617 Generate_Length: 4.25
+(INFO) 2024-04-07 14:49:04,286  - RLHF_Logger:
+Episode: 13 Timestep: 1904
+Policy_Loss: -0.01711 Critic_Loss: 0.04619 RM_Score: -2.533 Ref_KL: -0.3729 Generate_Length: 3.375
+(INFO) 2024-04-07 14:49:05,017  - RLHF_Logger:
+Episode: 13 Timestep: 1912
+Policy_Loss: -0.04072 Critic_Loss: 0.05795 RM_Score: -2.596 Ref_KL: -0.2739 Generate_Length: 5.125
+(INFO) 2024-04-07 14:49:06,456  - RLHF_Logger:
+Episode: 13 Timestep: 1920
+Policy_Loss: -0.04953 Critic_Loss: 0.09367 RM_Score: -3.266 Ref_KL: -0.2424 Generate_Length: 3.875
+(INFO) 2024-04-07 14:49:07,056  - RLHF_Logger:
+Episode: 13 Timestep: 1928
+Policy_Loss: -0.02748 Critic_Loss: 0.08584 RM_Score: -2.528 Ref_KL: -0.4073 Generate_Length: 3.875
+(INFO) 2024-04-07 14:49:07,857  - RLHF_Logger:
+Episode: 13 Timestep: 1936
+Policy_Loss: -0.02838 Critic_Loss: 0.06853 RM_Score: -2.798 Ref_KL: -0.2567 Generate_Length: 4.625
+(INFO) 2024-04-07 14:49:08,418  - RLHF_Logger:
+Episode: 13 Timestep: 1944
+Policy_Loss: -0.02745 Critic_Loss: 0.04458 RM_Score: -3.155 Ref_KL: -0.4143 Generate_Length: 3.75
+(INFO) 2024-04-07 14:49:09,057  - RLHF_Logger:
+Episode: 13 Timestep: 1952
+Policy_Loss: -0.04405 Critic_Loss: 0.05639 RM_Score: -2.815 Ref_KL: -0.3778 Generate_Length: 3.75
+(INFO) 2024-04-07 14:49:10,472  - RLHF_Logger:
+Episode: 13 Timestep: 1960
+Policy_Loss: -0.03243 Critic_Loss: 0.2278 RM_Score: -2.435 Ref_KL: -0.3975 Generate_Length: 3.5
+(INFO) 2024-04-07 14:49:11,840  - RLHF_Logger:
+Episode: 13 Timestep: 1968
+Policy_Loss: -0.03535 Critic_Loss: 0.04693 RM_Score: -3.287 Ref_KL: -0.4416 Generate_Length: 4
+(INFO) 2024-04-07 14:49:12,622  - RLHF_Logger:
+Episode: 13 Timestep: 1976
+Policy_Loss: -0.02547 Critic_Loss: 0.1157 RM_Score: -3.374 Ref_KL: -0.283 Generate_Length: 5.5
+(INFO) 2024-04-07 14:49:13,258  - RLHF_Logger:
+Episode: 13 Timestep: 1984
+Policy_Loss: -0.03096 Critic_Loss: 0.06295 RM_Score: -2.53 Ref_KL: -0.3302 Generate_Length: 4.5
+(INFO) 2024-04-07 14:49:14,294  - RLHF_Logger:
+Episode: 13 Timestep: 1992
+Policy_Loss: -0.03174 Critic_Loss: 0.077 RM_Score: -2.376 Ref_KL: -0.1836 Generate_Length: 8.125
+(INFO) 2024-04-07 14:49:15,108  - RLHF_Logger:
+Episode: 13 Timestep: 2000
+Policy_Loss: -0.02627 Critic_Loss: 0.13 RM_Score: -2.338 Ref_KL: -0.186 Generate_Length: 6
+(INFO) 2024-04-07 14:49:15,972  - RLHF_Logger:
+Episode: 13 Timestep: 2008
+Policy_Loss: -0.03751 Critic_Loss: 0.09478 RM_Score: -2.088 Ref_KL: -0.2436 Generate_Length: 6.25
+(INFO) 2024-04-07 14:49:18,082  - RLHF_Logger:
+Episode: 13 Timestep: 2016
+Policy_Loss: -0.02561 Critic_Loss: 0.08537 RM_Score: -3.778 Ref_KL: -0.09052 Generate_Length: 15.75
+(INFO) 2024-04-07 14:49:18,817  - RLHF_Logger:
+Episode: 13 Timestep: 2024
+Policy_Loss: -0.0345 Critic_Loss: 0.1036 RM_Score: -3.432 Ref_KL: -0.3476 Generate_Length: 4
+(INFO) 2024-04-07 14:49:19,635  - RLHF_Logger:
+Episode: 14 Timestep: 2032
+Policy_Loss: -0.03746 Critic_Loss: 0.1338 RM_Score: -3.453 Ref_KL: -0.3256 Generate_Length: 5
+(INFO) 2024-04-07 14:49:20,481  - RLHF_Logger:
+Episode: 14 Timestep: 2040
+Policy_Loss: -0.03636 Critic_Loss: 0.03433 RM_Score: -2.396 Ref_KL: -0.1913 Generate_Length: 6.125
+(INFO) 2024-04-07 14:49:21,971  - RLHF_Logger:
+Episode: 14 Timestep: 2048
+Policy_Loss: -0.03882 Critic_Loss: 0.1225 RM_Score: -3.035 Ref_KL: -0.2285 Generate_Length: 5.125
+(INFO) 2024-04-07 14:49:23,391  - RLHF_Logger:
+Episode: 14 Timestep: 2056
+Policy_Loss: -0.04252 Critic_Loss: 0.03013 RM_Score: -3.722 Ref_KL: -0.289 Generate_Length: 5.125
+(INFO) 2024-04-07 14:49:24,212  - RLHF_Logger:
+Episode: 14 Timestep: 2064
+Policy_Loss: -0.03391 Critic_Loss: 0.06311 RM_Score: -3.17 Ref_KL: -0.3207 Generate_Length: 3.75
+(INFO) 2024-04-07 14:49:24,767  - RLHF_Logger:
+Episode: 14 Timestep: 2072
+Policy_Loss: -0.00533 Critic_Loss: 0.05867 RM_Score: -2.774 Ref_KL: -0.3506 Generate_Length: 3.75
+(INFO) 2024-04-07 14:49:25,317  - RLHF_Logger:
+Episode: 14 Timestep: 2080
+Policy_Loss: -0.03652 Critic_Loss: 0.05069 RM_Score: -2.963 Ref_KL: -0.4491 Generate_Length: 3.125
+(INFO) 2024-04-07 14:49:26,622  - RLHF_Logger:
+Episode: 14 Timestep: 2088
+Policy_Loss: -0.01321 Critic_Loss: 0.04844 RM_Score: -2.328 Ref_KL: -0.4733 Generate_Length: 3.5
+(INFO) 2024-04-07 14:49:28,561  - RLHF_Logger:
+Episode: 14 Timestep: 2096
+Policy_Loss: -0.02555 Critic_Loss: 0.08472 RM_Score: -3.093 Ref_KL: -0.1765 Generate_Length: 9.125
+(INFO) 2024-04-07 14:49:29,951  - RLHF_Logger:
+Episode: 14 Timestep: 2104
+Policy_Loss: -0.02247 Critic_Loss: 0.06377 RM_Score: -3.267 Ref_KL: -0.1395 Generate_Length: 11.38
+(INFO) 2024-04-07 14:49:31,566  - RLHF_Logger:
+Episode: 14 Timestep: 2112
+Policy_Loss: -0.0205 Critic_Loss: 0.0466 RM_Score: -3.531 Ref_KL: -0.1496 Generate_Length: 9.375
+(INFO) 2024-04-07 14:49:32,296  - RLHF_Logger:
+Episode: 14 Timestep: 2120
+Policy_Loss: -0.03396 Critic_Loss: 0.05091 RM_Score: -3.422 Ref_KL: -0.2725 Generate_Length: 5.25
+(INFO) 2024-04-07 14:49:33,148  - RLHF_Logger:
+Episode: 14 Timestep: 2128
+Policy_Loss: -0.02124 Critic_Loss: 0.09537 RM_Score: -2.582 Ref_KL: -0.4011 Generate_Length: 3.5
+(INFO) 2024-04-07 14:49:33,827  - RLHF_Logger:
+Episode: 14 Timestep: 2136
+Policy_Loss: -0.03678 Critic_Loss: 0.07084 RM_Score: -3.136 Ref_KL: -0.2878 Generate_Length: 6.125
+(INFO) 2024-04-07 14:49:34,553  - RLHF_Logger:
+Episode: 14 Timestep: 2144
+Policy_Loss: -0.0336 Critic_Loss: 0.07776 RM_Score: -2.318 Ref_KL: -0.4306 Generate_Length: 3.75
+(INFO) 2024-04-07 14:49:35,186  - RLHF_Logger:
+Episode: 14 Timestep: 2152
+Policy_Loss: -0.04681 Critic_Loss: 0.05226 RM_Score: -2.281 Ref_KL: -0.4163 Generate_Length: 4.25
+(INFO) 2024-04-07 14:49:35,792  - RLHF_Logger:
+Episode: 14 Timestep: 2160
+Policy_Loss: -0.04939 Critic_Loss: 0.08371 RM_Score: -2.608 Ref_KL: -0.3804 Generate_Length: 4.125
+(INFO) 2024-04-07 14:49:36,511  - RLHF_Logger:
+Episode: 14 Timestep: 2168
+Policy_Loss: -0.00687 Critic_Loss: 0.07652 RM_Score: -1.938 Ref_KL: -0.2775 Generate_Length: 4.875
+(INFO) 2024-04-07 14:49:37,344  - RLHF_Logger:
+Episode: 14 Timestep: 2176
+Policy_Loss: -0.0477 Critic_Loss: 0.03178 RM_Score: -2.752 Ref_KL: -0.5258 Generate_Length: 2.625
+(INFO) 2024-04-07 14:49:37,940  - RLHF_Logger:
+Episode: 14 Timestep: 2184
+Policy_Loss: -0.03578 Critic_Loss: 0.04087 RM_Score: -2.313 Ref_KL: -0.3726 Generate_Length: 3.625
+(INFO) 2024-04-07 14:49:38,781  - RLHF_Logger:
+Episode: 15 Timestep: 2192
+Policy_Loss: -0.04794 Critic_Loss: 0.1262 RM_Score: -3.346 Ref_KL: -0.4547 Generate_Length: 2.75
+(INFO) 2024-04-07 14:49:39,604  - RLHF_Logger:
+Episode: 15 Timestep: 2200
+Policy_Loss: -0.04057 Critic_Loss: 0.1118 RM_Score: -2.124 Ref_KL: -0.3608 Generate_Length: 3.375
+(INFO) 2024-04-07 14:49:40,322  - RLHF_Logger:
+Episode: 15 Timestep: 2208
+Policy_Loss: -0.0428 Critic_Loss: 0.08256 RM_Score: -2.69 Ref_KL: -0.2836 Generate_Length: 5.125
+(INFO) 2024-04-07 14:49:41,336  - RLHF_Logger:
+Episode: 15 Timestep: 2216
+Policy_Loss: -0.05882 Critic_Loss: 0.08358 RM_Score: -3.177 Ref_KL: -0.2537 Generate_Length: 6.25
+(INFO) 2024-04-07 14:49:41,989  - RLHF_Logger:
+Episode: 15 Timestep: 2224
+Policy_Loss: -0.02868 Critic_Loss: 0.0908 RM_Score: -2.737 Ref_KL: -0.2997 Generate_Length: 4
+(INFO) 2024-04-07 14:49:43,055  - RLHF_Logger:
+Episode: 15 Timestep: 2232
+Policy_Loss: -0.02406 Critic_Loss: 0.05619 RM_Score: -2.901 Ref_KL: -0.1125 Generate_Length: 11.12
+(INFO) 2024-04-07 14:49:43,910  - RLHF_Logger:
+Episode: 15 Timestep: 2240
+Policy_Loss: -0.05226 Critic_Loss: 0.05355 RM_Score: -3.202 Ref_KL: -0.4442 Generate_Length: 2.875
+(INFO) 2024-04-07 14:49:46,182  - RLHF_Logger:
+Episode: 15 Timestep: 2248
+Policy_Loss: -0.02864 Critic_Loss: 0.07608 RM_Score: -2.871 Ref_KL: -0.1554 Generate_Length: 11.38
+(INFO) 2024-04-07 14:49:47,298  - RLHF_Logger:
+Episode: 15 Timestep: 2256
+Policy_Loss: -0.02881 Critic_Loss: 0.06092 RM_Score: -2.761 Ref_KL: -0.2444 Generate_Length: 7.625
+(INFO) 2024-04-07 14:49:48,690  - RLHF_Logger:
+Episode: 15 Timestep: 2264
+Policy_Loss: -0.04308 Critic_Loss: 0.1053 RM_Score: -1.854 Ref_KL: -0.4012 Generate_Length: 3.75
+(INFO) 2024-04-07 14:49:49,256  - RLHF_Logger:
+Episode: 15 Timestep: 2272
+Policy_Loss: -0.03507 Critic_Loss: 0.08511 RM_Score: -3.314 Ref_KL: -0.5248 Generate_Length: 2.75
+(INFO) 2024-04-07 14:49:49,756  - RLHF_Logger:
+Episode: 15 Timestep: 2280
+Policy_Loss: -0.05041 Critic_Loss: 0.0461 RM_Score: -2.777 Ref_KL: -0.832 Generate_Length: 2.125
+(INFO) 2024-04-07 14:49:51,066  - RLHF_Logger:
+Episode: 15 Timestep: 2288
+Policy_Loss: -0.05675 Critic_Loss: 0.04794 RM_Score: -2.799 Ref_KL: -1.016 Generate_Length: 1.625
+(INFO) 2024-04-07 14:49:51,828  - RLHF_Logger:
+Episode: 15 Timestep: 2296
+Policy_Loss: -0.03698 Critic_Loss: 0.04072 RM_Score: -2.475 Ref_KL: -0.5132 Generate_Length: 2.75
+(INFO) 2024-04-07 14:49:53,119  - RLHF_Logger:
+Episode: 15 Timestep: 2304
+Policy_Loss: -0.0525 Critic_Loss: 0.09226 RM_Score: -2.205 Ref_KL: -0.5041 Generate_Length: 2.5
+(INFO) 2024-04-07 14:49:54,102  - RLHF_Logger:
+Episode: 15 Timestep: 2312
+Policy_Loss: -0.03331 Critic_Loss: 0.08671 RM_Score: -3.216 Ref_KL: -0.2212 Generate_Length: 6.125
+(INFO) 2024-04-07 14:49:54,654  - RLHF_Logger:
+Episode: 15 Timestep: 2320
+Policy_Loss: -0.04736 Critic_Loss: 0.0469 RM_Score: -3.272 Ref_KL: -0.5986 Generate_Length: 2.5
+(INFO) 2024-04-07 14:49:55,645  - RLHF_Logger:
+Episode: 15 Timestep: 2328
+Policy_Loss: -0.01645 Critic_Loss: 0.08497 RM_Score: -3.111 Ref_KL: -0.184 Generate_Length: 7.25
+(INFO) 2024-04-07 14:49:56,256  - RLHF_Logger:
+Episode: 15 Timestep: 2336
+Policy_Loss: -0.02978 Critic_Loss: 0.07008 RM_Score: -2.709 Ref_KL: -0.2628 Generate_Length: 4.875
+(INFO) 2024-04-07 14:49:57,356  - RLHF_Logger:
+Episode: 16 Timestep: 2344
+Policy_Loss: -0.03078 Critic_Loss: 0.1339 RM_Score: -3.398 Ref_KL: -0.1735 Generate_Length: 8.5
+(INFO) 2024-04-07 14:49:58,183  - RLHF_Logger:
+Episode: 16 Timestep: 2352
+Policy_Loss: -0.02191 Critic_Loss: 0.151 RM_Score: -1.92 Ref_KL: -0.5974 Generate_Length: 2.875
+(INFO) 2024-04-07 14:49:58,897  - RLHF_Logger:
+Episode: 16 Timestep: 2360
+Policy_Loss: -0.03977 Critic_Loss: 0.08771 RM_Score: -2.573 Ref_KL: -0.2925 Generate_Length: 5.25
+(INFO) 2024-04-07 14:49:59,582  - RLHF_Logger:
+Episode: 16 Timestep: 2368
+Policy_Loss: -0.01843 Critic_Loss: 0.07921 RM_Score: -2.64 Ref_KL: -0.3947 Generate_Length: 4.25
+(INFO) 2024-04-07 14:50:00,136  - RLHF_Logger:
+Episode: 16 Timestep: 2376
+Policy_Loss: -0.02661 Critic_Loss: 0.03395 RM_Score: -3.486 Ref_KL: -0.4839 Generate_Length: 3
+(INFO) 2024-04-07 14:50:01,043  - RLHF_Logger:
+Episode: 16 Timestep: 2384
+Policy_Loss: -0.03051 Critic_Loss: 0.102 RM_Score: -3.095 Ref_KL: -0.2459 Generate_Length: 5.75
+(INFO) 2024-04-07 14:50:02,474  - RLHF_Logger:
+Episode: 16 Timestep: 2392
+Policy_Loss: -0.02091 Critic_Loss: 0.2032 RM_Score: -3.385 Ref_KL: -0.1974 Generate_Length: 9.875
+(INFO) 2024-04-07 14:50:03,308  - RLHF_Logger:
+Episode: 16 Timestep: 2400
+Policy_Loss: -0.0425 Critic_Loss: 0.0828 RM_Score: -2.433 Ref_KL: -0.4947 Generate_Length: 3
+(INFO) 2024-04-07 14:50:04,645  - RLHF_Logger:
+Episode: 16 Timestep: 2408
+Policy_Loss: -0.04188 Critic_Loss: 0.1003 RM_Score: -2.284 Ref_KL: -0.2943 Generate_Length: 3.875
+(INFO) 2024-04-07 14:50:05,181  - RLHF_Logger:
+Episode: 16 Timestep: 2416
+Policy_Loss: -0.0381 Critic_Loss: 0.07903 RM_Score: -3.392 Ref_KL: -0.4517 Generate_Length: 3.25
+(INFO) 2024-04-07 14:50:06,488  - RLHF_Logger:
+Episode: 16 Timestep: 2424
+Policy_Loss: -0.05275 Critic_Loss: 0.05237 RM_Score: -2.923 Ref_KL: -0.3171 Generate_Length: 4
+(INFO) 2024-04-07 14:50:07,227  - RLHF_Logger:
+Episode: 16 Timestep: 2432
+Policy_Loss: -0.03189 Critic_Loss: 0.04681 RM_Score: -3.188 Ref_KL: -0.4321 Generate_Length: 3.375
+(INFO) 2024-04-07 14:50:07,817  - RLHF_Logger:
+Episode: 16 Timestep: 2440
+Policy_Loss: -0.02554 Critic_Loss: 0.1587 RM_Score: -1.424 Ref_KL: -0.4129 Generate_Length: 3.125
+(INFO) 2024-04-07 14:50:08,375  - RLHF_Logger:
+Episode: 16 Timestep: 2448
+Policy_Loss: -0.0199 Critic_Loss: 0.06026 RM_Score: -2.665 Ref_KL: -0.3963 Generate_Length: 3.5
+(INFO) 2024-04-07 14:50:08,973  - RLHF_Logger:
+Episode: 16 Timestep: 2456
+Policy_Loss: -0.01137 Critic_Loss: 0.05368 RM_Score: -3.13 Ref_KL: -0.4221 Generate_Length: 3.375
+(INFO) 2024-04-07 14:50:09,995  - RLHF_Logger:
+Episode: 16 Timestep: 2464
+Policy_Loss: -0.03157 Critic_Loss: 0.07403 RM_Score: -3.154 Ref_KL: -0.2448 Generate_Length: 6.25
+(INFO) 2024-04-07 14:50:10,878  - RLHF_Logger:
+Episode: 16 Timestep: 2472
+Policy_Loss: -0.04208 Critic_Loss: 0.1018 RM_Score: -3.069 Ref_KL: -0.3425 Generate_Length: 4
+(INFO) 2024-04-07 14:50:12,268  - RLHF_Logger:
+Episode: 16 Timestep: 2480
+Policy_Loss: -0.0379 Critic_Loss: 0.09279 RM_Score: -3.052 Ref_KL: -0.2696 Generate_Length: 3.5
+(INFO) 2024-04-07 14:50:13,936  - RLHF_Logger:
+Episode: 16 Timestep: 2488
+Policy_Loss: -0.03958 Critic_Loss: 0.1013 RM_Score: -2.807 Ref_KL: -0.219 Generate_Length: 6.25
+(INFO) 2024-04-07 14:50:14,572  - RLHF_Logger:
+Episode: 16 Timestep: 2496
+Policy_Loss: -0.04176 Critic_Loss: 0.05017 RM_Score: -2.724 Ref_KL: -0.4618 Generate_Length: 4
+(INFO) 2024-04-07 14:50:15,518  - RLHF_Logger:
+Episode: 17 Timestep: 2504
+Policy_Loss: -0.03364 Critic_Loss: 0.05576 RM_Score: -2.633 Ref_KL: -0.4343 Generate_Length: 3.75
+(INFO) 2024-04-07 14:50:16,135  - RLHF_Logger:
+Episode: 17 Timestep: 2512
+Policy_Loss: -0.03908 Critic_Loss: 0.04211 RM_Score: -2.698 Ref_KL: -0.4022 Generate_Length: 4
+(INFO) 2024-04-07 14:50:18,165  - RLHF_Logger:
+Episode: 17 Timestep: 2520
+Policy_Loss: -0.01082 Critic_Loss: 0.09019 RM_Score: -3.392 Ref_KL: -0.1274 Generate_Length: 14.88
+(INFO) 2024-04-07 14:50:20,450  - RLHF_Logger:
+Episode: 17 Timestep: 2528
+Policy_Loss: -0.02254 Critic_Loss: 0.07377 RM_Score: -1.796 Ref_KL: -0.1301 Generate_Length: 11.62
+(INFO) 2024-04-07 14:50:22,307  - RLHF_Logger:
+Episode: 17 Timestep: 2536
+Policy_Loss: -0.01349 Critic_Loss: 0.0966 RM_Score: -3.723 Ref_KL: -0.1171 Generate_Length: 17.75
+(INFO) 2024-04-07 14:50:23,052  - RLHF_Logger:
+Episode: 17 Timestep: 2544
+Policy_Loss: -0.02803 Critic_Loss: 0.05037 RM_Score: -2.542 Ref_KL: -0.2689 Generate_Length: 4.875
+(INFO) 2024-04-07 14:50:23,992  - RLHF_Logger:
+Episode: 17 Timestep: 2552
+Policy_Loss: -0.03966 Critic_Loss: 0.08697 RM_Score: -3.003 Ref_KL: -0.3015 Generate_Length: 5.5
+(INFO) 2024-04-07 14:50:24,862  - RLHF_Logger:
+Episode: 17 Timestep: 2560
+Policy_Loss: -0.02491 Critic_Loss: 0.2137 RM_Score: -3.566 Ref_KL: -0.2685 Generate_Length: 4.75
+(INFO) 2024-04-07 14:50:25,555  - RLHF_Logger:
+Episode: 17 Timestep: 2568
+Policy_Loss: -0.02055 Critic_Loss: 0.09492 RM_Score: -3.455 Ref_KL: -0.3319 Generate_Length: 5.125
+(INFO) 2024-04-07 14:50:26,886  - RLHF_Logger:
+Episode: 17 Timestep: 2576
+Policy_Loss: -0.0193 Critic_Loss: 0.1083 RM_Score: -2.131 Ref_KL: -0.4184 Generate_Length: 3.25
+(INFO) 2024-04-07 14:50:28,199  - RLHF_Logger:
+Episode: 17 Timestep: 2584
+Policy_Loss: -0.01048 Critic_Loss: 0.09642 RM_Score: -2.863 Ref_KL: -0.4272 Generate_Length: 3
+(INFO) 2024-04-07 14:50:29,740  - RLHF_Logger:
+Episode: 17 Timestep: 2592
+Policy_Loss: -0.03404 Critic_Loss: 0.0587 RM_Score: -3.546 Ref_KL: -0.2649 Generate_Length: 4.375
+(INFO) 2024-04-07 14:50:30,303  - RLHF_Logger:
+Episode: 17 Timestep: 2600
+Policy_Loss: -0.02397 Critic_Loss: 0.06293 RM_Score: -3.238 Ref_KL: -0.4756 Generate_Length: 3.375
+(INFO) 2024-04-07 14:50:30,944  - RLHF_Logger:
+Episode: 17 Timestep: 2608
+Policy_Loss: -0.04615 Critic_Loss: 0.173 RM_Score: -2.182 Ref_KL: -0.48 Generate_Length: 4
+(INFO) 2024-04-07 14:50:31,848  - RLHF_Logger:
+Episode: 17 Timestep: 2616
+Policy_Loss: -0.03592 Critic_Loss: 0.07149 RM_Score: -2.631 Ref_KL: -0.4498 Generate_Length: 3.875
+(INFO) 2024-04-07 14:50:32,508  - RLHF_Logger:
+Episode: 17 Timestep: 2624
+Policy_Loss: -0.01671 Critic_Loss: 0.06231 RM_Score: -3.465 Ref_KL: -0.5748 Generate_Length: 2.75
+(INFO) 2024-04-07 14:50:33,155  - RLHF_Logger:
+Episode: 17 Timestep: 2632
+Policy_Loss: -0.02048 Critic_Loss: 0.06739 RM_Score: -2.377 Ref_KL: -0.46 Generate_Length: 3.5
+(INFO) 2024-04-07 14:50:34,196  - RLHF_Logger:
+Episode: 17 Timestep: 2640
+Policy_Loss: -0.02335 Critic_Loss: 0.1452 RM_Score: -1.996 Ref_KL: -0.4051 Generate_Length: 3.625
+(INFO) 2024-04-07 14:50:34,782  - RLHF_Logger:
+Episode: 17 Timestep: 2648
+Policy_Loss: -0.03352 Critic_Loss: 0.02617 RM_Score: -3.034 Ref_KL: -0.2605 Generate_Length: 3.625
+(INFO) 2024-04-07 14:50:35,596  - RLHF_Logger:
+Episode: 18 Timestep: 2656
+Policy_Loss: -0.0325 Critic_Loss: 0.1325 RM_Score: -3.268 Ref_KL: -0.3404 Generate_Length: 5.25
+(INFO) 2024-04-07 14:50:36,923  - RLHF_Logger:
+Episode: 18 Timestep: 2664
+Policy_Loss: -0.01678 Critic_Loss: 0.03826 RM_Score: -2.482 Ref_KL: -0.5467 Generate_Length: 3.25
+(INFO) 2024-04-07 14:50:37,483  - RLHF_Logger:
+Episode: 18 Timestep: 2672
+Policy_Loss: -0.01181 Critic_Loss: 0.05243 RM_Score: -3.185 Ref_KL: -0.4133 Generate_Length: 3.25
+(INFO) 2024-04-07 14:50:38,011  - RLHF_Logger:
+Episode: 18 Timestep: 2680
+Policy_Loss: -0.02669 Critic_Loss: 0.07256 RM_Score: -1.992 Ref_KL: -0.5475 Generate_Length: 3.125
+(INFO) 2024-04-07 14:50:38,543  - RLHF_Logger:
+Episode: 18 Timestep: 2688
+Policy_Loss: -0.02038 Critic_Loss: 0.07244 RM_Score: -3.239 Ref_KL: -0.56 Generate_Length: 3.125
+(INFO) 2024-04-07 14:50:39,506  - RLHF_Logger:
+Episode: 18 Timestep: 2696
+Policy_Loss: -0.01626 Critic_Loss: 0.06963 RM_Score: -2.989 Ref_KL: -0.3334 Generate_Length: 3.5
+(INFO) 2024-04-07 14:50:40,061  - RLHF_Logger:
+Episode: 18 Timestep: 2704
+Policy_Loss: -0.03239 Critic_Loss: 0.01871 RM_Score: -2.954 Ref_KL: -0.4248 Generate_Length: 3.5
+(INFO) 2024-04-07 14:50:40,824  - RLHF_Logger:
+Episode: 18 Timestep: 2712
+Policy_Loss: -0.008691 Critic_Loss: 0.02275 RM_Score: -3.147 Ref_KL: -0.3596 Generate_Length: 3
+(INFO) 2024-04-07 14:50:42,080  - RLHF_Logger:
+Episode: 18 Timestep: 2720
+Policy_Loss: -0.01546 Critic_Loss: 0.02394 RM_Score: -2.184 Ref_KL: -0.4566 Generate_Length: 2.75
+(INFO) 2024-04-07 14:50:42,745  - RLHF_Logger:
+Episode: 18 Timestep: 2728
+Policy_Loss: -0.0335 Critic_Loss: 0.08653 RM_Score: -2.065 Ref_KL: -0.4311 Generate_Length: 3.25
+(INFO) 2024-04-07 14:50:44,148  - RLHF_Logger:
+Episode: 18 Timestep: 2736
+Policy_Loss: -0.03067 Critic_Loss: 0.1132 RM_Score: -2.519 Ref_KL: -0.3239 Generate_Length: 6.625
+(INFO) 2024-04-07 14:50:44,877  - RLHF_Logger:
+Episode: 18 Timestep: 2744
+Policy_Loss: -0.06348 Critic_Loss: 0.1654 RM_Score: -3.589 Ref_KL: -0.3889 Generate_Length: 3.5
+(INFO) 2024-04-07 14:50:45,432  - RLHF_Logger:
+Episode: 18 Timestep: 2752
+Policy_Loss: -0.01686 Critic_Loss: 0.03891 RM_Score: -2.856 Ref_KL: -0.4558 Generate_Length: 3
+(INFO) 2024-04-07 14:50:46,504  - RLHF_Logger:
+Episode: 18 Timestep: 2760
+Policy_Loss: -0.02869 Critic_Loss: 0.07474 RM_Score: -3.236 Ref_KL: -0.206 Generate_Length: 7.25
+(INFO) 2024-04-07 14:50:47,808  - RLHF_Logger:
+Episode: 18 Timestep: 2768
+Policy_Loss: -0.0168 Critic_Loss: 0.07574 RM_Score: -3.26 Ref_KL: -0.5361 Generate_Length: 3
+(INFO) 2024-04-07 14:50:48,760  - RLHF_Logger:
+Episode: 18 Timestep: 2776
+Policy_Loss: -0.02783 Critic_Loss: 0.06238 RM_Score: -2.097 Ref_KL: -0.4033 Generate_Length: 4.125
+(INFO) 2024-04-07 14:50:50,034  - RLHF_Logger:
+Episode: 18 Timestep: 2784
+Policy_Loss: -0.02358 Critic_Loss: 0.03584 RM_Score: -2.578 Ref_KL: -0.525 Generate_Length: 3
+(INFO) 2024-04-07 14:50:50,731  - RLHF_Logger:
+Episode: 18 Timestep: 2792
+Policy_Loss: -0.05175 Critic_Loss: 0.1562 RM_Score: -2.559 Ref_KL: -0.4898 Generate_Length: 3
+(INFO) 2024-04-07 14:50:51,309  - RLHF_Logger:
+Episode: 18 Timestep: 2800
+Policy_Loss: -0.03125 Critic_Loss: 0.0233 RM_Score: -3.143 Ref_KL: -0.4334 Generate_Length: 3
+(INFO) 2024-04-07 14:50:53,752  - RLHF_Logger:
+Episode: 18 Timestep: 2808
+Policy_Loss: -0.001596 Critic_Loss: 0.0523 RM_Score: -2.886 Ref_KL: -0.07759 Generate_Length: 18.38
+(INFO) 2024-04-07 14:50:56,238  - RLHF_Logger:
+Episode: 19 Timestep: 2816
+Policy_Loss: -0.01611 Critic_Loss: 0.04889 RM_Score: -3.174 Ref_KL: -0.1412 Generate_Length: 13.25
+(INFO) 2024-04-07 14:50:57,061  - RLHF_Logger:
+Episode: 19 Timestep: 2824
+Policy_Loss: -0.02141 Critic_Loss: 0.0771 RM_Score: -1.929 Ref_KL: -0.3668 Generate_Length: 4.125
+(INFO) 2024-04-07 14:50:57,592  - RLHF_Logger:
+Episode: 19 Timestep: 2832
+Policy_Loss: -0.0396 Critic_Loss: 0.07683 RM_Score: -3.522 Ref_KL: -0.4787 Generate_Length: 3.25
+(INFO) 2024-04-07 14:50:58,991  - RLHF_Logger:
+Episode: 19 Timestep: 2840
+Policy_Loss: -0.05814 Critic_Loss: 0.04353 RM_Score: -2.619 Ref_KL: -0.3243 Generate_Length: 4.625
+(INFO) 2024-04-07 14:50:59,536  - RLHF_Logger:
+Episode: 19 Timestep: 2848
+Policy_Loss: -0.02349 Critic_Loss: 0.03088 RM_Score: -2.923 Ref_KL: -0.4288 Generate_Length: 3.375
+(INFO) 2024-04-07 14:51:00,260  - RLHF_Logger:
+Episode: 19 Timestep: 2856
+Policy_Loss: -0.02602 Critic_Loss: 0.02699 RM_Score: -2.533 Ref_KL: -0.4056 Generate_Length: 3.25
+(INFO) 2024-04-07 14:51:01,127  - RLHF_Logger:
+Episode: 19 Timestep: 2864
+Policy_Loss: -0.04497 Critic_Loss: 0.1122 RM_Score: -3.008 Ref_KL: -0.3317 Generate_Length: 5
+(INFO) 2024-04-07 14:51:02,084  - RLHF_Logger:
+Episode: 19 Timestep: 2872
+Policy_Loss: -0.04056 Critic_Loss: 0.07563 RM_Score: -3.225 Ref_KL: -0.285 Generate_Length: 4.25
+(INFO) 2024-04-07 14:51:02,910  - RLHF_Logger:
+Episode: 19 Timestep: 2880
+Policy_Loss: -0.04166 Critic_Loss: 0.0862 RM_Score: -2.312 Ref_KL: -0.3192 Generate_Length: 3.625
+(INFO) 2024-04-07 14:51:03,475  - RLHF_Logger:
+Episode: 19 Timestep: 2888
+Policy_Loss: -0.04589 Critic_Loss: 0.02814 RM_Score: -3.034 Ref_KL: -0.4743 Generate_Length: 3
+(INFO) 2024-04-07 14:51:04,088  - RLHF_Logger:
+Episode: 19 Timestep: 2896
+Policy_Loss: -0.02055 Critic_Loss: 0.05921 RM_Score: -3.19 Ref_KL: -0.4215 Generate_Length: 3.375
+(INFO) 2024-04-07 14:51:04,704  - RLHF_Logger:
+Episode: 19 Timestep: 2904
+Policy_Loss: -0.03274 Critic_Loss: 0.04834 RM_Score: -2.929 Ref_KL: -0.4009 Generate_Length: 3.75
+(INFO) 2024-04-07 14:51:05,489  - RLHF_Logger:
+Episode: 19 Timestep: 2912
+Policy_Loss: -0.02878 Critic_Loss: 0.06001 RM_Score: -2.591 Ref_KL: -0.2327 Generate_Length: 4.75
+(INFO) 2024-04-07 14:51:05,973  - RLHF_Logger:
+Episode: 19 Timestep: 2920
+Policy_Loss: -0.03833 Critic_Loss: 0.04455 RM_Score: -3.93 Ref_KL: -0.3872 Generate_Length: 2.75
+(INFO) 2024-04-07 14:51:06,760  - RLHF_Logger:
+Episode: 19 Timestep: 2928
+Policy_Loss: -0.02357 Critic_Loss: 0.04297 RM_Score: -2.959 Ref_KL: -0.2668 Generate_Length: 4.25
+(INFO) 2024-04-07 14:51:07,584  - RLHF_Logger:
+Episode: 19 Timestep: 2936
+Policy_Loss: -0.0312 Critic_Loss: 0.0967 RM_Score: -2.909 Ref_KL: -0.4308 Generate_Length: 4.625
+(INFO) 2024-04-07 14:51:08,592  - RLHF_Logger:
+Episode: 19 Timestep: 2944
+Policy_Loss: -0.02177 Critic_Loss: 0.08081 RM_Score: -1.945 Ref_KL: -0.4481 Generate_Length: 3.125
+(INFO) 2024-04-07 14:51:09,970  - RLHF_Logger:
+Episode: 19 Timestep: 2952
+Policy_Loss: -0.0496 Critic_Loss: 0.06693 RM_Score: -2.181 Ref_KL: -0.3267 Generate_Length: 4
+(INFO) 2024-04-07 14:51:10,796  - RLHF_Logger:
+Episode: 19 Timestep: 2960
+Policy_Loss: -0.02442 Critic_Loss: 0.05818 RM_Score: -2.139 Ref_KL: -0.4484 Generate_Length: 3.125
+(INFO) 2024-04-07 14:51:12,484  - RLHF_Logger:
+Episode: 20 Timestep: 2968
+Policy_Loss: -0.04806 Critic_Loss: 0.1367 RM_Score: -3.627 Ref_KL: -0.2458 Generate_Length: 5.75
+(INFO) 2024-04-07 14:51:13,271  - RLHF_Logger:
+Episode: 20 Timestep: 2976
+Policy_Loss: -0.03612 Critic_Loss: 0.05297 RM_Score: -2.716 Ref_KL: -0.209 Generate_Length: 5.25
+(INFO) 2024-04-07 14:51:13,875  - RLHF_Logger:
+Episode: 20 Timestep: 2984
+Policy_Loss: -0.02588 Critic_Loss: 0.07305 RM_Score: -2.943 Ref_KL: -0.3136 Generate_Length: 3.625
+(INFO) 2024-04-07 14:51:15,279  - RLHF_Logger:
+Episode: 20 Timestep: 2992
+Policy_Loss: -0.04335 Critic_Loss: 0.06243 RM_Score: -2.575 Ref_KL: -0.3725 Generate_Length: 3.375
+(INFO) 2024-04-07 14:51:15,878  - RLHF_Logger:
+Episode: 20 Timestep: 3000
+Policy_Loss: -0.02316 Critic_Loss: 0.09868 RM_Score: -2.177 Ref_KL: -0.5171 Generate_Length: 2.875
+(INFO) 2024-04-07 14:51:17,201  - RLHF_Logger:
+Episode: 20 Timestep: 3008
+Policy_Loss: -0.03614 Critic_Loss: 0.04353 RM_Score: -2.875 Ref_KL: -0.5541 Generate_Length: 2.5
+(INFO) 2024-04-07 14:51:17,781  - RLHF_Logger:
+Episode: 20 Timestep: 3016
+Policy_Loss: -0.04991 Critic_Loss: 0.02979 RM_Score: -2.93 Ref_KL: -0.5068 Generate_Length: 2.75
+(INFO) 2024-04-07 14:51:19,064  - RLHF_Logger:
+Episode: 20 Timestep: 3024
+Policy_Loss: -0.02932 Critic_Loss: 0.06738 RM_Score: -2.482 Ref_KL: -0.4709 Generate_Length: 3
+(INFO) 2024-04-07 14:51:20,469  - RLHF_Logger:
+Episode: 20 Timestep: 3032
+Policy_Loss: -0.02313 Critic_Loss: 0.07042 RM_Score: -3.487 Ref_KL: -0.2979 Generate_Length: 4
+(INFO) 2024-04-07 14:51:21,034  - RLHF_Logger:
+Episode: 20 Timestep: 3040
+Policy_Loss: -0.03324 Critic_Loss: 0.04337 RM_Score: -3.493 Ref_KL: -0.4943 Generate_Length: 3.625
+(INFO) 2024-04-07 14:51:21,777  - RLHF_Logger:
+Episode: 20 Timestep: 3048
+Policy_Loss: -0.01851 Critic_Loss: 0.05905 RM_Score: -2.607 Ref_KL: -0.4307 Generate_Length: 3.25
+(INFO) 2024-04-07 14:51:22,335  - RLHF_Logger:
+Episode: 20 Timestep: 3056
+Policy_Loss: -0.01444 Critic_Loss: 0.03733 RM_Score: -2.853 Ref_KL: -0.4405 Generate_Length: 3.25
+(INFO) 2024-04-07 14:51:23,126  - RLHF_Logger:
+Episode: 20 Timestep: 3064
+Policy_Loss: -0.01721 Critic_Loss: 0.08728 RM_Score: -2.36 Ref_KL: -0.6237 Generate_Length: 2.75
+(INFO) 2024-04-07 14:51:23,983  - RLHF_Logger:
+Episode: 20 Timestep: 3072
+Policy_Loss: -0.04454 Critic_Loss: 0.04671 RM_Score: -2.696 Ref_KL: -0.3555 Generate_Length: 3.625
+(INFO) 2024-04-07 14:51:26,883  - RLHF_Logger:
+Episode: 20 Timestep: 3080
+Policy_Loss: -0.01819 Critic_Loss: 0.0893 RM_Score: -3.376 Ref_KL: -0.09735 Generate_Length: 18.5
+(INFO) 2024-04-07 14:51:27,543  - RLHF_Logger:
+Episode: 20 Timestep: 3088
+Policy_Loss: -0.04648 Critic_Loss: 0.04249 RM_Score: -2.984 Ref_KL: -0.2162 Generate_Length: 4.375
+(INFO) 2024-04-07 14:51:28,368  - RLHF_Logger:
+Episode: 20 Timestep: 3096
+Policy_Loss: -0.03921 Critic_Loss: 0.06893 RM_Score: -2.811 Ref_KL: -0.2263 Generate_Length: 6
+(INFO) 2024-04-07 14:51:28,960  - RLHF_Logger:
+Episode: 20 Timestep: 3104
+Policy_Loss: -0.02628 Critic_Loss: 0.02856 RM_Score: -1.82 Ref_KL: -0.6339 Generate_Length: 2.75
+(INFO) 2024-04-07 14:51:29,680  - RLHF_Logger:
+Episode: 20 Timestep: 3112
+Policy_Loss: -0.02406 Critic_Loss: 0.1063 RM_Score: -2.746 Ref_KL: -0.4587 Generate_Length: 3.25
+(INFO) 2024-04-07 14:51:30,451  - RLHF_Logger:
+Episode: 20 Timestep: 3120
+Policy_Loss: -0.04149 Critic_Loss: 0.04289 RM_Score: -3.446 Ref_KL: -0.3022 Generate_Length: 3.5
+(INFO) 2024-04-07 14:51:31,099  - RLHF_Logger:
+Episode: 21 Timestep: 3128
+Policy_Loss: -0.03884 Critic_Loss: 0.04782 RM_Score: -2.868 Ref_KL: -0.3434 Generate_Length: 4.5
+(INFO) 2024-04-07 14:51:31,692  - RLHF_Logger:
+Episode: 21 Timestep: 3136
+Policy_Loss: -0.02529 Critic_Loss: 0.03464 RM_Score: -2.569 Ref_KL: -0.3618 Generate_Length: 3.25
+(INFO) 2024-04-07 14:51:32,269  - RLHF_Logger:
+Episode: 21 Timestep: 3144
+Policy_Loss: -0.05001 Critic_Loss: 0.07538 RM_Score: -3.424 Ref_KL: -0.4779 Generate_Length: 3.875
+(INFO) 2024-04-07 14:51:32,781  - RLHF_Logger:
+Episode: 21 Timestep: 3152
+Policy_Loss: -0.03042 Critic_Loss: 0.03495 RM_Score: -2.177 Ref_KL: -0.5319 Generate_Length: 3.125
+(INFO) 2024-04-07 14:51:33,475  - RLHF_Logger:
+Episode: 21 Timestep: 3160
+Policy_Loss: -0.03265 Critic_Loss: 0.02014 RM_Score: -3.274 Ref_KL: -0.6118 Generate_Length: 2.5
+(INFO) 2024-04-07 14:51:34,785  - RLHF_Logger:
+Episode: 21 Timestep: 3168
+Policy_Loss: -0.03081 Critic_Loss: 0.05491 RM_Score: -3.237 Ref_KL: -0.4004 Generate_Length: 3.25
+(INFO) 2024-04-07 14:51:35,646  - RLHF_Logger:
+Episode: 21 Timestep: 3176
+Policy_Loss: -0.01507 Critic_Loss: 0.04262 RM_Score: -2.892 Ref_KL: -0.3882 Generate_Length: 2.625
+(INFO) 2024-04-07 14:51:37,053  - RLHF_Logger:
+Episode: 21 Timestep: 3184
+Policy_Loss: -0.03043 Critic_Loss: 0.0774 RM_Score: -3.353 Ref_KL: -0.3064 Generate_Length: 3.5
+(INFO) 2024-04-07 14:51:37,868  - RLHF_Logger:
+Episode: 21 Timestep: 3192
+Policy_Loss: -0.02909 Critic_Loss: 0.05083 RM_Score: -2.263 Ref_KL: -0.1962 Generate_Length: 6.5
+(INFO) 2024-04-07 14:51:39,252  - RLHF_Logger:
+Episode: 21 Timestep: 3200
+Policy_Loss: -0.02577 Critic_Loss: 0.06311 RM_Score: -2.629 Ref_KL: -0.4517 Generate_Length: 3.125
+(INFO) 2024-04-07 14:51:39,254  - RLHF_Logger:
+RLHF Training Complete

@@ -1,0 +1,302 @@
+RLHF_Logger---INFO---2024-01-15 18:51:45,747---
+Episode: 0 Timestep: 50
+Policy_Loss: 329.8 Critic_Loss: 30.92 Reward: -5.718 RM_Reward: -5.634 Ref_Reward: 0.08384
+RLHF_Logger---INFO---2024-01-15 18:54:47,435---
+Episode: 1 Timestep: 100
+Policy_Loss: 178 Critic_Loss: 27.29 Reward: -5.871 RM_Reward: -5.829 Ref_Reward: 0.04151
+RLHF_Logger---INFO---2024-01-15 18:57:47,625---
+Episode: 2 Timestep: 150
+Policy_Loss: 406.8 Critic_Loss: 19.43 Reward: -5.698 RM_Reward: -5.655 Ref_Reward: 0.04244
+RLHF_Logger---INFO---2024-01-15 19:00:38,833---
+Episode: 3 Timestep: 200
+Policy_Loss: 293.6 Critic_Loss: 17.13 Reward: -5.844 RM_Reward: -5.666 Ref_Reward: 0.1781
+RLHF_Logger---INFO---2024-01-15 19:03:30,202---
+Episode: 4 Timestep: 250
+Policy_Loss: 197.1 Critic_Loss: 13.95 Reward: -5.799 RM_Reward: -5.681 Ref_Reward: 0.1181
+RLHF_Logger---INFO---2024-01-15 19:06:31,400---
+Episode: 5 Timestep: 300
+Policy_Loss: 359.8 Critic_Loss: 11.8 Reward: -5.86 RM_Reward: -5.819 Ref_Reward: 0.04029
+RLHF_Logger---INFO---2024-01-15 19:09:29,598---
+Episode: 6 Timestep: 350
+Policy_Loss: 121.8 Critic_Loss: 15.45 Reward: -5.955 RM_Reward: -5.864 Ref_Reward: 0.09084
+RLHF_Logger---INFO---2024-01-15 19:12:23,246---
+Episode: 7 Timestep: 400
+Policy_Loss: 203.2 Critic_Loss: 13.25 Reward: -5.691 RM_Reward: -5.562 Ref_Reward: 0.1285
+RLHF_Logger---INFO---2024-01-15 19:15:18,930---
+Episode: 8 Timestep: 450
+Policy_Loss: 184 Critic_Loss: 14.08 Reward: -5.655 RM_Reward: -5.482 Ref_Reward: 0.173
+RLHF_Logger---INFO---2024-01-15 19:18:25,428---
+Episode: 9 Timestep: 500
+Policy_Loss: 218.3 Critic_Loss: 9.072 Reward: -5.947 RM_Reward: -5.909 Ref_Reward: 0.03758
+RLHF_Logger---INFO---2024-01-15 19:21:25,748---
+Episode: 10 Timestep: 550
+Policy_Loss: 319.1 Critic_Loss: 13.63 Reward: -5.843 RM_Reward: -5.702 Ref_Reward: 0.1417
+RLHF_Logger---INFO---2024-01-15 19:24:21,961---
+Episode: 11 Timestep: 600
+Policy_Loss: 106.6 Critic_Loss: 12.31 Reward: -5.97 RM_Reward: -5.892 Ref_Reward: 0.07778
+RLHF_Logger---INFO---2024-01-15 19:27:31,574---
+Episode: 12 Timestep: 650
+Policy_Loss: 183.6 Critic_Loss: 11.77 Reward: -5.648 RM_Reward: -5.571 Ref_Reward: 0.07675
+RLHF_Logger---INFO---2024-01-15 19:30:37,963---
+Episode: 13 Timestep: 700
+Policy_Loss: 85.73 Critic_Loss: 12.13 Reward: -5.811 RM_Reward: -5.699 Ref_Reward: 0.1125
+RLHF_Logger---INFO---2024-01-15 19:33:46,537---
+Episode: 14 Timestep: 750
+Policy_Loss: 150.4 Critic_Loss: 11.26 Reward: -5.759 RM_Reward: -5.68 Ref_Reward: 0.07876
+RLHF_Logger---INFO---2024-01-15 19:36:45,164---
+Episode: 15 Timestep: 800
+Policy_Loss: 48.4 Critic_Loss: 11.77 Reward: -5.351 RM_Reward: -5.224 Ref_Reward: 0.1274
+RLHF_Logger---INFO---2024-01-15 19:39:48,759---
+Episode: 16 Timestep: 850
+Policy_Loss: 24.64 Critic_Loss: 7.976 Reward: -4.613 RM_Reward: -4.505 Ref_Reward: 0.1086
+RLHF_Logger---INFO---2024-01-15 19:42:49,009---
+Episode: 17 Timestep: 900
+Policy_Loss: -5.496 Critic_Loss: 6.834 Reward: -3.934 RM_Reward: -3.739 Ref_Reward: 0.1957
+RLHF_Logger---INFO---2024-01-15 19:45:32,019---
+Episode: 18 Timestep: 950
+Policy_Loss: -1.67 Critic_Loss: 5.605 Reward: -3.834 RM_Reward: -3.565 Ref_Reward: 0.269
+RLHF_Logger---INFO---2024-01-15 19:48:40,114---
+Episode: 19 Timestep: 1000
+Policy_Loss: 17.91 Critic_Loss: 3.588 Reward: -4.039 RM_Reward: -3.903 Ref_Reward: 0.1352
+RLHF_Logger---INFO---2024-01-15 19:51:45,956---
+Episode: 20 Timestep: 1050
+Policy_Loss: 1.477 Critic_Loss: 4.594 Reward: -3.503 RM_Reward: -3.321 Ref_Reward: 0.1824
+RLHF_Logger---INFO---2024-01-15 19:54:45,250---
+Episode: 21 Timestep: 1100
+Policy_Loss: 4.568 Critic_Loss: 3.952 Reward: -3.174 RM_Reward: -2.999 Ref_Reward: 0.175
+RLHF_Logger---INFO---2024-01-15 19:57:48,318---
+Episode: 22 Timestep: 1150
+Policy_Loss: 0.9396 Critic_Loss: 3.521 Reward: -3.035 RM_Reward: -2.834 Ref_Reward: 0.2011
+RLHF_Logger---INFO---2024-01-15 20:00:41,054---
+Episode: 23 Timestep: 1200
+Policy_Loss: 1.227 Critic_Loss: 3.357 Reward: -2.971 RM_Reward: -2.743 Ref_Reward: 0.2279
+RLHF_Logger---INFO---2024-01-15 20:03:39,243---
+Episode: 24 Timestep: 1250
+Policy_Loss: 0.298 Critic_Loss: 3.5 Reward: -2.777 RM_Reward: -2.543 Ref_Reward: 0.234
+RLHF_Logger---INFO---2024-01-15 20:06:53,701---
+Episode: 25 Timestep: 1300
+Policy_Loss: 2.311 Critic_Loss: 2.065 Reward: -2.676 RM_Reward: -2.477 Ref_Reward: 0.1987
+RLHF_Logger---INFO---2024-01-15 20:09:56,254---
+Episode: 26 Timestep: 1350
+Policy_Loss: 3.691 Critic_Loss: 1.852 Reward: -2.614 RM_Reward: -2.413 Ref_Reward: 0.2011
+RLHF_Logger---INFO---2024-01-15 20:12:54,507---
+Episode: 27 Timestep: 1400
+Policy_Loss: 4.445 Critic_Loss: 2.566 Reward: -2.407 RM_Reward: -2.175 Ref_Reward: 0.2317
+RLHF_Logger---INFO---2024-01-15 20:15:47,069---
+Episode: 28 Timestep: 1450
+Policy_Loss: -3.274 Critic_Loss: 2.198 Reward: -2.297 RM_Reward: -2.024 Ref_Reward: 0.2721
+RLHF_Logger---INFO---2024-01-15 20:18:47,333---
+Episode: 29 Timestep: 1500
+Policy_Loss: -2.469 Critic_Loss: 2.092 Reward: -2.202 RM_Reward: -1.937 Ref_Reward: 0.2653
+RLHF_Logger---INFO---2024-01-15 20:21:48,591---
+Episode: 30 Timestep: 1550
+Policy_Loss: 1.561 Critic_Loss: 1.595 Reward: -2.255 RM_Reward: -2.037 Ref_Reward: 0.2176
+RLHF_Logger---INFO---2024-01-15 20:24:46,535---
+Episode: 31 Timestep: 1600
+Policy_Loss: 0.8649 Critic_Loss: 2.238 Reward: -2.363 RM_Reward: -2.123 Ref_Reward: 0.2397
+RLHF_Logger---INFO---2024-01-15 20:27:56,201---
+Episode: 32 Timestep: 1650
+Policy_Loss: 2.173 Critic_Loss: 1.81 Reward: -2.047 RM_Reward: -1.814 Ref_Reward: 0.2327
+RLHF_Logger---INFO---2024-01-15 20:30:59,828---
+Episode: 33 Timestep: 1700
+Policy_Loss: -0.5204 Critic_Loss: 2.422 Reward: -2.345 RM_Reward: -2.085 Ref_Reward: 0.2607
+RLHF_Logger---INFO---2024-01-15 20:34:04,941---
+Episode: 34 Timestep: 1750
+Policy_Loss: -1.112 Critic_Loss: 1.633 Reward: -1.922 RM_Reward: -1.643 Ref_Reward: 0.2794
+RLHF_Logger---INFO---2024-01-15 20:37:02,443---
+Episode: 35 Timestep: 1800
+Policy_Loss: 1.947 Critic_Loss: 2.454 Reward: -2.256 RM_Reward: -2.011 Ref_Reward: 0.2455
+RLHF_Logger---INFO---2024-01-15 20:40:06,586---
+Episode: 36 Timestep: 1850
+Policy_Loss: 1.138 Critic_Loss: 1.543 Reward: -2.167 RM_Reward: -1.934 Ref_Reward: 0.2331
+RLHF_Logger---INFO---2024-01-15 20:43:10,955---
+Episode: 37 Timestep: 1900
+Policy_Loss: 0.1717 Critic_Loss: 1.832 Reward: -2.108 RM_Reward: -1.862 Ref_Reward: 0.246
+RLHF_Logger---INFO---2024-01-15 20:46:16,414---
+Episode: 38 Timestep: 1950
+Policy_Loss: 1.844 Critic_Loss: 2.048 Reward: -2.104 RM_Reward: -1.868 Ref_Reward: 0.2362
+RLHF_Logger---INFO---2024-01-15 20:49:19,953---
+Episode: 39 Timestep: 2000
+Policy_Loss: 0.8314 Critic_Loss: 1.683 Reward: -2.287 RM_Reward: -2.037 Ref_Reward: 0.2496
+RLHF_Logger---INFO---2024-01-15 20:52:18,697---
+Episode: 40 Timestep: 2050
+Policy_Loss: 0.7397 Critic_Loss: 1.809 Reward: -2.086 RM_Reward: -1.842 Ref_Reward: 0.2438
+RLHF_Logger---INFO---2024-01-15 20:55:25,273---
+Episode: 41 Timestep: 2100
+Policy_Loss: 2.187 Critic_Loss: 1.633 Reward: -1.993 RM_Reward: -1.715 Ref_Reward: 0.2772
+RLHF_Logger---INFO---2024-01-15 20:58:30,635---
+Episode: 42 Timestep: 2150
+Policy_Loss: 0.472 Critic_Loss: 1.331 Reward: -2.098 RM_Reward: -1.857 Ref_Reward: 0.2403
+RLHF_Logger---INFO---2024-01-15 21:01:31,799---
+Episode: 43 Timestep: 2200
+Policy_Loss: 0.98 Critic_Loss: 1.989 Reward: -2.198 RM_Reward: -1.933 Ref_Reward: 0.2657
+RLHF_Logger---INFO---2024-01-15 21:04:33,885---
+Episode: 44 Timestep: 2250
+Policy_Loss: -1.951 Critic_Loss: 1.916 Reward: -2.022 RM_Reward: -1.761 Ref_Reward: 0.2613
+RLHF_Logger---INFO---2024-01-15 21:07:31,992---
+Episode: 45 Timestep: 2300
+Policy_Loss: 2.388 Critic_Loss: 2.296 Reward: -2.161 RM_Reward: -1.899 Ref_Reward: 0.2625
+RLHF_Logger---INFO---2024-01-15 21:10:31,531---
+Episode: 46 Timestep: 2350
+Policy_Loss: 2.606 Critic_Loss: 2.106 Reward: -2.335 RM_Reward: -2.062 Ref_Reward: 0.2724
+RLHF_Logger---INFO---2024-01-15 21:13:35,530---
+Episode: 47 Timestep: 2400
+Policy_Loss: 2.209 Critic_Loss: 2.049 Reward: -2.092 RM_Reward: -1.835 Ref_Reward: 0.2563
+RLHF_Logger---INFO---2024-01-15 21:16:44,802---
+Episode: 48 Timestep: 2450
+Policy_Loss: 0.5632 Critic_Loss: 1.664 Reward: -2.128 RM_Reward: -1.866 Ref_Reward: 0.2619
+RLHF_Logger---INFO---2024-01-15 21:19:47,743---
+Episode: 49 Timestep: 2500
+Policy_Loss: 0.6672 Critic_Loss: 1.778 Reward: -2.188 RM_Reward: -1.943 Ref_Reward: 0.2456
+RLHF_Logger---INFO---2024-01-15 21:22:57,903---
+Episode: 50 Timestep: 2550
+Policy_Loss: 0.4407 Critic_Loss: 1.655 Reward: -2.16 RM_Reward: -1.915 Ref_Reward: 0.2448
+RLHF_Logger---INFO---2024-01-15 21:25:49,076---
+Episode: 51 Timestep: 2600
+Policy_Loss: -0.7802 Critic_Loss: 2.6 Reward: -2.196 RM_Reward: -1.882 Ref_Reward: 0.314
+RLHF_Logger---INFO---2024-01-15 21:28:47,369---
+Episode: 52 Timestep: 2650
+Policy_Loss: -0.2608 Critic_Loss: 2.118 Reward: -2.141 RM_Reward: -1.867 Ref_Reward: 0.2731
+RLHF_Logger---INFO---2024-01-15 21:31:47,378---
+Episode: 53 Timestep: 2700
+Policy_Loss: 0.5205 Critic_Loss: 1.658 Reward: -2.078 RM_Reward: -1.802 Ref_Reward: 0.2761
+RLHF_Logger---INFO---2024-01-15 21:34:56,424---
+Episode: 54 Timestep: 2750
+Policy_Loss: 0.3942 Critic_Loss: 1.341 Reward: -2.034 RM_Reward: -1.789 Ref_Reward: 0.2449
+RLHF_Logger---INFO---2024-01-15 21:37:44,892---
+Episode: 55 Timestep: 2800
+Policy_Loss: 0.7117 Critic_Loss: 2.261 Reward: -2.103 RM_Reward: -1.823 Ref_Reward: 0.2799
+RLHF_Logger---INFO---2024-01-15 21:40:38,064---
+Episode: 56 Timestep: 2850
+Policy_Loss: -5.255 Critic_Loss: 1.666 Reward: -1.875 RM_Reward: -1.596 Ref_Reward: 0.2793
+RLHF_Logger---INFO---2024-01-15 21:43:42,326---
+Episode: 57 Timestep: 2900
+Policy_Loss: 0.2366 Critic_Loss: 1.599 Reward: -1.937 RM_Reward: -1.657 Ref_Reward: 0.2805
+RLHF_Logger---INFO---2024-01-15 21:46:37,930---
+Episode: 58 Timestep: 2950
+Policy_Loss: -1.536 Critic_Loss: 2.178 Reward: -2.232 RM_Reward: -1.957 Ref_Reward: 0.2757
+RLHF_Logger---INFO---2024-01-15 21:49:42,434---
+Episode: 59 Timestep: 3000
+Policy_Loss: 2.869 Critic_Loss: 1.787 Reward: -2.177 RM_Reward: -1.912 Ref_Reward: 0.2656
+RLHF_Logger---INFO---2024-01-15 21:52:49,161---
+Episode: 60 Timestep: 3050
+Policy_Loss: 2.812 Critic_Loss: 1.827 Reward: -2.04 RM_Reward: -1.778 Ref_Reward: 0.2619
+RLHF_Logger---INFO---2024-01-15 21:55:37,892---
+Episode: 61 Timestep: 3100
+Policy_Loss: -0.6323 Critic_Loss: 2.14 Reward: -2.126 RM_Reward: -1.857 Ref_Reward: 0.2695
+RLHF_Logger---INFO---2024-01-15 21:58:33,192---
+Episode: 62 Timestep: 3150
+Policy_Loss: 3.171 Critic_Loss: 1.984 Reward: -2.173 RM_Reward: -1.902 Ref_Reward: 0.2708
+RLHF_Logger---INFO---2024-01-15 22:01:26,373---
+Episode: 63 Timestep: 3200
+Policy_Loss: 3.83 Critic_Loss: 1.892 Reward: -2.009 RM_Reward: -1.738 Ref_Reward: 0.2711
+RLHF_Logger---INFO---2024-01-15 22:04:23,436---
+Episode: 64 Timestep: 3250
+Policy_Loss: 2.847 Critic_Loss: 2.18 Reward: -2.222 RM_Reward: -1.948 Ref_Reward: 0.2744
+RLHF_Logger---INFO---2024-01-15 22:07:21,659---
+Episode: 65 Timestep: 3300
+Policy_Loss: 0.3132 Critic_Loss: 1.827 Reward: -2.09 RM_Reward: -1.816 Ref_Reward: 0.2743
+RLHF_Logger---INFO---2024-01-15 22:10:14,018---
+Episode: 66 Timestep: 3350
+Policy_Loss: 2.618 Critic_Loss: 2.089 Reward: -2.193 RM_Reward: -1.915 Ref_Reward: 0.278
+RLHF_Logger---INFO---2024-01-15 22:13:12,174---
+Episode: 67 Timestep: 3400
+Policy_Loss: -3.243 Critic_Loss: 1.742 Reward: -2.061 RM_Reward: -1.782 Ref_Reward: 0.2791
+RLHF_Logger---INFO---2024-01-15 22:16:03,557---
+Episode: 68 Timestep: 3450
+Policy_Loss: 0.4918 Critic_Loss: 2.028 Reward: -2.136 RM_Reward: -1.87 Ref_Reward: 0.2655
+RLHF_Logger---INFO---2024-01-15 22:18:58,583---
+Episode: 69 Timestep: 3500
+Policy_Loss: 0.5926 Critic_Loss: 2.015 Reward: -2.227 RM_Reward: -1.95 Ref_Reward: 0.2761
+RLHF_Logger---INFO---2024-01-15 22:21:48,255---
+Episode: 70 Timestep: 3550
+Policy_Loss: -3.776 Critic_Loss: 2.042 Reward: -2.102 RM_Reward: -1.804 Ref_Reward: 0.2979
+RLHF_Logger---INFO---2024-01-15 22:24:48,898---
+Episode: 71 Timestep: 3600
+Policy_Loss: -1.218 Critic_Loss: 1.799 Reward: -2.292 RM_Reward: -2.016 Ref_Reward: 0.2762
+RLHF_Logger---INFO---2024-01-15 22:27:47,219---
+Episode: 72 Timestep: 3650
+Policy_Loss: 0.1933 Critic_Loss: 2.03 Reward: -2.291 RM_Reward: -1.983 Ref_Reward: 0.3077
+RLHF_Logger---INFO---2024-01-15 22:30:42,527---
+Episode: 73 Timestep: 3700
+Policy_Loss: 0.4831 Critic_Loss: 1.584 Reward: -2.164 RM_Reward: -1.9 Ref_Reward: 0.2639
+RLHF_Logger---INFO---2024-01-15 22:33:41,895---
+Episode: 74 Timestep: 3750
+Policy_Loss: -1.735 Critic_Loss: 2.18 Reward: -2.263 RM_Reward: -1.992 Ref_Reward: 0.2709
+RLHF_Logger---INFO---2024-01-15 22:36:26,323---
+Episode: 75 Timestep: 3800
+Policy_Loss: -0.4122 Critic_Loss: 2.435 Reward: -2.283 RM_Reward: -1.978 Ref_Reward: 0.3054
+RLHF_Logger---INFO---2024-01-15 22:39:16,661---
+Episode: 76 Timestep: 3850
+Policy_Loss: 4.02 Critic_Loss: 2.441 Reward: -2.267 RM_Reward: -1.967 Ref_Reward: 0.2993
+RLHF_Logger---INFO---2024-01-15 22:42:10,691---
+Episode: 77 Timestep: 3900
+Policy_Loss: -5.776 Critic_Loss: 2.317 Reward: -2.226 RM_Reward: -1.938 Ref_Reward: 0.2879
+RLHF_Logger---INFO---2024-01-15 22:45:03,517---
+Episode: 78 Timestep: 3950
+Policy_Loss: -2.837 Critic_Loss: 1.831 Reward: -2.051 RM_Reward: -1.747 Ref_Reward: 0.3048
+RLHF_Logger---INFO---2024-01-15 22:48:04,352---
+Episode: 79 Timestep: 4000
+Policy_Loss: 2.971 Critic_Loss: 2.11 Reward: -2.374 RM_Reward: -2.101 Ref_Reward: 0.2731
+RLHF_Logger---INFO---2024-01-15 22:51:01,876---
+Episode: 80 Timestep: 4050
+Policy_Loss: -1.261 Critic_Loss: 1.986 Reward: -2.131 RM_Reward: -1.836 Ref_Reward: 0.2949
+RLHF_Logger---INFO---2024-01-15 22:54:02,939---
+Episode: 81 Timestep: 4100
+Policy_Loss: 2.754 Critic_Loss: 2.092 Reward: -2.218 RM_Reward: -1.944 Ref_Reward: 0.274
+RLHF_Logger---INFO---2024-01-15 22:56:54,844---
+Episode: 82 Timestep: 4150
+Policy_Loss: 0.4578 Critic_Loss: 1.669 Reward: -2.273 RM_Reward: -2.002 Ref_Reward: 0.2702
+RLHF_Logger---INFO---2024-01-15 22:59:44,585---
+Episode: 83 Timestep: 4200
+Policy_Loss: -6.591 Critic_Loss: 2.037 Reward: -2.244 RM_Reward: -1.899 Ref_Reward: 0.3448
+RLHF_Logger---INFO---2024-01-15 23:02:44,174---
+Episode: 84 Timestep: 4250
+Policy_Loss: 1.102 Critic_Loss: 1.823 Reward: -2.296 RM_Reward: -2.022 Ref_Reward: 0.2734
+RLHF_Logger---INFO---2024-01-15 23:05:37,517---
+Episode: 85 Timestep: 4300
+Policy_Loss: 1.944 Critic_Loss: 2.211 Reward: -2.26 RM_Reward: -1.963 Ref_Reward: 0.297
+RLHF_Logger---INFO---2024-01-15 23:08:33,994---
+Episode: 86 Timestep: 4350
+Policy_Loss: 0.8388 Critic_Loss: 2.253 Reward: -2.315 RM_Reward: -2.014 Ref_Reward: 0.3013
+RLHF_Logger---INFO---2024-01-15 23:11:29,822---
+Episode: 87 Timestep: 4400
+Policy_Loss: -3.638 Critic_Loss: 2.102 Reward: -2.3 RM_Reward: -2.003 Ref_Reward: 0.2968
+RLHF_Logger---INFO---2024-01-15 23:14:31,073---
+Episode: 88 Timestep: 4450
+Policy_Loss: 2.691 Critic_Loss: 2.142 Reward: -2.115 RM_Reward: -1.808 Ref_Reward: 0.3068
+RLHF_Logger---INFO---2024-01-15 23:17:24,204---
+Episode: 89 Timestep: 4500
+Policy_Loss: 4.724 Critic_Loss: 2.202 Reward: -2.146 RM_Reward: -1.86 Ref_Reward: 0.2863
+RLHF_Logger---INFO---2024-01-15 23:20:20,599---
+Episode: 90 Timestep: 4550
+Policy_Loss: 1.583 Critic_Loss: 2.262 Reward: -2.362 RM_Reward: -2.045 Ref_Reward: 0.3161
+RLHF_Logger---INFO---2024-01-15 23:23:09,675---
+Episode: 91 Timestep: 4600
+Policy_Loss: 0.3677 Critic_Loss: 1.581 Reward: -2.132 RM_Reward: -1.85 Ref_Reward: 0.2813
+RLHF_Logger---INFO---2024-01-15 23:26:06,328---
+Episode: 92 Timestep: 4650
+Policy_Loss: 0.3235 Critic_Loss: 1.577 Reward: -2.405 RM_Reward: -2.131 Ref_Reward: 0.2739
+RLHF_Logger---INFO---2024-01-15 23:29:05,801---
+Episode: 93 Timestep: 4700
+Policy_Loss: 4.211 Critic_Loss: 2.068 Reward: -2.175 RM_Reward: -1.881 Ref_Reward: 0.2942
+RLHF_Logger---INFO---2024-01-15 23:31:58,353---
+Episode: 94 Timestep: 4750
+Policy_Loss: 5.189 Critic_Loss: 1.896 Reward: -2.223 RM_Reward: -1.939 Ref_Reward: 0.2838
+RLHF_Logger---INFO---2024-01-15 23:34:43,429---
+Episode: 95 Timestep: 4800
+Policy_Loss: -0.8645 Critic_Loss: 2.127 Reward: -2.13 RM_Reward: -1.778 Ref_Reward: 0.3519
+RLHF_Logger---INFO---2024-01-15 23:37:36,956---
+Episode: 96 Timestep: 4850
+Policy_Loss: -4.456 Critic_Loss: 2.048 Reward: -2.204 RM_Reward: -1.885 Ref_Reward: 0.3188
+RLHF_Logger---INFO---2024-01-15 23:40:38,010---
+Episode: 97 Timestep: 4900
+Policy_Loss: 5.025 Critic_Loss: 2.394 Reward: -2.505 RM_Reward: -2.22 Ref_Reward: 0.2849
+RLHF_Logger---INFO---2024-01-15 23:43:37,161---
+Episode: 98 Timestep: 4950
+Policy_Loss: -1.026 Critic_Loss: 1.849 Reward: -2.267 RM_Reward: -1.97 Ref_Reward: 0.2972
+RLHF_Logger---INFO---2024-01-15 23:46:35,337---
+Episode: 99 Timestep: 5000
+Policy_Loss: 0.4206 Critic_Loss: 1.402 Reward: -2.261 RM_Reward: -1.995 Ref_Reward: 0.2657
+RLHF_Logger---INFO---2024-01-15 23:46:35,431---
+RLHF Training Complete
