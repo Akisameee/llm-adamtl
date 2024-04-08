@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -13,7 +13,7 @@ from accelerate import Accelerator
 # from peft import get_peft_model
 
 from data.instruct_dataset import Instruct_Dataset, instruct_collator
-from configs import RLHF_Config, parse_args_into_dataclasses
+from configs import RLHF_Config, parse_args_into_dataclasses, get_dataclass_fields
 from modules.lms import BaseLM, RewardLM
 from modules.ppo import PPO_Trainer, Memory
 from modules.peft import replace_peft_layers
@@ -36,11 +36,12 @@ class RLHFTrainer(nn.Module):
         # models
         if model is None:
             model = AutoModelForCausalLMWithValueHead.from_pretrained(config.model_cfg.model_pretrain_path)
-            model, peft_info = replace_peft_layers(
-                model = model,
-                peft_config = config.model_cfg.peft_config,
-                return_info = True
-            )
+            if config.model_cfg.peft_cfg is not None:
+                model, peft_info = replace_peft_layers(
+                    model = model,
+                    peft_config = config.model_cfg.peft_cfg,
+                    return_info = True
+                )
         else:
             peft_info = None
 
@@ -100,6 +101,7 @@ class RLHFTrainer(nn.Module):
         self.retokenization = config.retokenization
         self.kl_ref_coef = config.kl_ref_coef
 
+        self.logger.info(config.get_args_info())
         if peft_info:
             self.logger.info(peft_info)
 
@@ -472,16 +474,18 @@ class RLHFTrainer(nn.Module):
                 rlhf_bar.update(1)
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
-                    ppo_stats = self.ppo_trainer.learn(memories)
+                    ppo_stats = [self.ppo_trainer.learn(memories)]
+                    # print(f'ppo_stats {ppo_stats}')
                     ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
                     if self.accelerator.is_main_process:
+                        # print(f'ppo_stats_gathered {ppo_stats_gathered}')
                         self.logger.step(
                             episode = episode + 1,
                             timestep = timestep,
                             stat_dict = merge_dict(
                                 unmerged_dicts = ppo_stats_gathered,
                                 reduce = 'mean'
-                            ) if isinstance(ppo_stats_gathered, list) else ppo_stats_gathered
+                            )
                         )
                     memories.clear()
                     if max_timestep - timestep < n_update_timestep:
@@ -494,9 +498,18 @@ class RLHFTrainer(nn.Module):
 def main():
 
     config = RLHF_Config()
-    config = parse_args_into_dataclasses(
-        dataclass = RLHF_Config
-    )
+    # print(config.to_dict())
+    # config = parse_args_into_dataclasses(
+    #     dataclass = RLHF_Config
+    # )
+    # print(config.to_dict())
+    print(config.sample_batch_size)
+    print(config.model_cfg.model_pretrain_path)
+    print(config.model_cfg.peft_cfg.r)
+    config.parse_args()
+    print(config.sample_batch_size)
+    print(config.model_cfg.model_pretrain_path)
+    print(config.model_cfg.peft_cfg.r)
 
     # model = AutoModelForCausalLMWithValueHead.from_pretrained(
     #     config.model_cfg.model_pretrain_path,

@@ -106,7 +106,7 @@ class Logger():
             return
         
         # print(self.historys)
-        self.historys.to_csv(os.path.join(self.dir, 'Train_Result.csv'))
+        self.historys.to_csv(os.path.join(self.dir, 'train_result.csv'))
         for col_name in self.historys.columns:
             if col_name in ['Episode', 'Timestep']:
                 continue
@@ -122,7 +122,7 @@ class Logger():
 
 if __name__ == '__main__':
 
-    logger = Logger('output', 'Test_Logger')
+    logger = Logger('output', 'test')
     for epoch in tqdm(range(10)):
         time.sleep(1)
         logger.info(f'test msg:{epoch}')

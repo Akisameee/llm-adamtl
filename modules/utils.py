@@ -156,7 +156,7 @@ def merge_dict(
             merged_data = merged_datas
         else:
             raise NotImplementedError
-        merge_dict[key] = merged_data
+        merged_dict[key] = merged_data
 
     return merged_dict
 

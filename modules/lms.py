@@ -15,8 +15,8 @@ class BaseLM(nn.Module):
         super(BaseLM, self).__init__()
         
         self.lm = AutoModelForCausalLM.from_pretrained(config.model_pretrain_path)
-        if config.peft_config is not None:
-            self.lm = get_peft_model(self.lm, config.peft_config)
+        # if config.peft_cfg is not None:
+        #     self.lm = get_peft_model(self.lm, config.peft_cfg)
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
         self.generation_config = config.generation_config
         if self.generation_config.pad_token_id == None:

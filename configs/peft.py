@@ -1,10 +1,7 @@
-from typing import Literal, Optional
-import json
-import numpy as np
-from dataclasses import dataclass, field
+from .base import *
 
 @dataclass
-class Peft_Config(object):
+class Peft_Config(Base_Config):
 
     adapter_name: str = None
     target_modules: list[str] = None

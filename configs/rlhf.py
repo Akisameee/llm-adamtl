@@ -3,8 +3,9 @@ from peft.tuners.lora import LoraConfig
 from peft.utils.peft_types import TaskType
 import argparse
 
-from configs.peft import Peft_Config, Lora_Config
-from configs.ppo import PPO_Config
+from .ppo import PPO_Config
+from .peft import Lora_Config
+from .model import LM_Config, RM_Config
 
 @dataclass
 class RLHF_Config(PPO_Config):
@@ -12,8 +13,8 @@ class RLHF_Config(PPO_Config):
     accelertor_cfg: Accelertor_Config = Accelertor_Config()
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         model_name = 'casuallm',
-        train_data_path = os.path.join('/home', 'smliu', 'datasets', 'sft', 'sharegpt', 'dev_sft_sharegpt.csv'),
-        val_data_path = os.path.join('/home', 'smliu', 'datasets', 'sft', 'sharegpt', 'dev_sft.csv'),
+        train_data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt', 'dev_sft_sharegpt.csv'),
+        val_data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt', 'dev_sft.csv'),
         tokenizer_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         padding_side = 'left',
         max_len = 512,
@@ -29,7 +30,7 @@ class RLHF_Config(PPO_Config):
         #     lora_alpha = 32,
         #     lora_dropout = 0.1
         # )
-        peft_config = Lora_Config(
+        peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 4,
             lora_alpha = 32,
@@ -68,4 +69,3 @@ class RLHF_Config(PPO_Config):
     n_update_epoch: int = 5
 
     output_dir: str = os.path.join('.', 'output')
-

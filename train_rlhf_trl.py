@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     model = AutoModelForCausalLMWithValueHead.from_pretrained(
         config.model_cfg.model_pretrain_path,
-        peft_config = config.model_cfg.peft_config
+        peft_config = config.model_cfg.peft_cfg
     )
     # model = replace_peft_layers(
     #     model = model,

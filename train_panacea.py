@@ -39,11 +39,12 @@ class Panacea_Trainer(nn.Module):
         self.model = model
         if self.model is None:
             model = AutoModelForCausalLMWithValueHead.from_pretrained(config.model_cfg.model_pretrain_path)
-            self.model, peft_info = replace_peft_layers(
-                model = model,
-                peft_config = config.model_cfg.peft_config,
-                return_info = True
-            )
+            if config.model_cfg.peft_cfg is not None:
+                self.model, peft_info = replace_peft_layers(
+                    model = model,
+                    peft_config = config.model_cfg.peft_cfg,
+                    return_info = True
+                )
         else:
             peft_info = None
 

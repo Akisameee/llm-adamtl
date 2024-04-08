@@ -2,10 +2,11 @@ from .base import *
 from peft.tuners.lora import LoraConfig
 from peft.utils.peft_types import TaskType
 
-from configs.peft import Lora_Config
+from .peft import Lora_Config
+from .model import LM_Config, RM_Config
 
 @dataclass
-class DPO_Config(object):
+class DPO_Config(Base_Config):
 
     model_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
     dataset_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
@@ -21,7 +22,7 @@ class DPO_Config(object):
         #     lora_alpha = 32,
         #     lora_dropout = 0.1
         # )
-        peft_config = Lora_Config(
+        peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 4,
             lora_alpha = 32,

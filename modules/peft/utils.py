@@ -47,7 +47,7 @@ def replace_peft_layers(
         total_params = sum(p.numel() for p in model.parameters())
         total_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
         total_non_trainable_params = total_params - total_trainable_params
-        peft_info = f'{type(model)} Peft Info:\n' + \
+        peft_info = f'Peft Info:\n' + \
         f'total parameters: {total_params}\n' + \
         f'trainable parameters: {total_trainable_params}\n' + \
         f'non-trainable parameters: {total_non_trainable_params}'

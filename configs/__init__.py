@@ -2,16 +2,20 @@ from .base import (
     Instruct_Dataset_Config,
     HumanFeedback_Dataset_Config,
     generation_config,
-    LM_Config,
-    RM_Config,
     Accelertor_Config,
     get_argparser,
-    parse_args_into_dataclasses
+    parse_args_into_dataclasses,
+    get_dataclass_fields
 )
 
 from .prompts_infos import (
     dataset_infos,
     model_infos
+)
+
+from .model import (
+    LM_Config,
+    RM_Config
 )
 
 from .sft import (

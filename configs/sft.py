@@ -1,7 +1,7 @@
 from .base import *
 
 @dataclass
-class SFT_Train_Config(object):
+class SFT_Train_Config(Base_Config):
 
     def __init__(self) -> None:
 
