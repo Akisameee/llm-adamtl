@@ -4,7 +4,12 @@ import os
 import logging
 import seaborn as sns
 import pandas as pd
+import numpy as np
+import random
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from scipy import spatial
 from tqdm.auto import tqdm
 
 class Timer():
@@ -119,10 +124,117 @@ class Logger():
                 figure.get_figure().savefig(os.path.join(self.dir, col_name), dpi=400)
                 plt.close()
 
+def check_line_is_pareto_front(
+    point_line
+):
+    A, B = point_line[0], point_line[1]
+    k = (A[1] - B[1]) / (A[0] - B[0])
+    b = A[1] - k * A[0]
+
+    if b / k < 0 and b > 0:
+        return True
+    else:
+        return False
+    
+def check_plane_is_pareto_front(
+    tri_plane
+):  
+    A, B, C = tri_plane[0], tri_plane[1], tri_plane[2]
+    AB = [B[0]-A[0], B[1]-A[1], B[2]-A[2]]
+    AC = [C[0]-A[0], C[1]-A[1], C[2]-A[2]]
+    
+    N = np.cross(AB, AC)
+    d = (-N[0]*A[0]) - (N[1]*A[1]) - (N[2]*A[2])
+
+    if d / N[0] < 0 and d / N[1] < 0 and d / N[2] < 0:
+        return True
+    else:
+        return False
+
+def draw_pareto_fronts(
+    dataframe: pd.DataFrame,
+    axes_names: tuple = ('x', 'y', 'z'),
+    save_path: str = ''
+):
+    if len(axes_names) == 2:
+
+        fig = plt.figure()
+        axes = fig.add_subplot(111)
+
+        x = dataframe[axes_names[0]]
+        y = dataframe[axes_names[1]]
+
+        vertices = np.array([x, y]).T
+        hull = spatial.ConvexHull(vertices)
+        faces = hull.simplices
+        
+        axes.scatter(x, y)
+        for face in faces:
+            if check_line_is_pareto_front([
+                vertices[face[0]],
+                vertices[face[1]]
+            ]):
+                axes.plot(
+                    (x[face[0]], x[face[1]]),
+                    (y[face[0]], y[face[1]]),
+                    color = 'C0',
+                    alpha = 0.75
+                )
+
+        axes.set_xlabel(axes_names[0])
+        axes.set_ylabel(axes_names[1])
+
+    elif len(axes_names) == 3:
+        fig = plt.figure()
+        axes = fig.add_subplot(111, projection='3d')
+
+        x = dataframe[axes_names[0]]
+        y = dataframe[axes_names[1]]
+        z = dataframe[axes_names[2]]
+
+        vertices = np.array([x, y, z]).T
+        hull = spatial.ConvexHull(vertices)
+        faces = hull.simplices
+        
+        axes.scatter(x, y, z)
+        line_vertices = []
+        for face in faces:
+            line = [
+                vertices[face[0]],
+                vertices[face[1]],
+                vertices[face[2]]
+            ]
+            if check_plane_is_pareto_front(line):
+                line_vertices.append(np.array(line))
+        axes.add_collection3d(Poly3DCollection(line_vertices, alpha = 0.2))
+
+        axes.set_xlabel(axes_names[0])
+        axes.set_ylabel(axes_names[1])
+        axes.set_zlabel(axes_names[2])
+    
+    else:
+        raise ValueError('dim > 3')
+
+    plt.savefig(save_path, dpi = 400)
+    plt.close()
+
 
 if __name__ == '__main__':
 
     logger = Logger('output', 'test')
-    for epoch in tqdm(range(10)):
-        time.sleep(1)
-        logger.info(f'test msg:{epoch}')
+    for i in range(100):
+        logger.step(
+            episode = 0,
+            timestep = i,
+            stat_dict = {
+                'reward_a': random.uniform(-5, 5),
+                'reward_b': random.uniform(-5, 5),
+                'reward_c': random.uniform(-5, 5)
+            }
+        )
+    draw_pareto_fronts(
+        dataframe = logger.historys,
+        axes_names = ('reward_a', 'reward_b', 'reward_c'),
+        save_path = os.path.join(logger.dir, 'pareto_fronts')
+    )
+    

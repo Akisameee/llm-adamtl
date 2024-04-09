@@ -17,7 +17,7 @@ from configs import RLHF_Config, parse_args_into_dataclasses, get_dataclass_fiel
 from modules.lms import BaseLM, RewardLM
 from modules.ppo import PPO_Trainer, Memory
 from modules.peft import replace_peft_layers
-from modules.utils import shift, log_prob, default, masked_mean, merge_dict
+from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_dispatched_model
 from logger import Logger
 from trl.core import LengthSampler
 
@@ -35,22 +35,12 @@ class RLHFTrainer(nn.Module):
 
         # models
         if model is None:
-            model = AutoModelForCausalLMWithValueHead.from_pretrained(
-                config.model_cfg.model_pretrain_path
-            )
-        if config.model_cfg.peft_cfg is not None:
-            model, peft_info = replace_peft_layers(
-                model = model,
-                peft_config = config.model_cfg.peft_cfg,
-                return_info = True
+            model, peft_info = get_dispatched_model(
+                config = config.model_cfg,
+                model_class = AutoModelForCausalLMWithValueHead
             )
         else:
             peft_info = None
-        model = dispatch_model(
-            model = model,
-            device_map = 'auto',
-            no_split_module_classes=['Lora_Linear']
-        )
 
         self.reward_model = reward_model
         if self.reward_model is None:

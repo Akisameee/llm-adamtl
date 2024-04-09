@@ -16,6 +16,7 @@ class Base_Adapter(nn.Module):
         super().__init__()
 
         self.base_layer = base_layer
+        self.device = base_layer.weight
         self.disabled = False
 
     def set_adapter(self, enable: bool, base_enable: bool = False):

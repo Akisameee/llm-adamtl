@@ -6,24 +6,28 @@ from peft import get_peft_model
 
 from transformers import AutoModelForCausalLM, AutoModelForSequenceClassification, GPT2Tokenizer, GPT2Model, AutoConfig, AutoTokenizer
 from configs import SFT_Train_Config, LM_Config
-from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_mean
+from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_mean, get_dispatched_model
 
 
 class BaseLM(nn.Module):
 
-    def __init__(self, config: LM_Config, **kwargs):
+    def __init__(self, config: LM_Config, dispatch = False, **kwargs):
         super(BaseLM, self).__init__()
         
-        self.lm = AutoModelForCausalLM.from_pretrained(config.model_pretrain_path, **kwargs)
-        # if config.peft_cfg is not None:
-        #     self.lm = get_peft_model(self.lm, config.peft_cfg)
+        if dispatch:
+            self.lm, _  = get_dispatched_model(
+                config = config,
+                model_class = AutoModelForCausalLM
+            )
+        else:
+            self.lm = AutoModelForCausalLM.from_pretrained(config.model_pretrain_path, **kwargs)
+            
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
         self.generation_config = config.generation_config
         if self.generation_config.pad_token_id == None:
             self.generation_config.pad_token_id = self.tokenizer.pad_token_id
         
         self.hidden_dim = 1024
-
         self.device = config.device
         # if self.device == 'cuda':
         #     self = nn.DataParallel(self, device_ids=config.device_ids)
@@ -199,16 +203,21 @@ class RewardLMWithoutLMHead(nn.Module):
 
 class RewardLM(nn.Module):
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config, dispatch = False, **kwargs):
         super(RewardLM, self).__init__()
 
         lm_config = AutoConfig.from_pretrained(config.model_pretrain_path)
         # if lm_config.architectures[0] != 'GPT2ForSequenceClassification':
         #     raise NotImplementedError
-        
-        self.lm = AutoModelForSequenceClassification.from_pretrained(config.model_pretrain_path, **kwargs)
-        self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
+        if dispatch:
+            self.lm, _  = get_dispatched_model(
+                config = config,
+                model_class = AutoModelForSequenceClassification
+            )
+        else:
+            self.lm = AutoModelForSequenceClassification.from_pretrained(config.model_pretrain_path, **kwargs)
 
+        self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
         self.max_len = lm_config.max_position_embeddings
         self.device = config.device
         # self.to(self.device)
