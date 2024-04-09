@@ -11,10 +11,10 @@ from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_me
 
 class BaseLM(nn.Module):
 
-    def __init__(self, config: LM_Config):
+    def __init__(self, config: LM_Config, **kwargs):
         super(BaseLM, self).__init__()
         
-        self.lm = AutoModelForCausalLM.from_pretrained(config.model_pretrain_path)
+        self.lm = AutoModelForCausalLM.from_pretrained(config.model_pretrain_path, **kwargs)
         # if config.peft_cfg is not None:
         #     self.lm = get_peft_model(self.lm, config.peft_cfg)
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
@@ -27,7 +27,7 @@ class BaseLM(nn.Module):
         self.device = config.device
         # if self.device == 'cuda':
         #     self = nn.DataParallel(self, device_ids=config.device_ids)
-        self.to(self.device)
+        # self.to(self.device)
 
     def set_freeze(self, freeze):
 
@@ -199,19 +199,19 @@ class RewardLMWithoutLMHead(nn.Module):
 
 class RewardLM(nn.Module):
 
-    def __init__(self, config):
+    def __init__(self, config, **kwargs):
         super(RewardLM, self).__init__()
 
         lm_config = AutoConfig.from_pretrained(config.model_pretrain_path)
         # if lm_config.architectures[0] != 'GPT2ForSequenceClassification':
         #     raise NotImplementedError
         
-        self.lm = AutoModelForSequenceClassification.from_pretrained(config.model_pretrain_path)
+        self.lm = AutoModelForSequenceClassification.from_pretrained(config.model_pretrain_path, **kwargs)
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
 
         self.max_len = lm_config.max_position_embeddings
         self.device = config.device
-        self.to(self.device)
+        # self.to(self.device)
     
     def set_freeze(self, freeze):
 

@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -9,7 +9,7 @@ from functools import partial
 from random import randrange
 from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
-from accelerate import Accelerator
+from accelerate import Accelerator, dispatch_model
 # from peft import get_peft_model
 
 from data.instruct_dataset import Instruct_Dataset, instruct_collator
@@ -35,15 +35,22 @@ class RLHFTrainer(nn.Module):
 
         # models
         if model is None:
-            model = AutoModelForCausalLMWithValueHead.from_pretrained(config.model_cfg.model_pretrain_path)
-            if config.model_cfg.peft_cfg is not None:
-                model, peft_info = replace_peft_layers(
-                    model = model,
-                    peft_config = config.model_cfg.peft_cfg,
-                    return_info = True
-                )
+            model = AutoModelForCausalLMWithValueHead.from_pretrained(
+                config.model_cfg.model_pretrain_path
+            )
+        if config.model_cfg.peft_cfg is not None:
+            model, peft_info = replace_peft_layers(
+                model = model,
+                peft_config = config.model_cfg.peft_cfg,
+                return_info = True
+            )
         else:
             peft_info = None
+        model = dispatch_model(
+            model = model,
+            device_map = 'auto',
+            no_split_module_classes=['Lora_Linear']
+        )
 
         self.reward_model = reward_model
         if self.reward_model is None:
@@ -53,9 +60,14 @@ class RLHFTrainer(nn.Module):
 
         self.ref_model = ref_model
         if self.ref_model is None:
-            self.ref_model = BaseLM(config.ref_cfg)
+            self.ref_model = BaseLM(config.ref_cfg, device_map = 'auto')
         self.ref_model.set_freeze(freeze=True)
         self.ref_model = self.ref_model.eval()
+        self.ref_model = dispatch_model(
+            model = self.ref_model,
+            device_map = 'auto',
+            no_split_module_classes=['Lora_Linear']
+        )
                 
         optimizer = torch.optim.AdamW(
             filter(lambda p: p.requires_grad, model.parameters()),
@@ -437,6 +449,7 @@ class RLHFTrainer(nn.Module):
                     action_masks = action_masks,
                     prompt_texts = prompt_texts
                 )
+                print(rm_rewards)
                 
                 detach_to_cpu_ = lambda t: t.detach().cpu()
 
@@ -497,34 +510,15 @@ class RLHFTrainer(nn.Module):
 
 def main():
 
+    model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
     config = RLHF_Config()
-    # print(config.to_dict())
-    # config = parse_args_into_dataclasses(
-    #     dataclass = RLHF_Config
-    # )
-    # print(config.to_dict())
-    print(config.sample_batch_size)
-    print(config.model_cfg.model_pretrain_path)
-    print(config.model_cfg.peft_cfg.r)
+    config.dateset_cfg.tokenizer_pretrain_path = model_path
+    config.model_cfg.model_pretrain_path = model_path
+    config.ref_cfg.model_pretrain_path = model_path
     config.parse_args()
-    print(config.sample_batch_size)
-    print(config.model_cfg.model_pretrain_path)
-    print(config.model_cfg.peft_cfg.r)
-
-    # model = AutoModelForCausalLMWithValueHead.from_pretrained(
-    #     config.model_cfg.model_pretrain_path,
-    # )
-    # model = replace_peft_layers(
-    #     model = model,
-    #     peft_config = config.model_cfg.peft_config
-    # )
-    # reward_model = RewardLM(config.reward_cfg)
-    # reference_model = BaseLM(config.ref_cfg)
 
     trainer = RLHFTrainer(
         config = config
-        # reward_model = reward_model,
-        # ref_model = reference_model
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'

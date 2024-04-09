@@ -19,5 +19,11 @@ model_infos = {
         'prompt_prefix': '<|USER|> ',
         'response_prefix': '<|ASSISTANT|> ',
         'eos_token_id': 32001
+    },
+
+    'MindLLM': {
+        'prompt_prefix': '',
+        'response_prefix': '<|ASSISTANT|> ',
+        'eos_token_id': 50256
     }
 }

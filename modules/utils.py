@@ -178,4 +178,4 @@ class ExperienceDataset(Dataset):
 
     def __getitem__(self, index):
         
-        return tuple(map(lambda t: t[index].to(self.device), self.data))
+        return tuple(map(lambda t: t[index], self.data))

@@ -149,11 +149,18 @@ class HumanFeedback_Dataset_Config(Base_Config):
     truncation_side: Optional[Literal['left', 'right']] = 'left'
     max_len: int = None
 
+# generation_config = GenerationConfig(
+#     top_k = 0.0,
+#     top_p = 1.0,
+#     do_sample = True,
+#     eos_token_id = 32001,
+# )
+
 generation_config = GenerationConfig(
     top_k = 0.0,
     top_p = 1.0,
     do_sample = True,
-    eos_token_id = 32001,
+    eos_token_id = 50256,
 )
 
 @dataclass

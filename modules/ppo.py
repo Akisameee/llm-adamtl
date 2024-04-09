@@ -128,7 +128,9 @@ class PPO_Trainer(nn.Module):
 
         self.tokenizer = tokenizer
         if self.tokenizer is None:
-            self.tokenizer = AutoTokenizer.from_pretrained(config.model_cfg.model_pretrain_path)
+            self.tokenizer = AutoTokenizer.from_pretrained(config.model_cfg.model_pretrain_path, padding_side = 'left')
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
 
         # optimizers
         self.optimizer = optimizer
@@ -226,7 +228,7 @@ class PPO_Trainer(nn.Module):
     ):
         
         if kwargs['eos_token_id'] is None:
-            raise ValueError('eos_token_id is None.')
+            eos_token_id = self.tokenizer.eos_token_id
         else:
             eos_token_id = kwargs['eos_token_id']
         
@@ -243,7 +245,7 @@ class PPO_Trainer(nn.Module):
             padding = True,
             max_length = None,
             return_tensors = 'pt',
-        ).to(self.device)
+        ).to(self.accelerator.device)
 
         # kwargs.pop('generation_kwargs')
         if self.accelerator is not None:
@@ -410,7 +412,7 @@ class PPO_Trainer(nn.Module):
                     returns,
                     advantages,
                 ],
-                device = self.device
+                # device = self.device
             ),
             batch_size = self.train_batch_size,
             shuffle = True
