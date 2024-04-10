@@ -130,7 +130,7 @@ class PPO_Trainer(nn.Module):
         if self.tokenizer is None:
             self.tokenizer = AutoTokenizer.from_pretrained(config.model_cfg.model_pretrain_path, padding_side = 'left')
         if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
+            self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
 
         # optimizers
         self.optimizer = optimizer
@@ -246,6 +246,7 @@ class PPO_Trainer(nn.Module):
             max_length = None,
             return_tensors = 'pt',
         ).to(self.accelerator.device)
+        input_len = inputs_pad['input_ids'].shape[-1]
 
         # kwargs.pop('generation_kwargs')
         if self.accelerator is not None:
@@ -264,16 +265,18 @@ class PPO_Trainer(nn.Module):
         action_masks_return = []
         for sequence, mask in zip(sequences, inputs_pad['attention_mask']):
 
-            if eos_token_id in sequence:
-                pad_mask = sequence == eos_token_id
+            responses = sequence[input_len:]
+            if eos_token_id in responses:
+                pad_mask = responses == eos_token_id
                 post_pad_idx = torch.nonzero(pad_mask, as_tuple = False)[0, 0].item() + 1
             else:
-                post_pad_idx = sequence.shape[0]
+                post_pad_idx = responses.shape[0]
+            post_pad_idx += input_len
 
             sequence_return = sequence[(1 - mask).sum(): post_pad_idx]
             mask_return = torch.ones_like(sequence_return)
             action_mask_return = torch.ones_like(sequence_return)
-            action_mask_return[:mask.sum()] = 0
+            action_mask_return[: mask.sum()] = 0
             # print(self.tokenizer.decode(sequence_return))
             # print(self.tokenizer.decode(sequence_return * mask_return))
             # print(self.tokenizer.decode(sequence_return * action_mask_return))

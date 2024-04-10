@@ -8,10 +8,8 @@ from typing import Union, Literal, Optional
 from einops import rearrange
 import os
 from transformers import AutoModel, AutoConfig
-from accelerate import load_checkpoint_and_dispatch, init_empty_weights, dispatch_model, infer_auto_device_map
 
 from configs import LM_Config, RM_Config
-from modules.peft import replace_peft_layers
 
 def eval_decorator(fn):
 
@@ -185,35 +183,3 @@ class ExperienceDataset(Dataset):
         
         return tuple(map(lambda t: t[index], self.data))
     
-
-def get_dispatched_model(
-    config: LM_Config | RM_Config,
-    model_class: type = AutoModel
-):
-    # model_config = AutoConfig.from_pretrained(config)
-    # with init_empty_weights():
-    #     model = model_class.from_config(model_config)
-    
-    # weights_path = os.path.join(config.model_pretrain_path, 'pytorch_model.bin')
-    # model = load_checkpoint_and_dispatch(
-    #     model, weights_path, device_map="auto", no_split_module_classes=["Lora_linear"]
-    # )
-    model = model_class.from_pretrained(config.model_pretrain_path)
-    if config.peft_cfg is not None:
-        if config.peft_cfg.target_modules is not None:
-            model, peft_info = replace_peft_layers(
-                model = model,
-                peft_config = config.peft_config,
-                return_info = True
-            )
-    
-    device_map = infer_auto_device_map(
-        model = model,
-        no_split_module_classes = ["Lora_linear"]
-    )
-    model = dispatch_model(
-        model = model,
-        device_map = device_map
-    )
-
-    return model, peft_info

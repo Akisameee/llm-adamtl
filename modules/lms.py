@@ -3,10 +3,85 @@ import torch.nn as nn
 from einops import rearrange, repeat, reduce, pack, unpack
 from einops.layers.torch import Rearrange, Reduce
 from peft import get_peft_model
+from accelerate import load_checkpoint_and_dispatch, init_empty_weights, dispatch_model, infer_auto_device_map
+from accelerate.utils import get_balanced_memory
 
-from transformers import AutoModelForCausalLM, AutoModelForSequenceClassification, GPT2Tokenizer, GPT2Model, AutoConfig, AutoTokenizer
-from configs import SFT_Train_Config, LM_Config
-from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_mean, get_dispatched_model
+from transformers import AutoModelForCausalLM, AutoModelForSequenceClassification, GPT2Tokenizer, GPT2Model, AutoConfig, AutoTokenizer, AutoModel, GPTNeoForCausalLM, DebertaV2ForSequenceClassification
+from trl import AutoModelForCausalLMWithValueHead
+from configs import SFT_Train_Config, LM_Config, RM_Config, RLHF_Config
+from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_mean
+from modules.peft import replace_peft_layers
+
+lora_module_classes = ["Lora_linear"]
+
+def get_dispatched_model(
+    config: LM_Config | RM_Config,
+    model_class: type = AutoModel,
+    device_map = 'auto'
+):
+    # model_config = AutoConfig.from_pretrained(config.model_pretrain_path)
+    # with init_empty_weights():
+    #     model = model_class.from_config(model_config)
+    
+    # weights_path = os.path.join(config.model_pretrain_path, 'pytorch_model.bin')
+    # model = load_checkpoint_and_dispatch(
+    #     model, weights_path, device_map="auto", no_split_module_classes=["Lora_linear"]
+    # )
+    
+    if model_class in [BaseLM, RewardLM]:
+        full_model = model_class(config)
+        model = full_model.lm
+    else:
+        full_model = model_class.from_pretrained(config.model_pretrain_path)
+        if model_class == AutoModelForCausalLMWithValueHead:
+            model = full_model.pretrained_model
+        else:
+            model = full_model
+    if isinstance(model, DebertaV2ForSequenceClassification):
+        setattr(model, "_no_split_modules", ["DebertaV2Layer"])
+        
+    dtype = model.dtype
+    peft_info = None
+    if config.peft_cfg is not None:
+        if config.peft_cfg.target_modules is not None:
+            model, peft_info = replace_peft_layers(
+                model = model,
+                peft_config = config.peft_cfg,
+                return_info = True
+            )
+    
+    no_split_module_classes = model._get_no_split_modules(device_map) + lora_module_classes
+    if device_map != "sequential":
+        max_memory = get_balanced_memory(
+            model,
+            dtype=dtype,
+            low_zero=(device_map == "balanced_low_0"),
+            no_split_module_classes = no_split_module_classes,
+        )
+
+    max_memory[0] *= 0.9
+    model.tie_weights()
+    device_map = infer_auto_device_map(
+        model = model,
+        max_memory = max_memory,
+        no_split_module_classes = no_split_module_classes,
+        # verbose = True
+    )
+    model = dispatch_model(
+        model = model,
+        device_map = device_map
+    )
+    print(model.hf_device_map)
+
+    if model_class in [BaseLM, RewardLM]:
+        full_model.lm = model
+    elif model_class == AutoModelForCausalLMWithValueHead:
+        full_model.pretrained_model = model
+        full_model.v_head.to(model.device)
+    else:
+        full_model = model
+    
+    return full_model, peft_info
 
 
 class BaseLM(nn.Module):
@@ -14,13 +89,13 @@ class BaseLM(nn.Module):
     def __init__(self, config: LM_Config, dispatch = False, **kwargs):
         super(BaseLM, self).__init__()
         
-        if dispatch:
-            self.lm, _  = get_dispatched_model(
-                config = config,
-                model_class = AutoModelForCausalLM
-            )
-        else:
-            self.lm = AutoModelForCausalLM.from_pretrained(config.model_pretrain_path, **kwargs)
+        # if dispatch:
+        #     self.lm, _  = get_dispatched_model(
+        #         config = config,
+        #         model_class = AutoModelForCausalLM
+        #     )
+        # else:
+        self.lm = AutoModelForCausalLM.from_pretrained(config.model_pretrain_path, **kwargs)
             
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
         self.generation_config = config.generation_config
@@ -209,13 +284,13 @@ class RewardLM(nn.Module):
         lm_config = AutoConfig.from_pretrained(config.model_pretrain_path)
         # if lm_config.architectures[0] != 'GPT2ForSequenceClassification':
         #     raise NotImplementedError
-        if dispatch:
-            self.lm, _  = get_dispatched_model(
-                config = config,
-                model_class = AutoModelForSequenceClassification
-            )
-        else:
-            self.lm = AutoModelForSequenceClassification.from_pretrained(config.model_pretrain_path, **kwargs)
+        # if dispatch:
+        #     self.lm, _  = get_dispatched_model(
+        #         config = config,
+        #         model_class = AutoModelForSequenceClassification
+        #     )
+        # else:
+        self.lm = AutoModelForSequenceClassification.from_pretrained(config.model_pretrain_path, **kwargs)
 
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
         self.max_len = lm_config.max_position_embeddings
@@ -293,3 +368,20 @@ class RewardLM(nn.Module):
         #     reward = reward.unsqueeze(0)
 
         return reward
+    
+
+if __name__ == '__main__':
+
+    model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
+    # model_path = '/home/smliu/Pretrain_Models/LocutusqueXFelladrin-TinyMistral248M-Instruct'
+    config = RLHF_Config()
+    config.dateset_cfg.tokenizer_pretrain_path = model_path
+    config.model_cfg.model_pretrain_path = model_path
+    config.ref_cfg.model_pretrain_path = model_path
+
+    model = get_dispatched_model(
+        config = config.model_cfg,
+        model_class = AutoModelForCausalLMWithValueHead,
+    )
+
+    test_out = model.forward()

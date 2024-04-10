@@ -105,7 +105,10 @@ class Logger():
         
         self.logger.info(log_str)
 
-    def save_res(self):
+    def save_res(
+        self,
+        save_dir: str = None
+    ):
 
         if self.disable:
             return
@@ -121,8 +124,23 @@ class Logger():
                     x = 'Timestep',
                     y = col_name
                 )
-                figure.get_figure().savefig(os.path.join(self.dir, col_name), dpi=400)
+                figure.get_figure().savefig(
+                    os.path.join(self.dir, col_name) if save_dir is None else save_dir,
+                    dpi=400
+                )
                 plt.close()
+
+    def save_pareto_front(
+        self,
+        axes_names: tuple,
+        save_dir: str = None
+    ):
+        save_dir = self.dir if save_dir is None else save_dir
+        draw_pareto_fronts(
+            dataframe = self.historys,
+            axes_names = axes_names,
+            save_path = os.path.join(save_dir, 'pareto_front') 
+        )
 
 def check_line_is_pareto_front(
     point_line
@@ -157,7 +175,6 @@ def draw_pareto_fronts(
     save_path: str = ''
 ):
     if len(axes_names) == 2:
-
         fig = plt.figure()
         axes = fig.add_subplot(111)
 
@@ -166,17 +183,17 @@ def draw_pareto_fronts(
 
         vertices = np.array([x, y]).T
         hull = spatial.ConvexHull(vertices)
-        faces = hull.simplices
+        lines = hull.simplices
         
         axes.scatter(x, y)
-        for face in faces:
+        for line in lines:
             if check_line_is_pareto_front([
-                vertices[face[0]],
-                vertices[face[1]]
+                vertices[line[0]],
+                vertices[line[1]]
             ]):
                 axes.plot(
-                    (x[face[0]], x[face[1]]),
-                    (y[face[0]], y[face[1]]),
+                    (x[line[0]], x[line[1]]),
+                    (y[line[0]], y[line[1]]),
                     color = 'C0',
                     alpha = 0.75
                 )
@@ -194,15 +211,15 @@ def draw_pareto_fronts(
 
         vertices = np.array([x, y, z]).T
         hull = spatial.ConvexHull(vertices)
-        faces = hull.simplices
+        lines = hull.simplices
         
         axes.scatter(x, y, z)
         line_vertices = []
-        for face in faces:
+        for line in lines:
             line = [
-                vertices[face[0]],
-                vertices[face[1]],
-                vertices[face[2]]
+                vertices[line[0]],
+                vertices[line[1]],
+                vertices[line[2]]
             ]
             if check_plane_is_pareto_front(line):
                 line_vertices.append(np.array(line))
@@ -232,9 +249,7 @@ if __name__ == '__main__':
                 'reward_c': random.uniform(-5, 5)
             }
         )
-    draw_pareto_fronts(
-        dataframe = logger.historys,
-        axes_names = ('reward_a', 'reward_b', 'reward_c'),
-        save_path = os.path.join(logger.dir, 'pareto_fronts')
+    logger.save_pareto_front(
+        axes_names = ('reward_a', 'reward_b', 'reward_c')
     )
     

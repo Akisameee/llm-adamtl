@@ -22,8 +22,8 @@ model_infos = {
     },
 
     'MindLLM': {
-        'prompt_prefix': '',
-        'response_prefix': '<|ASSISTANT|> ',
+        'prompt_prefix': '<user>\n',
+        'response_prefix': '<assistant>\n',
         'eos_token_id': 50256
     }
 }

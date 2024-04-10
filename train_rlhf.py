@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -14,10 +14,10 @@ from accelerate import Accelerator, dispatch_model
 
 from data.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import RLHF_Config, parse_args_into_dataclasses, get_dataclass_fields
-from modules.lms import BaseLM, RewardLM
+from modules.lms import BaseLM, RewardLM, get_dispatched_model
 from modules.ppo import PPO_Trainer, Memory
 from modules.peft import replace_peft_layers
-from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_dispatched_model
+from modules.utils import shift, log_prob, default, masked_mean, merge_dict
 from logger import Logger
 from trl.core import LengthSampler
 
@@ -44,20 +44,21 @@ class RLHFTrainer(nn.Module):
 
         self.reward_model = reward_model
         if self.reward_model is None:
-            self.reward_model = RewardLM(config.reward_cfg)
+            self.reward_model, _ = get_dispatched_model(
+                config = config.reward_cfg,
+                model_class = RewardLM
+            )
         self.reward_model.set_freeze(freeze=True)
         self.reward_model = self.reward_model.eval()
 
         self.ref_model = ref_model
         if self.ref_model is None:
-            self.ref_model = BaseLM(config.ref_cfg, device_map = 'auto')
+            self.ref_model, _ = get_dispatched_model(
+                config = config.ref_cfg,
+                model_class = BaseLM
+            )
         self.ref_model.set_freeze(freeze=True)
         self.ref_model = self.ref_model.eval()
-        self.ref_model = dispatch_model(
-            model = self.ref_model,
-            device_map = 'auto',
-            no_split_module_classes=['Lora_Linear']
-        )
                 
         optimizer = torch.optim.AdamW(
             filter(lambda p: p.requires_grad, model.parameters()),
@@ -120,42 +121,6 @@ class RLHFTrainer(nn.Module):
             return self.accelerator.device
         else:
             return self.ppo_trainer.model.device
-
-    @torch.no_grad()
-    def generate(
-        self,
-        max_seq_len: int,
-        *args,
-        prompt: torch.FloatTensor,
-        num_samples: int = 4,  # sample 4 per prompt and select the one with highest reward
-        **kwargs
-    ):
-        
-        (
-            sequences,
-            mask,
-            prompt_mask
-        ) = self.ppo_trainer.generate(
-            max_seq_len = max_seq_len,
-            *args,
-            prompt = prompt,
-            num_samples = num_samples,
-            **kwargs
-        )
-
-        rewards = self.reward_model(
-            sequences,
-            prompt_mask = prompt_mask,
-            mask = mask,
-            sample = True
-        )
-
-        best_sequence_index = rewards.topk(1, dim = -1).indices
-
-        best_sequence = sequences[best_sequence_index]
-        best_sequence = rearrange(best_sequence, '1 ... -> ...')
-
-        return best_sequence
     
     def compute_reward_single(
         self,
@@ -208,7 +173,7 @@ class RLHFTrainer(nn.Module):
                 attention_masks = masks,
                 prompt_masks = prompt_masks
             )
-            # print(prompt_texts[0], response_texts[0])
+            print(f'Prompt:{prompt_texts[0]}Response:{response_texts[0]}')
             if prompt_texts is None:
                 prompt_texts = prompt_texts_decode
             reward_sequences, reward_masks, reward_token_type_ids = reward_model.encode_batch(
@@ -216,7 +181,6 @@ class RLHFTrainer(nn.Module):
                 response_texts = response_texts,
                 return_padding = True
             )
-            # print(f'Prompt:{prompt_text}Response:{response_text}\n')
         else:
             reward_sequences = sequences
             reward_masks = masks
@@ -415,6 +379,9 @@ class RLHFTrainer(nn.Module):
                     return_padding = True,
                     **self.generation_config.to_dict()
                 )
+                # all_lens = masks.sum(dim = -1)
+                # gen_lens = action_masks.sum(dim = -1)
+                # print(all_lens, gen_lens)
 
                 logits, values = self.ppo_trainer.batch_forward(
                     sequences,
@@ -439,7 +406,6 @@ class RLHFTrainer(nn.Module):
                     action_masks = action_masks,
                     prompt_texts = prompt_texts
                 )
-                print(rm_rewards)
                 
                 detach_to_cpu_ = lambda t: t.detach().cpu()
 
@@ -501,6 +467,7 @@ class RLHFTrainer(nn.Module):
 def main():
 
     model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
+    # model_path = '/home/smliu/Pretrain_Models/LocutusqueXFelladrin-TinyMistral248M-Instruct'
     config = RLHF_Config()
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
@@ -512,7 +479,8 @@ def main():
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
-    dataset = Instruct_Dataset(config.dateset_cfg, config.dateset_cfg.train_data_path)
+    dataset = Instruct_Dataset(config.dateset_cfg)
+    dataset.load(mode = 'sharegpt')
     trainer.train(
         ds_generator = dataset.get_generator(),
         n_episode = config.n_episode,

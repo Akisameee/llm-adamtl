@@ -12,8 +12,7 @@ class Panacea_PPO_Config(PPO_Config):
     accelertor_cfg: Accelertor_Config = Accelertor_Config()
     dateset_cfg = Instruct_Dataset_Config(
         model_name = 'casuallm',
-        train_data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt', 'train_sft.csv'),
-        val_data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt', 'dev_sft.csv'),
+        data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
         tokenizer_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         padding_side = 'left',
         max_len = 512,

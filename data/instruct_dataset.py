@@ -8,7 +8,9 @@ from transformers import AutoTokenizer, AutoConfig
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from data.datasets import Dataset_Parser
 from configs import SFT_Train_Config, Instruct_Dataset_Config, RLHF_Config
+from configs import dataset_infos, model_infos
 
 
 csv.field_size_limit(10000000)
@@ -47,8 +49,7 @@ class Instruct_Dataset():
 
     def __init__(
             self,
-            config: Instruct_Dataset_Config,
-            data_path: str
+            config: Instruct_Dataset_Config
         ):
         
         self.tokenizer = AutoTokenizer.from_pretrained(config.tokenizer_pretrain_path, padding_side = config.padding_side)
@@ -56,22 +57,39 @@ class Instruct_Dataset():
             self.tokenizer.pad_token = self.tokenizer.eos_token
         self.max_len = config.max_len
 
-        self.data_path = data_path
+        self.dataset_parser = Dataset_Parser(
+            data_dir = config.data_path,
+            model_name = os.path.split(config.tokenizer_pretrain_path)[-1],
+            remove_chinese = config.remove_chinese
+        )
+        self.data_path = config.data_path
         self.prompt_only = True if config.tokenize_type in ['prompt_pad', 'prompt_not_pad'] else False
         self.tokenize = {
             'prompt_pad': self.tokenize_prompt_pad,
             'prompt_not_pad': self.tokenize_prompt_not_pad,
             'prompt_response': self.tokenize_prompt_response
         }[config.tokenize_type]
-        self.remove_chinese = config.remove_chinese
-        if config.tokenizer_pretrain_path.endswith('LocutusqueXFelladrin-TinyMistral248M-Instruct'):
-            self.add_instruct_prompt = lambda p, r: ('<|USER|> ' + p, '<|ASSISTANT|> ' + r) \
-            if not self.prompt_only else ('<|USER|> ' + p + ' <|ASSISTANT|> ', '<|ASSISTANT|> ' + r)
-        else:
-            self.add_instruct_prompt = lambda p, r: ('Human: ' + p, 'Assistant: ' + r) \
-            if not self.prompt_only else ('Human: ' + p + ' Assistant: ', 'Assistant: ' + r)
+        # self.remove_chinese = config.remove_chinese
+        # if config.tokenizer_pretrain_path.endswith('LocutusqueXFelladrin-TinyMistral248M-Instruct'):
+        #     self.add_instruct_prompt = lambda p, r: ('<|USER|> ' + p, '<|ASSISTANT|> ' + r) \
+        #     if not self.prompt_only else ('<|USER|> ' + p + ' <|ASSISTANT|> ', '<|ASSISTANT|> ' + r)
+        # else:
+        #     self.add_instruct_prompt = lambda p, r: ('Human: ' + p, 'Assistant: ' + r) \
+        #     if not self.prompt_only else ('Human: ' + p + ' Assistant: ', 'Assistant: ' + r)
 
-        self.datas = self.read_sharegpt_dataset(self.data_path)
+        
+        # self.datas = self.read_sharegpt_dataset(self.data_path)
+        self.texts = []
+        self.datas = []
+
+    def load(
+        self,
+        sub_paths = None,
+        mode = 'train'
+    ):
+        texts = self.dataset_parser.parse_dataset(sub_paths = sub_paths, mode = mode)
+        self.texts += texts
+        self.datas += self.tokenize_parsed_texts(texts)
         
     def tokenize_prompt_pad(self, prompt_texts, response_texts):
         
@@ -180,6 +198,16 @@ class Instruct_Dataset():
         else:
             datas = None
         return datas
+    
+    def tokenize_parsed_texts(self, texts):
+
+        prompt_texts = [text['prompt'] for text in texts]
+        response_key = 'response' if 'response' in texts[0].keys() else 'chosen'
+        response_texts = [text[response_key] for text in texts]
+        datas = self.tokenize(prompt_texts, response_texts)
+
+        return datas
+        
 
     def get_generator(self):
 
@@ -188,10 +216,16 @@ class Instruct_Dataset():
 if __name__ == '__main__':
 
     config = RLHF_Config()
-    config.dateset_cfg.tokenize_type = 'prompt_pad'
-    dataset = Instruct_Dataset(config.dateset_cfg, config.dateset_cfg.train_data_path)
+    model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
+    config.dateset_cfg.tokenizer_pretrain_path = model_path
+    config.model_cfg.model_pretrain_path = model_path
+    config.ref_cfg.model_pretrain_path = model_path
+    dataset = Instruct_Dataset(config.dateset_cfg)
+    dataset.load(
+        mode = 'sharegpt'
+    )
     instruct_ds = dataset.get_generator()
-    loader = torch.utils.data.DataLoader(instruct_ds, batch_size = 8)
+    loader = torch.utils.data.DataLoader(instruct_ds, batch_size = 8, collate_fn = instruct_collator)
     for batch in loader:
-        print(batch[0].shape, batch[1].shape)
+        print(batch[0], batch[1])
     print(dataset.datas)

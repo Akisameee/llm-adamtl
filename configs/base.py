@@ -127,8 +127,7 @@ class Base_Config(object):
 class Instruct_Dataset_Config(Base_Config):
 
     model_name: str = None
-    train_data_path: str = None
-    val_data_path: str = None
+    data_path: str = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt')
     tokenizer_pretrain_path: str = None
     padding_side: Optional[Literal['left', 'right']] = 'left'
     max_len: int = 512
