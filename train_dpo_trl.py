@@ -89,8 +89,8 @@ if __name__ == '__main__':
             # print(f'Prompt:{prompt_text}Response:{response_text}\n')
 
             reward_sequence, reward_mask, reward_prompt_mask = reward_model.encode_single(
-                prompt_text = prompt_text,
-                response_text = response_text
+                prompt = prompt_text,
+                response = response_text
             )
             rm_reward = reward_model(
                 reward_sequence,

@@ -17,7 +17,8 @@ class RLHF_Config(PPO_Config):
         tokenizer_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         padding_side = 'left',
         max_len = 512,
-        tokenize_type = 'prompt_not_pad'
+        tokenize_type = 'prompt_not_pad',
+        remove_chinese = False
     )
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
@@ -40,7 +41,7 @@ class RLHF_Config(PPO_Config):
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
     )
     reward_cfg: RM_Config = RM_Config(
-        model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'reward-model-deberta-v3-base')
+        model_pretrain_path = os.path.join('/home', 'smliu', 'huggingface', 'OpenAssistant', 'reward-model-deberta-v3-base')
     )
 
     retokenization: bool = True
@@ -61,9 +62,9 @@ class RLHF_Config(PPO_Config):
     ratio_threshold: float = 10
     value_loss_coef: float = 0.1
 
-    n_episode: int = 20
+    n_episode: int = 10
     sample_batch_size: int = 4
-    n_update_timestep: int = 8
+    n_update_timestep: int = 16
     train_batch_size: int = 8
     n_update_epoch: int = 5
 

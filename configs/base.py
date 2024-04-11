@@ -128,6 +128,7 @@ class Instruct_Dataset_Config(Base_Config):
 
     model_name: str = None
     data_path: str = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt')
+    sub_data_path: list = None
     tokenizer_pretrain_path: str = None
     padding_side: Optional[Literal['left', 'right']] = 'left'
     max_len: int = 512
@@ -156,10 +157,10 @@ class HumanFeedback_Dataset_Config(Base_Config):
 # )
 
 generation_config = GenerationConfig(
-    top_k = 0.0,
+    top_k = 50,
     top_p = 1.0,
     do_sample = True,
-    eos_token_id = 50256,
+    eos_token_id = 50256
 )
 
 @dataclass

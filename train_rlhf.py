@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -13,15 +13,15 @@ from accelerate import Accelerator, dispatch_model
 # from peft import get_peft_model
 
 from data.instruct_dataset import Instruct_Dataset, instruct_collator
-from configs import RLHF_Config, parse_args_into_dataclasses, get_dataclass_fields
+from configs import RLHF_Config
 from modules.lms import BaseLM, RewardLM, get_dispatched_model
 from modules.ppo import PPO_Trainer, Memory
-from modules.peft import replace_peft_layers
+from modules.peft import replace_peft_layers, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict
 from logger import Logger
 from trl.core import LengthSampler
 
-class RLHFTrainer(nn.Module):
+class RLHF_Trainer(nn.Module):
 
     def __init__(
         self,
@@ -35,12 +35,12 @@ class RLHFTrainer(nn.Module):
 
         # models
         if model is None:
-            model, peft_info = get_dispatched_model(
+            model, model_peft_info = get_dispatched_model(
                 config = config.model_cfg,
                 model_class = AutoModelForCausalLMWithValueHead
             )
         else:
-            peft_info = None
+            model_peft_info = None
 
         self.reward_model = reward_model
         if self.reward_model is None:
@@ -49,16 +49,19 @@ class RLHFTrainer(nn.Module):
                 model_class = RewardLM
             )
         self.reward_model.set_freeze(freeze=True)
-        self.reward_model = self.reward_model.eval()
+        self.reward_model.eval()
 
         self.ref_model = ref_model
         if self.ref_model is None:
-            self.ref_model, _ = get_dispatched_model(
-                config = config.ref_cfg,
-                model_class = BaseLM
-            )
-        self.ref_model.set_freeze(freeze=True)
-        self.ref_model = self.ref_model.eval()
+            if model_peft_info is not None:
+                self.ref_model = None
+            else:
+                self.ref_model, _ = get_dispatched_model(
+                    config = config.ref_cfg,
+                    model_class = BaseLM
+                )
+                self.ref_model.set_freeze(freeze=True)
+                self.ref_model.eval()
                 
         optimizer = torch.optim.AdamW(
             filter(lambda p: p.requires_grad, model.parameters()),
@@ -105,8 +108,10 @@ class RLHFTrainer(nn.Module):
         self.kl_ref_coef = config.kl_ref_coef
 
         self.logger.info(config.get_args_info())
-        if peft_info:
-            self.logger.info(peft_info)
+        if model_peft_info:
+            self.logger.info(model_peft_info)
+        if self.ref_model is None:
+            self.logger.info(f'Disabling target model peft layers as reference model.')
 
     def save(self, filepath = './checkpoint.pt'):
         torch.save(self.ppo_trainer.state_dict(), filepath)
@@ -157,182 +162,69 @@ class RLHFTrainer(nn.Module):
 
         return action_log_prob, action_prob
 
+    @torch.no_grad()
     def get_rm_rewards(
         self,
         reward_model: nn.Module,
         sequences: torch.FloatTensor,
         masks: torch.LongTensor,
         action_masks: torch.LongTensor,
-        prompt_texts: list[str] = None
+        # prompt_texts: list[str] = None
     ):
-
-        if self.retokenization:
-            prompt_masks = (1 - action_masks) * masks
-            prompt_texts_decode, response_texts = self.ppo_trainer.decode_batch(
-                inputs_ids = sequences,
-                attention_masks = masks,
-                prompt_masks = prompt_masks
-            )
-            print(f'Prompt:{prompt_texts[0]}Response:{response_texts[0]}')
-            if prompt_texts is None:
-                prompt_texts = prompt_texts_decode
-            reward_sequences, reward_masks, reward_token_type_ids = reward_model.encode_batch(
-                prompt_texts = prompt_texts,
-                response_texts = response_texts,
-                return_padding = True
-            )
-        else:
-            reward_sequences = sequences
-            reward_masks = masks
-            reward_token_type_ids = action_masks
-
-        rm_rewards = reward_model(
-            reward_sequences,
-            attention_mask = reward_masks,
-            token_type_ids = reward_token_type_ids,
-            sample = True
+        
+        prompt_masks = (1 - action_masks) * masks
+        prompt_texts, response_texts = self.ppo_trainer.decode_batch(
+            inputs_ids = sequences,
+            attention_masks = masks,
+            prompt_masks = prompt_masks
+        )
+        rm_rewards = reward_model.get_rewards(
+            prompts = prompt_texts,
+            responses = response_texts
+        )
+        self.logger.info(
+            '-' * 50 + '\n' + \
+            f'Prompt:{prompt_texts[0]}\n' + \
+            '-' * 50 + '\n' + \
+            f'Response:{response_texts[0]}\n' + \
+            '-' * 50 + '\n' + \
+            f'RM_Score:{rm_rewards[0]}'
         )
 
         return rm_rewards
-
-    def train_single_sampling(
+    
+    @torch.no_grad()
+    def get_ref_logprobs(
         self,
-        prompts,
-        n_episode: int = 50000,
-        n_timestep: int = 500,
-        n_update_timestep: int = 5000,
-        max_seq_len: int = 2048,
+        ref_model: nn.Module,
+        sequences: torch.LongTensor,
+        masks: torch.LongTensor
     ):
-        device = self.device
-        total_timestep = 0
-        memories = deque([])
-        length_sampler = LengthSampler(32, 128)
+        
+        if ref_model is None:
+            # disable peft layers, switch to reference model
+            set_all_adapters(
+                model = self.ppo_trainer.model,
+                enable = False
+            )
+            ref_logits, _ = self.ppo_trainer.batch_forward(
+                sequences,
+                mask = masks
+            )
+            set_all_adapters(
+                model = self.ppo_trainer.model,
+                enable = True
+            )
+        else:
+            ref_logits, _, _ = ref_model(
+                input_ids = sequences,
+                attention_mask = masks
+            )
+        ref_logits = shift(ref_logits, shift = 1, dim = -2)
+        ref_probs = ref_logits.softmax(dim = -1)
+        ref_logprobs = log_prob(ref_probs, sequences)
 
-        # prompts_ids = [prompt['input_ids'].squeeze().to(device) for prompt in prompts]
-        # prompts_text = [prompt['prompt_text'] for prompt in prompts]
-        prompts_ids = [prompt.squeeze().to(device) for prompt in prompts[0]]
-        prompts_text = prompts[2]
-
-        for episode in tqdm(range(n_episode)):
-            for timestep in range(n_timestep):
-                total_timestep += 1
-
-                # select a bunch of random states (prompts)
-                # and get the action (sampled sequence from palm as well as the action probs)
-                # also calculate the reward using reward model and store
-                rand_prompt_index = randrange(0, len(prompts_ids))
-
-                prompt_ids = prompts_ids[rand_prompt_index]
-                prompt_text = prompts_text[rand_prompt_index]
-
-                # get predicted sequence
-                self.generation_config.max_new_tokens = length_sampler()
-                (
-                    actions,
-                    sequence,
-                    mask,
-                    prompt_mask,
-                    logits,
-                    value
-                ) = self.ppo_trainer.generate(
-                    prompt_ids = rearrange(prompt_ids, 'n -> 1 n'),
-                    max_seq_len = max_seq_len,
-                    **self.generation_config.to_dict()
-                )
-
-                # need to shift along sequence dimension by 1, since actions start from the last prompt (state) token
-                logits = shift(logits, shift = 1, dim = -2)
-                prob = logits.softmax(dim = -1)
-
-                action_len = actions.shape[-1]
-                logprob = log_prob(prob, sequence)
-                # action_log_prob = action_log_prob[:, -action_len:]
-
-                # reference model logits
-                action_mask = ~prompt_mask.bool()
-                ref_logits, _, _ = self.ref_model(
-                    input_ids = sequence,
-                    attention_mask = mask
-                )
-
-                ref_logits = shift(ref_logits, shift = 1, dim = -2)
-                ref_prob = ref_logits.softmax(dim = -1)
-                ref_logprob = log_prob(ref_prob, sequence)
-                # ref_log_prob = ref_log_prob[:, -action_len:]
-                
-                actions = rearrange(actions, '1 ... -> ...')
-
-                # get reward as given by supervised trained reward model
-                sequence = torch.cat((prompt_ids, actions), dim = 0)
-
-                prompt_length = len(prompt_ids)
-                prompt_mask = torch.arange(sequence.shape[-1], device = device) < prompt_length
-
-                sequence = rearrange(sequence, 'n -> 1 n')
-                prompt_mask = rearrange(prompt_mask, 'n -> 1 n').long()
-                mask = default(mask, lambda: torch.ones(sequence.shape, dtype = torch.bool, device = device))
-
-                if self.retokenization:
-                    _, response_text = self.ppo_trainer.decode_single(
-                        input_ids = sequence,
-                        attention_mask = mask,
-                        prompt_mask = prompt_mask
-                    )
-                    reward_sequence, reward_mask, reward_prompt_mask = self.reward_model.encode_single(
-                        prompt_text = prompt_text,
-                        response_text = response_text
-                    )
-                    # print(f'Prompt:{prompt_text}Response:{response_text}\n')
-                else:
-                    reward_sequence = sequence
-                    reward_mask = mask
-                    reward_prompt_mask = prompt_mask
-
-                rm_reward = self.reward_model(
-                    reward_sequence,
-                    attention_mask = reward_mask,
-                    token_type_ids = reward_prompt_mask,
-                    sample = True
-                )
-                
-                # reward, kl_ref, reward_mean = self.compute_reward_single(
-                #     rm_reward = rm_reward,
-                #     action_logprobs = logprob,
-                #     ref_logprobs = ref_logprob
-                # )
-
-                detach_to_cpu_ = lambda t: rearrange(t.detach().cpu(), '1 ... -> ...')
-
-                # store memory for learning
-                memories.append(Memory(*map(detach_to_cpu_, (
-                    sequence,
-                    mask,
-                    action_mask,
-                    prob,
-                    logprob,
-                    ref_logprob,
-                    rm_reward,
-                    value
-                ))))
-
-                # learn from the stored memories
-                if total_timestep % n_update_timestep == 0:
-                    # self.logger.info('Updating...')
-                    ppo_stats = self.ppo_trainer.learn(memories)
-                    ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
-                    if self.accelerator.is_main_process:
-                        self.logger.step(
-                            episode = episode,
-                            timestep = total_timestep,
-                            stat_dict = merge_dict(
-                                unmerged_dicts = ppo_stats_gathered,
-                                reduce = 'mean'
-                            ) if isinstance(ppo_stats_gathered, list) else ppo_stats_gathered
-                        )
-                    memories.clear()
-
-        self.logger.info('RLHF Training Complete')
-        self.logger.save_res()
+        return ref_logprobs
 
     def train(
         self,
@@ -342,6 +234,11 @@ class RLHFTrainer(nn.Module):
         sample_batch_size: int = 8,
     ):
         
+        set_all_adapters(
+            model = self.ppo_trainer.model,
+            enable = True
+        )
+
         dataloader = DataLoader(
             dataset = ds_generator,
             batch_size = sample_batch_size,
@@ -379,9 +276,6 @@ class RLHFTrainer(nn.Module):
                     return_padding = True,
                     **self.generation_config.to_dict()
                 )
-                # all_lens = masks.sum(dim = -1)
-                # gen_lens = action_masks.sum(dim = -1)
-                # print(all_lens, gen_lens)
 
                 logits, values = self.ppo_trainer.batch_forward(
                     sequences,
@@ -391,20 +285,18 @@ class RLHFTrainer(nn.Module):
                 probs = logits.softmax(dim = -1)
                 logprobs = log_prob(probs, sequences)
 
-                ref_logits, _, _ = self.ref_model(
-                    input_ids = sequences,
-                    attention_mask = masks
+                ref_logprobs = self.get_ref_logprobs(
+                    ref_model = self.ref_model,
+                    sequences = sequences,
+                    masks = masks
                 )
-                ref_logits = shift(ref_logits, shift = 1, dim = -2)
-                ref_probs = ref_logits.softmax(dim = -1)
-                ref_logprobs = log_prob(ref_probs, sequences)
 
                 rm_rewards = self.get_rm_rewards(
                     reward_model = self.reward_model,
                     sequences = sequences,
                     masks = masks,
                     action_masks = action_masks,
-                    prompt_texts = prompt_texts
+                    # prompt_texts = prompt_texts
                 )
                 
                 detach_to_cpu_ = lambda t: t.detach().cpu()
@@ -466,21 +358,29 @@ class RLHFTrainer(nn.Module):
 
 def main():
 
-    model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
-    # model_path = '/home/smliu/Pretrain_Models/LocutusqueXFelladrin-TinyMistral248M-Instruct'
     config = RLHF_Config()
+
+    data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
+    sub_data_path = ['helpful-base']
+    config.dateset_cfg.data_path = data_path
+    config.dateset_cfg.sub_data_path = sub_data_path
+
+    model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
+    
+    # rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
+    # config.reward_cfg.model_pretrain_path = rm_path
     config.parse_args()
 
-    trainer = RLHFTrainer(
+    trainer = RLHF_Trainer(
         config = config
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     dataset = Instruct_Dataset(config.dateset_cfg)
-    dataset.load(mode = 'sharegpt')
+    dataset.load(mode = 'train')
     trainer.train(
         ds_generator = dataset.get_generator(),
         n_episode = config.n_episode,

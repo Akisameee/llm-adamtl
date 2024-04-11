@@ -21,15 +21,11 @@ class Base_Adapter(nn.Module):
     def set_adapter(self, enable: bool, base_enable: bool = False):
 
         if enable:
-            self.requires_grad_(True)
             self.base_layer.requires_grad_(False)
             self.disabled = False
         else:
-            self.requires_grad_(False)
-            if base_enable:
-                self.base_layer.requires_grad_(True)
-            else:
-                self.base_layer.requires_grad_(False)
+            self.base_layer.requires_grad_(base_enable)
+            self.base_layer.requires_grad_(base_enable)
             self.disabled = True
 
     def forward(self, x: torch.Tensor, *args, **kwargs):

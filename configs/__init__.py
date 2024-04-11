@@ -10,7 +10,8 @@ from .base import (
 
 from .prompts_infos import (
     dataset_infos,
-    model_infos
+    model_infos,
+    rm_infos
 )
 
 from .model import (

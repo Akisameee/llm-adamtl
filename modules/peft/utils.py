@@ -58,5 +58,13 @@ def replace_peft_layers(
 def freeze_except_adapters():
     pass
 
-def set_all_adapters():
-    pass
+def set_all_adapters(
+    model: nn.Module,
+    enable: bool,
+    base_enable: bool = False
+):
+    for module in model.children():
+        if isinstance(module, Base_Adapter):
+            module.set_adapter(enable = enable, base_enable = base_enable)
+        elif len(list(module.children())) > 0:
+            set_all_adapters(module, enable = enable, base_enable = base_enable)

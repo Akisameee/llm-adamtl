@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import os
 from einops import rearrange, repeat, reduce, pack, unpack
 from einops.layers.torch import Rearrange, Reduce
 from peft import get_peft_model
@@ -8,7 +9,7 @@ from accelerate.utils import get_balanced_memory
 
 from transformers import AutoModelForCausalLM, AutoModelForSequenceClassification, GPT2Tokenizer, GPT2Model, AutoConfig, AutoTokenizer, AutoModel, GPTNeoForCausalLM, DebertaV2ForSequenceClassification
 from trl import AutoModelForCausalLMWithValueHead
-from configs import SFT_Train_Config, LM_Config, RM_Config, RLHF_Config
+from configs import SFT_Train_Config, LM_Config, RM_Config, RLHF_Config, rm_infos
 from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_mean
 from modules.peft import replace_peft_layers
 
@@ -183,62 +184,6 @@ class BaseLM(nn.Module):
         # print('Response:', self.tokenizer.decode(response.squeeze()))
         
         return response
-        
-    # @torch.no_grad()
-    # @eval_decorator
-    # def generate(
-    #         self,
-    #         seq_len,
-    #         prompt = None,
-    #         temperature = 1.,
-    #         filter_logits_fn = top_k,
-    #         filter_thres = 0.9,
-    #         pad_value = 0.,
-    #         eos_token = None,
-    #         return_seq_without_prompt = True,
-    #         **kwargs
-    #     ):
-
-    #     if eos_token is None:
-    #         eos_token = self.tokenizer.eos_token_id
-
-    #     if prompt is None:
-    #         prompt = torch.randint(0, self.num_tokens, (1, 1))
-    #         prompt = prompt.to(self.device)
-    #         return_seq_without_prompt = False
-
-    #     prompt, leading_dims = pack([prompt], '* n')
-
-    #     n, out = prompt.shape[-1], prompt.clone()
-
-    #     sample_num_times = max(1, seq_len - prompt.shape[-1])
-
-    #     for _ in range(sample_num_times):
-    #         logits, embeds, _ = self.forward(out, **kwargs)
-    #         logits, embeds = logits[:, -1], embeds[:, -1]
-
-    #         if filter_logits_fn is not None:
-    #             logits = filter_logits_fn(logits, thres = filter_thres)
-
-    #         sample = gumbel_sample(logits, temperature = temperature, dim = -1)
-    #         out, _ = pack([out, sample], 'b *')
-
-    #         if eos_token is not None:
-    #             is_eos_tokens = (out == eos_token)
-
-    #             if is_eos_tokens.any(dim = -1).all():
-    #                 # mask out everything after the eos tokens
-    #                 shifted_is_eos_tokens = F.pad(is_eos_tokens, (1, -1))
-    #                 mask = shifted_is_eos_tokens.float().cumsum(dim = -1) >= 1
-    #                 out = out.masked_fill(mask, pad_value)
-    #                 break
-
-    #     out, = unpack(out, leading_dims, '* n')
-
-    #     if not return_seq_without_prompt:
-    #         return out
-
-    #     return out[..., n:]
     
 class RewardLMWithoutLMHead(nn.Module):
 
@@ -278,21 +223,23 @@ class RewardLMWithoutLMHead(nn.Module):
 
 class RewardLM(nn.Module):
 
-    def __init__(self, config, dispatch = False, **kwargs):
+    def __init__(
+        self,
+        config: RM_Config,
+        dispatch = False,
+        **kwargs
+    ):
         super(RewardLM, self).__init__()
 
         lm_config = AutoConfig.from_pretrained(config.model_pretrain_path)
-        # if lm_config.architectures[0] != 'GPT2ForSequenceClassification':
-        #     raise NotImplementedError
-        # if dispatch:
-        #     self.lm, _  = get_dispatched_model(
-        #         config = config,
-        #         model_class = AutoModelForSequenceClassification
-        #     )
-        # else:
+        self.single_forward = False if lm_config.pad_token_id is not None else True
         self.lm = AutoModelForSequenceClassification.from_pretrained(config.model_pretrain_path, **kwargs)
+        self.model_info = rm_infos[os.path.split(config.model_pretrain_path)[-1]]
+        self.uni_info = rm_infos['universal']
 
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
         self.max_len = lm_config.max_position_embeddings
         self.device = config.device
         # self.to(self.device)
@@ -301,28 +248,41 @@ class RewardLM(nn.Module):
 
         for p in self.parameters():
             p.requires_grad = not freeze
-        
-    def encode_single(self, prompt_text, response_text):
 
+    def replace_instruct_prompts(
+        self,
+        target_str: str
+    ):
+        target_str = target_str.replace(self.uni_info['prompt_prefix'], self.model_info['prompt_prefix'])
+        target_str = target_str.replace(self.uni_info['response_prefix'], self.model_info['response_prefix'])
+
+        return target_str
+        
+    def encode_single(self, prompt: str, response: str):
+
+        prompt = self.replace_instruct_prompts(prompt)
+        # response = self.replace_instruct_prompts(response)
         tokenizer_out = self.tokenizer(
-            prompt_text,
-            response_text,
+            prompt,
+            response,
             # padding = 'max_length',
-            max_length = self.max_len,
-            truncation=True,
-            return_tensors = 'pt',
-            return_token_type_ids = True
+            truncation = True,
+            return_tensors = 'pt'
         ).to(self.device)
 
-        return (
-            tokenizer_out['input_ids'],
-            tokenizer_out['attention_mask'],
-            tokenizer_out['token_type_ids']
-        )
+        return tokenizer_out
     
     def encode_batch(self, prompt_texts, response_texts, return_padding = False):
         
         if return_padding:
+            prompt_texts = [
+                self.replace_instruct_prompts(prompt_text)
+                for prompt_text in prompt_texts
+            ]
+            # response_texts = [
+            #     self.replace_instruct_prompts(response_text)
+            #     for response_text in response_texts
+            # ]
             tokenizer_out = self.tokenizer.batch_encode_plus(
                 batch_text_or_text_pairs = list(zip(prompt_texts, response_texts)),
                 padding = True,
@@ -331,41 +291,59 @@ class RewardLM(nn.Module):
                 return_tensors = 'pt',
                 return_token_type_ids = True
             ).to(self.device)
-            return (
-                tokenizer_out['input_ids'],
-                tokenizer_out['attention_mask'],
-                tokenizer_out['token_type_ids']
-            )
+            return tokenizer_out
         else:
-            outs = []
+            tokenizer_outs = {}
             for prompt_text, response_text in zip(prompt_texts, response_texts):
                 tokenizer_out = self.encode_single(prompt_text, response_text)
-                outs.append(tokenizer_out)
-            return (
-                [out[0] for out in outs],
-                [out[1] for out in outs],
-                [out[2] for out in outs]
+                for k, v in tokenizer_out:
+                    if k in tokenizer_out.keys():
+                        tokenizer_outs[k].append(v)
+                    else:
+                        tokenizer_outs[k] = [v]
+            
+            return tokenizer_outs
+
+    def get_rewards(
+        self,
+        prompts,
+        responses
+    ):
+        if isinstance(prompts, str):
+            prompts = [prompts]
+            responses = [responses]
+
+        rewards = []
+        for prompt, response in zip(prompts, responses):
+            tokenizer_out = self.encode_single(
+                prompt = prompt,
+                response = response
             )
-    
-    # def get_text_reward()
+            reward = self.forward(
+                **tokenizer_out
+            )
+            rewards.append(reward)
+        rewards = torch.cat(rewards)
+        
+        return rewards
 
     def forward(
             self,
-            input_ids = None,
+            input_ids,
             attention_mask = None,
             token_type_ids = None,
             **kwargs
         ):
+        assert input_ids.shape[0] == 1
 
         lm_out = self.lm(
             input_ids = input_ids,
             attention_mask = attention_mask,
-            token_type_ids = token_type_ids
+            token_type_ids = token_type_ids,
+            **kwargs
         )
 
-        reward = lm_out.logits.squeeze()
-        # if len(reward.size()) < 2:
-        #     reward = reward.unsqueeze(0)
+        reward = lm_out.logits[0]
 
         return reward
     

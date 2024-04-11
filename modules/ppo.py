@@ -13,9 +13,9 @@ from transformers import AutoTokenizer
 from transformers.generation.utils import GenerationConfig
 from accelerate import Accelerator
 import tqdm
-import math
+import os
 
-from configs import PPO_Config
+from configs import PPO_Config, model_infos
 from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHead
 from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, default, masked_whiten
@@ -124,6 +124,8 @@ class PPO_Trainer(nn.Module):
 
         # models
         self.model = model
+        self.model_info = model_infos[os.path.split(config.model_cfg.model_pretrain_path)[-1]]
+        self.uni_info = model_infos['universal']
         self.model_params = filter(lambda p: p.requires_grad, self.model.parameters())
 
         self.tokenizer = tokenizer
@@ -187,21 +189,28 @@ class PPO_Trainer(nn.Module):
         else:
             return self.model.device
         
+    def replace_instruct_prompts(
+        self,
+        target_str: str
+    ):
+        target_str = target_str.replace(self.model_info['prompt_prefix'], self.uni_info['prompt_prefix'])
+        target_str = target_str.replace(self.model_info['response_prefix'], self.uni_info['response_prefix'])
+
+        return target_str
+        
     def decode_single(self, input_ids, attention_mask, prompt_mask):
 
         input_ids = input_ids.squeeze()
         attention_mask = attention_mask.squeeze()
         prompt_mask = prompt_mask.squeeze()
 
-        # response_mask = (1 - prompt_mask) * attention_mask
-        # prompt_ids = input_ids * attention_mask * prompt_mask
         prompt_ids = input_ids[:torch.sum(prompt_mask)]
-        # response_ids = input_ids * attention_mask * response_mask
         response_ids = input_ids[torch.sum(prompt_mask): torch.sum(attention_mask)]
 
-        # all_text = self.tokenizer.decode(input_ids)
         prompt = self.tokenizer.decode(prompt_ids)
         response = self.tokenizer.decode(response_ids)
+        prompt = self.replace_instruct_prompts(prompt)
+        response = self.replace_instruct_prompts(response)
 
         return prompt, response
     
@@ -231,6 +240,7 @@ class PPO_Trainer(nn.Module):
             eos_token_id = self.tokenizer.eos_token_id
         else:
             eos_token_id = kwargs['eos_token_id']
+        kwargs['pad_token_id'] = self.tokenizer.pad_token_id
         
         kwargs.pop('max_length')
         if length_sampler is not None:

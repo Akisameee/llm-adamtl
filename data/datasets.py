@@ -184,6 +184,8 @@ class Dataset_Parser(object):
         prompt_full = ''
         response_full = ''
         for idx, (prompt_text, response_text) in enumerate(text_splitted):
+            prompt_text = prompt_text.strip()
+            response_text = response_text.strip()
             prompt_full += self.model_info['prompt_prefix'] + prompt_text
             if idx == len(text_splitted) - 1:
                 prompt_full += self.model_info['response_prefix']
