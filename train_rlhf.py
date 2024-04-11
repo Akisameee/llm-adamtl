@@ -250,7 +250,7 @@ class RLHF_Trainer(nn.Module):
         max_timestep = len(dataloader) * sample_batch_size * n_episode
 
         memories = deque([])
-        length_sampler = LengthSampler(32, 128)
+        length_sampler = LengthSampler(64, 128)
 
         timestep = 0
         updatestep = 0
@@ -370,8 +370,8 @@ def main():
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
     
-    # rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
-    # config.reward_cfg.model_pretrain_path = rm_path
+    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
+    config.reward_cfg.model_pretrain_path = rm_path
     config.parse_args()
 
     trainer = RLHF_Trainer(

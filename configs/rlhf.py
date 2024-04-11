@@ -62,7 +62,7 @@ class RLHF_Config(PPO_Config):
     ratio_threshold: float = 10
     value_loss_coef: float = 0.1
 
-    n_episode: int = 10
+    n_episode: int = 5
     sample_batch_size: int = 4
     n_update_timestep: int = 16
     train_batch_size: int = 8
