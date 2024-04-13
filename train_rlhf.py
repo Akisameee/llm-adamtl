@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -13,7 +13,7 @@ from accelerate import Accelerator, dispatch_model
 # from peft import get_peft_model
 
 from data.instruct_dataset import Instruct_Dataset, instruct_collator
-from configs import RLHF_Config
+from configs import RLHF_Config, model_infos
 from modules.lms import BaseLM, RewardLM, get_dispatched_model
 from modules.ppo import PPO_Trainer, Memory
 from modules.peft import replace_peft_layers, set_all_adapters
@@ -103,8 +103,11 @@ class RLHF_Trainer(nn.Module):
             logger = self.logger
         )
         
-        self.generation_config = config.model_cfg.generation_config
+        self.model_info = model_infos[os.path.split(config.model_cfg.model_pretrain_path)[-1]]
+        self.generation_config = self.model_info['generation_config']
         self.retokenization = config.retokenization
+        self.n_sample_reuse = config.n_sample_reuse
+        self.clean_cache_every_iter = True
         self.kl_ref_coef = config.kl_ref_coef
 
         self.logger.info(config.get_args_info())
@@ -250,7 +253,7 @@ class RLHF_Trainer(nn.Module):
         max_timestep = len(dataloader) * sample_batch_size * n_episode
 
         memories = deque([])
-        length_sampler = LengthSampler(64, 128)
+        length_sampler = LengthSampler(256, 300)
 
         timestep = 0
         updatestep = 0
@@ -272,18 +275,19 @@ class RLHF_Trainer(nn.Module):
                 ) = self.ppo_trainer.generate_batch(
                     prompts_ids = prompts_ids,
                     attention_masks = attention_masks,
-                    length_sampler = length_sampler,
+                    # length_sampler = length_sampler,
                     return_padding = True,
                     **self.generation_config.to_dict()
                 )
 
-                logits, values = self.ppo_trainer.batch_forward(
-                    sequences,
-                    mask = masks
-                )
-                logits = shift(logits, shift = 1, dim = -2)
-                probs = logits.softmax(dim = -1)
-                logprobs = log_prob(probs, sequences)
+                with torch.no_grad():
+                    logits, values = self.ppo_trainer.batch_forward(
+                        sequences,
+                        mask = masks
+                    )
+                    logits = shift(logits, shift = 1, dim = -2)
+                    probs = logits.softmax(dim = -1)
+                    logprobs = log_prob(probs, sequences)
 
                 ref_logprobs = self.get_ref_logprobs(
                     ref_model = self.ref_model,
@@ -331,15 +335,27 @@ class RLHF_Trainer(nn.Module):
                         rm_reward,
                         value[: seq_len]
                     ))))
+
+                if self.clean_cache_every_iter:
+                    del (
+                        sequences,
+                        masks,
+                        action_masks,
+                        probs,
+                        logprobs,
+                        ref_logprobs,
+                        rm_rewards,
+                        values
+                    )
+                    torch.cuda.empty_cache()
                 
                 rlhf_bar.update(1)
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
                     ppo_stats = [self.ppo_trainer.learn(memories)]
-                    # print(f'ppo_stats {ppo_stats}')
+                    # torch.cuda.empty_cache()
                     ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
                     if self.accelerator.is_main_process:
-                        # print(f'ppo_stats_gathered {ppo_stats_gathered}')
                         self.logger.step(
                             episode = episode + 1,
                             timestep = timestep,
@@ -348,7 +364,8 @@ class RLHF_Trainer(nn.Module):
                                 reduce = 'mean'
                             )
                         )
-                    memories.clear()
+                    while len(memories) > (self.n_sample_reuse - 1) * n_update_timestep:
+                        memories.popleft()
                     if max_timestep - timestep < n_update_timestep:
                         break
 
@@ -365,7 +382,7 @@ def main():
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
-    model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
+    model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path

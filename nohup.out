@@ -1,0 +1,227 @@
+OrderedDict([('transformer.wte', 0), ('lm_head', 0), ('transformer.wpe', 0), ('transformer.drop', 0), ('transformer.h.0', 0), ('transformer.h.1', 0), ('transformer.h.2', 0), ('transformer.h.3', 0), ('transformer.h.4', 0), ('transformer.h.5', 0), ('transformer.h.6', 0), ('transformer.h.7', 0), ('transformer.h.8', 0), ('transformer.h.9', 1), ('transformer.h.10', 1), ('transformer.h.11', 1), ('transformer.h.12', 1), ('transformer.h.13', 1), ('transformer.h.14', 1), ('transformer.h.15', 1), ('transformer.h.16', 1), ('transformer.h.17', 1), ('transformer.h.18', 1), ('transformer.h.19', 1), ('transformer.h.20', 1), ('transformer.h.21', 1), ('transformer.h.22', 1), ('transformer.h.23', 1), ('transformer.ln_f', 1)])
+OrderedDict([('transformer.wte', 0), ('transformer.wpe', 0), ('transformer.drop', 0), ('transformer.h.0', 0), ('transformer.h.1', 0), ('transformer.h.2', 0), ('transformer.h.3', 0), ('transformer.h.4', 0), ('transformer.h.5', 0), ('transformer.h.6', 0), ('transformer.h.7', 0), ('transformer.h.8', 0), ('transformer.h.9', 0), ('transformer.h.10', 0), ('transformer.h.11', 0), ('transformer.h.12', 0), ('transformer.h.13', 0), ('transformer.h.14', 1), ('transformer.h.15', 1), ('transformer.h.16', 1), ('transformer.h.17', 1), ('transformer.h.18', 1), ('transformer.h.19', 1), ('transformer.h.20', 1), ('transformer.h.21', 1), ('transformer.h.22', 1), ('transformer.h.23', 1), ('transformer.h.24', 1), ('transformer.h.25', 1), ('transformer.h.26', 1), ('transformer.h.27', 1), ('transformer.h.28', 1), ('transformer.h.29', 1), ('transformer.h.30', 1), ('transformer.h.31', 1), ('transformer.h.32', 1), ('transformer.h.33', 1), ('transformer.h.34', 1), ('transformer.h.35', 1), ('transformer.ln_f', 1), ('score', 1)])
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+(INFO) 2024-04-14 01:07:44,530 - RLHF_train_logger:
+Args Info:
+--accelertor_cfg_args_namespace None
+--accelertor_cfg_log_with None
+--accelertor_cfg_gradient_accumulation_steps 1
+--model_cfg_args_namespace None
+--model_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--model_cfg_peft_cfg_args_namespace None
+--model_cfg_peft_cfg_adapter_name lora
+--model_cfg_peft_cfg_target_modules ['q_proj', 'k_proj', 'v_proj', 'o_proj']
+--model_cfg_peft_cfg_r 8
+--model_cfg_peft_cfg_lora_alpha 32
+--model_cfg_peft_cfg_lora_dropout 0.1
+--model_cfg_ckpt_path ./ckpts
+--model_cfg_use_ckpt False
+--model_cfg_ckpt_load_path None
+--model_cfg_device cuda
+--model_cfg_max_len 512
+--model_cfg_generation_config GenerationConfig {
+  "do_sample": true,
+  "eos_token_id": 50256,
+  "no_repeat_ngram_size": 5,
+  "num_beams": 4,
+  "repetition_penalty": 0.5
+}
+
+--ref_cfg_args_namespace None
+--ref_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--ref_cfg_peft_cfg_args_namespace None
+--ref_cfg_peft_cfg_adapter_name None
+--ref_cfg_peft_cfg_target_modules None
+--ref_cfg_ckpt_path ./ckpts
+--ref_cfg_use_ckpt False
+--ref_cfg_ckpt_load_path None
+--ref_cfg_device cuda
+--ref_cfg_max_len 512
+--ref_cfg_generation_config GenerationConfig {
+  "do_sample": true,
+  "eos_token_id": 50256,
+  "no_repeat_ngram_size": 5,
+  "num_beams": 4,
+  "repetition_penalty": 0.5
+}
+
+--lr 0.0001
+--weight_decay 0.0005
+--pooled_values False
+--max_norm None
+--kl_ref_coef 0.2
+--kl_type kl
+--eps_clip 0.2
+--value_clip 0.2
+--beta_s 0.01
+--lam 0.95
+--gae_gamma 1
+--ratio_threshold 10
+--value_loss_coef 0.1
+--train_batch_size 4
+--n_update_epoch 5
+--output_dir ./output
+--dateset_cfg_args_namespace None
+--dateset_cfg_model_name casuallm
+--dateset_cfg_data_path /home/smliu/datasets/hf/hh-rlhf
+--dateset_cfg_sub_data_path ['helpful-base']
+--dateset_cfg_tokenizer_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--dateset_cfg_padding_side left
+--dateset_cfg_max_len 512
+--dateset_cfg_prompt_only False
+--dateset_cfg_tokenize_type prompt_not_pad
+--dateset_cfg_remove_chinese False
+--reward_cfg_args_namespace None
+--reward_cfg_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-helpful-reward_model
+--reward_cfg_peft_cfg_args_namespace None
+--reward_cfg_peft_cfg_adapter_name None
+--reward_cfg_peft_cfg_target_modules None
+--reward_cfg_device cuda
+--retokenization True
+--n_episode 5
+--sample_batch_size 1
+--n_sample_reuse 3
+--n_update_timestep 8
+
+(INFO) 2024-04-14 01:07:44,532 - RLHF_train_logger:
+Peft Info:
+total parameters: 1368956928
+trainable parameters: 2359296
+non-trainable parameters: 1366597632
+(INFO) 2024-04-14 01:07:44,532 - RLHF_train_logger:
+Disabling target model peft layers as reference model.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+  0%|          | 0/4728 [00:00<?, ?it/s]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+                                        (INFO) 2024-04-14 01:08:00,178 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>Hi, I'd like to sell my old vinyl records on eBay. How do I do that?<response_prefix>Well you need to make a category for them in eBay, and a description for each one.  You can also upload pictures of the items, and write a description for each picture.  It might be nice to have some information about how old the records are, and perhaps you can rate them with a score.  You can also, for example, enter other information like price, condition, size, and whether they're in perfect condition or not.  See here for more information about what eBay considers “Seller’s Marks” -- that’s what you can say in your description of what each record is, and it's all entirely optional: http://help.ebay.com/customer/mail-thankyou/helpitem.html/29083/Condition-and-Collectibility<prompt_prefix>Thanks. Any tips for how to handle shipping. or how to get good prices for what I sell?<response_prefix>Hm, it's hard to say without knowing more about what you're selling.  It's probably a good idea to know the values of the records in advance, so that you can figure out a fair price before you start listing them.  You might be able to tell from the seller ratings of your records if they're worth a lot or not, but it could take some time to do research before you get a good idea of what to list them at.  What do you think you'd like to get out of the experience, and do you have a plan for how you'll sell the records?<prompt_prefix>I'm looking to make money, that's all. Any other tips?<response_prefix>
+--------------------------------------------------
+Response:If you're selling vinyl records, there are a lot of ways to make money: 
+1. You could try to sell them on eBay and sell them for more or less than you're worth. 
+2. You could sell your records to a lot of people and try to sell them for a good price. 
+3. You could start a record store and sell your records online. 
+4. You could sell you of your records online at a store or at a garage. 
+I hope that helps! Let me know if you have any other questions or if there's anything else I can help you with.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.6390941739082336
+  0%|          | 0/4728 [00:11<?, ?it/s]  0%|          | 1/4728 [00:12<15:50:31, 12.07s/it]                                                   (INFO) 2024-04-14 01:08:12,260 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>What is the best selling candy in the US?<response_prefix>
+--------------------------------------------------
+Response:As an AI language model, I don't have access to the latest information on the US candy market. However, I can provide you with some general information on the best-selling candy in the US:
+
+Best-selling candy:
+
+- Hershey's
+
+Hershey's is the largest candy company in the US, with over 2.5 million units in the US market. The company is known for its high-quality candy, such as Hershey's Super Hershey's and Super Hershey's, which are known for their high-quality candy. Hershey's also produces high-quality candy and their products are known for their in-house candy, such as their Super Hershey's in-house candy.
+
+Best-sellers in the US are also known for their unique flavors and unique flavors, such as their signature Hershey's Super Super Hershey's flavors and their signature signature Hershey's signature Hershey's candy.
+
+It's important to note that the US candy market is highly competitive, and the best-sellers are often the ones who are in high demand. However, the best-sellingers are also the ones who have the best reputation in the market and are known for their quality candy.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.7662776708602905
+  0%|          | 1/4728 [00:24<15:50:31, 12.07s/it]  0%|          | 2/4728 [00:24<15:52:48, 12.10s/it]                                                   (INFO) 2024-04-14 01:08:19,900 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>How do I fix a running toilet?<response_prefix>Do you have any tools?<prompt_prefix>Yes, I have all of the tools here that I might need.<response_prefix>I would start by removing the covers that cover the pump and check it to see if it needs to be replaced. Then check to see if there are any leaks around the base of the toilet tank.  If there are no leaks, then I would turn the water off, and then remove the tank to see if there are any leaks at the base. If there are leaks, I would try to repair them with the tools I already have. If there are no leaks, then I would replace the tank.<prompt_prefix>Can you tell me about the different parts in the toilet tank that could be causing leaks.<response_prefix>Sure. The most important part is the flapper. It sits at the bottom of the tank and is lifted by the water pressure. A good way to test whether there is a leak at the base is to put water in the tank and look for any drips. It can be difficult to identify if the flapper isn’t sealing properly, but I can tell you that a failing flapper can be replaced.<prompt_prefix>Okay, I think I have a flapper that isn't sealing correctly. I will have to replace it to stop the leak.<response_prefix>
+--------------------------------------------------
+Response:Great. The next step is a good look around for the flapper. I will start by removing the bottom of the flapper, and then I will identify it by looking for any leaks. It will be difficult, but it’s important to identify the flapper and the leaks. I will then replace the flapper to the bottom and then remove the flapper to see if it’s sealing correctly.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.6640763282775879
+  0%|          | 2/4728 [00:31<15:52:48, 12.10s/it]  0%|          | 3/4728 [00:31<13:09:21, 10.02s/it]                                                   (INFO) 2024-04-14 01:08:24,215 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>What are some of the best books by Ray Bradbury?<response_prefix>He wrote a huge number of stories and novels.  Some of my favorites are The Martian Chronicles, The Illustrated Man, Fahrenheit 451, and Dandelion Wine.<prompt_prefix>Can you tell me more about The Martian Chronicles and The Illustrated Man?<response_prefix>
+--------------------------------------------------
+Response:Sure! The Martian Chronicles is a series of books that tells the story of a Martian named Rick Deckard, who is stranded on Mars. The Illustrated Man is a series of short stories that tell the story of Rick Deckard, a Martian who is stranded on a Martian planet. The Martian Chronicles are set in a small town on Mars, and they are set in the story.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.777401864528656
+  0%|          | 3/4728 [00:35<13:09:21, 10.02s/it]  0%|          | 4/4728 [00:36<10:12:08,  7.77s/it]                                                   (INFO) 2024-04-14 01:08:32,734 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>How do I care for a wood table?<response_prefix>I’m a computer program, not a carpenter, but in general, wood tends to be a natural material that doesn’t need a lot of special care, other than some maintenance and a little wood oil every now and then to preserve its original color. Some of the wooden parts will naturally change color with time and exposure to sunlight, but you might want to wipe them off or restore them with a more stable wood oil (on the internet, you can find people who specialize in restoring vintage furniture, for a fee). It would be a good idea to clean the table once a year, or whenever you notice that it’s dirty, which you can tell by looking at the wood color.<prompt_prefix>Should I use a table cloth?<response_prefix>
+--------------------------------------------------
+Response:Yes, you should definitely use a table cloth, especially if you have a wooden table that you want to keep with you for an extended period of time. Some good options include tablecloths that have a natural color, or tablecloths with natural fibers, such as wool or synthetic fibers. It's also a good idea to use tablecloths that are clean, in good condition, and that are the same color as the wood you are using. Some popular brands for tablecloths include Marmot, Everlane, and Knoll. It's a good idea to find a table cloth that you can use for extended periods, as it can help keep the wood looking its best.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.6894914507865906
+  0%|          | 4/4728 [00:44<10:12:08,  7.77s/it]  0%|          | 5/4728 [00:44<10:32:45,  8.04s/it]                                                   (INFO) 2024-04-14 01:08:44,880 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>What kind of fruits can I use to make a custard fruit tart?<response_prefix>
+--------------------------------------------------
+Response:There are many fruits that can be used to make a delicious custard fruit tart. Here are some of the most popular ones:
+
+1. Berries: Berries such as strawberries, blueberries, raspberries, and blackberries are popular choices for custard tart. They add a sweet and fruity flavor to the dish.
+
+2. Citrus fruits: Citrus fruits such as oranges, grapefruits, and lemons are a great choice for a custard tart as they add a sweet, fruity flavor.
+
+3. Berries and strawberries: Berries and strawberries are great for custard tart, as they add a fruity flavor and are easy to make.
+
+4. Apples: Apples are a classic fruit that can be used as a topping for custard. They add a savory and sweet flavor to the tart.
+
+5. Pears: Pears are a popular fruit that can add a tart flavor to the custard.
+
+6. Apples and oranges: Apples and oranges can be used as topping for custard as they add a delicious, sweet flavor.
+
+7. Pomegranates: Pomegranates are a sweet and tart fruit that can be le
+--------------------------------------------------
+RM_Score:3.044370174407959
+  0%|          | 5/4728 [00:56<10:32:45,  8.04s/it]  0%|          | 6/4728 [00:56<12:22:50,  9.44s/it]                                                   (INFO) 2024-04-14 01:08:46,660 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>What do I do about a cockroach infestation?<response_prefix>The thing about cockroaches is that you never know when they’ll appear.  Do you know if your house already has them?<prompt_prefix>yes i found some!<response_prefix>Hmm. Cockroaches are good for making poisons, but how well do you know about poison making?  And you’ll need plenty of cockroaches to make a big batch of poison.  How many do you think you have now?<prompt_prefix>I don't know anything<response_prefix>
+--------------------------------------------------
+Response:I’m sorry, I don’t have that information. I’m sorry to hear that. Is there anything else you need help with?<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.8633724451065063
+  0%|          | 6/4728 [00:58<12:22:50,  9.44s/it]  0%|          | 7/4728 [00:58<9:04:44,  6.92s/it]                                                   (INFO) 2024-04-14 01:08:51,618 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>How are LEDs made?<response_prefix>We’d need to define what a LED is to be sure, but generally speaking, an LED is a thin plastic tube that is typically coated with one of three metals, like indium or gallium.  Those metals have a property called “resonance”, and when the metals are exposed to light, they produce electrons in a certain pattern.  A light that flashes repeatedly, as in a strobe light, causes a fluorescent material inside the tube to glow, like you see in a traffic light.<prompt_prefix>Are they similar to a fluorescent bulb?<response_prefix>No, an LED is very different from a fluorescent bulb.  Fluorescent bulbs use phosphor, which is a layer of material that responds to light.  The bulb emits a light that you can see, but what makes it “fluorescent” is that the light is visible for a long time after the bulb has been turned off.  An LED bulb doesn’t emit light when it’s off, so you can’t tell if it’s working by looking at it.<prompt_prefix>Interesting! So an LED is more energy efficient than a fluorescent bulb?<response_prefix>
+--------------------------------------------------
+Response:Yes, an LED is more efficient than fluorescent bulbs.  LED’s energy efficiency is generally more than that of fluorescent bulbs, which can be very energy-intensive and consume a lot of energy.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.7120038270950317
+  0%|          | 7/4728 [01:03<9:04:44,  6.92s/it]  0%|          | 8/4728 [01:03<8:16:24,  6.31s/it]                                                  (INFO) 2024-04-14 01:08:58,602 - RLHF_train_logger:
+Episode: 1 Timestep: 8
+policy_loss: 0.0161 critic_loss: 0.01172 rm_score: -0.2584 ref_kl: 0 generate_length: 127.5
+  0%|          | 8/4728 [01:10<8:16:24,  6.31s/it]                                                  (INFO) 2024-04-14 01:08:59,938 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>How can I lose 50 lbs. in a year?<response_prefix>I can’t.<prompt_prefix>What do you mean you can't?  I think it's possible.<response_prefix>Yes it is possible, but you cannot lose 50 lbs. in a year.<prompt_prefix>You can or you can't?  You are confusing me.<response_prefix>
+--------------------------------------------------
+Response:It's possible that you can, but it's also possible that you can't.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.906611442565918
+  0%|          | 8/4728 [01:11<8:16:24,  6.31s/it]  0%|          | 9/4728 [01:12<9:12:38,  7.03s/it]                                                  (INFO) 2024-04-14 01:09:01,894 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>Is a higher octane gasoline better for your car?<response_prefix>How old is the car? What is the mileage? What do you typically put in it? What model car is it?<prompt_prefix>a 10 year old Ford.<response_prefix>Then you probably don’t need high-octane gasoline. The average car will do fine with the regular fuel.<prompt_prefix>Then why do they sell it?<response_prefix>
+--------------------------------------------------
+Response:It's a fine-tilled engine with a high octane rating for 10 years. The gasoline is better than regular gasoline because it has better fuel economy.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.8453665971755981
+  0%|          | 9/4728 [01:13<9:12:38,  7.03s/it]  0%|          | 10/4728 [01:13<7:01:26,  5.36s/it]                                                   (INFO) 2024-04-14 01:09:06,422 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>What are some good Pixar films?<response_prefix>I really like Toy Story, and the Toy Story movies are great to watch with kids.  Wall-E is another good one, it’s also really popular with kids, and adults love it too.  The Incredibles is also great, I think anyone would like it.  What sorts of things do you like to do with your kids?<prompt_prefix>Cool, so I could watch those with my kids and enjoy them?<response_prefix>I think so.  I like both of those.  They’re really funny and they’re full of really great stories, which are fun for everyone.  I also really like The Lion King, it’s kind of a grown-up movie, but it’s fun for kids, and it also has really good messages.  So yeah, they’re all really good!  Do you have kids?<prompt_prefix>lion king isn't pixar<response_prefix>
+--------------------------------------------------
+Response:What do you mean? I mean I’m really good with kids!  I’m like, my kids and I like all the movies, and I love to watch them.  Do you have any other films you’d like to watch?<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.7367746829986572
+  0%|          | 10/4728 [01:18<7:01:26,  5.36s/it]  0%|          | 11/4728 [01:18<6:42:02,  5.11s/it]                                                   (INFO) 2024-04-14 01:09:18,540 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>Who is Angelina Jolie?  Why is she so famous?<response_prefix>
+--------------------------------------------------
+Response:Angelina Jolie is a fictional character from the DC Comics universe. She is a DC Comics superhero who is a fictional character who is based on the DC Comics character Angelina Jolie. Jolie is a superhero who is a member of the DC Comics superhero team of the DC Comics. 
+
+Jolie's superhero team is based on the fictional character of Angelina Jolie, who is a famous superhero from the DC Comics character team. Jolie's team is known for their superhero abilities, including their ability to hack into security systems, their ability to manipulate time, and their ability to use their powers for good. Jolie's superhero team's powers are based on her own powers, which are the ability to use her own abilities to help others. 
+
+In addition to her powers, Jolie is also known for her good sense and her ability to help others. She is a member of a superhero team that is based on the superhero team of the superhero team from the DC Comics team. Jolie is known for her sense of humor and her ability to make others laugh. 
+
+Overall, Angelina Jolie's superhero abilities and her good sense of humor make her a popular and beloved character in the DC Comics universe, and she is a
+--------------------------------------------------
+RM_Score:2.259946823120117
+  0%|          | 11/4728 [01:30<6:42:02,  5.11s/it]  0%|          | 12/4728 [01:30<9:30:52,  7.26s/it]                                                   (INFO) 2024-04-14 01:09:27,809 - RLHF_train_logger:
+--------------------------------------------------
+Prompt:<|endoftext|><prompt_prefix>Where do I start to potty train my child?<response_prefix>I’m glad you asked.  I’m not sure if you’re looking to potty train your child, or if you want me to help you with it, but I’ll be happy to offer advice.  I can tell you that this is something you can do with a child as young as two.  Just like other behavior, your child learns it through repetition and practice.  You’ll want to teach your child to use the potty, before you do anything else.  So, start by taking your child to the potty about once an hour, after eating, drinking, and napping.  It’s important to be consistent with this.  Don’t let your child hold it, as this can cause constipation and irritable bowels.  And while you’re teaching your child, make sure you ask them if they’re trying to pee or poop and when they’re done.  Finally, make sure you put your child on the potty before any other activity, so they’re getting used to the feel and sounds of it.<prompt_prefix>When is a good age to start teaching him to be potty trained<response_prefix>
+--------------------------------------------------
+Response:It's important to start teaching your child to potty train before it's too late. Potty training is important for the child's growth and development, and it can help improve their behavior. It's also important to teach your child the potty train, so they feel comfortable and confident. It's also a good idea to have a child with potty issues or questions, so you can have them practice potty training with you and your child. Finally, it's important to make sure that your child is getting enough sleep, and that you're getting enough rest so that they can feel their full attention and attention to the potty.<|endoftext|>
+--------------------------------------------------
+RM_Score:-0.6379686594009399
+  0%|          | 12/4728 [01:39<9:30:52,  7.26s/it]  0%|          | 13/4728 [01:39<10:17:30,  7.86s/it]

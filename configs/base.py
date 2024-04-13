@@ -160,7 +160,10 @@ generation_config = GenerationConfig(
     top_k = 50,
     top_p = 1.0,
     do_sample = True,
-    eos_token_id = 50256
+    eos_token_id = 50256,
+    num_beams = 4,
+    repetition_penalty = 0.5,
+    no_repeat_ngram_size = 5
 )
 
 @dataclass

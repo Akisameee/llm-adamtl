@@ -231,7 +231,6 @@ class PPO_Trainer(nn.Module):
         self,
         prompts_ids: torch.FloatTensor,
         attention_masks: torch.LongTensor,
-        length_sampler: Callable = None,
         return_padding: bool = False,
         **kwargs
     ):
@@ -243,8 +242,8 @@ class PPO_Trainer(nn.Module):
         kwargs['pad_token_id'] = self.tokenizer.pad_token_id
         
         kwargs.pop('max_length')
-        if length_sampler is not None:
-            kwargs['max_new_tokens'] = length_sampler()
+        if kwargs['max_new_tokens'] is None:
+            kwargs['max_new_tokens'] = 256
 
         inputs = {
             'input_ids': prompts_ids,

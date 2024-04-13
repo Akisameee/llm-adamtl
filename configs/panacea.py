@@ -20,17 +20,9 @@ class Panacea_PPO_Config(PPO_Config):
     )
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
-        # peft_config = LoraConfig(
-        #     task_type = TaskType.CAUSAL_LM,
-        #     target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
-        #     inference_mode = False,
-        #     r = 4,
-        #     lora_alpha = 32,
-        #     lora_dropout = 0.1
-        # )
         peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
-            r = 4,
+            r = 8,
             lora_alpha = 32,
             lora_dropout = 0.1
         )
@@ -59,11 +51,11 @@ class Panacea_PPO_Config(PPO_Config):
     value_loss_coef: float = 0.1
     scalariztion_type: Optional[Literal['ls', 'tche']] = 'ls'
 
-    n_episode: int = 100
-    n_timestep: int = 32
-    sample_batch_size: int = 4
+    n_episode: int = 5
+    sample_batch_size: int = 1
+    n_sample_reuse: int = 1
     n_update_timestep: int = 8
-    train_batch_size: int = 8
+    train_batch_size: int = 4
     n_update_epoch: int = 5
 
     output_dir: str = os.path.join('.', 'output')
