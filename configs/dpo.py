@@ -6,22 +6,15 @@ from .peft import Lora_Config
 from .model import LM_Config, RM_Config
 
 @dataclass
-class DPO_Config(Base_Config):
+class DPO_Config(Trainer_Config):
 
+    task_name: str = 'DPO_train'
     model_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
     dataset_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
 
     accelertor_cfg: Accelertor_Config = Accelertor_Config()
     model_cfg = LM_Config(
         model_pretrain_path = model_path,
-        # peft_config = LoraConfig(
-        #     task_type = TaskType.CAUSAL_LM,
-        #     target_modules = ['q_proj', 'v_proj'],
-        #     inference_mode = False,
-        #     r = 8,
-        #     lora_alpha = 32,
-        #     lora_dropout = 0.1
-        # )
         peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 4,

@@ -172,6 +172,12 @@ class Accelertor_Config(Base_Config):
     log_with: Optional[Literal['wandb', 'tensorboard']] = None
     gradient_accumulation_steps: int = 1
 
+@dataclass
+class Trainer_Config(Base_Config):
+
+    task_name: str = None
+    output_dir: str = os.path.join('.', 'output')
+
 
 def get_argparser(
     dataclass

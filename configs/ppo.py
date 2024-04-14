@@ -5,20 +5,15 @@ from peft.utils.peft_types import TaskType
 from .peft import Lora_Config
 from .model import LM_Config, RM_Config
 
+from trl import AutoModelForCausalLMWithValueHead
+
 @dataclass
-class PPO_Config(Base_Config):
+class PPO_Config(Trainer_Config):
 
     accelertor_cfg: Accelertor_Config = Accelertor_Config()
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
-        # peft_config = LoraConfig(
-        #     task_type = TaskType.CAUSAL_LM,
-        #     target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
-        #     inference_mode = False,
-        #     r = 4,
-        #     lora_alpha = 32,
-        #     lora_dropout = 0.1
-        # )
+        model_class = AutoModelForCausalLMWithValueHead,
         peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 4,

@@ -207,8 +207,8 @@ class PPO_Trainer(nn.Module):
         prompt_ids = input_ids[:torch.sum(prompt_mask)]
         response_ids = input_ids[torch.sum(prompt_mask): torch.sum(attention_mask)]
 
-        prompt = self.tokenizer.decode(prompt_ids)
-        response = self.tokenizer.decode(response_ids)
+        prompt = self.tokenizer.decode(prompt_ids, skip_special_tokens = True)
+        response = self.tokenizer.decode(response_ids, skip_special_tokens = True)
         prompt = self.replace_instruct_prompts(prompt)
         response = self.replace_instruct_prompts(response)
 

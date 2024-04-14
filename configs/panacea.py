@@ -1,15 +1,19 @@
 from .base import *
 from peft.tuners.lora import LoraConfig
 from peft.utils.peft_types import TaskType
+from trl import AutoModelForCausalLMWithValueHead
 
 from .ppo import PPO_Config
-from .peft import Lora_Config
+from .peft import Lora_Config, Panacea_SVD_Config
 from .model import LM_Config, RM_Config
 
 @dataclass
 class Panacea_PPO_Config(PPO_Config):
 
-    accelertor_cfg: Accelertor_Config = Accelertor_Config()
+    task_name: str = 'Panacea_train'
+    accelertor_cfg: Accelertor_Config = Accelertor_Config(
+        gradient_accumulation_steps = 2
+    )
     dateset_cfg = Instruct_Dataset_Config(
         model_name = 'casuallm',
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
@@ -20,17 +24,20 @@ class Panacea_PPO_Config(PPO_Config):
     )
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
-        peft_cfg = Lora_Config(
+        model_class = AutoModelForCausalLMWithValueHead,
+        peft_cfg = Panacea_SVD_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 8,
             lora_alpha = 32,
-            lora_dropout = 0.1
+            lora_dropout = 0.1,
+            pref_dim = 2
         )
     )
     ref_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
     )
     reward_cfgs: list[RM_Config] = field(default_factory=list)
+    reward_names: list[str] = field(default_factory=list)
 
     retokenization: bool = True
     
@@ -51,11 +58,11 @@ class Panacea_PPO_Config(PPO_Config):
     value_loss_coef: float = 0.1
     scalariztion_type: Optional[Literal['ls', 'tche']] = 'ls'
 
-    n_episode: int = 5
+    n_episode: int = 1
     sample_batch_size: int = 1
     n_sample_reuse: int = 1
     n_update_timestep: int = 8
-    train_batch_size: int = 4
+    train_batch_size: int = 2
     n_update_epoch: int = 5
 
     output_dir: str = os.path.join('.', 'output')

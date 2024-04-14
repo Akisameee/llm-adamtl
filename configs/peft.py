@@ -13,3 +13,12 @@ class Lora_Config(Peft_Config):
     r: int = 8
     lora_alpha: int = 1
     lora_dropout: float = 0.0
+
+@dataclass
+class Panacea_SVD_Config(Peft_Config):
+
+    adapter_name: str = 'panacea'
+    r: int = 8
+    lora_alpha: int = 1
+    lora_dropout: float = 0.0
+    pref_dim: int = 2

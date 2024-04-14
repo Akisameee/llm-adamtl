@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -9,199 +9,67 @@ from functools import partial
 from random import randrange
 from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
-from accelerate import Accelerator, dispatch_model
+from accelerate import Accelerator
 
+from base_trainer import Base_Trainer
 from data.instruct_dataset import Instruct_Dataset, instruct_collator
-from configs import RLHF_Config, model_infos
+from configs import Panacea_PPO_Config, RM_Config, model_infos
 from modules.lms import BaseLM, RewardLM, get_model
 from modules.ppo import PPO_Trainer, Memory
-from modules.peft import replace_peft_layers, set_all_adapters
+from modules.peft import replace_peft_layers, Panacea_SVD_Linear, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict
 from logger import Logger
 from trl.core import LengthSampler
 
-class RLHF_Trainer(nn.Module):
+class Panacea_Trainer(Base_Trainer):
 
     def __init__(
         self,
-        config: RLHF_Config,
-        model: AutoModelForCausalLMWithValueHead = None,
-        reward_model: RewardLM = None,
-        ref_model: BaseLM = None,
-        logger: Logger = None
+        config: Panacea_PPO_Config
     ):
-        super().__init__()
-
-        # models
-        if model is None:
-            model, model_peft_info = get_model(
-                config = config.model_cfg,
-                model_class = AutoModelForCausalLMWithValueHead
-            )
-        else:
-            model_peft_info = None
-
-        self.reward_model = reward_model
-        if self.reward_model is None:
-            self.reward_model, _ = get_model(
-                config = config.reward_cfg,
-                model_class = RewardLM
-            )
-        self.reward_model.set_freeze(freeze=True)
-        self.reward_model.eval()
-
-        self.ref_model = ref_model
-        if self.ref_model is None:
-            if model_peft_info is not None:
-                self.ref_model = None
-            else:
-                self.ref_model, _ = get_model(
-                    config = config.ref_cfg,
-                    model_class = BaseLM
-                )
-                self.ref_model.set_freeze(freeze=True)
-                self.ref_model.eval()
-                
-        optimizer = torch.optim.AdamW(
-            filter(lambda p: p.requires_grad, model.parameters()),
-            lr = config.lr,
-            weight_decay = config.weight_decay
-        )
-
-        # prepare with accelerator
-        self.accelerator = Accelerator(
-            log_with = config.accelertor_cfg.log_with,
-            gradient_accumulation_steps = config.accelertor_cfg.gradient_accumulation_steps
-        )
-
-        (
-            model,
-            self.ref_model,
-            self.reward_model,
-            optimizer
-        ) = self.accelerator.prepare(
-            model,
-            self.ref_model,
-            self.reward_model,
-            optimizer
-        )
         
-        self.logger = logger
-        if self.logger is None:
-            self.logger = Logger(
-                output_dir = config.output_dir,
-                task_name = 'RLHF_train',
-                disable = not self.accelerator.is_main_process
-            )
+        super().__init__(
+            config = config,
+            accelerator_cfg = config.accelertor_cfg,
+            model_cfg = config.model_cfg,
+            ref_cfg = config.ref_cfg,
+            reward_cfg = config.reward_cfgs
+        )
 
         self.ppo_trainer = PPO_Trainer(
             config = config,
-            model = model,
-            optimizer = optimizer,
+            model = self.model,
+            optimizer = self.optimizer,
             accelerator = self.accelerator,
             logger = self.logger
         )
         
-        self.model_name = os.path.split(config.model_cfg.model_pretrain_path)[-1]
-        self.model_info = model_infos[self.model_name]
-        self.generation_config = self.model_info['generation_config']
+        self.reward_names = config.reward_names
+        assert len(self.reward_names) == len(self.reward_models)
+        self.pref_dim = len(self.reward_names)
         self.retokenization = config.retokenization
         self.n_sample_reuse = config.n_sample_reuse
-        self.clean_cache_every_iter = True
+        self.scalariztion_type = config.scalariztion_type
         self.kl_ref_coef = config.kl_ref_coef
-        self.ckpts_dir = config.ckpts_dir
+        
+    def sample_pref_vec(self):
+        
+        pref_vec = torch.rand(self.pref_dim)
+        pref_vec = pref_vec / torch.sum(pref_vec)
 
-        self.logger.info(config.get_args_info())
-        if model_peft_info:
-            self.logger.info(model_peft_info)
-        if self.ref_model is None:
-            self.logger.info(f'Disabling target model peft layers as reference model.')
-
-    def save(self, model, ckpt_dir = './checkpoint.pt'):
-
-        self.accelerator.wait_for_everyone()
-        self.accelerator.save_model(model, ckpt_dir)
-
-    def load(self, model, ckpt_dir = './checkpoint.pt'):
-
-        unwrapped_model = self.accelerator.unwrap_model(model)
-        path_to_checkpoint = os.path.join(ckpt_dir,"pytorch_model.bin")
-        unwrapped_model.load_state_dict(torch.load(path_to_checkpoint))
-
-    @property
-    def device(self):
-        if self.accelerator is not None:
-            return self.accelerator.device
-        else:
-            return self.ppo_trainer.model.device
+        return pref_vec
     
-    def compute_reward_single(
+    def set_pref_vec(
         self,
-        rm_reward: torch.FloatTensor,
-        action_logprobs: torch.FloatTensor,
-        ref_logprobs: torch.FloatTensor
+        model: torch.nn.Module,
+        pref_vec: torch.FloatTensor
     ):
-        kl_ref = self.kl_penalty(action_logprobs, ref_logprobs) * self.kl_ref_coef
-        reward = -kl_ref
-        reward[:, -1] += rm_reward
-        kl_ref_mean = -torch.mean(kl_ref).unsqueeze(0)
-        
-        return reward, kl_ref_mean, kl_ref_mean + rm_reward
-        
-    def kl_penalty(
-        self,
-        logprob,
-        ref_logprob
-    ):
-        return logprob - ref_logprob
+        for module in model.modules():
+            if isinstance(module, Panacea_SVD_Linear):
+                module.set_pref_vec(pref_vec)
 
-    def compute_action_log_prob(
-        self,
-        action_len,
-        action_logits,
-        sequence
-    ):
-        # need to shift along sequence dimension by 1, since actions start from the last prompt (state) token
-        action_logits = shift(action_logits, shift = 1, dim = -2)
-        action_prob = action_logits.softmax(dim = -1)
+        self.logger.info(f'pref_vec set to {pref_vec}')
 
-        action_log_prob = log_prob(action_prob, sequence)
-        action_log_prob = action_log_prob[:, -action_len:]
-
-        return action_log_prob, action_prob
-
-    @torch.no_grad()
-    def get_rm_rewards(
-        self,
-        reward_model: nn.Module,
-        sequences: torch.FloatTensor,
-        masks: torch.LongTensor,
-        action_masks: torch.LongTensor,
-        verbose: bool = False
-    ):
-        
-        prompt_masks = (1 - action_masks) * masks
-        prompt_texts, response_texts = self.ppo_trainer.decode_batch(
-            inputs_ids = sequences,
-            attention_masks = masks,
-            prompt_masks = prompt_masks
-        )
-        rm_rewards = reward_model.get_rewards(
-            prompts = prompt_texts,
-            responses = response_texts
-        )
-        if verbose:
-            self.logger.info(
-                '-' * 50 + '\n' + \
-                f'Prompt:{prompt_texts[0]}\n' + \
-                '-' * 50 + '\n' + \
-                f'Response:{response_texts[0]}\n' + \
-                '-' * 50 + '\n' + \
-                f'RM_Score:{rm_rewards[0]}'
-            )
-
-        return rm_rewards
-    
     @torch.no_grad()
     def get_ref_logprobs(
         self,
@@ -234,8 +102,70 @@ class RLHF_Trainer(nn.Module):
         ref_logprobs = log_prob(ref_probs, sequences)
 
         return ref_logprobs
+        
+    @torch.no_grad()
+    def get_rm_rewards(
+        self,
+        reward_model: nn.Module,
+        sequences: torch.FloatTensor,
+        masks: torch.LongTensor,
+        action_masks: torch.LongTensor,
+        verbose: bool = False
+    ):
+        
+        prompt_masks = (1 - action_masks) * masks
+        prompt_texts, response_texts = self.ppo_trainer.decode_batch(
+            inputs_ids = sequences,
+            attention_masks = masks,
+            prompt_masks = prompt_masks
+        )
+        rm_rewards = reward_model.get_rewards(
+            prompts = prompt_texts,
+            responses = response_texts
+        )
+        if verbose:
+            self.logger.info(
+                '-' * 50 + '\n' + \
+                f'Prompt:{prompt_texts[0]}\n' + \
+                '-' * 50 + '\n' + \
+                f'Response:{response_texts[0]}\n' + \
+                '-' * 50 + '\n' + \
+                f'RM_Score:{rm_rewards[0]}'
+            )
 
-    def train(
+        return rm_rewards
+    
+    def scalariztion(
+        self,
+        rms_rewards: list[torch.FloatTensor],
+        pref_vec: torch.FloatTensor
+    ):  
+        
+        rm_rewards_scalar = torch.zeros_like(rms_rewards[0])
+        if self.scalariztion_type == 'ls':
+            for rm_rewards, pref_weight in zip(rms_rewards, pref_vec):
+                rm_rewards_scalar += rm_rewards * pref_weight
+        else:
+            raise NotImplementedError
+        
+        return rm_rewards_scalar
+
+    def compute_action_log_prob(
+        self,
+        action_len,
+        action_logits,
+        sequence
+    ):
+        # need to shift along sequence dimension by 1, since actions start from the last prompt (state) token
+        action_logits = shift(action_logits, shift = 1, dim = -2)
+        action_prob = action_logits.softmax(dim = -1)
+
+        action_log_prob = log_prob(action_prob, sequence)
+        action_log_prob = action_log_prob[:, -action_len:]
+
+        return action_log_prob, action_prob
+
+    def train_ppo(
         self,
         ds_generator,
         n_episode: int = 10,
@@ -263,6 +193,9 @@ class RLHF_Trainer(nn.Module):
 
         timestep = 0
         updatestep = 0
+        rms_reward_records = []
+        pref_vec = self.sample_pref_vec()
+        self.set_pref_vec(self.ppo_trainer.model, pref_vec)
         rlhf_bar = tqdm(
             total = max_timestep // n_update_timestep * n_update_timestep // sample_batch_size,
             disable = not self.accelerator.is_main_process
@@ -301,12 +234,22 @@ class RLHF_Trainer(nn.Module):
                     masks = masks
                 )
 
-                rm_rewards = self.get_rm_rewards(
-                    reward_model = self.reward_model,
-                    sequences = sequences,
-                    masks = masks,
-                    action_masks = action_masks,
-                    verbose = timestep % n_update_timestep == 0
+                rms_rewards = []
+                rms_reward_record = {}
+                for idx, reward_model in enumerate(self.reward_models):
+                    rm_rewards = self.get_rm_rewards(
+                        reward_model = reward_model,
+                        sequences = sequences,
+                        masks = masks,
+                        action_masks = action_masks,
+                        verbose = timestep % n_update_timestep == 0
+                    )
+                    rms_rewards.append(rm_rewards)
+                    rms_reward_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
+                rms_reward_records.append(rms_reward_record)
+                rm_rewards_scalarized = self.scalariztion(
+                    rms_rewards = rms_rewards,
+                    pref_vec = pref_vec
                 )
                 
                 detach_to_cpu_ = lambda t: t.detach().cpu()
@@ -318,7 +261,7 @@ class RLHF_Trainer(nn.Module):
                     prob,
                     logprob,
                     ref_logprob,
-                    rm_reward,
+                    rm_reward_scalarized,
                     value
                 ) in zip(
                     sequences,
@@ -327,7 +270,7 @@ class RLHF_Trainer(nn.Module):
                     probs,
                     logprobs,
                     ref_logprobs,
-                    rm_rewards,
+                    rm_rewards_scalarized,
                     values
                 ):
                     seq_len = torch.sum(mask).item()
@@ -338,7 +281,7 @@ class RLHF_Trainer(nn.Module):
                         prob[: seq_len, :],
                         logprob[: seq_len],
                         ref_logprob[: seq_len],
-                        rm_reward,
+                        rm_reward_scalarized,
                         value[: seq_len]
                     ))))
 
@@ -359,36 +302,46 @@ class RLHF_Trainer(nn.Module):
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
                     ppo_stats = [self.ppo_trainer.learn(memories)]
-                    # torch.cuda.empty_cache()
+                    torch.cuda.empty_cache()
                     ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
+                    rms_reward_records_gathered = self.accelerator.gather_for_metrics(rms_reward_records)
+                    all_ppo_stats = merge_dict(unmerged_dicts = ppo_stats_gathered, reduce = 'mean')
+                    all_rms_reward_records = merge_dict(unmerged_dicts = rms_reward_records_gathered, reduce = 'mean')
+                    all_ppo_stats.update(all_rms_reward_records)
                     if self.accelerator.is_main_process:
                         self.logger.step(
                             episode = episode + 1,
                             timestep = timestep,
-                            stat_dict = merge_dict(
-                                unmerged_dicts = ppo_stats_gathered,
-                                reduce = 'mean'
-                            )
+                            stat_dict = all_ppo_stats
                         )
+
                     while len(memories) > (self.n_sample_reuse - 1) * n_update_timestep:
                         memories.popleft()
+                    rms_reward_records.clear()
+
                     if max_timestep - timestep < n_update_timestep:
                         break
+                    else:
+                        pref_vec = self.sample_pref_vec()
+                        self.set_pref_vec(self.ppo_trainer.model, pref_vec)
 
-        self.logger.info('RLHF Training Complete')
+        self.logger.info('Panacea Training Complete')
         self.logger.save_res()
+        self.logger.save_pareto_front(
+            tuple(self.reward_names)
+        )
         self.save(
             self.ppo_trainer.model,
             os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
         )
 
-
 def main():
 
-    config = RLHF_Config()
+    config = Panacea_PPO_Config()
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
-    sub_data_path = ['helpful-base']
+    # sub_data_path = ['helpful-base', 'harmless-base']
+    sub_data_path = ['harmless-base']
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
@@ -397,18 +350,23 @@ def main():
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
     
-    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
-    config.reward_cfg.model_pretrain_path = rm_path
-    config.parse_args()
+    rm_path_1 = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
+    rm_path_2 = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-harmless-reward_model')
+    config.reward_cfgs = [
+        RM_Config(model_pretrain_path = rm_path_1),
+        RM_Config(model_pretrain_path = rm_path_2)
+    ]
+    config.reward_names = ['helpful', 'harmless']
+    # config.parse_args()
 
-    trainer = RLHF_Trainer(
+    trainer = Panacea_Trainer(
         config = config
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     dataset = Instruct_Dataset(config.dateset_cfg)
     dataset.load(mode = 'train')
-    trainer.train(
+    trainer.train_ppo(
         ds_generator = dataset.get_generator(),
         n_episode = config.n_episode,
         n_update_timestep = config.n_update_timestep,

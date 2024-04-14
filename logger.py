@@ -7,29 +7,20 @@ import pandas as pd
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import torch
 from mpl_toolkits import mplot3d
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from mpl_toolkits.mplot3d import Axes3D, proj3d
+from matplotlib.patches import FancyArrowPatch
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 from scipy import spatial
 from tqdm.auto import tqdm
 
-class Timer():
-
-    def __init__(self):
-        
-        self.start_time_stamp = 0
-
-    def start(self):
-
-        self.start_time_stamp = time.time()
-
-    def end(self):
-
-        assert self.start_time_stamp != 0
-        end_time_stamp = time.time()
-        time_cost = end_time_stamp - self.start_time_stamp
-        self.start_time_stamp = 0
-
-        return time_cost
+arrow_kwargs = {
+    'color': 'C0',
+    'linewidth': 0.05,
+    # 'headwidth': 0.1,
+    # 'headlength': 0.1
+}
     
 def get_logger(name='logger', file_name='./log.txt'):
     
@@ -73,7 +64,8 @@ class Logger():
         self.output_dir = output_dir
         current_time = datetime.datetime.now()
         time_str = current_time.strftime('%Y-%m-%d %H-%M-%S')
-        self.dir = os.path.join(output_dir, time_str)
+        self.dir_name = f'{task_name} {time_str}'
+        self.dir = os.path.join(output_dir, self.dir_name)
         os.mkdir(self.dir)
 
         self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}_log.txt'))
@@ -85,8 +77,20 @@ class Logger():
             return
         
         log_str = f'Episode: {episode} Timestep: {timestep}\n'
-        log_str += ' '.join([f'{key}: {value:.4g}'for key, value in stat_dict.items()]) if stat_dict is not None else ''
+        stat_strs = []
+        for key, value in stat_dict.items():
+            if isinstance(value, (int, float)):
+                stat_strs.append(f'{key}: {value:.4g}')
+            elif isinstance(value, torch.Tensor):
+                value = value.detach().numpy().tolist()
+                stat_strs.append(f'{key}: {value}')
+            elif isinstance(value, np.ndarray):
+                value = value.tolist()
+                stat_strs.append(f'{key}: {value}')
+            else:
+                stat_strs.append(f'{key}: {value}')
         
+        log_str += ' '.join(stat_strs)
         self.info(log_str)
 
         columns = ['Episode', 'Timestep'] + list(stat_dict.keys())
@@ -96,7 +100,6 @@ class Logger():
         if self.historys is None:
             self.historys = pd.DataFrame(columns=columns)
         self.historys.loc[len(self.historys)] = history
-        # print(self.historys)
 
     def info(self, log_str):
 
@@ -109,11 +112,9 @@ class Logger():
         self,
         save_dir: str = None
     ):
-
         if self.disable:
             return
         
-        # print(self.historys)
         self.historys.to_csv(os.path.join(self.dir, 'train_result.csv'))
         for col_name in self.historys.columns:
             if col_name in ['Episode', 'Timestep']:
@@ -126,7 +127,7 @@ class Logger():
                 )
                 figure.get_figure().savefig(
                     os.path.join(self.dir, col_name) if save_dir is None else save_dir,
-                    dpi=400
+                    dpi = 400
                 )
                 plt.close()
 
@@ -135,11 +136,14 @@ class Logger():
         axes_names: tuple,
         save_dir: str = None
     ):
+        if self.disable:
+            return
+
         save_dir = self.dir if save_dir is None else save_dir
         draw_pareto_fronts(
             dataframe = self.historys,
             axes_names = axes_names,
-            save_path = os.path.join(save_dir, 'pareto_front') 
+            save_path = os.path.join(save_dir, '_'.join(axes_names) + '_pareto_front') 
         )
 
 def check_line_is_pareto_front(
@@ -168,12 +172,24 @@ def check_plane_is_pareto_front(
         return True
     else:
         return False
+    
+def unit_vec(vec):
+
+    length = np.sqrt(sum([x**2 for x in vec]))
+    return np.array(vec) / length
 
 def draw_pareto_fronts(
     dataframe: pd.DataFrame,
     axes_names: tuple = ('x', 'y', 'z'),
+    vecs_name: str = 'pref_vec',
     save_path: str = ''
 ):
+    if vecs_name:
+        pref_vecs = dataframe[vecs_name]
+    else:
+        pref_vecs = None
+    
+    alphas = np.linspace(0.1, 1, len(dataframe))
     if len(axes_names) == 2:
         fig = plt.figure()
         axes = fig.add_subplot(111)
@@ -185,7 +201,18 @@ def draw_pareto_fronts(
         hull = spatial.ConvexHull(vertices)
         lines = hull.simplices
         
-        axes.scatter(x, y)
+        axes.scatter(x, y, alpha = alphas)
+
+        if pref_vecs is not None:
+            for i in range(len(x)):
+                pref_vec = unit_vec(pref_vecs[i]) / 3
+                axes.arrow(
+                    x[i], y[i],
+                    pref_vec[0], pref_vec[1],
+                    alpha = alphas[i],
+                    color = 'C0', width = 0.05, head_width = 0.1, head_length = 0.1
+                )
+        
         for line in lines:
             if check_line_is_pareto_front([
                 vertices[line[0]],
@@ -194,8 +221,7 @@ def draw_pareto_fronts(
                 axes.plot(
                     (x[line[0]], x[line[1]]),
                     (y[line[0]], y[line[1]]),
-                    color = 'C0',
-                    alpha = 0.75
+                    color = 'C0', alpha = 0.75
                 )
 
         axes.set_xlabel(axes_names[0])
@@ -204,16 +230,27 @@ def draw_pareto_fronts(
     elif len(axes_names) == 3:
         fig = plt.figure()
         axes = fig.add_subplot(111, projection='3d')
+        plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
 
         x = dataframe[axes_names[0]]
         y = dataframe[axes_names[1]]
         z = dataframe[axes_names[2]]
-
+        axes.scatter(x, y, z, alpha = alphas)
+        
+        if pref_vecs is not None:
+            for i in range(len(x)):
+                pref_vec = unit_vec(pref_vecs[i]) / 2
+                axes.quiver(
+                    x[i], y[i], z[i],
+                    pref_vec[0], pref_vec[1], pref_vec[2],
+                    alpha = alphas[i],
+                    color = 'C0'
+                )
+                print(alphas[i])
+        
         vertices = np.array([x, y, z]).T
         hull = spatial.ConvexHull(vertices)
         lines = hull.simplices
-        
-        axes.scatter(x, y, z)
         line_vertices = []
         for line in lines:
             line = [
@@ -240,16 +277,20 @@ if __name__ == '__main__':
 
     logger = Logger('output', 'test')
     for i in range(100):
+        pref_vec = torch.rand(3)
+        pref_vec = pref_vec / torch.sum(pref_vec)
         logger.step(
             episode = 0,
             timestep = i,
             stat_dict = {
                 'reward_a': random.uniform(-5, 5),
                 'reward_b': random.uniform(-5, 5),
-                'reward_c': random.uniform(-5, 5)
+                'reward_c': random.uniform(-5, 5),
+                'pref_vec': pref_vec
             }
         )
     logger.save_pareto_front(
+        # axes_names = ('reward_a', 'reward_b')
         axes_names = ('reward_a', 'reward_b', 'reward_c')
     )
     

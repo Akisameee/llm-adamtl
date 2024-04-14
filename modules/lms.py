@@ -15,19 +15,20 @@ from modules.peft import replace_peft_layers
 
 lora_module_classes = ["Lora_linear"]
 
-def get_dispatched_model(
+def get_model(
     config: LM_Config | RM_Config,
-    model_class: type = AutoModel,
+    dispatch: bool = True,
     device_map = 'auto'
 ):
-    # model_config = AutoConfig.from_pretrained(config.model_pretrain_path)
-    # with init_empty_weights():
-    #     model = model_class.from_config(model_config)
-    
-    # weights_path = os.path.join(config.model_pretrain_path, 'pytorch_model.bin')
-    # model = load_checkpoint_and_dispatch(
-    #     model, weights_path, device_map="auto", no_split_module_classes=["Lora_linear"]
-    # )
+    if config.model_class is None:
+        if isinstance(config, LM_Config):
+            model_class = BaseLM
+        elif isinstance(config, RM_Config):
+            model_class = RewardLM
+        else:
+            raise NotImplementedError
+    else:
+        model_class = config.model_class
     
     if model_class in [BaseLM, RewardLM]:
         full_model = model_class(config)
@@ -38,41 +39,43 @@ def get_dispatched_model(
             model = full_model.pretrained_model
         else:
             model = full_model
-    if isinstance(model, DebertaV2ForSequenceClassification):
-        setattr(model, "_no_split_modules", ["DebertaV2Layer"])
-        
-    dtype = model.dtype
-    peft_info = None
-    if config.peft_cfg is not None:
-        if config.peft_cfg.target_modules is not None:
-            model, peft_info = replace_peft_layers(
-                model = model,
-                peft_config = config.peft_cfg,
-                return_info = True
-            )
     
-    no_split_module_classes = model._get_no_split_modules(device_map) + lora_module_classes
-    if device_map != "sequential":
-        max_memory = get_balanced_memory(
-            model,
-            dtype=dtype,
-            low_zero=(device_map == "balanced_low_0"),
-            no_split_module_classes = no_split_module_classes,
-        )
+    if dispatch:
+        if isinstance(model, DebertaV2ForSequenceClassification):
+            setattr(model, "_no_split_modules", ["DebertaV2Layer"])
+            
+        dtype = model.dtype
+        peft_info = None
+        if config.peft_cfg is not None:
+            if config.peft_cfg.target_modules is not None:
+                model, peft_info = replace_peft_layers(
+                    model = model,
+                    peft_config = config.peft_cfg,
+                    return_info = True
+                )
+        
+        no_split_module_classes = model._get_no_split_modules(device_map) + lora_module_classes
+        if device_map != "sequential":
+            max_memory = get_balanced_memory(
+                model,
+                dtype=dtype,
+                low_zero=(device_map == "balanced_low_0"),
+                no_split_module_classes = no_split_module_classes,
+            )
 
-    max_memory[0] *= 0.9
-    model.tie_weights()
-    device_map = infer_auto_device_map(
-        model = model,
-        max_memory = max_memory,
-        no_split_module_classes = no_split_module_classes,
-        # verbose = True
-    )
-    model = dispatch_model(
-        model = model,
-        device_map = device_map
-    )
-    print(model.hf_device_map)
+        max_memory[0] *= 0.9
+        model.tie_weights()
+        device_map = infer_auto_device_map(
+            model = model,
+            max_memory = max_memory,
+            no_split_module_classes = no_split_module_classes,
+            # verbose = True
+        )
+        model = dispatch_model(
+            model = model,
+            device_map = device_map
+        )
+        # print(model.hf_device_map)
 
     if model_class in [BaseLM, RewardLM]:
         full_model.lm = model
@@ -357,7 +360,7 @@ if __name__ == '__main__':
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
 
-    model = get_dispatched_model(
+    model = get_model(
         config = config.model_cfg,
         model_class = AutoModelForCausalLMWithValueHead,
     )

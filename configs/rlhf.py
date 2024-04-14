@@ -1,7 +1,7 @@
 from .base import *
 from peft.tuners.lora import LoraConfig
 from peft.utils.peft_types import TaskType
-import argparse
+from trl import AutoModelForCausalLMWithValueHead
 
 from .ppo import PPO_Config
 from .peft import Lora_Config
@@ -10,6 +10,7 @@ from .model import LM_Config, RM_Config
 @dataclass
 class RLHF_Config(PPO_Config):
 
+    task_name: str = 'RLHF_train'
     accelertor_cfg: Accelertor_Config = Accelertor_Config()
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         model_name = 'casuallm',
@@ -22,6 +23,7 @@ class RLHF_Config(PPO_Config):
     )
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
+        model_class = AutoModelForCausalLMWithValueHead,
         peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 8,
@@ -56,9 +58,10 @@ class RLHF_Config(PPO_Config):
 
     n_episode: int = 5
     sample_batch_size: int = 1
-    n_sample_reuse: int = 3
+    n_sample_reuse: int = 2
     n_update_timestep: int = 8
     train_batch_size: int = 4
     n_update_epoch: int = 5
 
     output_dir: str = os.path.join('.', 'output')
+    ckpts_dir: str = os.path.join('/home', 'smliu', 'ckpts')

@@ -2,7 +2,14 @@ from .base import *
 from .peft import Peft_Config
 
 @dataclass
-class LM_Config(Base_Config):
+class Model_Config(Base_Config):
+
+    model_pretrain_path: str = None
+    model_class: type = None
+    peft_cfg: Peft_Config = None
+
+@dataclass
+class LM_Config(Model_Config):
 
     model_pretrain_path: str = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
     peft_cfg: Peft_Config = None
@@ -14,7 +21,7 @@ class LM_Config(Base_Config):
     generation_config: GenerationConfig = generation_config
 
 @dataclass
-class RM_Config(Base_Config):
+class RM_Config(Model_Config):
 
     model_pretrain_path: str = os.path.join('/home', 'smliu', 'Pretrain_Models', 'reward-model-deberta-v3-base')
     peft_cfg: Peft_Config = None

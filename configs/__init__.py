@@ -3,6 +3,7 @@ from .base import (
     HumanFeedback_Dataset_Config,
     generation_config,
     Accelertor_Config,
+    Trainer_Config,
     get_argparser,
     parse_args_into_dataclasses,
     get_dataclass_fields

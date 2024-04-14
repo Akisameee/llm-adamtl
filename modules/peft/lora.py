@@ -13,27 +13,25 @@ class Lora_Linear(Base_Adapter):
 
     def __init__(
         self,
+        config: Lora_Config,
         base_layer: nn.Module,
-        r: int,
-        lora_alpha: int = 1,
-        lora_dropout: float = 0.0,
     ) -> None:
         if not isinstance(base_layer, nn.Linear):
             raise TypeError(f'Expected base_layer type \'torch.nn.Linear\', but got \'{type(base_layer)}\'.')
         super().__init__(base_layer)
-        if r <= 0:
-            raise ValueError(f'Expected r > 0, but got r = {r}.')
+        if config.r <= 0:
+            raise ValueError(f'Expected r > 0, but got r = {config.r}.')
 
         self.in_features, self.out_features = base_layer.in_features, base_layer.out_features
-        self.lora_alpha = lora_alpha
-        self.lora_A = nn.Linear(in_features = self.in_features, out_features = r, bias = False)
-        self.lora_B = nn.Linear(in_features = r, out_features = self.out_features, bias = False)
+        self.lora_alpha = config.lora_alpha
+        self.lora_A = nn.Linear(in_features = self.in_features, out_features = config.r, bias = False)
+        self.lora_B = nn.Linear(in_features = config.r, out_features = self.out_features, bias = False)
         self.reset_lora_weight(init_weights = True)
-        if lora_dropout > 0.0:
-            self.dropout = nn.Dropout(p = lora_dropout)
+        if config.lora_dropout > 0.0:
+            self.dropout = nn.Dropout(p = config.lora_dropout)
         else:
             self.dropout = nn.Identity()
-        self.scaling = lora_alpha / r
+        self.scaling = config.lora_alpha / config.r
         self.merged = False
         self.set_adapter(enable = True)
 

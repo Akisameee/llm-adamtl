@@ -12,7 +12,7 @@ adapter_maps = {
     'lora': {
         nn.Linear: Lora_Linear
     },
-    'panacea_svd': {
+    'panacea': {
         nn.Linear: Panacea_SVD_Linear,
         Lora_Linear: Panacea_SVD_Linear
     }
@@ -32,10 +32,8 @@ def replace_peft_layers(
                 adapter_map = adapter_maps[peft_config.adapter_name]
                 if type(module) in adapter_map.keys():
                     peft_module = adapter_map[type(module)](
-                        base_layer = module,
-                        r = peft_config.r,
-                        lora_alpha = peft_config.lora_alpha,
-                        lora_dropout = peft_config.lora_dropout
+                        config = peft_config,
+                        base_layer = module
                     )
                 else:
                     raise NotImplementedError

@@ -61,6 +61,11 @@ rm_infos = {
         'prompt_prefix': '\n\nHuman: ',
         'response_prefix': '\n\nAssistant: '
     },
+
+    'gpt2-large-harmless-reward_model': {
+        'prompt_prefix': '\n\nHuman: ',
+        'response_prefix': '\n\nAssistant: '
+    },
     
     'reward-model-deberta-v3-base': {
         'prompt_prefix': '',
