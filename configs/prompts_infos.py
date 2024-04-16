@@ -29,6 +29,8 @@ model_infos = {
             top_p = 1.0,
             do_sample = True,
             eos_token_id = 32001,
+            max_length = 512,
+            max_new_tokens = 256
         )
     },
 
@@ -45,6 +47,7 @@ model_infos = {
             repetition_penalty = 0.5,
             no_repeat_ngram_size = 5,
             pad_token_id = 50256,
+            max_length = 512,
             max_new_tokens = 256
         )
     }

@@ -7,7 +7,7 @@ from random import randrange
 import os
 
 from configs import RLHF_Config
-from data.instruct_dataset import Instruct_Dataset
+from datas.instruct_dataset import Instruct_Dataset
 from modules.lms import RewardLM
 from logger import Logger
 

@@ -11,12 +11,12 @@ from trl import AutoModelForCausalLMWithValueHead
 from accelerate import Accelerator, dispatch_model
 from transformers import PreTrainedModel
 
-from data.instruct_dataset import Instruct_Dataset, instruct_collator
-from configs import RLHF_Config, LM_Config, RM_Config, model_infos, Accelertor_Config, Trainer_Config
-from modules.lms import BaseLM, RewardLM, get_model
+from datas.instruct_dataset import Instruct_Dataset, instruct_collator
+from configs import RLHF_Config, LM_Config, RM_Config, Accelertor_Config, Trainer_Config
+# from modules.lms import BaseLM, RewardLM, get_model
 from modules.ppo import PPO_Trainer, Memory
-from modules.peft import replace_peft_layers, set_all_adapters
-from modules.utils import shift, log_prob, default, masked_mean, merge_dict
+from modules.pefts import replace_peft_layers, set_all_adapters
+from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_model
 from logger import Logger
 from trl.core import LengthSampler
 
@@ -29,18 +29,18 @@ class Base_Trainer(nn.Module):
         model_cfg: LM_Config,
         ref_cfg: LM_Config = None,
         reward_cfg: RM_Config | list = None,
+        model_kwargs: dict = None,
     ):
         super().__init__()
 
         if isinstance(accelerator_cfg, Accelerator):
             self.accelerator = accelerator_cfg
         elif isinstance(accelerator_cfg, Accelertor_Config):
-            accelerator_cfg = accelerator_cfg
             self.accelerator = Accelerator(
                 log_with = accelerator_cfg.log_with,
                 gradient_accumulation_steps = accelerator_cfg.gradient_accumulation_steps
             )
-        self.dispatch_models = self.accelerator.state.num_processes == 1
+        self.dispatch_models = self.accelerator.state.num_processes == 1 and torch.cuda.device_count() > 1
 
         self.logger = Logger(
             output_dir = config.output_dir,
@@ -52,7 +52,8 @@ class Base_Trainer(nn.Module):
         # models
         self.model, model_peft_info = get_model(
             config = model_cfg,
-            dispatch = self.dispatch_models
+            dispatch = self.dispatch_models,
+            **model_kwargs
         )
         if model_peft_info:
             self.logger.info(model_peft_info)
@@ -127,15 +128,21 @@ class Base_Trainer(nn.Module):
         else:
             self.reward_models = None
         
-        self.model_name = os.path.split(model_cfg.model_pretrain_path)[-1]
-        self.model_info = model_infos[self.model_name]
+        self.model_name = model_cfg.model_name
+        self.model_info = model_cfg.model_info
         self.generation_config = self.model_info['generation_config']
         self.clean_cache_every_iter = False
 
-    def save(self, model, ckpt_dir = './checkpoint.pt'):
+    def save(self, model, ckpt_dir = './checkpoint.pt', wait_for_everyone = False, safetensor = False):
 
-        self.accelerator.wait_for_everyone()
-        self.accelerator.save_model(model, ckpt_dir)
+        if wait_for_everyone:
+            self.accelerator.wait_for_everyone()
+        if safetensor:
+            self.accelerator.save_model(model, ckpt_dir)
+        else:
+            os.mkdir(ckpt_dir)
+            unwrapped_model = self.accelerator.unwrap_model(model)
+            torch.save(unwrapped_model.state_dict(), os.path.join(ckpt_dir, 'checkpoint.pt'))
 
     def load(self, model, ckpt_dir = './checkpoint.pt'):
 

@@ -10,30 +10,37 @@ from random import randrange
 from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
 from accelerate import Accelerator
+from accelerate.utils import broadcast
 
 from base_trainer import Base_Trainer
-from data.instruct_dataset import Instruct_Dataset, instruct_collator
+from datas.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import Panacea_PPO_Config, RM_Config, model_infos
-from modules.lms import BaseLM, RewardLM, get_model
+# from modules.lms import BaseLM, RewardLM
+from modules.base import BaseLMWithValueHeads
 from modules.ppo import PPO_Trainer, Memory
-from modules.peft import replace_peft_layers, Panacea_SVD_Linear, set_all_adapters
-from modules.utils import shift, log_prob, default, masked_mean, merge_dict
+from modules.pefts import replace_peft_layers, Panacea_SVD_Linear, set_all_adapters
+from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_model
 from logger import Logger
 from trl.core import LengthSampler
 
-class Panacea_Trainer(Base_Trainer):
+class MORLHF_Trainer(Base_Trainer):
 
     def __init__(
         self,
         config: Panacea_PPO_Config
     ):
-        
+        config.model_cfg.model_class = BaseLMWithValueHeads
+
+        self.reward_names = config.reward_names
+        assert len(self.reward_names) == len(self.reward_models)
+        self.pref_dim = len(self.reward_names)
         super().__init__(
             config = config,
             accelerator_cfg = config.accelertor_cfg,
             model_cfg = config.model_cfg,
             ref_cfg = config.ref_cfg,
-            reward_cfg = config.reward_cfgs
+            reward_cfg = config.reward_cfgs,
+            model_kwargs = dict(n_v_head = self.pref_dim)
         )
 
         self.ppo_trainer = PPO_Trainer(
@@ -44,9 +51,6 @@ class Panacea_Trainer(Base_Trainer):
             logger = self.logger
         )
         
-        self.reward_names = config.reward_names
-        assert len(self.reward_names) == len(self.reward_models)
-        self.pref_dim = len(self.reward_names)
         self.retokenization = config.retokenization
         self.n_sample_reuse = config.n_sample_reuse
         self.scalariztion_type = config.scalariztion_type
@@ -54,8 +58,11 @@ class Panacea_Trainer(Base_Trainer):
         
     def sample_pref_vec(self):
         
-        pref_vec = torch.rand(self.pref_dim)
+        pref_vec = torch.rand(self.pref_dim).to(self.device)
         pref_vec = pref_vec / torch.sum(pref_vec)
+        # print('unbroadcasted', pref_vec)
+        pref_vec = broadcast(pref_vec)
+        # print('broadcasted', pref_vec)
 
         return pref_vec
     
@@ -68,7 +75,7 @@ class Panacea_Trainer(Base_Trainer):
             if isinstance(module, Panacea_SVD_Linear):
                 module.set_pref_vec(pref_vec)
 
-        self.logger.info(f'pref_vec set to {pref_vec}')
+        # self.logger.info(f'pref_vec set to {pref_vec}')
 
     @torch.no_grad()
     def get_ref_logprobs(
@@ -142,7 +149,9 @@ class Panacea_Trainer(Base_Trainer):
     ):  
         
         rm_rewards_scalar = torch.zeros_like(rms_rewards[0])
-        if self.scalariztion_type == 'ls':
+        if self.scalariztion_type is None:
+            rm_rewards_scalar = torch.stack(rms_rewards)
+        elif self.scalariztion_type == 'ls':
             for rm_rewards, pref_weight in zip(rms_rewards, pref_vec):
                 rm_rewards_scalar += rm_rewards * pref_weight
         else:
@@ -193,7 +202,7 @@ class Panacea_Trainer(Base_Trainer):
 
         timestep = 0
         updatestep = 0
-        rms_reward_records = []
+        sample_records = []
         pref_vec = self.sample_pref_vec()
         self.set_pref_vec(self.ppo_trainer.model, pref_vec)
         rlhf_bar = tqdm(
@@ -206,6 +215,7 @@ class Panacea_Trainer(Base_Trainer):
                 self.ppo_trainer.model.eval()
                 batch_size = len(prompts_ids)
                 timestep += batch_size
+                sample_record = {}
 
                 (
                     sequences,
@@ -235,7 +245,7 @@ class Panacea_Trainer(Base_Trainer):
                 )
 
                 rms_rewards = []
-                rms_reward_record = {}
+                
                 for idx, reward_model in enumerate(self.reward_models):
                     rm_rewards = self.get_rm_rewards(
                         reward_model = reward_model,
@@ -245,8 +255,8 @@ class Panacea_Trainer(Base_Trainer):
                         verbose = timestep % n_update_timestep == 0
                     )
                     rms_rewards.append(rm_rewards)
-                    rms_reward_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
-                rms_reward_records.append(rms_reward_record)
+                    sample_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
+                sample_records.append(sample_record)
                 rm_rewards_scalarized = self.scalariztion(
                     rms_rewards = rms_rewards,
                     pref_vec = pref_vec
@@ -301,13 +311,17 @@ class Panacea_Trainer(Base_Trainer):
                 rlhf_bar.update(1)
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
+                    self.accelerator.wait_for_everyone()
                     ppo_stats = [self.ppo_trainer.learn(memories)]
                     torch.cuda.empty_cache()
+
                     ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
-                    rms_reward_records_gathered = self.accelerator.gather_for_metrics(rms_reward_records)
+                    sample_records_gathered = self.accelerator.gather_for_metrics(sample_records)
                     all_ppo_stats = merge_dict(unmerged_dicts = ppo_stats_gathered, reduce = 'mean')
-                    all_rms_reward_records = merge_dict(unmerged_dicts = rms_reward_records_gathered, reduce = 'mean')
-                    all_ppo_stats.update(all_rms_reward_records)
+                    all_sample_records = merge_dict(unmerged_dicts = sample_records_gathered, reduce = 'mean')
+                    all_sample_records['pref_vec'] = pref_vec.cpu()
+                    all_ppo_stats.update(all_sample_records)
+
                     if self.accelerator.is_main_process:
                         self.logger.step(
                             episode = episode + 1,
@@ -317,7 +331,7 @@ class Panacea_Trainer(Base_Trainer):
 
                     while len(memories) > (self.n_sample_reuse - 1) * n_update_timestep:
                         memories.popleft()
-                    rms_reward_records.clear()
+                    sample_records.clear()
 
                     if max_timestep - timestep < n_update_timestep:
                         break
@@ -325,15 +339,18 @@ class Panacea_Trainer(Base_Trainer):
                         pref_vec = self.sample_pref_vec()
                         self.set_pref_vec(self.ppo_trainer.model, pref_vec)
 
+        self.accelerator.wait_for_everyone()
         self.logger.info('Panacea Training Complete')
         self.logger.save_res()
         self.logger.save_pareto_front(
-            tuple(self.reward_names)
+            tuple(self.reward_names),
+            vecs_name = 'pref_vec'
         )
-        self.save(
-            self.ppo_trainer.model,
-            os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
-        )
+        if self.accelerator.is_main_process:
+            self.save(
+                self.ppo_trainer.model,
+                os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
+            )
 
 def main():
 
@@ -359,7 +376,7 @@ def main():
     config.reward_names = ['helpful', 'harmless']
     # config.parse_args()
 
-    trainer = Panacea_Trainer(
+    trainer = MORLHF_Trainer(
         config = config
     )
     

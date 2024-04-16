@@ -1,9 +1,9 @@
 from .base import *
-from peft.tuners.lora import LoraConfig
-from peft.utils.peft_types import TaskType
-from trl import AutoModelForCausalLMWithValueHead
+# from trl import AutoModelForCausalLMWithValueHead
+# from modules.base import BaseLMWithValueHeads
 
 from .ppo import PPO_Config
+from .datasets_config import Instruct_Dataset_Config
 from .peft import Lora_Config
 from .model import LM_Config, RM_Config
 
@@ -11,9 +11,10 @@ from .model import LM_Config, RM_Config
 class RLHF_Config(PPO_Config):
 
     task_name: str = 'RLHF_train'
-    accelertor_cfg: Accelertor_Config = Accelertor_Config()
+    accelertor_cfg: Accelertor_Config = Accelertor_Config(
+        gradient_accumulation_steps = 2
+    )
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
-        model_name = 'casuallm',
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
         tokenizer_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         padding_side = 'left',
@@ -23,7 +24,7 @@ class RLHF_Config(PPO_Config):
     )
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
-        model_class = AutoModelForCausalLMWithValueHead,
+        model_class = None,
         peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 8,
@@ -56,12 +57,11 @@ class RLHF_Config(PPO_Config):
     ratio_threshold: float = 10
     value_loss_coef: float = 0.1
 
-    n_episode: int = 5
+    n_episode: int = 1
     sample_batch_size: int = 1
-    n_sample_reuse: int = 2
+    n_sample_reuse: int = 1
     n_update_timestep: int = 8
-    train_batch_size: int = 4
+    train_batch_size: int = 2
     n_update_epoch: int = 5
 
     output_dir: str = os.path.join('.', 'output')
-    ckpts_dir: str = os.path.join('/home', 'smliu', 'ckpts')

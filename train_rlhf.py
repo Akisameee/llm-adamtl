@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -11,129 +11,43 @@ from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
 from accelerate import Accelerator, dispatch_model
 
-from data.instruct_dataset import Instruct_Dataset, instruct_collator
+from base_trainer import Base_Trainer
+from datas.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import RLHF_Config, model_infos
-from modules.lms import BaseLM, RewardLM, get_model
+# from modules.lms import BaseLM, RewardLM, get_model
+from modules import BaseLMWithValueHeads
 from modules.ppo import PPO_Trainer, Memory
-from modules.peft import replace_peft_layers, set_all_adapters
+from modules.pefts import replace_peft_layers, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict
 from logger import Logger
 from trl.core import LengthSampler
 
-class RLHF_Trainer(nn.Module):
+class RLHF_Trainer(Base_Trainer):
 
     def __init__(
         self,
-        config: RLHF_Config,
-        model: AutoModelForCausalLMWithValueHead = None,
-        reward_model: RewardLM = None,
-        ref_model: BaseLM = None,
-        logger: Logger = None
+        config: RLHF_Config
     ):
-        super().__init__()
-
-        # models
-        if model is None:
-            model, model_peft_info = get_model(
-                config = config.model_cfg,
-                model_class = AutoModelForCausalLMWithValueHead
-            )
-        else:
-            model_peft_info = None
-
-        self.reward_model = reward_model
-        if self.reward_model is None:
-            self.reward_model, _ = get_model(
-                config = config.reward_cfg,
-                model_class = RewardLM
-            )
-        self.reward_model.set_freeze(freeze=True)
-        self.reward_model.eval()
-
-        self.ref_model = ref_model
-        if self.ref_model is None:
-            if model_peft_info is not None:
-                self.ref_model = None
-            else:
-                self.ref_model, _ = get_model(
-                    config = config.ref_cfg,
-                    model_class = BaseLM
-                )
-                self.ref_model.set_freeze(freeze=True)
-                self.ref_model.eval()
-                
-        optimizer = torch.optim.AdamW(
-            filter(lambda p: p.requires_grad, model.parameters()),
-            lr = config.lr,
-            weight_decay = config.weight_decay
+        config.model_cfg.model_class = BaseLMWithValueHeads
+        super().__init__(
+            config = config,
+            accelerator_cfg = config.accelertor_cfg,
+            model_cfg = config.model_cfg,
+            ref_cfg = config.ref_cfg,
+            reward_cfg = config.reward_cfg
         )
-
-        # prepare with accelerator
-        self.accelerator = Accelerator(
-            log_with = config.accelertor_cfg.log_with,
-            gradient_accumulation_steps = config.accelertor_cfg.gradient_accumulation_steps
-        )
-
-        (
-            model,
-            self.ref_model,
-            self.reward_model,
-            optimizer
-        ) = self.accelerator.prepare(
-            model,
-            self.ref_model,
-            self.reward_model,
-            optimizer
-        )
-        
-        self.logger = logger
-        if self.logger is None:
-            self.logger = Logger(
-                output_dir = config.output_dir,
-                task_name = 'RLHF_train',
-                disable = not self.accelerator.is_main_process
-            )
 
         self.ppo_trainer = PPO_Trainer(
             config = config,
-            model = model,
-            optimizer = optimizer,
+            model = self.model,
+            optimizer = self.optimizer,
             accelerator = self.accelerator,
             logger = self.logger
         )
         
-        self.model_name = os.path.split(config.model_cfg.model_pretrain_path)[-1]
-        self.model_info = model_infos[self.model_name]
-        self.generation_config = self.model_info['generation_config']
         self.retokenization = config.retokenization
         self.n_sample_reuse = config.n_sample_reuse
-        self.clean_cache_every_iter = True
         self.kl_ref_coef = config.kl_ref_coef
-        self.ckpts_dir = config.ckpts_dir
-
-        self.logger.info(config.get_args_info())
-        if model_peft_info:
-            self.logger.info(model_peft_info)
-        if self.ref_model is None:
-            self.logger.info(f'Disabling target model peft layers as reference model.')
-
-    def save(self, model, ckpt_dir = './checkpoint.pt'):
-
-        self.accelerator.wait_for_everyone()
-        self.accelerator.save_model(model, ckpt_dir)
-
-    def load(self, model, ckpt_dir = './checkpoint.pt'):
-
-        unwrapped_model = self.accelerator.unwrap_model(model)
-        path_to_checkpoint = os.path.join(ckpt_dir,"pytorch_model.bin")
-        unwrapped_model.load_state_dict(torch.load(path_to_checkpoint))
-
-    @property
-    def device(self):
-        if self.accelerator is not None:
-            return self.accelerator.device
-        else:
-            return self.ppo_trainer.model.device
     
     def compute_reward_single(
         self,
@@ -359,7 +273,7 @@ class RLHF_Trainer(nn.Module):
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
                     ppo_stats = [self.ppo_trainer.learn(memories)]
-                    # torch.cuda.empty_cache()
+                    torch.cuda.empty_cache()
                     ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
                     if self.accelerator.is_main_process:
                         self.logger.step(

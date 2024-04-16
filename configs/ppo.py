@@ -1,19 +1,17 @@
 from .base import *
-from peft.tuners.lora import LoraConfig
-from peft.utils.peft_types import TaskType
 
 from .peft import Lora_Config
+from .datasets_config import Instruct_Dataset_Config
 from .model import LM_Config, RM_Config
-
-from trl import AutoModelForCausalLMWithValueHead
 
 @dataclass
 class PPO_Config(Trainer_Config):
 
     accelertor_cfg: Accelertor_Config = Accelertor_Config()
+    dateset_cfg: Instruct_Dataset_Config = None
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
-        model_class = AutoModelForCausalLMWithValueHead,
+        model_class = None,
         peft_cfg = Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 4,

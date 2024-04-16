@@ -59,18 +59,18 @@ class Logger():
     def __init__(self, output_dir, task_name, disable = False) -> None:
         
         self.disable = disable
-        if self.disable:
-            return
         self.output_dir = output_dir
         current_time = datetime.datetime.now()
         time_str = current_time.strftime('%Y-%m-%d %H-%M-%S')
         self.dir_name = f'{task_name} {time_str}'
         self.dir = os.path.join(output_dir, self.dir_name)
-        os.mkdir(self.dir)
-
-        self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}_log.txt'))
         self.historys = None
-
+        if self.disable:
+            return
+        
+        os.mkdir(self.dir)
+        self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}_log.txt'))
+        
     def step(self, episode, timestep, stat_dict = None):
 
         if self.disable:
@@ -81,13 +81,12 @@ class Logger():
         for key, value in stat_dict.items():
             if isinstance(value, (int, float)):
                 stat_strs.append(f'{key}: {value:.4g}')
-            elif isinstance(value, torch.Tensor):
-                value = value.detach().numpy().tolist()
-                stat_strs.append(f'{key}: {value}')
-            elif isinstance(value, np.ndarray):
-                value = value.tolist()
-                stat_strs.append(f'{key}: {value}')
             else:
+                if isinstance(value, torch.Tensor):
+                    value = value.detach().numpy().tolist()
+                elif isinstance(value, np.ndarray):
+                    value = value.tolist()
+                value = [f'{num:.3f}' for num in value]
                 stat_strs.append(f'{key}: {value}')
         
         log_str += ' '.join(stat_strs)
@@ -119,6 +118,8 @@ class Logger():
         for col_name in self.historys.columns:
             if col_name in ['Episode', 'Timestep']:
                 continue
+            elif not np.issubdtype(self.historys[col_name].dtype, np.number):
+                continue
             else:
                 figure = sns.lineplot(
                     data = self.historys,
@@ -134,6 +135,7 @@ class Logger():
     def save_pareto_front(
         self,
         axes_names: tuple,
+        vecs_name: str = None,
         save_dir: str = None
     ):
         if self.disable:
@@ -143,18 +145,23 @@ class Logger():
         draw_pareto_fronts(
             dataframe = self.historys,
             axes_names = axes_names,
+            vecs_name = vecs_name,
             save_path = os.path.join(save_dir, '_'.join(axes_names) + '_pareto_front') 
         )
 
 def check_line_is_pareto_front(
-    point_line
+    point_line,
+    points
 ):
     A, B = point_line[0], point_line[1]
     k = (A[1] - B[1]) / (A[0] - B[0])
     b = A[1] - k * A[0]
 
-    if b / k < 0 and b > 0:
-        return True
+    if k < 0:
+        for point in points:
+            if point[1] - 1e-4 > k * point[0] + b:
+                return False
+            return True
     else:
         return False
     
@@ -181,7 +188,7 @@ def unit_vec(vec):
 def draw_pareto_fronts(
     dataframe: pd.DataFrame,
     axes_names: tuple = ('x', 'y', 'z'),
-    vecs_name: str = 'pref_vec',
+    vecs_name: str = None,
     save_path: str = ''
 ):
     if vecs_name:
@@ -202,22 +209,25 @@ def draw_pareto_fronts(
         lines = hull.simplices
         
         axes.scatter(x, y, alpha = alphas)
+        scaling = min([np.ptp(x.values), np.ptp(y.values)])
 
         if pref_vecs is not None:
             for i in range(len(x)):
-                pref_vec = unit_vec(pref_vecs[i]) / 3
+                pref_vec = unit_vec(pref_vecs[i]) * 0.05 * scaling
                 axes.arrow(
                     x[i], y[i],
                     pref_vec[0], pref_vec[1],
-                    alpha = alphas[i],
-                    color = 'C0', width = 0.05, head_width = 0.1, head_length = 0.1
+                    alpha = alphas[i], color = 'C0',
+                    width = 0.01 * scaling, head_width = 0.02 * scaling, head_length = 0.02 * scaling
                 )
         
         for line in lines:
-            if check_line_is_pareto_front([
-                vertices[line[0]],
-                vertices[line[1]]
-            ]):
+            if check_line_is_pareto_front(
+                [
+                    vertices[line[0]],
+                    vertices[line[1]]
+                ], points = [(x[line_[0]], y[line_[0]]) for line_ in lines]
+            ):
                 axes.plot(
                     (x[line[0]], x[line[1]]),
                     (y[line[0]], y[line[1]]),
@@ -277,20 +287,22 @@ if __name__ == '__main__':
 
     logger = Logger('output', 'test')
     for i in range(100):
-        pref_vec = torch.rand(3)
+        pref_vec = torch.rand(2)
         pref_vec = pref_vec / torch.sum(pref_vec)
         logger.step(
             episode = 0,
             timestep = i,
             stat_dict = {
-                'reward_a': random.uniform(-5, 5),
-                'reward_b': random.uniform(-5, 5),
-                'reward_c': random.uniform(-5, 5),
+                'reward_a': random.uniform(-1, 1),
+                'reward_b': random.uniform(-1, 2),
+                # 'reward_c': random.uniform(-5, 5),
                 'pref_vec': pref_vec
             }
         )
+    logger.save_res()
     logger.save_pareto_front(
-        # axes_names = ('reward_a', 'reward_b')
-        axes_names = ('reward_a', 'reward_b', 'reward_c')
+        axes_names = ('reward_a', 'reward_b'),
+        # axes_names = ('reward_a', 'reward_b', 'reward_c'),
+        vecs_name = 'pref_vec'
     )
     

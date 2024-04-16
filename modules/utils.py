@@ -7,9 +7,90 @@ import math
 from typing import Union, Literal, Optional
 from einops import rearrange
 import os
-from transformers import AutoModel, AutoConfig
+from transformers import AutoModel, AutoConfig, DebertaV2ForSequenceClassification
+from trl import AutoModelForCausalLMWithValueHead
+from accelerate import load_checkpoint_and_dispatch, init_empty_weights, dispatch_model, infer_auto_device_map
+from accelerate.utils import get_balanced_memory
 
 from configs import LM_Config, RM_Config
+from modules.pefts import replace_peft_layers
+from modules.base import BaseLM, BaseRM, BaseLMWithValueHeads
+
+lora_module_classes = ["Lora_linear"]
+
+def get_model(
+    config: LM_Config | RM_Config,
+    dispatch: bool = True,
+    device_map = 'auto',
+    **kwargs
+):
+    if config.model_class is None:
+        if isinstance(config, LM_Config):
+            model_class = BaseLM
+        elif isinstance(config, RM_Config):
+            model_class = BaseRM
+        else:
+            raise NotImplementedError
+    else:
+        model_class = config.model_class
+    
+    if model_class in [BaseLM, BaseRM, BaseLMWithValueHeads]:
+        full_model = model_class(config, **kwargs)
+        model = full_model.pretrained_model
+    else:
+        full_model = model_class.from_pretrained(config.model_pretrain_path, **kwargs)
+        if model_class in [AutoModelForCausalLMWithValueHead]:
+            model = full_model.pretrained_model
+        else:
+            model = full_model
+    
+    peft_info = None
+    if config.peft_cfg is not None:
+        if config.peft_cfg.target_modules is not None:
+            model, peft_info = replace_peft_layers(
+                model = model,
+                peft_config = config.peft_cfg,
+                return_info = True
+            )
+            
+    if dispatch:
+        dtype = model.dtype
+        if isinstance(model, DebertaV2ForSequenceClassification):
+            setattr(model, "_no_split_modules", ["DebertaV2Layer"])
+        
+        no_split_module_classes = model._get_no_split_modules(device_map) + lora_module_classes
+        if device_map != "sequential":
+            max_memory = get_balanced_memory(
+                model,
+                dtype=dtype,
+                low_zero=(device_map == "balanced_low_0"),
+                no_split_module_classes = no_split_module_classes,
+            )
+
+        max_memory[0] *= 0.9
+        model.tie_weights()
+        device_map = infer_auto_device_map(
+            model = model,
+            max_memory = max_memory,
+            no_split_module_classes = no_split_module_classes,
+            # verbose = True
+        )
+        model = dispatch_model(
+            model = model,
+            device_map = device_map
+        )
+        # print(model.hf_device_map)
+
+    if model_class in [BaseLM, BaseRM, BaseLMWithValueHeads, AutoModelForCausalLMWithValueHead]:
+        full_model.pretrained_model = model
+        if model_class == AutoModelForCausalLMWithValueHead:
+            full_model.v_head.to(model.device)
+        else:
+            full_model.post_init()
+    else:
+        full_model = model
+    
+    return full_model, peft_info
 
 def eval_decorator(fn):
 

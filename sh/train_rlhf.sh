@@ -8,8 +8,8 @@ cd $main_path
 CUDA_VISIBLE_DEVICES=0,1,2,3 \
 # accelerate launch --num_processes=1 $launch_path \
 python $launch_path \
-    --sample_batch_size 4 \
-    --dateset_cfg_tokenizer_pretrain_path $model_path \
-    --model_cfg_model_pretrain_path $model_path \
-    --ref_cfg_model_pretrain_path $model_path \
-    --model_cfg_peft_cfg_r 4
+    --sample_batch_size 1 \
+    # --dateset_cfg_tokenizer_pretrain_path $model_path \
+    # --model_cfg_model_pretrain_path $model_path \
+    # --ref_cfg_model_pretrain_path $model_path \
+    # --model_cfg_peft_cfg_r 8

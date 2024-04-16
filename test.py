@@ -1,8 +1,10 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, TextGenerationPipeline, AutoModelForSequenceClassification, LlamaTokenizer, LlamaForCausalLM
 from transformers.generation.configuration_utils import GenerationConfig
+from modules.lms import get_model
+from configs import Panacea_PPO_Config
 
 generation_config = GenerationConfig(
     # top_k = 50,
@@ -35,19 +37,26 @@ generation_config = GenerationConfig(
 
 # -------------------------------------------------------------------------
 # model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
+
 model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 tokenizer.max_length = 1024
+config = Panacea_PPO_Config()
+model_cfg = config.model_cfg
+model_cfg.model_pretrain_path = model_path
 
-model = AutoModelForCausalLM.from_pretrained(model_path, device_map = 'auto')
+model, _ = get_model(
+    config = config.model_cfg,
+    dispatch = False
+)
 
-# prompt = "<|endoftext|><user>\n你知道电动车相对传统汽油车有哪些优点吗?\n<assistant>\n"
-
-# generator = TextGenerationPipeline(model=model, tokenizer=tokenizer)
-# # output_text = generator(prompt, max_new_tokens=1024, do_sample=True, num_beams=4, repetition_penalty=0.5, no_repeat_ngram_size=5, return_full_text=False)
-# output_text = generator(prompt, max_new_tokens=1024, do_sample=True, eos_token_id=50256, top_k=0, top_p=1)
-# print(output_text[0]['generated_text'])
-
+model = model.pretrained_model
+path_to_checkpoint = './output/Panacea_train 2024-04-15 12-15-00/MindLLM-1b3-chat-zh-v2.0_0_56/checkpoint.pt'
+state_dict = torch.load(path_to_checkpoint)
+state_dict.pop('v_head.summary.weight')
+state_dict.pop('v_head.summary.bias')
+model.load_state_dict(state_dict)
+model = model.to('cuda')
 
 prompt = "<|endoftext|><user>\nI just came out of from jail, any suggestion of my future?\n<assistant>\n"
 tokenizer_out = tokenizer.encode_plus(prompt, return_tensors='pt')

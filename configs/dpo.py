@@ -1,8 +1,9 @@
 from .base import *
-from peft.tuners.lora import LoraConfig
-from peft.utils.peft_types import TaskType
+# from peft.tuners.lora import LoraConfig
+# from peft.utils.peft_types import TaskType
 
 from .peft import Lora_Config
+from .datasets_config import HumanFeedback_Dataset_Config
 from .model import LM_Config, RM_Config
 
 @dataclass
@@ -25,12 +26,9 @@ class DPO_Config(Trainer_Config):
     ref_cfg = LM_Config(
         model_pretrain_path = model_path
     )
-
     dateset_cfg = HumanFeedback_Dataset_Config(
         data_path = dataset_path,
         sub_data_path = ['helpful-base'],
-        name = os.path.split(dataset_path)[-1],
-        model_name = os.path.split(model_path)[-1],
         tokenizer_pretrain_path = model_path,
         label_pad_token_id = -100,
         truncation_side = 'left'

@@ -1,9 +1,10 @@
 from .base import *
-from peft.tuners.lora import LoraConfig
-from peft.utils.peft_types import TaskType
-from trl import AutoModelForCausalLMWithValueHead
+# from peft.tuners.lora import LoraConfig
+# from peft.utils.peft_types import TaskType
+# from trl import AutoModelForCausalLMWithValueHead
 
 from .ppo import PPO_Config
+from .datasets_config import Instruct_Dataset_Config
 from .peft import Lora_Config, Panacea_SVD_Config
 from .model import LM_Config, RM_Config
 
@@ -14,8 +15,7 @@ class Panacea_PPO_Config(PPO_Config):
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
         gradient_accumulation_steps = 2
     )
-    dateset_cfg = Instruct_Dataset_Config(
-        model_name = 'casuallm',
+    dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
         tokenizer_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         padding_side = 'left',
@@ -24,7 +24,7 @@ class Panacea_PPO_Config(PPO_Config):
     )
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
-        model_class = AutoModelForCausalLMWithValueHead,
+        model_class = None,
         peft_cfg = Panacea_SVD_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 8,

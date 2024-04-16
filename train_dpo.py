@@ -3,7 +3,7 @@ import os
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from configs import DPO_Config, parse_args_into_dataclasses
-from data import HumanFeedback_Dataset
+from datas import HumanFeedback_Dataset
 from modules.dpo import DPO_Trainer
 
 def main():

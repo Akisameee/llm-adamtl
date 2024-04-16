@@ -4,94 +4,16 @@ import os
 from einops import rearrange, repeat, reduce, pack, unpack
 from einops.layers.torch import Rearrange, Reduce
 from peft import get_peft_model
-from accelerate import load_checkpoint_and_dispatch, init_empty_weights, dispatch_model, infer_auto_device_map
-from accelerate.utils import get_balanced_memory
 
-from transformers import AutoModelForCausalLM, AutoModelForSequenceClassification, GPT2Tokenizer, GPT2Model, AutoConfig, AutoTokenizer, AutoModel, GPTNeoForCausalLM, DebertaV2ForSequenceClassification
+from transformers import AutoModelForCausalLM, AutoModelForSequenceClassification, AutoConfig, AutoTokenizer, AutoModel, GPTNeoForCausalLM, DebertaV2ForSequenceClassification
 from trl import AutoModelForCausalLMWithValueHead
 from configs import SFT_Train_Config, LM_Config, RM_Config, RLHF_Config, rm_infos
-from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_mean
-from modules.peft import replace_peft_layers
+from modules.utils import eval_decorator, top_k, top_p, gumbel_sample, masked_mean, get_model
 
-lora_module_classes = ["Lora_linear"]
-
-def get_model(
-    config: LM_Config | RM_Config,
-    dispatch: bool = True,
-    device_map = 'auto'
-):
-    if config.model_class is None:
-        if isinstance(config, LM_Config):
-            model_class = BaseLM
-        elif isinstance(config, RM_Config):
-            model_class = RewardLM
-        else:
-            raise NotImplementedError
-    else:
-        model_class = config.model_class
-    
-    if model_class in [BaseLM, RewardLM]:
-        full_model = model_class(config)
-        model = full_model.lm
-    else:
-        full_model = model_class.from_pretrained(config.model_pretrain_path)
-        if model_class == AutoModelForCausalLMWithValueHead:
-            model = full_model.pretrained_model
-        else:
-            model = full_model
-    
-    if dispatch:
-        if isinstance(model, DebertaV2ForSequenceClassification):
-            setattr(model, "_no_split_modules", ["DebertaV2Layer"])
-            
-        dtype = model.dtype
-        peft_info = None
-        if config.peft_cfg is not None:
-            if config.peft_cfg.target_modules is not None:
-                model, peft_info = replace_peft_layers(
-                    model = model,
-                    peft_config = config.peft_cfg,
-                    return_info = True
-                )
-        
-        no_split_module_classes = model._get_no_split_modules(device_map) + lora_module_classes
-        if device_map != "sequential":
-            max_memory = get_balanced_memory(
-                model,
-                dtype=dtype,
-                low_zero=(device_map == "balanced_low_0"),
-                no_split_module_classes = no_split_module_classes,
-            )
-
-        max_memory[0] *= 0.9
-        model.tie_weights()
-        device_map = infer_auto_device_map(
-            model = model,
-            max_memory = max_memory,
-            no_split_module_classes = no_split_module_classes,
-            # verbose = True
-        )
-        model = dispatch_model(
-            model = model,
-            device_map = device_map
-        )
-        # print(model.hf_device_map)
-
-    if model_class in [BaseLM, RewardLM]:
-        full_model.lm = model
-    elif model_class == AutoModelForCausalLMWithValueHead:
-        full_model.pretrained_model = model
-        full_model.v_head.to(model.device)
-    else:
-        full_model = model
-    
-    return full_model, peft_info
-
-
-class BaseLM(nn.Module):
+class BaseLMOld(nn.Module):
 
     def __init__(self, config: LM_Config, dispatch = False, **kwargs):
-        super(BaseLM, self).__init__()
+        super(BaseLMOld, self).__init__()
         
         # if dispatch:
         #     self.lm, _  = get_dispatched_model(
@@ -282,10 +204,6 @@ class RewardLM(nn.Module):
                 self.replace_instruct_prompts(prompt_text)
                 for prompt_text in prompt_texts
             ]
-            # response_texts = [
-            #     self.replace_instruct_prompts(response_text)
-            #     for response_text in response_texts
-            # ]
             tokenizer_out = self.tokenizer.batch_encode_plus(
                 batch_text_or_text_pairs = list(zip(prompt_texts, response_texts)),
                 padding = True,

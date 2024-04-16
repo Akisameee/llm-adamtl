@@ -16,8 +16,8 @@ import tqdm
 import os
 
 from configs import PPO_Config, model_infos
-from modules.lms import BaseLM, RewardLM
-from modules.base import BaseLMWithValueHead
+# from modules.lms import BaseLM, RewardLM
+from modules.base import BaseLMWithValueHeads
 from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, default, masked_whiten
 from logger import Logger
 
@@ -114,7 +114,7 @@ class PPO_Trainer(nn.Module):
     def __init__(
         self,
         config: PPO_Config,
-        model: AutoModelForCausalLMWithValueHead,
+        model: AutoModelForCausalLMWithValueHead | BaseLMWithValueHeads,
         tokenizer: AutoTokenizer = None,
         optimizer: torch.optim.Optimizer = None,
         accelerator: Accelerator = None,
@@ -124,7 +124,7 @@ class PPO_Trainer(nn.Module):
 
         # models
         self.model = model
-        self.model_info = model_infos[os.path.split(config.model_cfg.model_pretrain_path)[-1]]
+        self.model_info = config.model_cfg.model_info
         self.uni_info = model_infos['universal']
         self.model_params = filter(lambda p: p.requires_grad, self.model.parameters())
 
@@ -171,16 +171,6 @@ class PPO_Trainer(nn.Module):
         self.value_loss_coef = config.value_loss_coef
 
         self.ckpt_path = config.model_cfg.ckpt_path
-
-    def save(self, save_path = None):
-
-        if save_path is None:
-            save_path = self.ckpt_path
-        if self.accelerator is not None:
-            self.accelerator.unwrap_model(self.model).save_pretrained(save_path)
-        else:
-            self.model.save_pretrained(save_path)
-        self.tokenizer.save_pretrained(save_path)
     
     @property
     def device(self):
@@ -189,42 +179,46 @@ class PPO_Trainer(nn.Module):
         else:
             return self.model.device
         
-    def replace_instruct_prompts(
-        self,
-        target_str: str
-    ):
-        target_str = target_str.replace(self.model_info['prompt_prefix'], self.uni_info['prompt_prefix'])
-        target_str = target_str.replace(self.model_info['response_prefix'], self.uni_info['response_prefix'])
+    # def replace_instruct_prompts(
+    #     self,
+    #     target_str: str
+    # ):
+    #     target_str = target_str.replace(self.model_info['prompt_prefix'], self.uni_info['prompt_prefix'])
+    #     target_str = target_str.replace(self.model_info['response_prefix'], self.uni_info['response_prefix'])
 
-        return target_str
+    #     return target_str
         
-    def decode_single(self, input_ids, attention_mask, prompt_mask):
+    # def decode_single(self, input_ids, attention_mask, prompt_mask):
 
-        input_ids = input_ids.squeeze()
-        attention_mask = attention_mask.squeeze()
-        prompt_mask = prompt_mask.squeeze()
+    #     input_ids = input_ids.squeeze()
+    #     attention_mask = attention_mask.squeeze()
+    #     prompt_mask = prompt_mask.squeeze()
 
-        prompt_ids = input_ids[:torch.sum(prompt_mask)]
-        response_ids = input_ids[torch.sum(prompt_mask): torch.sum(attention_mask)]
+    #     prompt_ids = input_ids[:torch.sum(prompt_mask)]
+    #     response_ids = input_ids[torch.sum(prompt_mask): torch.sum(attention_mask)]
 
-        prompt = self.tokenizer.decode(prompt_ids, skip_special_tokens = True)
-        response = self.tokenizer.decode(response_ids, skip_special_tokens = True)
-        prompt = self.replace_instruct_prompts(prompt)
-        response = self.replace_instruct_prompts(response)
+    #     prompt = self.tokenizer.decode(prompt_ids, skip_special_tokens = True)
+    #     response = self.tokenizer.decode(response_ids, skip_special_tokens = True)
+    #     prompt = self.replace_instruct_prompts(prompt)
+    #     response = self.replace_instruct_prompts(response)
 
-        return prompt, response
+    #     return prompt, response
     
+    # def decode_batch(self, inputs_ids, attention_masks, prompt_masks):
+
+    #     prompts = []
+    #     responses = []
+    #     for input_ids, mask, prompt_mask in zip(inputs_ids, attention_masks, prompt_masks):
+            
+    #         prompt, response = self.decode_single(input_ids, mask, prompt_mask)
+    #         prompts.append(prompt)
+    #         responses.append(response)
+        
+    #     return prompts, responses
+
     def decode_batch(self, inputs_ids, attention_masks, prompt_masks):
 
-        prompts = []
-        responses = []
-        for input_ids, mask, prompt_mask in zip(inputs_ids, attention_masks, prompt_masks):
-            
-            prompt, response = self.decode_single(input_ids, mask, prompt_mask)
-            prompts.append(prompt)
-            responses.append(response)
-        
-        return prompts, responses
+        return self.model.decode_batch(inputs_ids, attention_masks, prompt_masks)
     
     @torch.no_grad()
     def generate_batch(
@@ -232,6 +226,7 @@ class PPO_Trainer(nn.Module):
         prompts_ids: torch.FloatTensor,
         attention_masks: torch.LongTensor,
         return_padding: bool = False,
+        use_max_length: bool = True,
         **kwargs
     ):
         
@@ -241,9 +236,12 @@ class PPO_Trainer(nn.Module):
             eos_token_id = kwargs['eos_token_id']
         kwargs['pad_token_id'] = self.tokenizer.pad_token_id
         
-        kwargs.pop('max_length')
-        if kwargs['max_new_tokens'] is None:
-            kwargs['max_new_tokens'] = 256
+        if use_max_length:
+            kwargs.pop('max_new_tokens')
+        else:
+            kwargs.pop('max_length')
+            if kwargs['max_new_tokens'] is None:
+                kwargs['max_new_tokens'] = 256
 
         inputs = {
             'input_ids': prompts_ids,
@@ -457,21 +455,6 @@ class PPO_Trainer(nn.Module):
 
                 probs = logits.softmax(dim = -1)
                 logprobs = log_prob(probs, sequences)
-
-                # rewards, kl_refs = self.compute_rewards(
-                #     rm_rewards = rm_rewards,
-                #     logprobs = old_logprobs,
-                #     ref_logprobs = ref_logprobs,
-                #     masks = action_masks
-                # )
-
-                # print(advantages, advantages.shape)
-                # old_values, advantages, returns = self.compute_advantages(
-                #     old_values,
-                #     rewards,
-                #     action_masks
-                # )
-                # print(advantages, advantages.shape)
 
                 policy_loss, value_loss = self.loss(
                     logprobs,

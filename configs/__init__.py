@@ -1,6 +1,4 @@
 from .base import (
-    Instruct_Dataset_Config,
-    HumanFeedback_Dataset_Config,
     generation_config,
     Accelertor_Config,
     Trainer_Config,
@@ -15,7 +13,14 @@ from .prompts_infos import (
     rm_infos
 )
 
+from .datasets_config import (
+    Dataset_Config,
+    Instruct_Dataset_Config,
+    HumanFeedback_Dataset_Config,
+)
+
 from .model import (
+    Model_Config,
     LM_Config,
     RM_Config
 )

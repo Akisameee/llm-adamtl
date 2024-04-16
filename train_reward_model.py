@@ -1,7 +1,7 @@
 import torch
 import time
 
-from data.instruct_dataset import Instruct_Dataset
+from datas.instruct_dataset import Instruct_Dataset
 from configs import SFT_Train_Config
 from modules.lms import RewardLM
 from torch.utils.data import DataLoader

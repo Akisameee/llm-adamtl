@@ -8,9 +8,9 @@ import os
 from peft import get_peft_model
 
 from configs import RLHF_Config
-from data.instruct_dataset import Instruct_Dataset
+from datas.instruct_dataset import Instruct_Dataset
 from modules.lms import RewardLM
-from modules.peft import replace_peft_layers
+from modules.pefts import replace_peft_layers
 from logger import Logger
 
 def collator(data):

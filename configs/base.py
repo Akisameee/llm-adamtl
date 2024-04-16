@@ -123,32 +123,6 @@ class Base_Config(object):
 
         return args_info_str
 
-@dataclass
-class Instruct_Dataset_Config(Base_Config):
-
-    model_name: str = None
-    data_path: str = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt')
-    sub_data_path: list = None
-    tokenizer_pretrain_path: str = None
-    padding_side: Optional[Literal['left', 'right']] = 'left'
-    max_len: int = 512
-    prompt_only: bool = False
-    tokenize_type: Optional[Literal['prompt_pad', 'prompt_not_pad', 'prompt_response']] = 'prompt_pad'
-    remove_chinese: bool = True
-
-@dataclass
-class HumanFeedback_Dataset_Config(Base_Config):
-
-    data_path: str = None
-    sub_data_path: list = None
-    name: str = None
-    model_name: str = None
-    tokenizer_pretrain_path: str = None
-    pad_token_id: int = None
-    label_pad_token_id: int = -100
-    truncation_side: Optional[Literal['left', 'right']] = 'left'
-    max_len: int = None
-
 # generation_config = GenerationConfig(
 #     top_k = 0.0,
 #     top_p = 1.0,

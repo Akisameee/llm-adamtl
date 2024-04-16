@@ -21,10 +21,10 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from configs import DPO_Config
-from data import HumanFeedback_Dataset, hf_collator
+from datas import HumanFeedback_Dataset, hf_collator
 from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHead
-from modules.peft import replace_peft_layers
+from modules.pefts import replace_peft_layers
 from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, default, masked_whiten, pad_to_length
 from logger import Logger
 
