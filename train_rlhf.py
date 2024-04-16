@@ -16,7 +16,7 @@ from datas.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import RLHF_Config, model_infos
 # from modules.lms import BaseLM, RewardLM, get_model
 from modules import BaseLMWithValueHeads
-from modules.ppo import PPO_Trainer, Memory
+from modules.ppo import PPO_Trainer, PPOMemory
 from modules.pefts import replace_peft_layers, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict
 from logger import Logger
@@ -245,7 +245,7 @@ class RLHF_Trainer(Base_Trainer):
                     values
                 ):
                     seq_len = torch.sum(mask).item()
-                    memories.append(Memory(*map(detach_to_cpu_, (
+                    memories.append(PPOMemory(*map(detach_to_cpu_, (
                         sequence[: seq_len],
                         mask[: seq_len],
                         action_mask[: seq_len],

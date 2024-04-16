@@ -5,7 +5,7 @@ from .base import *
 
 from .ppo import PPO_Config
 from .datasets_config import Instruct_Dataset_Config
-from .peft import Lora_Config, Panacea_SVD_Config
+from .pefts import Lora_Config, Panacea_SVD_Config
 from .model import LM_Config, RM_Config
 
 @dataclass
@@ -45,7 +45,7 @@ class Panacea_PPO_Config(PPO_Config):
     weight_decay: float = 5e-4
 
     pooled_values: bool = False
-    max_norm: bool = None
+    max_norm: float = None
     
     kl_ref_coef: float = 0.2
     kl_type: Optional[Literal['kl', 'abs', 'mse', 'full']] = 'kl'

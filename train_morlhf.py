@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -17,8 +17,9 @@ from datas.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import Panacea_PPO_Config, RM_Config, model_infos
 # from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHeads
-from modules.ppo import PPO_Trainer, Memory
-from modules.pefts import replace_peft_layers, Panacea_SVD_Linear, set_all_adapters
+from modules.ppo import PPO_Trainer, PPOMemory
+from modules.moppo import MOPPO_Trainer
+from modules.pefts import set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_model
 from logger import Logger
 from trl.core import LengthSampler
@@ -32,7 +33,6 @@ class MORLHF_Trainer(Base_Trainer):
         config.model_cfg.model_class = BaseLMWithValueHeads
 
         self.reward_names = config.reward_names
-        assert len(self.reward_names) == len(self.reward_models)
         self.pref_dim = len(self.reward_names)
         super().__init__(
             config = config,
@@ -43,8 +43,10 @@ class MORLHF_Trainer(Base_Trainer):
             model_kwargs = dict(n_v_head = self.pref_dim)
         )
 
-        self.ppo_trainer = PPO_Trainer(
+        assert len(self.reward_names) == len(self.reward_models)
+        self.ppo_trainer = MOPPO_Trainer(
             config = config,
+            pref_dim = self.pref_dim,
             model = self.model,
             optimizer = self.optimizer,
             accelerator = self.accelerator,
@@ -68,12 +70,11 @@ class MORLHF_Trainer(Base_Trainer):
     
     def set_pref_vec(
         self,
-        model: torch.nn.Module,
         pref_vec: torch.FloatTensor
     ):
-        for module in model.modules():
-            if isinstance(module, Panacea_SVD_Linear):
-                module.set_pref_vec(pref_vec)
+        self.ppo_trainer.set_pref_vec(
+            pref_vec = pref_vec
+        )
 
         # self.logger.info(f'pref_vec set to {pref_vec}')
 
@@ -150,7 +151,7 @@ class MORLHF_Trainer(Base_Trainer):
         
         rm_rewards_scalar = torch.zeros_like(rms_rewards[0])
         if self.scalariztion_type is None:
-            rm_rewards_scalar = torch.stack(rms_rewards)
+            rm_rewards_scalar = torch.stack(rms_rewards, dim = -1)
         elif self.scalariztion_type == 'ls':
             for rm_rewards, pref_weight in zip(rms_rewards, pref_vec):
                 rm_rewards_scalar += rm_rewards * pref_weight
@@ -198,13 +199,12 @@ class MORLHF_Trainer(Base_Trainer):
         max_timestep = len(dataloader) * sample_batch_size * n_episode
 
         memories = deque([])
-        length_sampler = LengthSampler(256, 300)
 
         timestep = 0
         updatestep = 0
         sample_records = []
         pref_vec = self.sample_pref_vec()
-        self.set_pref_vec(self.ppo_trainer.model, pref_vec)
+        self.set_pref_vec(pref_vec)
         rlhf_bar = tqdm(
             total = max_timestep // n_update_timestep * n_update_timestep // sample_batch_size,
             disable = not self.accelerator.is_main_process
@@ -261,7 +261,7 @@ class MORLHF_Trainer(Base_Trainer):
                     rms_rewards = rms_rewards,
                     pref_vec = pref_vec
                 )
-                
+
                 detach_to_cpu_ = lambda t: t.detach().cpu()
 
                 for (
@@ -284,7 +284,7 @@ class MORLHF_Trainer(Base_Trainer):
                     values
                 ):
                     seq_len = torch.sum(mask).item()
-                    memories.append(Memory(*map(detach_to_cpu_, (
+                    memories.append(PPOMemory(*map(detach_to_cpu_, (
                         sequence[: seq_len],
                         mask[: seq_len],
                         action_mask[: seq_len],
@@ -337,7 +337,7 @@ class MORLHF_Trainer(Base_Trainer):
                         break
                     else:
                         pref_vec = self.sample_pref_vec()
-                        self.set_pref_vec(self.ppo_trainer.model, pref_vec)
+                        self.set_pref_vec(pref_vec)
 
         self.accelerator.wait_for_everyone()
         self.logger.info('Panacea Training Complete')
@@ -355,6 +355,8 @@ class MORLHF_Trainer(Base_Trainer):
 def main():
 
     config = Panacea_PPO_Config()
+
+    config.scalariztion_type = None
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
     # sub_data_path = ['helpful-base', 'harmless-base']

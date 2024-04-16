@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import math
 import numpy as np
-from configs.peft import Peft_Config, Lora_Config
+from configs.pefts import Peft_Config, Lora_Config
 
 class Base_Adapter(nn.Module):
 

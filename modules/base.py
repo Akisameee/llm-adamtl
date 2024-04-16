@@ -337,18 +337,6 @@ class BaseLMWithValueHeads(Base_Warpper):
         self.post_init()
 
     def _init_weights(self, **kwargs):
-        r"""
-        Initializes the weights of the value head. The default initialization strategy is random.
-        Users can pass a different initialization strategy by passing the `v_head_init_strategy` argument
-        when calling `.from_pretrained`. Supported strategies are:
-        - `normal`: initializes the weights with a normal distribution.
-
-        Args:
-            **kwargs (`dict`, `optional`):
-                Additional keyword arguments, that are passed to the `ValueHead` class. These arguments
-                can contain the `v_head_init_strategy` argument as well as the `v_head_initializer_range`
-                argument.
-        """
         initializer_range = kwargs.pop("v_head_initializer_range", 0.2)
         # random init by default
         init_strategy = kwargs.pop("v_head_init_strategy", None)
@@ -367,22 +355,6 @@ class BaseLMWithValueHeads(Base_Warpper):
         attention_mask=None,
         **kwargs,
     ):
-        r"""
-        Applies a forward pass to the wrapped model and returns the logits of the value head.
-
-        Args:
-            input_ids (`torch.LongTensor` of shape `(batch_size, sequence_length)`):
-                Indices of input sequence tokens in the vocabulary.
-            past_key_values (`tuple(tuple(torch.FloatTensor))`, `optional`):
-                Contains pre-computed hidden-states (key and values in the attention blocks) as computed by the model
-                (see `past_key_values` input) to speed up sequential decoding.
-            attention_mask (`torch.FloatTensor` of shape `(batch_size, sequence_length)`, `optional`):
-                Mask to avoid performing attention on padding token indices. Mask values selected in ``[0, 1]``:
-                - 1 for tokens that are **not masked**,
-                - 0 for tokens that are **masked**.
-            kwargs (`dict`, `optional`):
-                Additional keyword arguments, that are passed to the wrapped model.
-        """
         kwargs["output_hidden_states"] = True  # this had already been set in the LORA / PEFT examples
         kwargs["past_key_values"] = past_key_values
 
@@ -404,7 +376,7 @@ class BaseLMWithValueHeads(Base_Warpper):
             value = v_head(last_hidden_state).squeeze(-1)
             values.append(value)
         if self.n_v_head > 1:
-            values = torch.stack(values)
+            values = torch.stack(values, dim = -1)
         else:
             values = values[0]
 

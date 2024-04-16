@@ -4,7 +4,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, TextGenerationPipeline, AutoModelForSequenceClassification, LlamaTokenizer, LlamaForCausalLM
 from transformers.generation.configuration_utils import GenerationConfig
 from modules.utils import get_model
-from modules.base import BaseLMWithValueHeads
+from modules.base import BaseLMWithValueHeads, BaseLM
 from configs import Panacea_PPO_Config, RLHF_Config
 
 generation_config = GenerationConfig(
@@ -26,14 +26,14 @@ tokenizer.max_length = 1024
 config = Panacea_PPO_Config()
 model_cfg = config.model_cfg
 model_cfg.model_pretrain_path = model_path
-model_cfg.model_class = BaseLMWithValueHeads
+model_cfg.model_class = BaseLM
 model, _ = get_model(
     config = config.model_cfg,
     dispatch = False
 )
 
 model = model.pretrained_model
-path_to_checkpoint = './output/Panacea_train 2024-04-16 23-05-04/MindLLM-1b3-chat-zh-v2.0_0_32/checkpoint.pt'
+path_to_checkpoint = './output/Panacea_train 2024-04-17 01-39-30/MindLLM-1b3-chat-zh-v2.0_0_24/checkpoint.pt'
 state_dict = torch.load(path_to_checkpoint)
 model.load_state_dict(state_dict, strict = False)
 model = model.to('cuda')

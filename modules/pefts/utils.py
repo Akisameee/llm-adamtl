@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import torch
 import torch.nn as nn
-from configs.peft import Peft_Config, Lora_Config
+from configs.pefts import Peft_Config, Lora_Config
 
 from modules.pefts.base import Base_Adapter
 from modules.pefts import Lora_Linear, Panacea_SVD_Linear

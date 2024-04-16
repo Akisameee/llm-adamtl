@@ -1,5 +1,5 @@
 from configs.base import *
-from configs.peft import Peft_Config
+from configs.pefts import Peft_Config
 
 from configs.prompts_infos import model_infos, rm_infos
 

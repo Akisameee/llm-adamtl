@@ -14,7 +14,7 @@ from transformers import PreTrainedModel
 from datas.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import RLHF_Config, LM_Config, RM_Config, Accelertor_Config, Trainer_Config
 # from modules.lms import BaseLM, RewardLM, get_model
-from modules.ppo import PPO_Trainer, Memory
+from modules.ppo import PPO_Trainer, PPOMemory
 from modules.pefts import replace_peft_layers, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_model
 from logger import Logger

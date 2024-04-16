@@ -45,7 +45,7 @@ from .panacea import (
     Panacea_PPO_Config
 )
 
-from .peft import (
+from .pefts import (
     Peft_Config,
     Lora_Config
 )

@@ -2,7 +2,7 @@ from .base import *
 # from peft.tuners.lora import LoraConfig
 # from peft.utils.peft_types import TaskType
 
-from .peft import Lora_Config
+from .pefts import Lora_Config
 from .datasets_config import HumanFeedback_Dataset_Config
 from .model import LM_Config, RM_Config
 

@@ -7,7 +7,7 @@ import numpy as np
 # from configs.peft_configs import Peft_Config, Lora_Config
 import peft
 
-from configs.peft import Panacea_SVD_Config
+from configs.pefts import Panacea_SVD_Config
 from modules.pefts.base import Base_Adapter
 from modules.pefts.lora import Lora_Linear
 

@@ -42,7 +42,7 @@ PPOGenerationReturn = namedtuple(
     ]
 )
 
-Memory = namedtuple(
+PPOMemory = namedtuple(
     'Memory',
     [
         'sequence',
@@ -218,7 +218,7 @@ class PPO_Trainer(nn.Module):
 
     def decode_batch(self, inputs_ids, attention_masks, prompt_masks):
 
-        return self.model.decode_batch(inputs_ids, attention_masks, prompt_masks)
+        return self.accelerator.unwrap_model(self.model).decode_batch(inputs_ids, attention_masks, prompt_masks)
     
     @torch.no_grad()
     def generate_batch(
@@ -382,7 +382,7 @@ class PPO_Trainer(nn.Module):
 
     def learn(
         self,
-        memories: Deque[Memory]
+        memories: Deque[PPOMemory]
     ):
         # stack all data stored in the memories
         (
