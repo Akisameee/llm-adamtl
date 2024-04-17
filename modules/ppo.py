@@ -617,3 +617,13 @@ class PPO_Trainer(nn.Module):
         }
 
         return train_stats
+    
+    def catch_cuda_error(func):
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except RuntimeError:
+                if 'logger' in kwargs.keys():
+                    kwargs['logger'].warning('CUDA RuntimeError, skipping batch.')
+                torch.cuda.empty_cache()
+        return wrapper

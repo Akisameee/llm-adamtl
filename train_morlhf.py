@@ -2,6 +2,7 @@ import os
 # os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
+import numpy as np
 from torch.utils.data import DataLoader
 from einops import rearrange, repeat, reduce
 from collections import deque
@@ -57,6 +58,7 @@ class MORLHF_Trainer(Base_Trainer):
         self.n_sample_reuse = config.n_sample_reuse
         self.scalariztion_type = config.scalariztion_type
         self.kl_ref_coef = config.kl_ref_coef
+        self.n_save_time = config.n_save_time
         
     def sample_pref_vec(self):
         
@@ -205,10 +207,15 @@ class MORLHF_Trainer(Base_Trainer):
         sample_records = []
         pref_vec = self.sample_pref_vec()
         self.set_pref_vec(pref_vec)
-        rlhf_bar = tqdm(
-            total = max_timestep // n_update_timestep * n_update_timestep // sample_batch_size,
+        tdqm_total = max_timestep // n_update_timestep * n_update_timestep // sample_batch_size
+        tqdm_bar = tqdm(
+            total = tdqm_total,
             disable = not self.accelerator.is_main_process
         )
+        save_timestep = np.linspace(0, tdqm_total, self.n_save_time + 1, endpoint=True)[1:]
+        save_timestep = np.round(save_timestep, 0).astype(int)
+        save_time = 0
+        self.logger.info(f'Save timesteps:{save_timestep}.')
         for episode in range(n_episode):
             for prompts_ids, attention_masks, prompt_texts in dataloader:
                 
@@ -253,6 +260,7 @@ class MORLHF_Trainer(Base_Trainer):
                         masks = masks,
                         action_masks = action_masks,
                         verbose = timestep % n_update_timestep == 0
+                        # verbose = True
                     )
                     rms_rewards.append(rm_rewards)
                     sample_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
@@ -308,8 +316,9 @@ class MORLHF_Trainer(Base_Trainer):
                     )
                     torch.cuda.empty_cache()
                 
-                rlhf_bar.update(1)
+                tqdm_bar.update(1)
                 if timestep >= (updatestep + 1) * n_update_timestep:
+                    # try:
                     updatestep += 1
                     self.accelerator.wait_for_everyone()
                     ppo_stats = [self.ppo_trainer.learn(memories)]
@@ -333,11 +342,19 @@ class MORLHF_Trainer(Base_Trainer):
                         memories.popleft()
                     sample_records.clear()
 
+                    if tqdm_bar.n >= save_timestep[save_time]:
+                        if self.accelerator.is_main_process:
+                            self.save(
+                                self.ppo_trainer.model,
+                                os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
+                            )
+                        save_time += 1
+
                     if max_timestep - timestep < n_update_timestep:
                         break
                     else:
                         pref_vec = self.sample_pref_vec()
-                        self.set_pref_vec(pref_vec)
+                        self.set_pref_vec(pref_vec)  
 
         self.accelerator.wait_for_everyone()
         self.logger.info('Panacea Training Complete')
@@ -346,11 +363,11 @@ class MORLHF_Trainer(Base_Trainer):
             tuple(self.reward_names),
             vecs_name = 'pref_vec'
         )
-        if self.accelerator.is_main_process:
-            self.save(
-                self.ppo_trainer.model,
-                os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
-            )
+        # if self.accelerator.is_main_process:
+        #     self.save(
+        #         self.ppo_trainer.model,
+        #         os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
+        #     )
 
 def main():
 
@@ -360,7 +377,7 @@ def main():
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
     # sub_data_path = ['helpful-base', 'harmless-base']
-    sub_data_path = ['harmless-base']
+    sub_data_path = ['helpful-base']
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 

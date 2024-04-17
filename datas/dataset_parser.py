@@ -12,7 +12,7 @@ from transformers import AutoTokenizer, AutoConfig
 from configs import dataset_infos, model_infos, Dataset_Config
 
 csv.field_size_limit(10000000)
-TEST = 0
+TEST = 128
 
 def has_chinese(str_check):
 

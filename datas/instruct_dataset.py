@@ -107,7 +107,7 @@ class Instruct_Dataset():
                 return_tensors = 'pt',
                 return_token_type_ids = False
             )
-            if tokenizer_out['input_ids'].size(-1) > 0.75 * self.max_len:
+            if tokenizer_out['input_ids'].size(-1) > 0.5 * self.max_len:
                 continue
             input_ids.append(tokenizer_out['input_ids'])
             attention_mask.append(tokenizer_out['attention_mask'])

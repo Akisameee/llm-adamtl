@@ -104,8 +104,13 @@ class Logger():
 
         if self.disable:
             return
-        
         self.logger.info(log_str)
+
+    def warning(self, log_str):
+
+        if self.disable:
+            return
+        self.logger.warning(log_str)
 
     def save_res(
         self,
@@ -114,7 +119,11 @@ class Logger():
         if self.disable:
             return
         
-        self.historys.to_csv(os.path.join(self.dir, 'train_result.csv'))
+        save_dir = self.dir if save_dir is None else save_dir
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        self.historys.to_csv(os.path.join(save_dir, 'train_result.csv'))
         for col_name in self.historys.columns:
             if col_name in ['Episode', 'Timestep']:
                 continue
@@ -127,7 +136,7 @@ class Logger():
                     y = col_name
                 )
                 figure.get_figure().savefig(
-                    os.path.join(self.dir, col_name) if save_dir is None else save_dir,
+                    os.path.join(save_dir, col_name),
                     dpi = 400
                 )
                 plt.close()
@@ -142,6 +151,9 @@ class Logger():
             return
 
         save_dir = self.dir if save_dir is None else save_dir
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        
         draw_pareto_fronts(
             dataframe = self.historys,
             axes_names = axes_names,
