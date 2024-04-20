@@ -5,7 +5,7 @@ model_path=/home/share/models/huggingface/bit-dny/MindLLM
 
 cd $main_path
 
-CUDA_VISIBLE_DEVICES=0,1,7 \
+CUDA_VISIBLE_DEVICES=0,1,2 \
 accelerate launch --num_processes=3 $launch_path \
 # python $launch_path \
 #     --sample_batch_size 1 \

@@ -13,7 +13,7 @@ class Panacea_PPO_Config(PPO_Config):
 
     task_name: str = 'Panacea_train'
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
-        gradient_accumulation_steps = 2
+        gradient_accumulation_steps = 4
     )
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
@@ -26,9 +26,9 @@ class Panacea_PPO_Config(PPO_Config):
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         model_class = None,
         peft_cfg = Panacea_SVD_Config(
-            target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
-            r = 8,
-            lora_alpha = 32,
+            target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj'],
+            r = 6,
+            lora_alpha = 64,
             lora_dropout = 0.1,
             pref_dim = 2
         )
@@ -36,8 +36,12 @@ class Panacea_PPO_Config(PPO_Config):
     ref_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
     )
-    reward_cfgs: list[RM_Config] = field(default_factory=list)
-    reward_names: list[str] = field(default_factory=list)
+    reward_cfg_0: RM_Config = None
+    reward_name_0: str = None
+    reward_cfg_1: RM_Config = None
+    reward_name_1: str = None
+    reward_cfg_2: RM_Config = None
+    reward_name_2: str = None
 
     retokenization: bool = True
     
@@ -61,8 +65,8 @@ class Panacea_PPO_Config(PPO_Config):
     n_episode: int = 1
     sample_batch_size: int = 1
     n_sample_reuse: int = 1
-    n_update_timestep: int = 8
-    train_batch_size: int = 2
+    n_update_timestep: int = 16
+    train_batch_size: int = 1
     n_update_epoch: int = 5
 
     n_save_time: int = 3

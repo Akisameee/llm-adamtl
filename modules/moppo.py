@@ -4,9 +4,7 @@ import torch.nn.functional as F
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import Dataset, DataLoader
 from collections import deque, namedtuple
-from einops import rearrange, repeat, reduce
 from einops.layers.torch import Rearrange
-from beartype.typing import List, Optional, Callable, Deque
 from functools import partial
 from trl import AutoModelForCausalLMWithValueHead
 from transformers import AutoTokenizer
@@ -66,7 +64,7 @@ class MOPPO_Trainer(PPO_Trainer):
 
     def learn(
         self,
-        memories: Deque[PPOMemory]
+        memories: deque[PPOMemory]
     ):
         # stack all data stored in the memories
         (

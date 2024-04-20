@@ -69,7 +69,7 @@ class Logger():
             return
         
         os.mkdir(self.dir)
-        self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}_log.txt'))
+        self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}.log'))
         
     def step(self, episode, timestep, stat_dict = None):
 
@@ -209,6 +209,7 @@ def draw_pareto_fronts(
         pref_vecs = None
     
     alphas = np.linspace(0.1, 1, len(dataframe))
+    
     if len(axes_names) == 2:
         fig = plt.figure()
         axes = fig.add_subplot(111)
@@ -219,13 +220,14 @@ def draw_pareto_fronts(
         vertices = np.array([x, y]).T
         hull = spatial.ConvexHull(vertices)
         lines = hull.simplices
-        
-        axes.scatter(x, y, alpha = alphas)
-        scaling = min([np.ptp(x.values), np.ptp(y.values)])
+
+        scaling = min([np.ptp(x.values), np.ptp(y.values)]) / np.log(len(dataframe))
+
+        axes.scatter(x, y, alpha = alphas, s = 25 * scaling)
 
         if pref_vecs is not None:
             for i in range(len(x)):
-                pref_vec = unit_vec(pref_vecs[i]) * 0.05 * scaling
+                pref_vec = unit_vec(pref_vecs[i]) * 0.1 * scaling
                 axes.arrow(
                     x[i], y[i],
                     pref_vec[0], pref_vec[1],
@@ -233,12 +235,14 @@ def draw_pareto_fronts(
                     width = 0.01 * scaling, head_width = 0.02 * scaling, head_length = 0.02 * scaling
                 )
         
+        hull_points = [(x[p], y[p]) for p in np.unique(lines)]
+        print(np.unique(lines))
         for line in lines:
             if check_line_is_pareto_front(
                 [
                     vertices[line[0]],
                     vertices[line[1]]
-                ], points = [(x[line_[0]], y[line_[0]]) for line_ in lines]
+                ], points = hull_points
             ):
                 axes.plot(
                     (x[line[0]], x[line[1]]),
@@ -298,15 +302,18 @@ def draw_pareto_fronts(
 if __name__ == '__main__':
 
     logger = Logger('output', 'test')
-    for i in range(100):
-        pref_vec = torch.rand(2)
+    pref_dim = 2
+    for i in range(2000):
+        pref_vec = torch.rand(pref_dim)
         pref_vec = pref_vec / torch.sum(pref_vec)
+        vec_len = random.uniform(0, 2)
+        vec_angle = (torch.rand(pref_dim) - 0.5).numpy().tolist()
         logger.step(
             episode = 0,
             timestep = i,
             stat_dict = {
-                'reward_a': random.uniform(-1, 1),
-                'reward_b': random.uniform(-1, 2),
+                'reward_a': vec_angle[0] * vec_len,
+                'reward_b': vec_angle[1] * vec_len,
                 # 'reward_c': random.uniform(-5, 5),
                 'pref_vec': pref_vec
             }

@@ -64,4 +64,6 @@ class RLHF_Config(PPO_Config):
     train_batch_size: int = 2
     n_update_epoch: int = 5
 
+    n_save_time: int = 3
     output_dir: str = os.path.join('.', 'output')
+    

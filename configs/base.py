@@ -93,7 +93,10 @@ class Base_Config(object):
     def parse_args(self):
 
         parser = argparse.ArgumentParser()
-        branches, fields = self.get_dataclass_fields(dataclass = type(self))
+        branches, fields = self.get_dataclass_fields(
+            dataclass = type(self),
+            default = self
+        )
 
         for name, ftype, fdefault in fields:
             if typing.get_origin(ftype) == typing.Union:

@@ -33,18 +33,28 @@ class MORLHF_Trainer(Base_Trainer):
     ):
         config.model_cfg.model_class = BaseLMWithValueHeads
 
-        self.reward_names = config.reward_names
+        self.reward_names = []
+        self.reward_cfgs = []
+        for i in range(3):
+            reward_cfg = getattr(config, f'reward_cfg_{i}')
+            reward_name = getattr(config, f'reward_name_{i}')
+            if reward_cfg is not None and reward_name is not None:
+                self.reward_cfgs.append(reward_cfg)
+                self.reward_names.append(reward_name)
+
         self.pref_dim = len(self.reward_names)
+        if self.pref_dim <= 1:
+            raise ValueError(f'Expected pref_dim > 1, but got pref_dim = {self.pref_dim}')
+
         super().__init__(
             config = config,
             accelerator_cfg = config.accelertor_cfg,
             model_cfg = config.model_cfg,
             ref_cfg = config.ref_cfg,
-            reward_cfg = config.reward_cfgs,
+            reward_cfg = self.reward_cfgs,
             model_kwargs = dict(n_v_head = self.pref_dim)
         )
-
-        assert len(self.reward_names) == len(self.reward_models)
+        
         self.ppo_trainer = MOPPO_Trainer(
             config = config,
             pref_dim = self.pref_dim,
@@ -145,7 +155,7 @@ class MORLHF_Trainer(Base_Trainer):
 
         return rm_rewards
     
-    def scalariztion(
+    def reward_scalariztion(
         self,
         rms_rewards: list[torch.FloatTensor],
         pref_vec: torch.FloatTensor
@@ -207,15 +217,12 @@ class MORLHF_Trainer(Base_Trainer):
         sample_records = []
         pref_vec = self.sample_pref_vec()
         self.set_pref_vec(pref_vec)
-        tdqm_total = max_timestep // n_update_timestep * n_update_timestep // sample_batch_size
         tqdm_bar = tqdm(
-            total = tdqm_total,
+            total = max_timestep // n_update_timestep * n_update_timestep // sample_batch_size,
             disable = not self.accelerator.is_main_process
         )
-        save_timestep = np.linspace(0, tdqm_total, self.n_save_time + 1, endpoint=True)[1:]
-        save_timestep = np.round(save_timestep, 0).astype(int)
-        save_time = 0
-        self.logger.info(f'Save timesteps:{save_timestep}.')
+        
+        self.get_save_timesteps(self.n_save_time, tqdm_bar.total)
         for episode in range(n_episode):
             for prompts_ids, attention_masks, prompt_texts in dataloader:
                 
@@ -265,7 +272,7 @@ class MORLHF_Trainer(Base_Trainer):
                     rms_rewards.append(rm_rewards)
                     sample_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
                 sample_records.append(sample_record)
-                rm_rewards_scalarized = self.scalariztion(
+                rm_rewards_scalarized = self.reward_scalariztion(
                     rms_rewards = rms_rewards,
                     pref_vec = pref_vec
                 )
@@ -342,13 +349,12 @@ class MORLHF_Trainer(Base_Trainer):
                         memories.popleft()
                     sample_records.clear()
 
-                    if tqdm_bar.n >= save_timestep[save_time]:
+                    if self.check_if_save(tqdm_bar.n):
                         if self.accelerator.is_main_process:
                             self.save(
                                 self.ppo_trainer.model,
                                 os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
                             )
-                        save_time += 1
 
                     if max_timestep - timestep < n_update_timestep:
                         break
@@ -363,11 +369,6 @@ class MORLHF_Trainer(Base_Trainer):
             tuple(self.reward_names),
             vecs_name = 'pref_vec'
         )
-        # if self.accelerator.is_main_process:
-        #     self.save(
-        #         self.ppo_trainer.model,
-        #         os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
-        #     )
 
 def main():
 
@@ -377,7 +378,7 @@ def main():
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
     # sub_data_path = ['helpful-base', 'harmless-base']
-    sub_data_path = ['helpful-base']
+    sub_data_path = ['harmless-base']
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
@@ -388,12 +389,11 @@ def main():
     
     rm_path_1 = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
     rm_path_2 = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-harmless-reward_model')
-    config.reward_cfgs = [
-        RM_Config(model_pretrain_path = rm_path_1),
-        RM_Config(model_pretrain_path = rm_path_2)
-    ]
-    config.reward_names = ['helpful', 'harmless']
-    # config.parse_args()
+    config.reward_cfg_0 = RM_Config(model_pretrain_path = rm_path_1)
+    config.reward_cfg_1 = RM_Config(model_pretrain_path = rm_path_2)
+    config.reward_name_0 = 'helpful'
+    config.reward_name_1 = 'harmless'
+    config.parse_args()
 
     trainer = MORLHF_Trainer(
         config = config

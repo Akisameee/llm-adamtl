@@ -1,9 +1,11 @@
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+import sys
+sys.path.insert(0, '/home/smliu/RLHF')
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, TextGenerationPipeline, AutoModelForSequenceClassification, LlamaTokenizer, LlamaForCausalLM
 from transformers.generation.configuration_utils import GenerationConfig
-from modules.lms import get_model
+from modules.utils import get_model
 from configs import Panacea_PPO_Config
 
 generation_config = GenerationConfig(
@@ -18,28 +20,30 @@ generation_config = GenerationConfig(
     pad_token_id = 50256
 )
 
-# model_path = '/home/share/models/huggingface/openlm-research/open_llama_3b'
-# tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast = False)
+# model_path = '/home/smliu/huggingface/openlm-research/open_llama_3b_v2'
+# tokenizer = LlamaTokenizer.from_pretrained(model_path)
 # # tokenizer.max_length = 1024
 
-# model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map = 'auto')
+# model = LlamaForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map = 'auto')
 
 # prompt = "Q: What is the largest animal?\nA: "
 
-# tokenizer_out = tokenizer.encode_plus(prompt, return_tensors='pt', add_special_tokens = False)
-# print(tokenizer.decode(tokenizer_out['input_ids'].squeeze()))
+# tokenizer_out = tokenizer(prompt, return_tensors='pt')
+# # print(tokenizer.decode(tokenizer_out['input_ids'].squeeze()))
 # tokenizer_out = {k: v.to(model.device) for k, v in tokenizer_out.items()}
 # # generation_config.max_new_tokens = 1024
-# sequence = model.generate(**tokenizer_out, max_new_tokens = 512)
+# sequence = model.generate(tokenizer_out['input_ids'], max_new_tokens = 32)
 
 # output_text = tokenizer.decode(sequence.squeeze())
 # print(output_text)
 
 # -------------------------------------------------------------------------
-# model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
+tokenizer_path = '/home/share/ours_llm/blue_space'
+model_path = '/home/share/ours_llm/models/model3b/checkpoint-80000'
+# model_path = '/home/share/models/huggingface/openlm-research/open_llama_3b'
 
-model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
-tokenizer = AutoTokenizer.from_pretrained(model_path)
+# model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, use_fast = False)
 tokenizer.max_length = 1024
 config = Panacea_PPO_Config()
 model_cfg = config.model_cfg
@@ -49,16 +53,10 @@ model, _ = get_model(
     config = config.model_cfg,
     dispatch = False
 )
-
-model = model.pretrained_model
-path_to_checkpoint = './output/Panacea_train 2024-04-15 12-15-00/MindLLM-1b3-chat-zh-v2.0_0_56/checkpoint.pt'
-state_dict = torch.load(path_to_checkpoint)
-state_dict.pop('v_head.summary.weight')
-state_dict.pop('v_head.summary.bias')
-model.load_state_dict(state_dict)
 model = model.to('cuda')
 
-prompt = "<|endoftext|><user>\nI just came out of from jail, any suggestion of my future?\n<assistant>\n"
+# prompt = "<|endoftext|><user>\nI just came out of from jail, any suggestion of my future?\n<assistant>\n"
+prompt = "<s>[INST]I just came out of from jail, any suggestion of my future?[/INST]"
 tokenizer_out = tokenizer.encode_plus(prompt, return_tensors='pt')
 tokenizer_out = {k: v.to(model.device) for k, v in tokenizer_out.items()}
 generation_config.max_new_tokens = 1024

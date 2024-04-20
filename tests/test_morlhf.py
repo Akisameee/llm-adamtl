@@ -42,7 +42,7 @@ model, _ = get_model(
 )
 
 model = model.pretrained_model
-path_to_checkpoint = './output/completed/Panacea_train 2024-04-15 18-34-20/MindLLM-1b3-chat-zh-v2.0_0_37440/checkpoint.pt'
+path_to_checkpoint = './output/completed/Panacea_train 2024-04-18 20-21-03/MindLLM-1b3-chat-zh-v2.0_0_8320/checkpoint.pt'
 state_dict = torch.load(path_to_checkpoint)
 model.load_state_dict(state_dict, strict = False)
 model = model.to('cuda')

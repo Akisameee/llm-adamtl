@@ -1,10 +1,8 @@
-from accelerate import Accelerator
-from torch.nn.modules import Module
 from modules.manipulators.base import *
 
 class Linear_Scalarization(Base_Manipulator):
 
-    def __init__(self, model: Module, accelerator: Accelerator, pref_dim: int) -> None:
+    def __init__(self, model: nn.Module, accelerator: Accelerator, pref_dim: int) -> None:
         super().__init__(model, accelerator, pref_dim)
 
     def get_weighted_loss(self, losses: torch.Tensor):
@@ -18,7 +16,7 @@ class Linear_Scalarization(Base_Manipulator):
 
 class ScaleInvariant_Linear_Scalarization(Base_Manipulator):
 
-    def __init__(self, model: Module, accelerator: Accelerator, pref_dim: int) -> None:
+    def __init__(self, model: nn.Module, accelerator: Accelerator, pref_dim: int) -> None:
         super().__init__(model, accelerator, pref_dim)
 
     def get_weighted_loss(self, losses: torch.Tensor):

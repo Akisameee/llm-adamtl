@@ -10,6 +10,7 @@ from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
 from accelerate import Accelerator, dispatch_model
 from transformers import PreTrainedModel
+import numpy as np
 
 from datas.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import RLHF_Config, LM_Config, RM_Config, Accelertor_Config, Trainer_Config
@@ -18,7 +19,6 @@ from modules.ppo import PPO_Trainer, PPOMemory
 from modules.pefts import replace_peft_layers, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_model
 from logger import Logger
-from trl.core import LengthSampler
 
 class Base_Trainer(nn.Module):
 
@@ -154,3 +154,26 @@ class Base_Trainer(nn.Module):
     def device(self):
         
         return self.accelerator.device
+    
+    def get_save_timesteps(
+        self,
+        n_save_time: int,
+        n_timestep: int
+    ):
+        save_timesteps = np.linspace(0, n_timestep, n_save_time + 1, endpoint = True)[1:]
+        self.save_timesteps = np.round(save_timesteps, 0).astype(int)
+        self.logger.info(f'Save timesteps:{self.save_timesteps}.')
+        self.save_time = 0
+    
+    def check_if_save(
+        self,
+        timestep: int
+    ):
+        if self.save_time >= len(self.save_timesteps):
+            self.logger.warning('Save timesteps maxed out.')
+            return False
+        if timestep >= self.save_timesteps[self.save_time]:
+            self.save_time += 1
+            return True
+        else:
+            return False

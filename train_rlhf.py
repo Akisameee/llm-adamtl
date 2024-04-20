@@ -48,6 +48,7 @@ class RLHF_Trainer(Base_Trainer):
         self.retokenization = config.retokenization
         self.n_sample_reuse = config.n_sample_reuse
         self.kl_ref_coef = config.kl_ref_coef
+        self.n_save_time = config.n_save_time
     
     def compute_reward_single(
         self,
@@ -177,10 +178,12 @@ class RLHF_Trainer(Base_Trainer):
 
         timestep = 0
         updatestep = 0
-        rlhf_bar = tqdm(
+        tqdm_bar = tqdm(
             total = max_timestep // n_update_timestep * n_update_timestep // sample_batch_size,
             disable = not self.accelerator.is_main_process
         )
+
+        self.get_save_timesteps(self.n_save_time, tqdm_bar.total)
         for episode in range(n_episode):
             for prompts_ids, attention_masks, prompt_texts in dataloader:
                 
@@ -269,7 +272,7 @@ class RLHF_Trainer(Base_Trainer):
                     )
                     torch.cuda.empty_cache()
                 
-                rlhf_bar.update(1)
+                tqdm_bar.update(1)
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
                     ppo_stats = [self.ppo_trainer.learn(memories)]
@@ -284,8 +287,18 @@ class RLHF_Trainer(Base_Trainer):
                                 reduce = 'mean'
                             )
                         )
+
+                        
                     while len(memories) > (self.n_sample_reuse - 1) * n_update_timestep:
                         memories.popleft()
+
+                    if self.check_if_save(tqdm_bar.n):
+                        if self.accelerator.is_main_process:
+                            self.save(
+                                self.ppo_trainer.model,
+                                os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
+                            )
+
                     if max_timestep - timestep < n_update_timestep:
                         break
 

@@ -50,6 +50,42 @@ model_infos = {
             max_length = 512,
             max_new_tokens = 256
         )
+    },
+
+    'MindLLM': {
+        'prompt_prefix': '[INST]',
+        'response_prefix': '[/INST]',
+        'eos_token_id': 50256,
+        'generation_config': GenerationConfig(
+            top_k = 50,
+            top_p = 1.0,
+            do_sample = True,
+            eos_token_id = 50256,
+            num_beams = 2,
+            repetition_penalty = 0.5,
+            no_repeat_ngram_size = 5,
+            pad_token_id = 50256,
+            max_length = 512,
+            max_new_tokens = 256
+        )
+    },
+
+    'checkpoint-80000': {
+        'prompt_prefix': '[INST]',
+        'response_prefix': '[/INST]',
+        'eos_token_id': 50256,
+        'generation_config': GenerationConfig(
+            top_k = 50,
+            top_p = 1.0,
+            do_sample = True,
+            eos_token_id = 50256,
+            num_beams = 2,
+            repetition_penalty = 0.5,
+            no_repeat_ngram_size = 5,
+            pad_token_id = 50256,
+            max_length = 512,
+            max_new_tokens = 256
+        )
     }
 }
 
