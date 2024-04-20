@@ -173,7 +173,7 @@ def check_line_is_pareto_front(
         for point in points:
             if point[1] - 1e-4 > k * point[0] + b:
                 return False
-            return True
+        return True
     else:
         return False
     
