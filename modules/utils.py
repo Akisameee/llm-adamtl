@@ -38,7 +38,8 @@ def get_model(
         full_model = model_class(config, **kwargs)
         model = full_model.pretrained_model
     else:
-        full_model = model_class.from_pretrained(config.model_pretrain_path, **kwargs)
+        # full_model = model_class.from_pretrained(config.model_pretrain_path, **kwargs)
+        full_model = model_class.from_pretrained(config.model_pretrain_path)
         if model_class in [AutoModelForCausalLMWithValueHead]:
             model = full_model.pretrained_model
         else:
@@ -72,6 +73,7 @@ def get_model(
         device_map = infer_auto_device_map(
             model = model,
             max_memory = max_memory,
+            dtype = dtype,
             no_split_module_classes = no_split_module_classes,
             # verbose = True
         )
@@ -79,7 +81,7 @@ def get_model(
             model = model,
             device_map = device_map
         )
-        # print(model.hf_device_map)
+        print(model.hf_device_map)
 
     if model_class in [BaseLM, BaseRM, BaseLMWithValueHeads, AutoModelForCausalLMWithValueHead]:
         full_model.pretrained_model = model
@@ -209,11 +211,11 @@ def masked_var(values: torch.Tensor, mask: torch.Tensor, unbiased: bool = True) 
     return variance
 
 def pad_to_length(
-        tensor: torch.Tensor,
-        length: int,
-        pad_value: Union[int, float],
-        dim: int = -1
-    ) -> torch.Tensor:
+    tensor: torch.Tensor,
+    length: int,
+    pad_value: Union[int, float],
+    dim: int = -1
+) -> torch.Tensor:
 
     if tensor.size(dim) >= length:
         return tensor

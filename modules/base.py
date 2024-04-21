@@ -72,9 +72,15 @@ class Base_Warpper(nn.Module):
         if to_uni:
             text = text.replace(self.model_info['prompt_prefix'], self.uni_info['prompt_prefix'])
             text = text.replace(self.model_info['response_prefix'], self.uni_info['response_prefix'])
+            if len(self.model_info['prompt_suffix']) > 1:
+                text = text.replace(self.model_info['prompt_suffix'], self.uni_info['prompt_suffix'])
+            if len(self.model_info['response_suffix']) > 1:
+                text = text.replace(self.model_info['response_suffix'], self.uni_info['response_suffix'])
         else:
             text = text.replace(self.uni_info['prompt_prefix'], self.model_info['prompt_prefix'])
             text = text.replace(self.uni_info['response_prefix'], self.model_info['response_prefix'])
+            text = text.replace(self.uni_info['prompt_suffix'], self.model_info['prompt_suffix'])
+            text = text.replace(self.uni_info['response_suffix'], self.model_info['response_suffix'])
 
         return text
     

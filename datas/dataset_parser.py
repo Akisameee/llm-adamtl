@@ -9,10 +9,10 @@ import re
 import numpy as np
 from transformers import AutoTokenizer, AutoConfig
 
-from configs import dataset_infos, model_infos, Dataset_Config
+from configs import dataset_infos, model_infos, Dataset_Config, Panacea_PPO_Config
 
 csv.field_size_limit(10000000)
-TEST = 0
+TEST = 100
 
 def has_chinese(str_check):
 
@@ -183,30 +183,31 @@ class Dataset_Parser(object):
         for idx, (prompt_text, response_text) in enumerate(text_splitted):
             prompt_text = prompt_text.strip()
             response_text = response_text.strip()
-            prompt_full += self.model_info['prompt_prefix'] + prompt_text
+            prompt_full += self.model_info['prompt_prefix'] + prompt_text + self.model_info['prompt_suffix']
             if idx == len(text_splitted) - 1:
                 prompt_full += self.model_info['response_prefix']
                 response_full = response_text
             else:
-                prompt_full += self.model_info['response_prefix'] + response_text
+                prompt_full += self.model_info['response_prefix'] + response_text + self.model_info['response_suffix']
 
         return prompt_full, response_full
 
 if __name__ == '__main__':
 
-    data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
+    config = Panacea_PPO_Config()
+    dataset_cfg = config.dateset_cfg
+    dataset_cfg.data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
     # data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt')
     model_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
-    model_path = '/home/share/models/huggingface/bit-dny/MindLLM'
-    model_name = os.path.split(model_path)[-1]
-    model_info = model_infos[model_name]
+    model_path = '/home/share/models/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+    dataset_cfg.tokenizer_pretrain_path = model_path
+
+    dataset_cfg.sub_data_path = ['helpful-base']
+
     parser = Dataset_Parser(
-        data_dir = data_path,
-        model_name = model_name,
-        remove_chinese = False
+        dataset_cfg
     )
     res = parser.parse_dataset(
-        sub_paths = ['helpful-base'],
         mode = 'train'
     )
     print(res)

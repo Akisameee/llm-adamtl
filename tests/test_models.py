@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '4,7'
 import sys
 sys.path.insert(0, '/home/smliu/RLHF')
 import torch
@@ -21,50 +21,51 @@ generation_config = GenerationConfig(
 )
 
 # model_path = '/home/smliu/huggingface/openlm-research/open_llama_3b_v2'
-# tokenizer = LlamaTokenizer.from_pretrained(model_path)
-# # tokenizer.max_length = 1024
+model_path = '/home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf'
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+# tokenizer.max_length = 1024
 
-# model = LlamaForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map = 'auto')
+model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map = 'auto')
 
-# prompt = "Q: What is the largest animal?\nA: "
+prompt = "<s>[INST] What is the largest animal? [/INST]"
 
-# tokenizer_out = tokenizer(prompt, return_tensors='pt')
-# # print(tokenizer.decode(tokenizer_out['input_ids'].squeeze()))
-# tokenizer_out = {k: v.to(model.device) for k, v in tokenizer_out.items()}
-# # generation_config.max_new_tokens = 1024
-# sequence = model.generate(tokenizer_out['input_ids'], max_new_tokens = 32)
-
-# output_text = tokenizer.decode(sequence.squeeze())
-# print(output_text)
-
-# -------------------------------------------------------------------------
-tokenizer_path = '/home/share/ours_llm/blue_space'
-model_path = '/home/share/ours_llm/models/model3b/checkpoint-80000'
-# model_path = '/home/share/models/huggingface/openlm-research/open_llama_3b'
-
-# model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, use_fast = False)
-tokenizer.max_length = 1024
-config = Panacea_PPO_Config()
-model_cfg = config.model_cfg
-model_cfg.model_pretrain_path = model_path
-
-model, _ = get_model(
-    config = config.model_cfg,
-    dispatch = False
-)
-model = model.to('cuda')
-
-# prompt = "<|endoftext|><user>\nI just came out of from jail, any suggestion of my future?\n<assistant>\n"
-prompt = "<s>[INST]I just came out of from jail, any suggestion of my future?[/INST]"
-tokenizer_out = tokenizer.encode_plus(prompt, return_tensors='pt')
+tokenizer_out = tokenizer(prompt, return_tensors='pt', add_special_tokens = False)
+# print(tokenizer.decode(tokenizer_out['input_ids'].squeeze()))
 tokenizer_out = {k: v.to(model.device) for k, v in tokenizer_out.items()}
-generation_config.max_new_tokens = 1024
-# sequence = model.generate(**tokenizer_out,  **generation_config.to_dict())
-sequence = model.generate(**tokenizer_out, max_new_tokens=1024, do_sample = True)
+# generation_config.max_new_tokens = 1024
+sequence = model.generate(tokenizer_out['input_ids'], max_new_tokens = 512)
 
 output_text = tokenizer.decode(sequence.squeeze())
 print(output_text)
+
+# -------------------------------------------------------------------------
+# tokenizer_path = '/home/share/ours_llm/blue_space'
+# model_path = '/home/share/ours_llm/models/model3b/checkpoint-80000'
+# # model_path = '/home/share/models/huggingface/openlm-research/open_llama_3b'
+
+# # model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+# tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, use_fast = False)
+# tokenizer.max_length = 1024
+# config = Panacea_PPO_Config()
+# model_cfg = config.model_cfg
+# model_cfg.model_pretrain_path = model_path
+
+# model, _ = get_model(
+#     config = config.model_cfg,
+#     dispatch = False
+# )
+# model = model.to('cuda')
+
+# # prompt = "<|endoftext|><user>\nI just came out of from jail, any suggestion of my future?\n<assistant>\n"
+# prompt = "<s>[INST]I just came out of from jail, any suggestion of my future?[/INST]"
+# tokenizer_out = tokenizer.encode_plus(prompt, return_tensors='pt')
+# tokenizer_out = {k: v.to(model.device) for k, v in tokenizer_out.items()}
+# generation_config.max_new_tokens = 1024
+# # sequence = model.generate(**tokenizer_out,  **generation_config.to_dict())
+# sequence = model.generate(**tokenizer_out, max_new_tokens=1024, do_sample = True)
+
+# output_text = tokenizer.decode(sequence.squeeze())
+# print(output_text)
 
 # -------------------------------------------------------------------------
 

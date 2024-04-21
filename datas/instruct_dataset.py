@@ -58,6 +58,8 @@ class Instruct_Dataset():
         self.max_len = config.max_len
 
         self.dataset_parser = Dataset_Parser(config = config)
+        self.model_info = self.dataset_parser.model_info
+        self.tokenizer_kwargs = self.model_info['tokenizer_kwargs'] if 'tokenizer_kwargs' in self.model_info.keys() else {}
         # self.data_path = config.data_path
         # self.sub_data_path = config.sub_data_path
         self.prompt_only = True if config.tokenize_type in ['prompt_pad', 'prompt_not_pad'] else False
@@ -86,7 +88,8 @@ class Instruct_Dataset():
             truncation = True,
             max_length = self.max_len,
             return_tensors = 'pt',
-            return_token_type_ids = False
+            return_token_type_ids = False,
+            **self.tokenizer_kwargs
         )
         input_ids = tokenizer_out['input_ids']
         attention_mask = tokenizer_out['attention_mask']
@@ -105,7 +108,8 @@ class Instruct_Dataset():
                 truncation = True,
                 max_length = self.max_len,
                 return_tensors = 'pt',
-                return_token_type_ids = False
+                return_token_type_ids = False,
+                **self.tokenizer_kwargs
             )
             if tokenizer_out['input_ids'].size(-1) > 0.5 * self.max_len:
                 continue
@@ -126,7 +130,8 @@ class Instruct_Dataset():
                 truncation = True,
                 max_length = self.max_len,
                 return_tensors = 'pt',
-                return_token_type_ids = True
+                return_token_type_ids = True,
+                **self.tokenizer_kwargs
             )
             tokenizer_out = self.get_response_label(tokenizer_out)
             tokenizer_out['prompt_text'] = prompt_text
@@ -211,7 +216,8 @@ if __name__ == '__main__':
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
-    model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+    # model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+    model_path = '/home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf'
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
