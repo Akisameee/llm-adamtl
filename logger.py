@@ -141,7 +141,7 @@ class Logger():
                 )
                 plt.close()
 
-    def save_pareto_front(
+    def save_pareto_front_train(
         self,
         axes_names: tuple,
         vecs_name: str = None,
@@ -154,7 +154,27 @@ class Logger():
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         
-        draw_pareto_fronts(
+        draw_pareto_fronts_train(
+            dataframe = self.historys,
+            axes_names = axes_names,
+            vecs_name = vecs_name,
+            save_path = os.path.join(save_dir, '_'.join(axes_names) + '_pareto_front') 
+        )
+
+    def save_pareto_front_test(
+        self,
+        axes_names: tuple,
+        vecs_name: str = None,
+        save_dir: str = None
+    ):
+        if self.disable:
+            return
+
+        save_dir = self.dir if save_dir is None else save_dir
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        
+        draw_pareto_front_test(
             dataframe = self.historys,
             axes_names = axes_names,
             vecs_name = vecs_name,
@@ -197,7 +217,41 @@ def unit_vec(vec):
     length = np.sqrt(sum([x**2 for x in vec]))
     return np.array(vec) / length
 
-def draw_pareto_fronts(
+def plot_pareto_fronts_2d(
+    x, y,
+    arrows,
+    lines,
+    axes_names,
+    alphas,
+    scaling
+):
+    fig = plt.figure()
+    axes = fig.add_subplot(111)
+
+    axes.scatter(x, y, alpha = alphas, s = 25 * scaling)
+
+    if arrows is not None:
+        for i in range(len(x)):
+            pref_vec = unit_vec(arrows[i]) * 0.1 * scaling
+            axes.arrow(
+                x[i], y[i],
+                pref_vec[0], pref_vec[1],
+                alpha = alphas[i], color = 'C0',
+                width = 0.01 * scaling, head_width = 0.02 * scaling, head_length = 0.02 * scaling
+            )
+    for line in lines:
+        axes.plot(
+            (x[line[0]], x[line[1]]),
+            (y[line[0]], y[line[1]]),
+            color = 'C0', alpha = 0.75
+        )
+
+    axes.set_xlabel(axes_names[0])
+    axes.set_ylabel(axes_names[1])
+
+    return axes
+
+def draw_pareto_fronts_train(
     dataframe: pd.DataFrame,
     axes_names: tuple = ('x', 'y', 'z'),
     vecs_name: str = None,
@@ -211,8 +265,6 @@ def draw_pareto_fronts(
     alphas = np.linspace(0.1, 1, len(dataframe))
     
     if len(axes_names) == 2:
-        fig = plt.figure()
-        axes = fig.add_subplot(111)
 
         x = dataframe[axes_names[0]]
         y = dataframe[axes_names[1]]
@@ -223,20 +275,8 @@ def draw_pareto_fronts(
 
         scaling = min([np.ptp(x.values), np.ptp(y.values)]) / np.log(len(dataframe))
 
-        axes.scatter(x, y, alpha = alphas, s = 25 * scaling)
-
-        if pref_vecs is not None:
-            for i in range(len(x)):
-                pref_vec = unit_vec(pref_vecs[i]) * 0.1 * scaling
-                axes.arrow(
-                    x[i], y[i],
-                    pref_vec[0], pref_vec[1],
-                    alpha = alphas[i], color = 'C0',
-                    width = 0.01 * scaling, head_width = 0.02 * scaling, head_length = 0.02 * scaling
-                )
-        
         hull_points = [(x[p], y[p]) for p in np.unique(lines)]
-        print(np.unique(lines))
+        pareto_front = []
         for line in lines:
             if check_line_is_pareto_front(
                 [
@@ -244,14 +284,16 @@ def draw_pareto_fronts(
                     vertices[line[1]]
                 ], points = hull_points
             ):
-                axes.plot(
-                    (x[line[0]], x[line[1]]),
-                    (y[line[0]], y[line[1]]),
-                    color = 'C0', alpha = 0.75
-                )
+                pareto_front.append(line)
 
-        axes.set_xlabel(axes_names[0])
-        axes.set_ylabel(axes_names[1])
+        plot_pareto_fronts_2d(
+            x, y,
+            arrows = pref_vecs,
+            lines = pareto_front,
+            axes_names = axes_names,
+            alphas = alphas,
+            scaling = scaling
+        )
 
     elif len(axes_names) == 3:
         fig = plt.figure()
@@ -298,16 +340,65 @@ def draw_pareto_fronts(
     plt.savefig(save_path, dpi = 400)
     plt.close()
 
+def draw_pareto_front_test(
+    dataframe: pd.DataFrame,
+    axes_names: tuple = ('x', 'y', 'z'),
+    vecs_name: str = None,
+    save_path: str = ''
+):
+    alphas = np.ones(len(dataframe))
+    
+    if len(axes_names) == 2:
+        
+        if vecs_name is not None:
+            if isinstance(dataframe[vecs_name][0], (np.ndarray, torch.Tensor)):
+                dataframe[vecs_name] = dataframe[vecs_name].apply(lambda x: x.tolist())
+
+            sp_idx = dataframe[dataframe[vecs_name].apply(lambda x: x == [0.0, 0.0])].index
+            if len(sp_idx) == 1:
+                sp_x, sp_y = dataframe.loc[sp_idx][axes_names[0]], dataframe.loc[sp_idx][axes_names[1]]
+            dataframe.drop(sp_idx, inplace = True)
+
+            dataframe['sort_val'] = dataframe[vecs_name].apply(lambda x: x[0])
+            dataframe = dataframe.sort_values(by = 'sort_val')
+            pref_vecs = dataframe[vecs_name]
+        else: pref_vecs = None
+
+        x = dataframe[axes_names[0]]
+        y = dataframe[axes_names[1]]
+
+        scaling = min([np.ptp(x.values), np.ptp(y.values)]) / np.log(len(dataframe))
+
+        if pref_vecs is not None:
+            pareto_front = [(i, i + 1) for i in range(0, len(dataframe) - 1)]
+        else: pareto_front = None
+
+        axes = plot_pareto_fronts_2d(
+            x, y,
+            arrows = pref_vecs,
+            lines = pareto_front,
+            axes_names = axes_names,
+            alphas = alphas,
+            scaling = scaling
+        )
+        axes.scatter(sp_x, sp_y, color = 'C1')
+
+    else:
+        raise NotImplementedError
+
+    plt.savefig(save_path, dpi = 400)
+    plt.close()
+
 
 if __name__ == '__main__':
 
     logger = Logger('output', 'test')
     pref_dim = 2
-    for i in range(2000):
+    for i in range(11):
         pref_vec = torch.rand(pref_dim)
         pref_vec = pref_vec / torch.sum(pref_vec)
         vec_len = random.uniform(0, 2)
-        vec_angle = (torch.rand(pref_dim) - 0.5).numpy().tolist()
+        vec_angle = (torch.rand(pref_dim) - 0.5).tolist()
         logger.step(
             episode = 0,
             timestep = i,
@@ -318,8 +409,18 @@ if __name__ == '__main__':
                 'pref_vec': pref_vec
             }
         )
+    logger.step(
+        episode = 0,
+        timestep = i + 1,
+        stat_dict = {
+            'reward_a': 0.5,
+            'reward_b': 0.3,
+            # 'reward_c': random.uniform(-5, 5),
+            'pref_vec': torch.FloatTensor([0, 0])
+        }
+    )
     logger.save_res()
-    logger.save_pareto_front(
+    logger.save_pareto_front_test(
         axes_names = ('reward_a', 'reward_b'),
         # axes_names = ('reward_a', 'reward_b', 'reward_c'),
         vecs_name = 'pref_vec'

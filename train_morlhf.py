@@ -363,9 +363,9 @@ class MORLHF_Trainer(Base_Trainer):
                         self.set_pref_vec(pref_vec)  
 
         self.accelerator.wait_for_everyone()
-        self.logger.info('Panacea Training Complete')
+        self.logger.info(f'{self.task_name} complete.')
         self.logger.save_res()
-        self.logger.save_pareto_front(
+        self.logger.save_pareto_front_train(
             tuple(self.reward_names),
             vecs_name = 'pref_vec'
         )

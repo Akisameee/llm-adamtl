@@ -128,12 +128,13 @@ class Base_Trainer(nn.Module):
         else:
             self.reward_models = None
         
+        self.task_name = config.task_name
         self.model_name = model_cfg.model_name
         self.model_info = model_cfg.model_info
         self.generation_config = self.model_info['generation_config']
         self.clean_cache_every_iter = False
 
-    def save(self, model, ckpt_dir = './checkpoint.pt', wait_for_everyone = False, safetensor = False):
+    def save(self, model, ckpt_dir = './output', wait_for_everyone = False, safetensor = False):
 
         if wait_for_everyone:
             self.accelerator.wait_for_everyone()
@@ -144,11 +145,10 @@ class Base_Trainer(nn.Module):
             unwrapped_model = self.accelerator.unwrap_model(model)
             torch.save(unwrapped_model.state_dict(), os.path.join(ckpt_dir, 'checkpoint.pt'))
 
-    def load(self, model, ckpt_dir = './checkpoint.pt'):
+    def load(self, model, ckpt_path = './checkpoint.pt'):
 
         unwrapped_model = self.accelerator.unwrap_model(model)
-        path_to_checkpoint = os.path.join(ckpt_dir, "pytorch_model.bin")
-        unwrapped_model.load_state_dict(torch.load(path_to_checkpoint))
+        unwrapped_model.load_state_dict(torch.load(ckpt_path))
 
     @property
     def device(self):
