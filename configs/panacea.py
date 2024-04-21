@@ -27,7 +27,7 @@ class Panacea_PPO_Config(PPO_Config):
         model_class = None,
         peft_cfg = Panacea_SVD_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj'],
-            r = 6,
+            r = 7,
             lora_alpha = 64,
             lora_dropout = 0.1,
             pref_dim = 2
@@ -65,9 +65,9 @@ class Panacea_PPO_Config(PPO_Config):
     n_episode: int = 1
     sample_batch_size: int = 1
     n_sample_reuse: int = 1
-    n_update_timestep: int = 16
+    n_update_timestep: int = 8
     train_batch_size: int = 1
-    n_update_epoch: int = 5
+    n_update_epoch: int = 3
 
     n_save_time: int = 3
     output_dir: str = os.path.join('.', 'output')

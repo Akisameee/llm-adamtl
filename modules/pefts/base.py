@@ -31,3 +31,7 @@ class Base_Adapter(nn.Module):
     def forward(self, x: torch.Tensor, *args, **kwargs):
 
         return self.base_layer(x, *args, **kwargs)
+    
+    def post_init(self):
+
+        self.to(self.base_layer.device)

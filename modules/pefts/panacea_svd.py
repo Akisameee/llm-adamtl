@@ -124,6 +124,7 @@ class Panacea_SVD_Linear(Base_Adapter):
 
     def forward(self, x: torch.Tensor, *args, **kwargs):
         
+        # print(f'x.device{x.device}, self.lora_A.device{self.lora_A.device}')
         if self.disabled:
             if self.merged:
                 self.unmerge()

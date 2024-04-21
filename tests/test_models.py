@@ -26,6 +26,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_path)
 # tokenizer.max_length = 1024
 
 model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map = 'auto')
+print(model.hf_device_map)
 
 prompt = "<s>[INST] What is the largest animal? [/INST]"
 

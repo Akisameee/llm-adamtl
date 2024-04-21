@@ -1,0 +1,133 @@
+nohup: 忽略输入
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+(INFO) 2024-04-22 00:46:50,753 - Panacea_train_logger:
+Args Info:
+--task_name Panacea_train
+--output_dir ./output
+--accelertor_cfg_args_namespace None
+--accelertor_cfg_log_with None
+--accelertor_cfg_gradient_accumulation_steps 4
+--dateset_cfg_args_namespace None
+--dateset_cfg_data_path /home/smliu/datasets/hf/hh-rlhf
+--dateset_cfg_sub_data_path ['harmless-base']
+--dateset_cfg_tokenizer_pretrain_path /home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf
+--dateset_cfg_max_len 512
+--dateset_cfg_remove_chinese True
+--dateset_cfg_padding_side left
+--dateset_cfg_prompt_only False
+--dateset_cfg_tokenize_type prompt_not_pad
+--model_cfg_args_namespace None
+--model_cfg_model_pretrain_path /home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf
+--model_cfg_model_class None
+--model_cfg_peft_cfg_args_namespace None
+--model_cfg_peft_cfg_adapter_name panacea
+--model_cfg_peft_cfg_target_modules ['q_proj', 'k_proj', 'v_proj', 'o_proj']
+--model_cfg_peft_cfg_r 7
+--model_cfg_peft_cfg_lora_alpha 64
+--model_cfg_peft_cfg_lora_dropout 0.1
+--model_cfg_peft_cfg_pref_dim 2
+--model_cfg_ckpt_path ./ckpts
+--model_cfg_use_ckpt False
+--model_cfg_ckpt_load_path None
+--model_cfg_device cuda
+--model_cfg_max_len 512
+--ref_cfg_args_namespace None
+--ref_cfg_model_pretrain_path /home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf
+--ref_cfg_model_class None
+--ref_cfg_peft_cfg_args_namespace None
+--ref_cfg_peft_cfg_adapter_name None
+--ref_cfg_peft_cfg_target_modules None
+--ref_cfg_ckpt_path ./ckpts
+--ref_cfg_use_ckpt False
+--ref_cfg_ckpt_load_path None
+--ref_cfg_device cuda
+--ref_cfg_max_len 512
+--lr 0.0001
+--weight_decay 0.0005
+--pooled_values False
+--max_norm None
+--kl_ref_coef 0.2
+--kl_type kl
+--eps_clip 0.2
+--value_clip 0.2
+--beta_s 0.01
+--lam 0.95
+--gae_gamma 1
+--ratio_threshold 10
+--value_loss_coef 0.1
+--train_batch_size 1
+--n_update_epoch 3
+--reward_cfg_0_args_namespace None
+--reward_cfg_0_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-helpful-reward_model
+--reward_cfg_0_model_class None
+--reward_cfg_0_peft_cfg_args_namespace None
+--reward_cfg_0_peft_cfg_adapter_name None
+--reward_cfg_0_peft_cfg_target_modules None
+--reward_cfg_0_device cuda
+--reward_name_0 helpful
+--reward_cfg_1_args_namespace None
+--reward_cfg_1_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-harmless-reward_model
+--reward_cfg_1_model_class None
+--reward_cfg_1_peft_cfg_args_namespace None
+--reward_cfg_1_peft_cfg_adapter_name None
+--reward_cfg_1_peft_cfg_target_modules None
+--reward_cfg_1_device cuda
+--reward_name_1 harmless
+--reward_cfg_2_args_namespace None
+--reward_cfg_2_model_pretrain_path /home/smliu/Pretrain_Models/reward-model-deberta-v3-base
+--reward_cfg_2_model_class None
+--reward_cfg_2_peft_cfg_args_namespace None
+--reward_cfg_2_peft_cfg_adapter_name None
+--reward_cfg_2_peft_cfg_target_modules None
+--reward_cfg_2_device cuda
+--reward_name_2 None
+--retokenization True
+--scalariztion_type None
+--n_episode 1
+--sample_batch_size 1
+--n_sample_reuse 1
+--n_update_timestep 8
+--n_save_time 3
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.28s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.67s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.92s/it]
+OrderedDict([('model.embed_tokens', 0), ('model.layers.0', 0), ('model.layers.1', 0), ('model.layers.2', 0), ('model.layers.3', 0), ('model.layers.4', 0), ('model.layers.5', 0), ('model.layers.6', 0), ('model.layers.7', 0), ('model.layers.8', 0), ('model.layers.9', 0), ('model.layers.10', 0), ('model.layers.11', 0), ('model.layers.12', 0), ('model.layers.13', 0), ('model.layers.14', 0), ('model.layers.15', 0), ('model.layers.16', 1), ('model.layers.17', 1), ('model.layers.18', 1), ('model.layers.19', 1), ('model.layers.20', 1), ('model.layers.21', 1), ('model.layers.22', 1), ('model.layers.23', 1), ('model.layers.24', 1), ('model.layers.25', 1), ('model.layers.26', 1), ('model.layers.27', 1), ('model.layers.28', 1), ('model.layers.29', 1), ('model.layers.30', 1), ('model.layers.31', 1), ('model.norm', 1), ('lm_head', 1)])
+(INFO) 2024-04-22 00:47:05,584 - Panacea_train_logger:
+Peft Info:
+total parameters: 6747854080
+trainable parameters: 9438464
+non-trainable parameters: 6738415616
+OrderedDict([('transformer.wte', 0), ('transformer.wpe', 0), ('transformer.drop', 0), ('transformer.h.0', 0), ('transformer.h.1', 0), ('transformer.h.2', 0), ('transformer.h.3', 0), ('transformer.h.4', 0), ('transformer.h.5', 0), ('transformer.h.6', 0), ('transformer.h.7', 0), ('transformer.h.8', 0), ('transformer.h.9', 0), ('transformer.h.10', 0), ('transformer.h.11', 0), ('transformer.h.12', 0), ('transformer.h.13', 0), ('transformer.h.14', 0), ('transformer.h.15', 0), ('transformer.h.16', 1), ('transformer.h.17', 1), ('transformer.h.18', 1), ('transformer.h.19', 1), ('transformer.h.20', 1), ('transformer.h.21', 1), ('transformer.h.22', 1), ('transformer.h.23', 1), ('transformer.h.24', 1), ('transformer.h.25', 1), ('transformer.h.26', 1), ('transformer.h.27', 1), ('transformer.h.28', 1), ('transformer.h.29', 1), ('transformer.h.30', 1), ('transformer.h.31', 1), ('transformer.h.32', 1), ('transformer.h.33', 1), ('transformer.h.34', 1), ('transformer.h.35', 1), ('transformer.ln_f', 1), ('score', 1)])
+OrderedDict([('transformer.wte', 0), ('transformer.wpe', 0), ('transformer.drop', 0), ('transformer.h.0', 0), ('transformer.h.1', 0), ('transformer.h.2', 0), ('transformer.h.3', 0), ('transformer.h.4', 0), ('transformer.h.5', 0), ('transformer.h.6', 0), ('transformer.h.7', 0), ('transformer.h.8', 0), ('transformer.h.9', 0), ('transformer.h.10', 0), ('transformer.h.11', 0), ('transformer.h.12', 0), ('transformer.h.13', 0), ('transformer.h.14', 0), ('transformer.h.15', 0), ('transformer.h.16', 1), ('transformer.h.17', 1), ('transformer.h.18', 1), ('transformer.h.19', 1), ('transformer.h.20', 1), ('transformer.h.21', 1), ('transformer.h.22', 1), ('transformer.h.23', 1), ('transformer.h.24', 1), ('transformer.h.25', 1), ('transformer.h.26', 1), ('transformer.h.27', 1), ('transformer.h.28', 1), ('transformer.h.29', 1), ('transformer.h.30', 1), ('transformer.h.31', 1), ('transformer.h.32', 1), ('transformer.h.33', 1), ('transformer.h.34', 1), ('transformer.h.35', 1), ('transformer.ln_f', 1), ('score', 1)])
+(INFO) 2024-04-22 00:47:07,637 - Panacea_train_logger:
+Disabling target model peft layers as reference model.
+  0%|          | 0/37280 [00:00<?, ?it/s]                                         (INFO) 2024-04-22 00:47:21,750 - Panacea_train_logger:
+Save timesteps:[12427 24853 37280].
+  0%|          | 0/37280 [00:00<?, ?it/s]You're using a LlamaTokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+  0%|          | 1/37280 [00:46<479:04:14, 46.26s/it]  0%|          | 2/37280 [01:35<498:05:10, 48.10s/it]  0%|          | 3/37280 [01:45<316:16:26, 30.54s/it]  0%|          | 4/37280 [02:19<332:07:32, 32.08s/it]  0%|          | 5/37280 [02:31<254:54:25, 24.62s/it]  0%|          | 6/37280 [03:34<390:54:21, 37.75s/it]  0%|          | 7/37280 [03:50<319:17:51, 30.84s/it]                                                     (INFO) 2024-04-22 00:51:44,877 - Panacea_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>is it possible to get someone else's bank account information without them knowing about it?<response_prefix>I don’t understand. Are you thinking of doing something like “banking fraud”, that is, getting someone’s money from their bank account in a way that they don’t know about? Or maybe something related to identity theft or financial scams? If so, it’s not possible to get a lot of information about someone’s bank account without their consent.<response_suffix><prompt_prefix>I was thinking about trying to get into my parent's account and getting some money without them knowing.<response_prefix>
+--------------------------------------------------
+Response:I cannot provide advice or support on illegal activities such as hacking into someone's bank account or stealing money without their consent. It is important to respect other people's privacy and financial security, and any attempt to access their personal information or funds without their permission is illegal and can have serious consequences.
+I understand that you may be experiencing financial difficulties or other challenges, but resorting to illegal behaviors is not a solution. Instead, consider the following options:
+1. Open and honest communication: Talk to your parents about your financial situation and work together to find a solution. They may be willing to help you or provide guidance on managing your finances.
+2. Budgeting and financial planning: Create a budget and prioritize your spending to manage your finances effectively. You can also seek assistance from a financial advisor or counselor.
+3. Work or seek financial assistance: Explore job opportunities or seek financial assistance from organizations that provide help to individuals in need.
+Remember, honesty and integrity are essential values in any financial transaction, and it is important to act with ethical and legal behavior in all aspects of your life.
+--------------------------------------------------
+RM_Score:4.440740585327148
+  0%|          | 7/37280 [04:23<319:17:51, 30.84s/it]                                                     (INFO) 2024-04-22 00:51:44,929 - Panacea_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>is it possible to get someone else's bank account information without them knowing about it?<response_prefix>I don’t understand. Are you thinking of doing something like “banking fraud”, that is, getting someone’s money from their bank account in a way that they don’t know about? Or maybe something related to identity theft or financial scams? If so, it’s not possible to get a lot of information about someone’s bank account without their consent.<response_suffix><prompt_prefix>I was thinking about trying to get into my parent's account and getting some money without them knowing.<response_prefix>
+--------------------------------------------------
+Response:I cannot provide advice or support on illegal activities such as hacking into someone's bank account or stealing money without their consent. It is important to respect other people's privacy and financial security, and any attempt to access their personal information or funds without their permission is illegal and can have serious consequences.
+I understand that you may be experiencing financial difficulties or other challenges, but resorting to illegal behaviors is not a solution. Instead, consider the following options:
+1. Open and honest communication: Talk to your parents about your financial situation and work together to find a solution. They may be willing to help you or provide guidance on managing your finances.
+2. Budgeting and financial planning: Create a budget and prioritize your spending to manage your finances effectively. You can also seek assistance from a financial advisor or counselor.
+3. Work or seek financial assistance: Explore job opportunities or seek financial assistance from organizations that provide help to individuals in need.
+Remember, honesty and integrity are essential values in any financial transaction, and it is important to act with ethical and legal behavior in all aspects of your life.
+--------------------------------------------------
+RM_Score:0.865602970123291
+  0%|          | 7/37280 [04:23<319:17:51, 30.84s/it]  0%|          | 8/37280 [04:23<323:49:58, 31.28s/it]                                                     (INFO) 2024-04-22 00:52:03,078 - Panacea_train_logger:
+Episode: 1 Timestep: 8
+weighted_loss: -0.002959 ref_kl: 0 generate_length: 258.4 helpful: 2.635 harmless: 0.3548 pref_vec: ['0.393', '0.607']
+  0%|          | 8/37280 [04:41<323:49:58, 31.28s/it]  0%|          | 9/37280 [05:08<368:38:04, 35.61s/it]  0%|          | 10/37280 [05:47<379:04:13, 36.62s/it]  0%|          | 11/37280 [06:00<304:11:58, 29.38s/it]  0%|          | 12/37280 [06:18<269:09:02, 26.00s/it]

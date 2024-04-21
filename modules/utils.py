@@ -68,7 +68,7 @@ def get_model(
                 no_split_module_classes = no_split_module_classes,
             )
 
-        max_memory[0] *= 0.9
+        # max_memory[0] *= 0.9
         model.tie_weights()
         device_map = infer_auto_device_map(
             model = model,

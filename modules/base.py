@@ -5,7 +5,7 @@ import sys
 from collections import OrderedDict
 import torch
 import torch.nn as nn
-from transformers import AutoModelForCausalLM, AutoTokenizer, GPT2Tokenizer, AutoModelForSequenceClassification
+from transformers import AutoModelForCausalLM, AutoTokenizer, GPT2Tokenizer, AutoModelForSequenceClassification, LlamaForCausalLM
 from trl import AutoModelForCausalLMWithValueHead
 from trl.models.modeling_base import PreTrainedModelWrapper
 
@@ -27,6 +27,11 @@ class Base_Warpper(nn.Module):
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_pretrain_path)
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
+        self.model_info_tokenized = {}
+        self.model_info_tokenized['prompt_prefix'] = self.tokenizer.decode(self.tokenizer.encode(self.model_info['prompt_prefix'], add_special_tokens = False))
+        self.model_info_tokenized['prompt_suffix'] = self.tokenizer.decode(self.tokenizer.encode(self.model_info['prompt_suffix'], add_special_tokens = False))
+        self.model_info_tokenized['response_prefix'] = self.tokenizer.decode(self.tokenizer.encode(self.model_info['response_prefix'], add_special_tokens = False))
+        self.model_info_tokenized['response_suffix'] = self.tokenizer.decode(self.tokenizer.encode(self.model_info['response_suffix'], add_special_tokens = False))
         self.pretrained_model = None
 
     @property
@@ -70,12 +75,12 @@ class Base_Warpper(nn.Module):
         to_uni: bool
     ):
         if to_uni:
-            text = text.replace(self.model_info['prompt_prefix'], self.uni_info['prompt_prefix'])
-            text = text.replace(self.model_info['response_prefix'], self.uni_info['response_prefix'])
-            if len(self.model_info['prompt_suffix']) > 1:
-                text = text.replace(self.model_info['prompt_suffix'], self.uni_info['prompt_suffix'])
-            if len(self.model_info['response_suffix']) > 1:
-                text = text.replace(self.model_info['response_suffix'], self.uni_info['response_suffix'])
+            text = text.replace(self.model_info_tokenized['prompt_prefix'], self.uni_info['prompt_prefix'])
+            text = text.replace(self.model_info_tokenized['response_prefix'], self.uni_info['response_prefix'])
+            if len(self.model_info_tokenized['prompt_suffix']) > 1:
+                text = text.replace(self.model_info_tokenized['prompt_suffix'], self.uni_info['prompt_suffix'])
+            if len(self.model_info_tokenized['response_suffix']) > 1:
+                text = text.replace(self.model_info_tokenized['response_suffix'], self.uni_info['response_suffix'])
         else:
             text = text.replace(self.uni_info['prompt_prefix'], self.model_info['prompt_prefix'])
             text = text.replace(self.uni_info['response_prefix'], self.model_info['response_prefix'])
@@ -433,8 +438,17 @@ class BaseLMWithValueHeads(Base_Warpper):
                     else:
                         new_output += (output,)
                 return new_output
-
             self.register_forward_hook(set_device_hook)
+
+            # def set_device_hook_pretrained(module, input, outputs):
+            #     new_output = ()
+            #     for output in outputs:
+            #         if isinstance(output, torch.Tensor):
+            #             new_output += (output.to(first_device),)
+            #         else:
+            #             new_output += (output,)
+            #     return new_output
+            # self.pretrained_model.register_forward_hook(set_device_hook_pretrained)
 
             self.is_sequential_parallel = True
 

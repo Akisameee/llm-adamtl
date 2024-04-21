@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 import sys
 sys.path.insert(0, '/home/smliu/RLHF')
 import torch
@@ -176,7 +176,7 @@ def main():
 
     tester = MORLHF_Tester(
         config = config,
-        ckpt_path = './output/completed/Panacea_train 2024-04-18 20-21-03/MindLLM-1b3-chat-zh-v2.0_0_8320/checkpoint.pt'
+        ckpt_path = './output/completed/Panacea_train 2024-04-21 10-29-42/MindLLM-1b3-chat-zh-v2.0_0_9360/checkpoint.pt'
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
