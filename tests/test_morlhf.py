@@ -163,6 +163,8 @@ def main():
     config.dateset_cfg.sub_data_path = sub_data_path
 
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+    config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
+    config.model_cfg.peft_cfg.r = 6
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
@@ -176,7 +178,7 @@ def main():
 
     tester = MORLHF_Tester(
         config = config,
-        ckpt_path = './output/completed/Panacea_train 2024-04-21 10-29-42/MindLLM-1b3-chat-zh-v2.0_0_9360/checkpoint.pt'
+        ckpt_path = './output/completed/Panacea_train 2024-04-21 10-29-42/MindLLM-1b3-chat-zh-v2.0_0_3120/checkpoint.pt'
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
@@ -185,7 +187,7 @@ def main():
     tester.test(
         ds_generator = dataset.get_generator(),
         n_epoch = 11,
-        n_test_sample = 200,
+        n_test_sample = 300,
         sample_batch_size = 1
     )
 

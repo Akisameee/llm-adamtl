@@ -2,8 +2,15 @@ from modules.manipulators.base import *
 
 class Linear_Scalarization(Base_Manipulator):
 
-    def __init__(self, model: nn.Module, accelerator: Accelerator, pref_dim: int) -> None:
-        super().__init__(model, accelerator, pref_dim)
+    def __init__(
+        self,
+        model: nn.Module,
+        accelerator: Accelerator,
+        optimizer: torch.optim.Optimizer,
+        pref_dim: int,
+        max_norm: float = None
+    ) -> None:
+        super().__init__(model, accelerator, optimizer, pref_dim, max_norm)
 
     def get_weighted_loss(self, losses: torch.Tensor):
         
@@ -16,8 +23,15 @@ class Linear_Scalarization(Base_Manipulator):
 
 class ScaleInvariant_Linear_Scalarization(Base_Manipulator):
 
-    def __init__(self, model: nn.Module, accelerator: Accelerator, pref_dim: int) -> None:
-        super().__init__(model, accelerator, pref_dim)
+    def __init__(
+        self,
+        model: nn.Module,
+        accelerator: Accelerator,
+        optimizer: torch.optim.Optimizer,
+        pref_dim: int,
+        max_norm: float = None
+    ) -> None:
+        super().__init__(model, accelerator, optimizer, pref_dim, max_norm)
 
     def get_weighted_loss(self, losses: torch.Tensor):
         

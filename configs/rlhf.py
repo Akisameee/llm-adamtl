@@ -26,6 +26,7 @@ class RLHF_Config(PPO_Config):
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         model_class = None,
         peft_cfg = Lora_Config(
+            use_peft = True,
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 8,
             lora_alpha = 32,

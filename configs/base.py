@@ -17,7 +17,7 @@ JSONDict = Annotated[Optional[dict], tyro.conf.arg(metavar="JSON", constructor=j
 @dataclass
 class Base_Config(object):
 
-    args_namespace: dict = None
+    __args_namespace: dict = None
 
     def to_dict(self):
 
@@ -37,6 +37,8 @@ class Base_Config(object):
         fields = []
         
         for field in dataclasses.fields(dataclass):
+            if field.name.endswith('__args_namespace'):
+                continue
             name_new = '_'.join([prefix, field.name]) if prefix is not None else field.name
             if dataclasses.is_dataclass(field.type):
                 sub_branch, sub_field = self.get_dataclass_fields(
@@ -112,15 +114,15 @@ class Base_Config(object):
         
         args_namespace = parser.parse_args()
         args_dataclass = self.parse_args_into_dataclass(branches, vars(args_namespace))
-        self.args_namespace = vars(args_namespace)
+        self.__args_namespace = vars(args_namespace)
 
         return args_dataclass
 
     def get_args_info(self):
 
         args_info_str = 'Args Info:\n'
-        if self.args_namespace is not None:
-            for key, value in self.args_namespace.items():
+        if self.__args_namespace is not None:
+            for key, value in self.__args_namespace.items():
                 if key != 'args_namespace':
                     args_info_str += f'--{key} {value}\n'
 

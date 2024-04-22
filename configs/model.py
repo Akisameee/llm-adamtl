@@ -37,7 +37,7 @@ class LM_Config(Model_Config):
 @dataclass
 class RM_Config(Model_Config):
 
-    model_pretrain_path: str = os.path.join('/home', 'smliu', 'Pretrain_Models', 'reward-model-deberta-v3-base')
+    model_pretrain_path: str = None
     peft_cfg: Peft_Config = None
     device: str = 'cuda'
 

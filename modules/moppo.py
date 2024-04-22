@@ -48,8 +48,10 @@ class MOPPO_Trainer(PPO_Trainer):
 
         self.manipulator = Linear_Scalarization(
             model = self.model,
+            accelerator = self.accelerator,
+            optimizer = self.optimizer,
             pref_dim = self.pref_dim,
-            accelerator = self.accelerator
+            max_norm = self.max_norm
         )
 
     def set_pref_vec(
@@ -127,7 +129,9 @@ class MOPPO_Trainer(PPO_Trainer):
         self.model.train()
 
         # PPO training
+        multi_losses = []
         weighted_losses = []
+        self.manipulator.clear()
         for _ in range(self.n_update_epoch):
             for (
                 sequences,
@@ -175,36 +179,46 @@ class MOPPO_Trainer(PPO_Trainer):
                 weighted_loss = self.manipulator.backward(
                     losses = losses
                 )
+                multi_losses.append(losses.detach().cpu().tolist())
                 weighted_losses.append(weighted_loss.item())
 
-                if self.max_norm is not None and self.accelerator.sync_gradients:
-                    self.accelerator.clip_grad_norm_(self.model_params, self.max_norm)
+                self.manipulator.step()
+                # self.optimizer.step()
+                # self.optimizer.zero_grad()
 
-                self.optimizer.step()
-                self.optimizer.zero_grad()
-
+        multi_losses = {f'losses_{i}': [losses[i] for losses in multi_losses] for i in range(self.pref_dim)}
         ppo_stats = self.get_train_stats(
             masks = all_action_masks,
             weighted_losses = weighted_losses,
-            kl_refs = kl_refs
+            kl_refs = kl_refs,
+            **multi_losses
         )
         
         return ppo_stats
     
     def get_train_stats(self, masks, **train_records):
 
+        train_stats = {}
+        for i in range(self.pref_dim):
+            losses = train_records.pop(f'losses_{i}')
+            loss_mean = sum(losses) / len(losses)
+            train_stats[f'loss_{i}'] = loss_mean
+
         weighted_losses = train_records.pop('weighted_losses')
         weighted_loss_mean = sum(weighted_losses) / len(weighted_losses)
+        train_stats['weighted_loss'] = weighted_loss_mean
 
         kl_refs = train_records.pop('kl_refs')
         kl_ref_mean = masked_mean(kl_refs, mask = masks, dim = None).item()
+        train_stats['ref_kl'] = kl_ref_mean
 
         response_len_mean = torch.sum(masks).item() / masks.shape[0]
+        train_stats['generate_length'] = response_len_mean
 
-        train_stats = {
-            'weighted_loss': weighted_loss_mean,
-            'ref_kl': kl_ref_mean,
-            'generate_length': response_len_mean
-        }
+        # train_stats = {
+        #     'weighted_loss': weighted_loss_mean,
+        #     'ref_kl': kl_ref_mean,
+        #     'generate_length': response_len_mean
+        # }
 
         return train_stats

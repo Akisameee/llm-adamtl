@@ -17,6 +17,7 @@ class DPO_Config(Trainer_Config):
     model_cfg = LM_Config(
         model_pretrain_path = model_path,
         peft_cfg = Lora_Config(
+            use_peft = True,
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj'],
             r = 4,
             lora_alpha = 32,

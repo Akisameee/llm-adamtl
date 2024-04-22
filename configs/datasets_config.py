@@ -31,7 +31,7 @@ class Dataset_Config(Base_Config):
 @dataclass
 class Instruct_Dataset_Config(Dataset_Config):
 
-    data_path: str = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt')
+    data_path: str = None
     sub_data_path: list = None
     padding_side: Optional[Literal['left', 'right']] = 'left'
     prompt_only: bool = False
