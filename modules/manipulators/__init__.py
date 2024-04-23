@@ -3,6 +3,7 @@ from .base import (
 )
 
 from .ls import (
-    Linear_Scalarization,
-    ScaleInvariant_Linear_Scalarization
+    Weight_Linear_Scalarization,
+    Weight_ScaleInvariant_Linear_Scalarization,
+    MO_Linear_Scalarization
 )

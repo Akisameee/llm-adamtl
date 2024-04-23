@@ -79,6 +79,7 @@ class Lora_Linear(Base_Adapter):
         else:
             self.base_layer.weight.data += delta_weights
         self.merged = True
+        # print('merged')
 
     def unmerge(self):
 
@@ -88,16 +89,17 @@ class Lora_Linear(Base_Adapter):
         delta_weights = self.get_delta_weights()
         self.base_layer.weight.data -= delta_weights
         self.merged = False
+        # print('unmerged')
 
     def train(self, mode: bool = True):
 
         self.lora_A.train(mode)
         self.lora_B.train(mode)
         self.dropout.train(mode)
-        # if mode:
-        #     self.unmerge()
-        # else:
-        #     self.merge()
+        if mode:
+            self.unmerge()
+        else:
+            self.merge()
 
     def forward(self, x: torch.Tensor, *args, **kwargs):
         
@@ -116,16 +118,25 @@ class Lora_Linear(Base_Adapter):
 if __name__ == '__main__':
 
     linear_layer = nn.Linear(in_features = 1024, out_features = 256, bias = False)
-    lora_layer = Lora_Linear(
-        base_layer = linear_layer,
+    config = Lora_Config(
+        use_peft = True,
         r = 8,
-        lora_alpha = 32,
-        lora_dropout = 0.1
+        lora_alpha = 32
+    )
+    lora_layer = Lora_Linear(
+        config = config,
+        base_layer = linear_layer
     )
 
+    test_tensor = torch.rand(4, 1024)
+    out = lora_layer.forward(test_tensor)
+    print(out)
     lora_layer.merge()
+    out = lora_layer.forward(test_tensor)
+    print(out)
     lora_layer.unmerge()
-    out = lora_layer.forward(torch.rand(4, 1024))
+    out = lora_layer.forward(test_tensor)
+    print(out)
     target = torch.ones(4, 256).float()
     (target - out).sum().backward()
     print(lora_layer.lora_A.weight.grad)

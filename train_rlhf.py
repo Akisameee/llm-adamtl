@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -203,20 +203,16 @@ class RLHF_Trainer(Base_Trainer):
                     **self.generation_config.to_dict()
                 )
 
-                with torch.no_grad():
-                    logits, values = self.ppo_trainer.batch_forward(
-                        sequences,
-                        mask = masks
-                    )
-                    logits = shift(logits, shift = 1, dim = -2)
-                    probs = logits.softmax(dim = -1)
-                    logprobs = log_prob(probs, sequences)
+                # with torch.no_grad():
+                #     logits, values = self.ppo_trainer.batch_forward(
+                #         sequences,
+                #         mask = masks
+                #     )
+                #     logits = shift(logits, shift = 1, dim = -2)
+                #     probs = logits.softmax(dim = -1)
+                #     logprobs = log_prob(probs, sequences)
 
-                ref_logprobs = self.get_ref_logprobs(
-                    ref_model = self.ref_model,
-                    sequences = sequences,
-                    masks = masks
-                )
+                #     values = shift(values, shift = 1, dim = -1)
 
                 rm_rewards = self.get_rm_rewards(
                     reward_model = self.reward_model,
@@ -232,31 +228,28 @@ class RLHF_Trainer(Base_Trainer):
                     sequence,
                     mask,
                     action_mask,
-                    prob,
-                    logprob,
-                    ref_logprob,
+                    # prob,
+                    # logprob,
                     rm_reward,
-                    value
+                    # value
                 ) in zip(
                     sequences,
                     masks,
                     action_masks,
-                    probs,
-                    logprobs,
-                    ref_logprobs,
+                    # probs,
+                    # logprobs,
                     rm_rewards,
-                    values
+                    # values
                 ):
                     seq_len = torch.sum(mask).item()
                     memories.append(PPOMemory(*map(detach_to_cpu_, (
                         sequence[: seq_len],
                         mask[: seq_len],
                         action_mask[: seq_len],
-                        prob[: seq_len, :],
-                        logprob[: seq_len],
-                        ref_logprob[: seq_len],
+                        # prob[: seq_len, :],
+                        # logprob[: seq_len],
                         rm_reward,
-                        value[: seq_len]
+                        # value[: seq_len]
                     ))))
 
                 if self.clean_cache_every_iter:
@@ -264,11 +257,10 @@ class RLHF_Trainer(Base_Trainer):
                         sequences,
                         masks,
                         action_masks,
-                        probs,
-                        logprobs,
-                        ref_logprobs,
+                        # probs,
+                        # logprobs,
                         rm_rewards,
-                        values
+                        # values
                     )
                     torch.cuda.empty_cache()
                 
@@ -288,7 +280,6 @@ class RLHF_Trainer(Base_Trainer):
                             )
                         )
 
-                        
                     while len(memories) > (self.n_sample_reuse - 1) * n_update_timestep:
                         memories.popleft()
 
@@ -304,27 +295,23 @@ class RLHF_Trainer(Base_Trainer):
 
         self.logger.info('RLHF Training Complete')
         self.logger.save_res()
-        self.save(
-            self.ppo_trainer.model,
-            os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
-        )
-
 
 def main():
 
     config = RLHF_Config()
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
-    sub_data_path = ['helpful-base']
+    sub_data_path = ['harmless-base']
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+    config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
     
-    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
+    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-harmless-reward_model')
     config.reward_cfg.model_pretrain_path = rm_path
     config.parse_args()
 

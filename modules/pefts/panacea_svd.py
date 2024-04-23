@@ -55,9 +55,10 @@ class Panacea_SVD_Linear(Base_Adapter):
         if not init_weights:
             return
         
-        nn.init.kaiming_uniform_(self.lora_A, a = math.sqrt(5))
-        nn.init.zeros_(self.lora_B)
-        # nn.init.normal_(self.lora_B, mean = 0.0, std = 0.02)
+        # nn.init.kaiming_uniform_(self.lora_A, a = math.sqrt(5))
+        # nn.init.zeros_(self.lora_B)
+        nn.init.normal_(self.lora_A, mean = 0.0, std = 0.02)
+        nn.init.normal_(self.lora_B, mean = 0.0, std = 0.02)
         nn.init.normal_(self.lora_diag[: self.r], mean = 0.0, std = 0.02)
         nn.init.normal_(self.pref_scaling, mean = 0.0, std = 0.5)
 
@@ -102,10 +103,10 @@ class Panacea_SVD_Linear(Base_Adapter):
     def train(self, mode: bool = True):
         
         self.dropout.train(mode)
-        # if mode:
-        #     self.unmerge()
-        # else:
-        #     self.merge()
+        if mode:
+            self.unmerge()
+        else:
+            self.merge()
 
     def set_pref_vec(self, pref_vec):
 
@@ -154,16 +155,16 @@ if __name__ == '__main__':
         base_layer = linear_layer
     )
 
-    # svd_lora_layer.set_pref_vec(torch.FloatTensor([0.1, 0.9]))
-    # svd_lora_layer.merge()
-    # svd_lora_layer.unmerge()
-    # out = svd_lora_layer.forward(torch.rand(4, 20, 1024))
-    # target = torch.ones(4, 20, 256).float()
-    # (target - out).sum().backward()
-    # print(svd_lora_layer.lora_A.grad)
-    # print(svd_lora_layer.lora_B.grad)
-    # print(svd_lora_layer.lora_diag.grad)
-    # print(svd_lora_layer.pref_scaling.grad)
+    svd_lora_layer.set_pref_vec(torch.FloatTensor([0.1, 0.9]))
+    print(svd_lora_layer.base_layer.weight.data)
+    svd_lora_layer.eval()
+    print(svd_lora_layer.base_layer.weight.data)
+    svd_lora_layer.train()
+    print(svd_lora_layer.base_layer.weight.data)
+    out = svd_lora_layer.forward(torch.rand(4, 20, 1024))
+    target = torch.ones(4, 20, 256).float()
+    (target - out).sum().backward()
     print(svd_lora_layer.lora_A.grad)
-    svd_lora_layer.lora_A[:svd_lora_layer.r, :].grad = torch.rand(svd_lora_layer.pref_dim, svd_lora_layer.in_features)
-    print(svd_lora_layer.lora_A.grad)
+    print(svd_lora_layer.lora_B.grad)
+    print(svd_lora_layer.lora_diag.grad)
+    print(svd_lora_layer.pref_scaling.grad)

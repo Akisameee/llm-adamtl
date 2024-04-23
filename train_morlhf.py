@@ -52,7 +52,7 @@ class MORLHF_Trainer(Base_Trainer):
             model_cfg = config.model_cfg,
             ref_cfg = config.ref_cfg,
             reward_cfg = self.reward_cfgs,
-            model_kwargs = dict(n_v_head = self.pref_dim)
+            **dict(n_v_head = self.pref_dim)
         )
         
         self.ppo_trainer = MOPPO_Trainer(

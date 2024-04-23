@@ -1,6 +1,6 @@
 from modules.manipulators.base import *
 
-class Linear_Scalarization(Base_Manipulator):
+class Weight_Linear_Scalarization(Base_Weight_Manipulator):
 
     def __init__(
         self,
@@ -21,7 +21,7 @@ class Linear_Scalarization(Base_Manipulator):
         return loss
         
 
-class ScaleInvariant_Linear_Scalarization(Base_Manipulator):
+class Weight_ScaleInvariant_Linear_Scalarization(Base_Weight_Manipulator):
 
     def __init__(
         self,
@@ -40,3 +40,23 @@ class ScaleInvariant_Linear_Scalarization(Base_Manipulator):
         
         loss = torch.sum(torch.log(losses) * self.pref_vec)
         return loss
+    
+class MO_Linear_Scalarization(Base_MO_Manipulator):
+
+    def __init__(
+        self,
+        model: nn.Module,
+        accelerator: Accelerator,
+        optimizer: torch.optim.Optimizer,
+        pref_dim: int,
+        max_norm: float = None
+    ) -> None:
+        super().__init__(model, accelerator, optimizer, pref_dim, max_norm)
+
+    def get_weighted_loss(self, losses: torch.Tensor):
+        
+        if self.pref_vec.device != losses.device:
+            self.pref_vec.to(losses.device)
+        
+        weighted_losses = losses * self.pref_vec
+        return weighted_losses

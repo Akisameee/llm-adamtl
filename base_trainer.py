@@ -29,7 +29,7 @@ class Base_Trainer(nn.Module):
         model_cfg: LM_Config,
         ref_cfg: LM_Config = None,
         reward_cfg: RM_Config | list = None,
-        model_kwargs: dict = None,
+        **model_kwargs,
     ):
         super().__init__()
 

@@ -13,13 +13,14 @@ from accelerate import Accelerator
 import tqdm
 import os
 
-from configs import PPO_Config, model_infos
+from configs import PPO_Config
 from modules.ppo import PPO_Trainer, PPOMemory, pad_sequence_fixed
 from modules.pefts import Panacea_SVD_Linear
 from modules.base import BaseLMWithValueHeads
 from modules.manipulators import (
-    Linear_Scalarization,
-    ScaleInvariant_Linear_Scalarization
+    Base_Manipulator,
+    Weight_Linear_Scalarization,
+    Weight_ScaleInvariant_Linear_Scalarization
 )
 from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, default, masked_whiten
 from logger import Logger
@@ -46,7 +47,7 @@ class MOPPO_Trainer(PPO_Trainer):
             logger = logger
         )
 
-        self.manipulator = Linear_Scalarization(
+        self.manipulator = Weight_Linear_Scalarization(
             model = self.model,
             accelerator = self.accelerator,
             optimizer = self.optimizer,
@@ -176,7 +177,7 @@ class MOPPO_Trainer(PPO_Trainer):
                 losses = torch.stack(losses, dim = 0)
                 # update
                 # self.accelerator.backward(loss)
-                weighted_loss = self.manipulator.backward(
+                weighted_loss, losses = self.manipulator.backward(
                     losses = losses
                 )
                 multi_losses.append(losses.detach().cpu().tolist())
