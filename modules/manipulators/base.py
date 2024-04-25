@@ -3,8 +3,9 @@ import torch.nn as nn
 from accelerate import Accelerator
 from typing import Dict, List, Tuple, Union
 import os
-
 from torch.optim.optimizer import Optimizer as Optimizer
+
+from modules.pefts import Panacea_SVD_Linear
 
 class Base_Manipulator():
 
@@ -160,9 +161,18 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
     def restore_gradient(
         self
     ):
+        for name, module in self.model.named_modules():
+            if isinstance(module, Panacea_SVD_Linear):
+                grad_dict = {k: v for k, v in self.grad_dict.items() if k.startswith(name)}
+                grad_dict = module.restore_gradient(grad_dict)
+                self.grad_dict.update(grad_dict)
+            
         for name, param in self.get_named_parameters():
             if name in self.grad_dict.keys():
-                param.grad = self.grad_dict[name].to(param.device)
+                if isinstance(self.grad_dict[name], list):
+                    param.grad = torch.stack(self.grad_dict[name], dim = 0).sum(dim = 0).to(param.device)
+                else:
+                    param.grad = self.grad_dict[name].to(param.device)
     
     def step(
         self

@@ -132,11 +132,7 @@ class MOPPO_Trainer(PPO_Trainer):
             sequences,
             masks,
             action_masks,
-            # old_probs,
-            # old_logprobs,
-            # ref_logprobs,
             rm_rewards_pref,
-            # old_values_pref
         ) = list(map(partial(pad_sequence_fixed, batch_first = True), zip(*memories)))
 
         self.model.train()
@@ -188,14 +184,11 @@ class MOPPO_Trainer(PPO_Trainer):
                     rm_rewards_pref,
                     old_values_pref,
                 ],
-                # device = self.device
+                device = self.device
             ),
             batch_size = self.train_batch_size,
             shuffle = True
         )
-        dataloader = self.accelerator.prepare(dataloader)
-
-        self.model.train()
 
         # PPO training
         multi_losses = []

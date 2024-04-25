@@ -200,6 +200,11 @@ class MORLHF_Trainer(Base_Trainer):
         n_update_timestep: int = 8,
         sample_batch_size: int = 8,
     ):
+        if n_update_timestep < self.accelerator.gradient_accumulation_steps:
+            raise ValueError(
+                f'Unable to train, n_update_timestep({n_update_timestep}) < ' + \
+                f'gradient_accumulation_step({self.accelerator.gradient_accumulation_steps}).'
+            )
         
         set_all_adapters(
             model = self.ppo_trainer.model,
@@ -249,23 +254,7 @@ class MORLHF_Trainer(Base_Trainer):
                     **self.generation_config.to_dict()
                 )
 
-                # with torch.no_grad():
-                #     logits, values = self.ppo_trainer.batch_forward(
-                #         sequences,
-                #         mask = masks
-                #     )
-                #     logits = shift(logits, shift = 1, dim = -2)
-                #     probs = logits.softmax(dim = -1)
-                #     logprobs = log_prob(probs, sequences)
-
-                # ref_logprobs = self.get_ref_logprobs(
-                #     ref_model = self.ref_model,
-                #     sequences = sequences,
-                #     masks = masks
-                # )
-
                 rms_rewards = []
-                
                 for idx, reward_model in enumerate(self.reward_models):
                     rm_rewards = self.get_rm_rewards(
                         reward_model = reward_model,
@@ -387,6 +376,10 @@ def main():
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
+    config.loss_manipulator_type = 'mols'
+    config.model_cfg.peft_cfg.r = 7
+    config.model_cfg.peft_cfg.pref_r = 1
+    
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
     # model_path = '/home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf'

@@ -18,6 +18,11 @@ class Base_Adapter(nn.Module):
         self.base_layer = base_layer
         self.disabled = False
 
+    @property
+    def device(self):
+
+        return self.base_layer.device
+
     def set_adapter(self, enable: bool, base_enable: bool = False):
 
         if enable:

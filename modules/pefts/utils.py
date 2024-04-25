@@ -66,3 +66,6 @@ def set_all_adapters(
             module.set_adapter(enable = enable, base_enable = base_enable)
         elif len(list(module.children())) > 0:
             set_all_adapters(module, enable = enable, base_enable = base_enable)
+
+def compute_angle(x, y):
+    pass
