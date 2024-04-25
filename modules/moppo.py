@@ -13,23 +13,33 @@ from accelerate import Accelerator
 import tqdm
 import os
 
-from configs import PPO_Config
+from configs import MOPPO_Config
 from modules.ppo import PPO_Trainer, PPOMemory, pad_sequence_fixed
+from modules.manipulators import (
+    Base_Weight_Manipulator,
+    Base_MO_Manipulator,
+    Weight_Linear_Scalarization,
+    Weight_ScaleInvariant_Linear_Scalarization,
+    MO_Linear_Scalarization
+)
 from modules.pefts import Panacea_SVD_Linear
 from modules.base import BaseLMWithValueHeads
-from modules.manipulators import (
-    Base_Manipulator,
-    Weight_Linear_Scalarization,
-    Weight_ScaleInvariant_Linear_Scalarization
-)
 from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, default, masked_whiten
 from logger import Logger
+
+manipulator_map = {
+    None: Base_Weight_Manipulator,
+    'ls': Weight_Linear_Scalarization,
+    'sils': Weight_ScaleInvariant_Linear_Scalarization,
+    'mo': Base_MO_Manipulator,
+    'mols': MO_Linear_Scalarization
+}
 
 class MOPPO_Trainer(PPO_Trainer):
 
     def __init__(
         self,
-        config: PPO_Config,
+        config: MOPPO_Config,
         pref_dim: int,
         model: AutoModelForCausalLMWithValueHead | BaseLMWithValueHeads,
         tokenizer: AutoTokenizer = None,
@@ -47,7 +57,8 @@ class MOPPO_Trainer(PPO_Trainer):
             logger = logger
         )
 
-        self.manipulator = Weight_Linear_Scalarization(
+        self.loss_manipulator_type = config.loss_manipulator_type
+        self.manipulator: Base_Weight_Manipulator = manipulator_map[self.loss_manipulator_type](
             model = self.model,
             accelerator = self.accelerator,
             optimizer = self.optimizer,
@@ -65,6 +76,53 @@ class MOPPO_Trainer(PPO_Trainer):
 
         self.manipulator.set_pref_vec(pref_vec)
 
+    @torch.no_grad()
+    def get_all_logprobs(
+        self,
+        sequences: torch.LongTensor,
+        masks: torch.LongTensor
+    ):
+        seq_dataloader = DataLoader(
+            ExperienceDataset(
+                [
+                    sequences,
+                    masks,
+                ],
+                device = self.device
+            ),
+            batch_size = self.train_batch_size,
+            shuffle = False,
+            drop_last = False
+        )
+
+        all_old_logprobs = []
+        all_old_values = []
+        all_ref_logprobs = []
+        for sequences, masks in seq_dataloader:
+            old_logits, old_values = self.batch_forward(
+                sequences,
+                mask = masks
+            )
+            old_logits = shift(old_logits, shift = 1, dim = -2)
+            old_probs = old_logits.softmax(dim = -1)
+            old_logprobs = log_prob(old_probs, sequences)
+            old_values = shift(old_values, shift = 1, dim = -2)
+            all_old_logprobs.append(old_logprobs)
+            all_old_values.append(old_values)
+
+            ref_logprobs = self.get_ref_logprobs(
+                ref_model = self.ref_model,
+                sequences = sequences,
+                masks = masks
+            )
+            all_ref_logprobs.append(ref_logprobs)
+
+        return (
+            torch.cat(all_old_logprobs, dim = 0),
+            torch.cat(all_old_values, dim = 0),
+            torch.cat(all_ref_logprobs, dim = 0)
+        )
+
     def learn(
         self,
         memories: deque[PPOMemory]
@@ -73,40 +131,50 @@ class MOPPO_Trainer(PPO_Trainer):
         (
             sequences,
             masks,
-            all_action_masks,
-            old_probs,
-            old_logprobs,
-            ref_logprobs,
+            action_masks,
+            # old_probs,
+            # old_logprobs,
+            # ref_logprobs,
             rm_rewards_pref,
-            old_values_pref
+            # old_values_pref
         ) = list(map(partial(pad_sequence_fixed, batch_first = True), zip(*memories)))
 
-        old_values_pref_new = []
-        advantages_pref = []
-        returns_pref = []
-        for i in range(self.pref_dim):
-            
-            rm_rewards = rm_rewards_pref[..., i]
-            old_values = old_values_pref[..., i]
-            rewards, kl_refs = self.compute_rewards(
-                rm_rewards = rm_rewards,
-                logprobs = old_logprobs,
-                ref_logprobs = ref_logprobs,
-                masks = all_action_masks
-            )
+        self.model.train()
+        (
+            old_logprobs,
+            old_values_pref,
+            ref_logprobs
+        ) = self.get_all_logprobs(
+            sequences = sequences,
+            masks = masks
+        )
 
-            old_values = shift(old_values, shift = 1, dim = -2)
-            old_values, advantages, returns = self.compute_advantages(
-                old_values,
-                rewards,
-                all_action_masks
-            )
-            old_values_pref_new.append(old_values)
-            advantages_pref.append(advantages)
-            returns_pref.append(returns)
-        old_values_pref = torch.stack(old_values_pref_new, dim = -1)
-        advantages_pref = torch.stack(advantages_pref, dim = -1)
-        returns_pref = torch.stack(returns_pref, dim = -1)
+        # old_values_pref_new = []
+        # advantages_pref = []
+        # returns_pref = []
+        # for i in range(self.pref_dim):
+            
+        #     rm_rewards = rm_rewards_pref[..., i]
+        #     old_values = old_values_pref[..., i]
+        #     rewards, kl_refs = self.compute_rewards(
+        #         rm_rewards = rm_rewards,
+        #         logprobs = old_logprobs,
+        #         ref_logprobs = ref_logprobs,
+        #         masks = all_action_masks
+        #     )
+
+        #     old_values = shift(old_values, shift = 1, dim = -2)
+        #     old_values, advantages, returns = self.compute_advantages(
+        #         old_values,
+        #         rewards,
+        #         all_action_masks
+        #     )
+        #     old_values_pref_new.append(old_values)
+        #     advantages_pref.append(advantages)
+        #     returns_pref.append(returns)
+        # old_values_pref = torch.stack(old_values_pref_new, dim = -1)
+        # advantages_pref = torch.stack(advantages_pref, dim = -1)
+        # returns_pref = torch.stack(returns_pref, dim = -1)
 
         # prepare dataloader
         dataloader = DataLoader(
@@ -114,11 +182,11 @@ class MOPPO_Trainer(PPO_Trainer):
                 [
                     sequences,
                     masks,
-                    all_action_masks,
+                    action_masks,
                     old_logprobs,
+                    ref_logprobs,
+                    rm_rewards_pref,
                     old_values_pref,
-                    returns_pref,
-                    advantages_pref,
                 ],
                 # device = self.device
             ),
@@ -139,9 +207,9 @@ class MOPPO_Trainer(PPO_Trainer):
                 masks,
                 action_masks,
                 old_logprobs,
+                ref_logprobs,
+                rm_rewards_pref,
                 old_values_pref,
-                returns_pref,
-                advantages_pref,
             ) in dataloader:
                 
                 logits, values_pref = self.batch_forward(
@@ -157,10 +225,23 @@ class MOPPO_Trainer(PPO_Trainer):
 
                 losses = []
                 for i in range(self.pref_dim):
-                    advantages = advantages_pref[..., i]
-                    returns = returns_pref[..., i]
                     values = values_pref[..., i]
+                    rm_rewards = rm_rewards_pref[..., i]
                     old_values = old_values_pref[..., i]
+
+                    rewards, kl_refs = self.compute_rewards(
+                        rm_rewards = rm_rewards,
+                        logprobs = old_logprobs,
+                        ref_logprobs = ref_logprobs,
+                        masks = action_masks
+                    )
+
+                    old_values, advantages, returns = self.compute_advantages(
+                        old_values,
+                        rewards,
+                        action_masks
+                    )
+
                     policy_loss, value_loss = self.loss(
                         logprobs,
                         old_logprobs,
@@ -175,8 +256,8 @@ class MOPPO_Trainer(PPO_Trainer):
                     loss = policy_loss + value_loss
                     losses.append(loss)
                 losses = torch.stack(losses, dim = 0)
+
                 # update
-                # self.accelerator.backward(loss)
                 weighted_loss, losses = self.manipulator.backward(
                     losses = losses
                 )
@@ -184,12 +265,10 @@ class MOPPO_Trainer(PPO_Trainer):
                 weighted_losses.append(weighted_loss.item())
 
                 self.manipulator.step()
-                # self.optimizer.step()
-                # self.optimizer.zero_grad()
 
         multi_losses = {f'losses_{i}': [losses[i] for losses in multi_losses] for i in range(self.pref_dim)}
         ppo_stats = self.get_train_stats(
-            masks = all_action_masks,
+            masks = action_masks,
             weighted_losses = weighted_losses,
             kl_refs = kl_refs,
             **multi_losses

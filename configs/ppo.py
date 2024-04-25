@@ -44,3 +44,9 @@ class PPO_Config(Trainer_Config):
     n_update_epoch: int = 5
 
     output_dir: str = os.path.join('.', 'output')
+
+@dataclass
+class MOPPO_Config(PPO_Config):
+
+    loss_manipulator_type: Optional[Literal['ls', 'sils', 'mo', 'mols']] = None
+    

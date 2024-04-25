@@ -30,7 +30,8 @@ from .sft import (
 )
 
 from .ppo import (
-    PPO_Config
+    PPO_Config,
+    MOPPO_Config
 )
 
 from .rlhf import (

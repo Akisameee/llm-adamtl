@@ -1,5 +1,7 @@
 from .base import (
-    Base_Manipulator
+    Base_Manipulator,
+    Base_Weight_Manipulator,
+    Base_MO_Manipulator
 )
 
 from .ls import (

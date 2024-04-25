@@ -154,7 +154,7 @@ class MORLHF_Tester(MORLHF_Trainer):
 def main():
 
     config = Panacea_PPO_Config()
-    config.scalariztion_type = None
+    config.reward_scalariztion_type = None
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
     # sub_data_path = ['helpful-base', 'harmless-base']

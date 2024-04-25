@@ -301,7 +301,7 @@ def main():
     config = RLHF_Config()
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
-    sub_data_path = ['harmless-base']
+    sub_data_path = ['helpful-base']
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
@@ -311,7 +311,7 @@ def main():
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
     
-    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-harmless-reward_model')
+    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
     config.reward_cfg.model_pretrain_path = rm_path
     config.parse_args()
 

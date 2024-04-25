@@ -126,9 +126,6 @@ class PPO_Trainer(nn.Module):
         # models
         self.model = model
         self.ref_model = ref_model
-        # self.model_info = config.model_cfg.model_info
-        # self.uni_info = model_infos['universal']
-        # self.model_params = filter(lambda p: p.requires_grad, self.model.parameters())
 
         self.tokenizer = tokenizer
         if self.tokenizer is None:
@@ -155,7 +152,7 @@ class PPO_Trainer(nn.Module):
                 task_name = 'RLHF_train',
                 disable = not self.accelerator.is_main_process
             )
-
+        
         self.manipulator = Base_Manipulator(
             model = self.model,
             accelerator = self.accelerator,
@@ -387,6 +384,7 @@ class PPO_Trainer(nn.Module):
 
         return ref_logprobs
     
+    @torch.no_grad()
     def get_all_logprobs(
         self,
         sequences: torch.LongTensor,
@@ -409,24 +407,23 @@ class PPO_Trainer(nn.Module):
         all_old_values = []
         all_ref_logprobs = []
         for sequences, masks in seq_dataloader:
-            with torch.no_grad():
-                old_logits, old_values = self.batch_forward(
-                    sequences,
-                    mask = masks
-                )
-                old_logits = shift(old_logits, shift = 1, dim = -2)
-                old_probs = old_logits.softmax(dim = -1)
-                old_logprobs = log_prob(old_probs, sequences)
-                old_values = shift(old_values, shift = 1, dim = -1)
-                all_old_logprobs.append(old_logprobs)
-                all_old_values.append(old_values)
+            old_logits, old_values = self.batch_forward(
+                sequences,
+                mask = masks
+            )
+            old_logits = shift(old_logits, shift = 1, dim = -2)
+            old_probs = old_logits.softmax(dim = -1)
+            old_logprobs = log_prob(old_probs, sequences)
+            old_values = shift(old_values, shift = 1, dim = -1)
+            all_old_logprobs.append(old_logprobs)
+            all_old_values.append(old_values)
 
-                ref_logprobs = self.get_ref_logprobs(
-                    ref_model = self.ref_model,
-                    sequences = sequences,
-                    masks = masks
-                )
-                all_ref_logprobs.append(ref_logprobs)
+            ref_logprobs = self.get_ref_logprobs(
+                ref_model = self.ref_model,
+                sequences = sequences,
+                masks = masks
+            )
+            all_ref_logprobs.append(ref_logprobs)
 
         return (
             torch.cat(all_old_logprobs, dim = 0),
@@ -533,130 +530,6 @@ class PPO_Trainer(nn.Module):
 
         ppo_stats = self.get_train_stats(
             masks = action_masks,
-            policy_losses = policy_losses,
-            critic_losses = critic_losses,
-            rewards = rewards,
-            rm_rewards = rm_rewards,
-            kl_refs = kl_refs
-        )
-        
-        return ppo_stats
-    
-    def learn_old(
-        self,
-        memories: deque[PPOMemory]
-    ):
-        # stack all data stored in the memories
-        (
-            sequences,
-            masks,
-            all_action_masks,
-            old_probs,
-            old_logprobs,
-            ref_logprobs,
-            rm_rewards,
-            old_values
-        ) = list(map(partial(pad_sequence_fixed, batch_first = True), zip(*memories)))
-
-        rewards, kl_refs = self.compute_rewards(
-            rm_rewards = rm_rewards,
-            logprobs = old_logprobs,
-            ref_logprobs = ref_logprobs,
-            masks = all_action_masks
-        )
-
-        old_values = shift(old_values, shift = 1, dim = -1)
-        old_values, advantages, returns = self.compute_advantages(
-            values = old_values,
-            rewards = rewards,
-            mask = all_action_masks
-        )
-
-        # prepare dataloader
-        dataloader = DataLoader(
-            ExperienceDataset(
-                [
-                    sequences,
-                    masks,
-                    all_action_masks,
-                    old_logprobs,
-                    old_values,
-                    returns,
-                    advantages,
-                ],
-                # device = self.device
-            ),
-            batch_size = self.train_batch_size,
-            shuffle = True
-        )
-        dataloader = self.accelerator.prepare(dataloader)
-
-        self.model.train()
-
-        # PPO training
-        policy_losses = []
-        critic_losses = []
-        self.manipulator.clear()
-        for _ in range(self.n_update_epoch):
-            for (
-                sequences,
-                masks,
-                action_masks,
-                old_logprobs,
-                old_values,
-                returns,
-                advantages,
-            ) in dataloader:
-                
-                logits, values = self.batch_forward(
-                    sequences,
-                    mask = masks
-                )
-
-                logits = shift(logits, shift = 1, dim = -2)
-                probs = logits.softmax(dim = -1)
-                logprobs = log_prob(probs, sequences)
-
-                values = shift(values, shift = 1, dim = -1)
-
-                ref_logprobs = self.get_ref_logprobs(
-                    ref_model = self.ref_model,
-                    sequences = sequences,
-                    masks = masks
-                )
-
-                policy_loss, value_loss = self.loss(
-                    logprobs,
-                    old_logprobs,
-                    advantages,
-                    returns,
-                    action_masks,
-                    values,
-                    old_values
-                )
-                critic_losses.append(value_loss.item())
-                policy_losses.append(policy_loss.item())
-
-                # combine losses
-                loss = policy_loss + value_loss
-
-                # update
-                # self.accelerator.backward(loss)
-
-                # if self.max_norm is not None:
-                #     if self.accelerator is not None:
-                #         if self.accelerator.sync_gradients:
-                #             self.accelerator.clip_grad_norm_(self.model_params, self.max_norm)
-                #     else:
-                #         torch.nn.utils.clip_grad_norm_(self.model_params, self.max_norm)
-
-                # self.optimizer.step()
-                # self.optimizer.zero_grad()
-                self.manipulator.backward(loss)
-                self.manipulator.step()
-
-        ppo_stats = self.get_train_stats(
-            masks = all_action_masks,
             policy_losses = policy_losses,
             critic_losses = critic_losses,
             rewards = rewards,

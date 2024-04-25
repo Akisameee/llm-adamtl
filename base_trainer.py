@@ -141,7 +141,8 @@ class Base_Trainer(nn.Module):
         if safetensor:
             self.accelerator.save_model(model, ckpt_dir)
         else:
-            os.mkdir(ckpt_dir)
+            if not os.path.exists(ckpt_dir):
+                os.mkdir(ckpt_dir)
             unwrapped_model = self.accelerator.unwrap_model(model)
             torch.save(unwrapped_model.state_dict(), os.path.join(ckpt_dir, 'checkpoint.pt'))
 

@@ -13,7 +13,7 @@ class Base_Manipulator():
         model: nn.Module,
         accelerator: Accelerator,
         optimizer: torch.optim.Optimizer,
-        max_norm: float = None
+        **kwargs
     ) -> None:
         
         self.model = model
@@ -22,7 +22,7 @@ class Base_Manipulator():
         self.n_gradient_accumulation_step = self.accelerator.gradient_accumulation_steps
         self.gradient_accumulation_step = 0
         self.grad_dict = {}
-        self.max_norm = max_norm
+        self.max_norm = kwargs.pop('max_norm', None)
 
     @property
     def device(self):
@@ -107,12 +107,11 @@ class Base_Weight_Manipulator(Base_Manipulator):
         model: nn.Module,
         accelerator: Accelerator,
         optimizer: Optimizer,
-        pref_dim: int,
-        max_norm: float = None
+        **kwargs
     ) -> None:
-        super().__init__(model, accelerator, optimizer, max_norm)
+        super().__init__(model, accelerator, optimizer, **kwargs)
 
-        self.pref_dim = pref_dim
+        self.pref_dim = kwargs.pop('pref_dim')
         self.pref_vec = torch.FloatTensor(self.pref_dim).to(self.device)
 
     def set_pref_vec(
@@ -132,10 +131,9 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
         model: nn.Module,
         accelerator: Accelerator,
         optimizer: Optimizer,
-        pref_dim: int,
-        max_norm: float = None
+        **kwargs
     ) -> None:
-        super().__init__(model, accelerator, optimizer, pref_dim, max_norm)
+        super().__init__(model, accelerator, optimizer, **kwargs)
 
     def get_weighted_loss(
         self,
@@ -149,7 +147,7 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
     ):
         for name, param in self.get_named_parameters():
             if name in self.grad_dict.keys():
-                assert len(self.grad_dict[name]) < obj_idx
+                assert len(self.grad_dict[name]) >= obj_idx
                 if len(self.grad_dict[name]) == obj_idx:
                     self.grad_dict[name].append(param.grad.detach().cpu())
                 else:
@@ -179,11 +177,14 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
         self,
         losses: torch.Tensor
     ):
-        assert len(losses) != self.pref_dim
+        assert len(losses) == self.pref_dim
         weighted_losses = self.get_weighted_loss(losses)
         
         for obj_idx, weighted_loss in enumerate(weighted_losses):
-            self.accelerator.backward(weighted_loss)
+            self.accelerator.backward(
+                weighted_loss,
+                retain_graph = obj_idx != self.pref_dim - 1
+            )
             self.accumulate_gradient(obj_idx)
         
         if self.max_norm is not None and self.accelerator.sync_gradients:

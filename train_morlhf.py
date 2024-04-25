@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -64,10 +64,15 @@ class MORLHF_Trainer(Base_Trainer):
             logger = self.logger
         )
         
+        self.reward_scalariztion_type = config.reward_scalariztion_type
+        if self.reward_scalariztion_type is not None and config.loss_manipulator_type is not None:
+            self.reward_scalariztion_type = None
+            raise ValueError(
+                'Cannot set a reward_scalariztion_type with a weighted loss method.\n' + \
+                'Setting reward_scalariztion_type to None.'
+            )
         self.retokenization = config.retokenization
         self.n_sample_reuse = config.n_sample_reuse
-        self.scalariztion_type = config.scalariztion_type
-        self.kl_ref_coef = config.kl_ref_coef
         self.n_save_time = config.n_save_time
         # self.clean_cache_every_iter = True
         
@@ -162,10 +167,10 @@ class MORLHF_Trainer(Base_Trainer):
         pref_vec: torch.FloatTensor
     ):  
         
-        rm_rewards_scalar = torch.zeros_like(rms_rewards[0])
-        if self.scalariztion_type is None:
+        rm_rewards_scalar = torch.zeros_like(rms_rewards[0]).unsqueeze(-1)
+        if self.reward_scalariztion_type is None:
             rm_rewards_scalar = torch.stack(rms_rewards, dim = -1)
-        elif self.scalariztion_type == 'ls':
+        elif self.reward_scalariztion_type == 'ls':
             for rm_rewards, pref_weight in zip(rms_rewards, pref_vec):
                 rm_rewards_scalar += rm_rewards * pref_weight
         else:
@@ -244,20 +249,20 @@ class MORLHF_Trainer(Base_Trainer):
                     **self.generation_config.to_dict()
                 )
 
-                with torch.no_grad():
-                    logits, values = self.ppo_trainer.batch_forward(
-                        sequences,
-                        mask = masks
-                    )
-                    logits = shift(logits, shift = 1, dim = -2)
-                    probs = logits.softmax(dim = -1)
-                    logprobs = log_prob(probs, sequences)
+                # with torch.no_grad():
+                #     logits, values = self.ppo_trainer.batch_forward(
+                #         sequences,
+                #         mask = masks
+                #     )
+                #     logits = shift(logits, shift = 1, dim = -2)
+                #     probs = logits.softmax(dim = -1)
+                #     logprobs = log_prob(probs, sequences)
 
-                ref_logprobs = self.get_ref_logprobs(
-                    ref_model = self.ref_model,
-                    sequences = sequences,
-                    masks = masks
-                )
+                # ref_logprobs = self.get_ref_logprobs(
+                #     ref_model = self.ref_model,
+                #     sequences = sequences,
+                #     masks = masks
+                # )
 
                 rms_rewards = []
                 
@@ -284,31 +289,31 @@ class MORLHF_Trainer(Base_Trainer):
                     sequence,
                     mask,
                     action_mask,
-                    prob,
-                    logprob,
-                    ref_logprob,
+                    # prob,
+                    # logprob,
+                    # ref_logprob,
                     rm_reward_scalarized,
-                    value
+                    # value
                 ) in zip(
                     sequences,
                     masks,
                     action_masks,
-                    probs,
-                    logprobs,
-                    ref_logprobs,
+                    # probs,
+                    # logprobs,
+                    # ref_logprobs,
                     rm_rewards_scalarized,
-                    values
+                    # values
                 ):
                     seq_len = torch.sum(mask).item()
                     memories.append(PPOMemory(*map(detach_to_cpu_, (
                         sequence[: seq_len],
                         mask[: seq_len],
                         action_mask[: seq_len],
-                        prob[: seq_len, :],
-                        logprob[: seq_len],
-                        ref_logprob[: seq_len],
+                        # prob[: seq_len, :],
+                        # logprob[: seq_len],
+                        # ref_logprob[: seq_len],
                         rm_reward_scalarized,
-                        value[: seq_len]
+                        # value[: seq_len]
                     ))))
 
                 if self.clean_cache_every_iter:
@@ -316,17 +321,16 @@ class MORLHF_Trainer(Base_Trainer):
                         sequences,
                         masks,
                         action_masks,
-                        probs,
-                        logprobs,
-                        ref_logprobs,
+                        # probs,
+                        # logprobs,
+                        # ref_logprobs,
                         rm_rewards,
-                        values
+                        # values
                     )
                     torch.cuda.empty_cache()
                 
                 tqdm_bar.update(1)
                 if timestep >= (updatestep + 1) * n_update_timestep:
-                    # try:
                     updatestep += 1
                     self.accelerator.wait_for_everyone()
                     ppo_stats = [self.ppo_trainer.learn(memories)]
@@ -375,7 +379,7 @@ def main():
 
     config = Panacea_PPO_Config()
 
-    config.scalariztion_type = None
+    config.reward_scalariztion_type = None
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
     # sub_data_path = ['helpful-base', 'harmless-base']

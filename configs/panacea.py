@@ -3,17 +3,17 @@ from .base import *
 # from peft.utils.peft_types import TaskType
 # from trl import AutoModelForCausalLMWithValueHead
 
-from .ppo import PPO_Config
+from .ppo import PPO_Config, MOPPO_Config
 from .datasets_config import Instruct_Dataset_Config
 from .pefts import Lora_Config, Panacea_SVD_Config
 from .model import LM_Config, RM_Config
 
 @dataclass
-class Panacea_PPO_Config(PPO_Config):
+class Panacea_PPO_Config(MOPPO_Config):
 
     task_name: str = 'Panacea_train'
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
-        gradient_accumulation_steps = 4
+        gradient_accumulation_steps = 16
     )
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
@@ -61,14 +61,15 @@ class Panacea_PPO_Config(PPO_Config):
     gae_gamma: float = 1
     ratio_threshold: float = 10
     value_loss_coef: float = 0.1
-    scalariztion_type: Optional[Literal['ls', 'tche']] = 'ls'
+    reward_scalariztion_type: Optional[Literal['ls', 'tche']] = None
+    loss_manipulator_type: Optional[Literal['ls', 'sils', 'mo', 'mols']] = 'ls'
 
     n_episode: int = 1
     sample_batch_size: int = 1
     n_sample_reuse: int = 1
     n_update_timestep: int = 8
     train_batch_size: int = 1
-    n_update_epoch: int = 3
+    n_update_epoch: int = 1
 
     n_save_time: int = 3
     output_dir: str = os.path.join('.', 'output')

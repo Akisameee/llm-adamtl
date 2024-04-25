@@ -7,10 +7,9 @@ class Weight_Linear_Scalarization(Base_Weight_Manipulator):
         model: nn.Module,
         accelerator: Accelerator,
         optimizer: torch.optim.Optimizer,
-        pref_dim: int,
-        max_norm: float = None
+        **kwargs
     ) -> None:
-        super().__init__(model, accelerator, optimizer, pref_dim, max_norm)
+        super().__init__(model, accelerator, optimizer, **kwargs)
 
     def get_weighted_loss(self, losses: torch.Tensor):
         
@@ -28,10 +27,9 @@ class Weight_ScaleInvariant_Linear_Scalarization(Base_Weight_Manipulator):
         model: nn.Module,
         accelerator: Accelerator,
         optimizer: torch.optim.Optimizer,
-        pref_dim: int,
-        max_norm: float = None
+        **kwargs
     ) -> None:
-        super().__init__(model, accelerator, optimizer, pref_dim, max_norm)
+        super().__init__(model, accelerator, optimizer, **kwargs)
 
     def get_weighted_loss(self, losses: torch.Tensor):
         
@@ -48,10 +46,9 @@ class MO_Linear_Scalarization(Base_MO_Manipulator):
         model: nn.Module,
         accelerator: Accelerator,
         optimizer: torch.optim.Optimizer,
-        pref_dim: int,
-        max_norm: float = None
+        **kwargs
     ) -> None:
-        super().__init__(model, accelerator, optimizer, pref_dim, max_norm)
+        super().__init__(model, accelerator, optimizer, **kwargs)
 
     def get_weighted_loss(self, losses: torch.Tensor):
         
