@@ -74,9 +74,10 @@ class Instruct_Dataset():
 
     def load(
         self,
-        mode = 'train'
+        mode = 'train',
+        max_sample = None
     ):
-        texts = self.dataset_parser.parse_dataset(mode = mode)
+        texts = self.dataset_parser.parse_dataset(mode = mode, max_sample = max_sample)
         self.texts += texts
         self.datas += self.tokenize_parsed_texts(texts)
         

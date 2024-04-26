@@ -50,21 +50,31 @@ class Dataset_Parser(object):
         
     def parse_dataset(
         self,
-        mode = 'train'
+        mode = 'train',
+        max_sample = None
     ):
         if isinstance(self.sub_paths, str):
             self.sub_paths = [self.sub_paths]
         
+        max_sample = max_sample if max_sample is not None else 0
         datas = []
         if self.dataset_name == 'hh-rlhf':
             for sub_path in self.sub_paths:
-                datas += self.parse_hh_rlhf_dataset(os.path.join(self.data_dir, sub_path), mode = mode)
+                datas += self.parse_hh_rlhf_dataset(
+                    os.path.join(self.data_dir, sub_path),
+                    mode = mode,
+                    max_sample = max_sample
+                )
         elif self.dataset_name == 'sharegpt':
-            datas = self.parse_sharegpt_dataset(self.data_dir, mode = mode)
+            datas = self.parse_sharegpt_dataset(
+                self.data_dir,
+                mode = mode,
+                max_sample = max_sample
+            )
 
         return datas
 
-    def parse_sharegpt_dataset(self, data_path, mode):
+    def parse_sharegpt_dataset(self, data_path, mode, max_sample = None):
         
         prompt_pattern = r'<s>Human: (.*?)</s>'
         response_pattern = r'<s>Assistant: (.*?)</s>'
@@ -104,14 +114,14 @@ class Dataset_Parser(object):
                 
                 datas.append(data)
 
-                if mode and len(datas) == TEST:
-                        break
-                if not mode and len(datas) == TEST // 10:
+                if mode and len(datas) == max_sample:
                     break
+                # if not mode and len(datas) == max_sample // 10:
+                #     break
         
         return datas
 
-    def parse_hh_rlhf_dataset(self, data_path, mode):
+    def parse_hh_rlhf_dataset(self, data_path, mode, max_sample = None):
 
         dataset_info = dataset_infos['hh-rlhf']
         dp_prefix = dataset_info['prompt_prefix']
@@ -148,10 +158,10 @@ class Dataset_Parser(object):
                 
                 datas.append(data)
 
-                if mode and len(datas) == TEST:
-                        break
-                if not mode and len(datas) == TEST // 10:
+                if mode and len(datas) == max_sample:
                     break
+                # if not mode and len(datas) == max_sample // 10:
+                #     break
         
         return datas
 

@@ -1,0 +1,176 @@
+nohup: 忽略输入
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Using RTX 3090 or 4000 series which doesn't support faster communication speedups. Ensuring P2P and IB communications are disabled.
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+(INFO) 2024-04-26 18:02:37,758 - Panacea_train_logger:
+Args Info:
+--task_name Panacea_train
+--n_save_time None
+--output_dir ./output
+--accelertor_cfg_log_with None
+--accelertor_cfg_gradient_accumulation_steps 8
+--dateset_cfg_data_path /home/smliu/datasets/hf/hh-rlhf
+--dateset_cfg_sub_data_path ['harmless-base']
+--dateset_cfg_tokenizer_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--dateset_cfg_max_len 512
+--dateset_cfg_remove_chinese True
+--dateset_cfg_padding_side left
+--dateset_cfg_prompt_only False
+--dateset_cfg_tokenize_type prompt_not_pad
+--model_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--model_cfg_model_class None
+--model_cfg_peft_cfg_adapter_name panacea
+--model_cfg_peft_cfg_use_peft True
+--model_cfg_peft_cfg_target_modules ['q_proj', 'k_proj', 'v_proj', 'out_proj']
+--model_cfg_peft_cfg_r 7
+--model_cfg_peft_cfg_pref_r 1
+--model_cfg_peft_cfg_lora_alpha 32
+--model_cfg_peft_cfg_lora_dropout 0.1
+--model_cfg_peft_cfg_pref_dim 2
+--model_cfg_ckpt_path ./ckpts
+--model_cfg_use_ckpt False
+--model_cfg_ckpt_load_path None
+--model_cfg_device cuda
+--model_cfg_max_len 512
+--ref_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--ref_cfg_model_class None
+--ref_cfg_peft_cfg_adapter_name None
+--ref_cfg_peft_cfg_use_peft False
+--ref_cfg_peft_cfg_target_modules None
+--ref_cfg_ckpt_path ./ckpts
+--ref_cfg_use_ckpt False
+--ref_cfg_ckpt_load_path None
+--ref_cfg_device cuda
+--ref_cfg_max_len 512
+--lr 0.0001
+--weight_decay 0.0005
+--pooled_values False
+--max_norm None
+--kl_ref_coef 0.5
+--kl_type kl
+--eps_clip 0.2
+--value_clip 0.2
+--beta_s 0.01
+--lam 0.95
+--gae_gamma 1
+--ratio_threshold 10
+--value_loss_coef 0.1
+--train_batch_size 1
+--n_update_epoch 1
+--loss_manipulator_type mols
+--reward_cfg_0_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-helpful-reward_model
+--reward_cfg_0_model_class None
+--reward_cfg_0_peft_cfg_adapter_name None
+--reward_cfg_0_peft_cfg_use_peft False
+--reward_cfg_0_peft_cfg_target_modules None
+--reward_cfg_0_device cuda
+--reward_cfg_0_reward_weight 1
+--reward_name_0 helpful
+--reward_cfg_1_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-harmless-reward_model
+--reward_cfg_1_model_class None
+--reward_cfg_1_peft_cfg_adapter_name None
+--reward_cfg_1_peft_cfg_use_peft False
+--reward_cfg_1_peft_cfg_target_modules None
+--reward_cfg_1_device cuda
+--reward_cfg_1_reward_weight 1
+--reward_name_1 harmless
+--reward_cfg_2_model_pretrain_path None
+--reward_cfg_2_model_class None
+--reward_cfg_2_peft_cfg_adapter_name None
+--reward_cfg_2_peft_cfg_use_peft False
+--reward_cfg_2_peft_cfg_target_modules None
+--reward_cfg_2_device cuda
+--reward_cfg_2_reward_weight 1
+--reward_name_2 None
+--reward_scalariztion_type None
+--n_episode 1
+--sample_batch_size 1
+--n_sample_reuse 1
+--n_update_timestep 16
+--n_save_step 3
+--n_eval_epoch 11
+--n_eval_sample 100
+
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+(INFO) 2024-04-26 18:02:44,992 - Panacea_train_logger:
+Peft Info:
+total parameters: 1370137536
+trainable parameters: 3539904
+non-trainable parameters: 1366597632
+(INFO) 2024-04-26 18:02:47,446 - Panacea_train_logger:
+Disabling target model peft layers as reference model.
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+  0%|          | 0/8832 [00:00<?, ?it/s]                                        (INFO) 2024-04-26 18:03:10,835 - Panacea_train_logger:
+Save timesteps:[2944 5888 8832].
+  0%|          | 0/8832 [00:00<?, ?it/s]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+  0%|          | 1/8832 [00:10<25:12:08, 10.27s/it]  0%|          | 2/8832 [00:16<18:58:52,  7.74s/it]  0%|          | 3/8832 [00:17<11:17:59,  4.61s/it]  0%|          | 4/8832 [00:17<7:38:48,  3.12s/it]   0%|          | 5/8832 [00:18<5:18:55,  2.17s/it]  0%|          | 6/8832 [00:24<8:51:39,  3.61s/it]  0%|          | 7/8832 [00:25<6:22:57,  2.60s/it]  0%|          | 8/8832 [00:25<4:41:00,  1.91s/it]  0%|          | 9/8832 [00:31<7:16:21,  2.97s/it]  0%|          | 10/8832 [00:33<6:48:23,  2.78s/it]  0%|          | 11/8832 [00:39<8:54:58,  3.64s/it]  0%|          | 12/8832 [00:40<7:00:16,  2.86s/it]  0%|          | 13/8832 [00:40<5:13:39,  2.13s/it]  0%|          | 14/8832 [00:41<4:21:34,  1.78s/it]  0%|          | 15/8832 [00:42<3:45:05,  1.53s/it]                                                   (INFO) 2024-04-26 18:03:54,108 - Panacea_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>I want to kill someone<response_prefix>That’s a problem, I’m not supposed to give you that information.  However, maybe I can help?<prompt_prefix>Yes, I would like your help<response_prefix>
+--------------------------------------------------
+Response:I’m sorry, but I cannot assist you with that. It is not ethical, legal, or moral to harm someone. Is there anything else I can help you with?
+--------------------------------------------------
+RM_Score:-0.5656043291091919
+  0%|          | 15/8832 [00:43<3:45:05,  1.53s/it]                                                   (INFO) 2024-04-26 18:03:54,133 - Panacea_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>I want to kill someone<response_prefix>That’s a problem, I’m not supposed to give you that information.  However, maybe I can help?<prompt_prefix>Yes, I would like your help<response_prefix>
+--------------------------------------------------
+Response:I’m sorry, but I cannot assist you with that. It is not ethical, legal, or moral to harm someone. Is there anything else I can help you with?
+--------------------------------------------------
+RM_Score:1.898411512374878
+  0%|          | 15/8832 [00:43<3:45:05,  1.53s/it]  0%|          | 16/8832 [00:43<3:12:27,  1.31s/it]                                                   (INFO) 2024-04-26 18:03:56,761 - root:
+Reducer buckets have been rebuilt in this iteration.
+  0%|          | 16/8832 [00:45<3:12:27,  1.31s/it]                                                   (INFO) 2024-04-26 18:04:02,526 - Panacea_train_logger:
+Episode: 1 Timestep: 16
+loss_0: 0.006565 loss_1: 0.05279 weighted_loss: 0.05935 ref_kl: 0 generate_length: 37.5 helpful: 0.8094 harmless: -0.2201 pref_vec: ['0.226', '0.774']
+  0%|          | 16/8832 [00:51<3:12:27,  1.31s/it]  0%|          | 17/8832 [00:56<11:55:06,  4.87s/it]  0%|          | 18/8832 [00:57<9:25:29,  3.85s/it]   0%|          | 19/8832 [01:03<10:39:01,  4.35s/it]  0%|          | 20/8832 [01:04<8:00:42,  3.27s/it]   0%|          | 21/8832 [01:06<7:29:22,  3.06s/it]  0%|          | 22/8832 [01:07<5:26:39,  2.22s/it]  0%|          | 23/8832 [01:12<8:09:29,  3.33s/it]  0%|          | 24/8832 [01:13<6:08:48,  2.51s/it]  0%|          | 25/8832 [01:15<5:55:46,  2.42s/it]  0%|          | 26/8832 [01:16<4:51:19,  1.98s/it]  0%|          | 27/8832 [01:18<4:41:12,  1.92s/it]  0%|          | 28/8832 [01:19<4:09:47,  1.70s/it]  0%|          | 29/8832 [01:23<5:21:38,  2.19s/it]  0%|          | 30/8832 [01:24<5:01:12,  2.05s/it]  0%|          | 31/8832 [01:26<4:36:10,  1.88s/it]                                                   (INFO) 2024-04-26 18:04:37,670 - Panacea_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>What is singer Cardi B.  real name?<response_prefix>
+--------------------------------------------------
+Response:Cardi B is a real name for the singer-songwriter.
+--------------------------------------------------
+RM_Score:0.9257550835609436
+  0%|          | 31/8832 [01:26<4:36:10,  1.88s/it]                                                   (INFO) 2024-04-26 18:04:37,693 - Panacea_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>What is singer Cardi B.  real name?<response_prefix>
+--------------------------------------------------
+Response:Cardi B is a real name for the singer-songwriter.
+--------------------------------------------------
+RM_Score:-0.28097105026245117
+  0%|          | 31/8832 [01:26<4:36:10,  1.88s/it]  0%|          | 32/8832 [01:26<3:40:24,  1.50s/it]

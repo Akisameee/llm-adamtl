@@ -435,6 +435,13 @@ class PPO_Trainer(nn.Module):
         self,
         memories: deque[PPOMemory]
     ):
+        if len(memories) < self.accelerator.gradient_accumulation_steps * self.train_batch_size:
+            raise ValueError(
+                f'Unable to train, n_sample({len(memories)}) < ' + \
+                f'gradient_accumulation_step({self.accelerator.gradient_accumulation_steps}) * ' + \
+                f'train_batch_size({self.train_batch_size}).'
+            )
+
         # stack all data stored in the memories
         (
             sequences,

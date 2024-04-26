@@ -64,14 +64,15 @@ class Logger():
         time_str = current_time.strftime('%Y-%m-%d %H-%M-%S')
         self.dir_name = f'{task_name} {time_str}'
         self.dir = os.path.join(output_dir, self.dir_name)
-        self.historys = None
+        self.train_historys = None
+        self.eval_historys = []
         if self.disable:
             return
         
         os.mkdir(self.dir)
         self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}.log'))
         
-    def step(self, episode, timestep, stat_dict = None):
+    def step(self, episode, timestep, stat_dict = None, eval_step = None):
 
         if self.disable:
             return
@@ -96,9 +97,15 @@ class Logger():
         history = stat_dict if stat_dict is not None else {}
         history['Episode'] = episode
         history['Timestep'] = timestep
-        if self.historys is None:
-            self.historys = pd.DataFrame(columns=columns)
-        self.historys.loc[len(self.historys)] = history
+        if eval_step is None:
+            if self.train_historys is None:
+                self.train_historys = pd.DataFrame(columns = columns)
+            self.train_historys.loc[len(self.train_historys)] = history
+        else:
+            assert eval_step <= len(self.eval_historys) and eval_step >=0
+            if len(self.eval_historys) == eval_step:
+                self.eval_historys.append(pd.DataFrame(columns = columns))
+            self.eval_historys[eval_step].loc[len(self.eval_historys[eval_step])] = history
 
     def info(self, log_str):
 
@@ -123,23 +130,28 @@ class Logger():
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
 
-        self.historys.to_csv(os.path.join(save_dir, 'train_result.csv'))
-        for col_name in self.historys.columns:
-            if col_name in ['Episode', 'Timestep']:
-                continue
-            elif not np.issubdtype(self.historys[col_name].dtype, np.number):
-                continue
-            else:
-                figure = sns.lineplot(
-                    data = self.historys,
-                    x = 'Timestep',
-                    y = col_name
-                )
-                figure.get_figure().savefig(
-                    os.path.join(save_dir, col_name),
-                    dpi = 400
-                )
-                plt.close()
+        if self.train_historys is not None:
+            self.train_historys.to_csv(os.path.join(save_dir, 'train_result.csv'))
+            for col_name in self.train_historys.columns:
+                if col_name in ['Episode', 'Timestep']:
+                    continue
+                elif not np.issubdtype(self.train_historys[col_name].dtype, np.number):
+                    continue
+                else:
+                    figure = sns.lineplot(
+                        data = self.train_historys,
+                        x = 'Timestep',
+                        y = col_name
+                    )
+                    figure.get_figure().savefig(
+                        os.path.join(save_dir, col_name),
+                        dpi = 400
+                    )
+                    plt.close()
+        else:
+            if len(self.eval_historys) > 0:
+                for eval_step, eval_history in enumerate(self.eval_historys):
+                    eval_history.to_csv(os.path.join(save_dir, f'{eval_step}_eval_result.csv'))
 
     def save_pareto_front_train(
         self,
@@ -154,12 +166,28 @@ class Logger():
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         
-        draw_pareto_fronts_train(
-            dataframe = self.historys,
+        train_plot_args = get_train_plot_args(
+            dataframe = self.train_historys,
             axes_names = axes_names,
-            vecs_name = vecs_name,
-            save_path = os.path.join(save_dir, '_'.join(axes_names) + '_pareto_front') 
+            vecs_name = vecs_name
         )
+        axes = plot_pareto_fronts_2d(**train_plot_args)
+
+        eval_alphas_factor = np.linspace(0.1, 1, len(self.eval_historys))
+        for eval_step, eval_history in enumerate(self.eval_historys):
+            eval_plot_args = get_eval_plot_args(
+                dataframe = eval_history,
+                axes_names = axes_names,
+                vecs_name = vecs_name
+            )
+            eval_plot_args['p_alphas'] *= eval_alphas_factor[eval_step]
+            eval_plot_args['l_alphas'] *= eval_alphas_factor[eval_step]
+            axes = plot_pareto_fronts_2d(**eval_plot_args, prev_axes = axes)
+
+        save_path = os.path.join(save_dir, '_'.join(axes_names) + '_pareto_front') 
+        plt.savefig(save_path, dpi = 400)
+        plt.close()
+        
 
     def save_pareto_front_test(
         self,
@@ -174,12 +202,16 @@ class Logger():
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         
-        draw_pareto_front_test(
-            dataframe = self.historys,
+        eval_plot_args = get_eval_plot_args(
+            dataframe = self.eval_historys[0],
             axes_names = axes_names,
-            vecs_name = vecs_name,
-            save_path = os.path.join(save_dir, '_'.join(axes_names) + '_pareto_front') 
+            vecs_name = vecs_name
         )
+        plot_pareto_fronts_2d(**eval_plot_args)
+
+        save_path = os.path.join(save_dir, '_'.join(axes_names) + '_pareto_front') 
+        plt.savefig(save_path, dpi = 400)
+        plt.close()
 
 def check_line_is_pareto_front(
     point_line,
@@ -222,13 +254,23 @@ def plot_pareto_fronts_2d(
     arrows,
     lines,
     axes_names,
-    alphas,
-    scaling
+    p_alphas,
+    l_alphas,
+    scaling,
+    color = 'C0',
+    sp_points = None,
+    prev_axes = None
 ):
-    fig = plt.figure()
-    axes = fig.add_subplot(111)
+    if prev_axes is None:
+        fig = plt.figure()
+        axes = fig.add_subplot(111)
+    else:
+        axes = prev_axes
 
-    axes.scatter(x, y, alpha = alphas, s = 25 * scaling)
+    axes.scatter(x, y, alpha = p_alphas, s = 25 * scaling, color = color)
+    if sp_points is not None:
+        for sp_point in sp_points:
+            axes.scatter(sp_point[0], sp_point[1], color = 'C1')
 
     if arrows is not None:
         for i in range(len(x)):
@@ -236,14 +278,14 @@ def plot_pareto_fronts_2d(
             axes.arrow(
                 x[i], y[i],
                 pref_vec[0], pref_vec[1],
-                alpha = alphas[i], color = 'C0',
+                alpha = p_alphas[i], color = color,
                 width = 0.01 * scaling, head_width = 0.02 * scaling, head_length = 0.02 * scaling
             )
-    for line in lines:
+    for line, l_alpha in zip(lines, l_alphas):
         axes.plot(
             (x[line[0]], x[line[1]]),
             (y[line[0]], y[line[1]]),
-            color = 'C0', alpha = 0.75
+            color = color, alpha = 0.75 * l_alpha
         )
 
     axes.set_xlabel(axes_names[0])
@@ -251,18 +293,17 @@ def plot_pareto_fronts_2d(
 
     return axes
 
-def draw_pareto_fronts_train(
+def get_train_plot_args(
     dataframe: pd.DataFrame,
     axes_names: tuple = ('x', 'y', 'z'),
     vecs_name: str = None,
-    save_path: str = ''
 ):
     if vecs_name:
         pref_vecs = dataframe[vecs_name]
     else:
         pref_vecs = None
     
-    alphas = np.linspace(0.1, 1, len(dataframe))
+    p_alphas = np.linspace(0.1, 1, len(dataframe))
     
     if len(axes_names) == 2:
 
@@ -285,17 +326,22 @@ def draw_pareto_fronts_train(
                 ], points = hull_points
             ):
                 pareto_front.append(line)
-
-        plot_pareto_fronts_2d(
-            x, y,
+        
+        l_alphas = np.ones(len(pareto_front))
+        plot_args = dict(
+            x = x,
+            y = y,
             arrows = pref_vecs,
             lines = pareto_front,
             axes_names = axes_names,
-            alphas = alphas,
-            scaling = scaling
+            p_alphas = p_alphas,
+            l_alphas = l_alphas,
+            scaling = scaling,
+            color = 'C0'
         )
 
     elif len(axes_names) == 3:
+        raise NotImplementedError
         fig = plt.figure()
         axes = fig.add_subplot(111, projection='3d')
         plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
@@ -336,17 +382,15 @@ def draw_pareto_fronts_train(
     
     else:
         raise ValueError('dim > 3')
+    
+    return plot_args
 
-    plt.savefig(save_path, dpi = 400)
-    plt.close()
-
-def draw_pareto_front_test(
+def get_eval_plot_args(
     dataframe: pd.DataFrame,
     axes_names: tuple = ('x', 'y', 'z'),
     vecs_name: str = None,
-    save_path: str = ''
 ):
-    alphas = np.ones(len(dataframe))
+    p_alphas = np.ones(len(dataframe))
     
     if len(axes_names) == 2:
         
@@ -357,6 +401,9 @@ def draw_pareto_front_test(
             sp_idx = dataframe[dataframe[vecs_name].apply(lambda x: x == [0.0, 0.0])].index
             if len(sp_idx) == 1:
                 sp_x, sp_y = dataframe.loc[sp_idx][axes_names[0]], dataframe.loc[sp_idx][axes_names[1]]
+                sp_points = [(sp_x, sp_y)]
+            else:
+                sp_points = None
             dataframe.drop(sp_idx, inplace = True)
 
             dataframe['sort_val'] = dataframe[vecs_name].apply(lambda x: x[0])
@@ -371,56 +418,88 @@ def draw_pareto_front_test(
 
         if pref_vecs is not None:
             pareto_front = [(i, i + 1) for i in range(0, len(dataframe) - 1)]
-        else: pareto_front = None
+            l_alphas = np.ones(len(pareto_front))
+        else:
+            pareto_front = None
+            l_alphas = None
 
-        axes = plot_pareto_fronts_2d(
-            x, y,
+        plot_args = dict(
+            x = x,
+            y = y,
             arrows = pref_vecs,
             lines = pareto_front,
             axes_names = axes_names,
-            alphas = alphas,
-            scaling = scaling
+            p_alphas = p_alphas,
+            l_alphas = l_alphas,
+            scaling = scaling,
+            sp_points = sp_points,
+            color = 'C2'
         )
-        axes.scatter(sp_x, sp_y, color = 'C1')
 
     else:
         raise NotImplementedError
 
-    plt.savefig(save_path, dpi = 400)
-    plt.close()
+    return plot_args
 
 
 if __name__ == '__main__':
 
     logger = Logger('output', 'test')
     pref_dim = 2
-    for i in range(11):
-        pref_vec = torch.rand(pref_dim)
-        pref_vec = pref_vec / torch.sum(pref_vec)
-        vec_len = random.uniform(0, 2)
-        vec_angle = (torch.rand(pref_dim) - 0.5).tolist()
-        logger.step(
-            episode = 0,
-            timestep = i,
-            stat_dict = {
-                'reward_a': vec_angle[0] * vec_len,
-                'reward_b': vec_angle[1] * vec_len,
-                # 'reward_c': random.uniform(-5, 5),
-                'pref_vec': pref_vec
-            }
-        )
-    logger.step(
-        episode = 0,
-        timestep = i + 1,
-        stat_dict = {
-            'reward_a': 0.5,
-            'reward_b': 0.3,
-            # 'reward_c': random.uniform(-5, 5),
-            'pref_vec': torch.FloatTensor([0, 0])
-        }
-    )
+    n_eval_timestep = 250
+    
+    def sim_train():
+        for i in range(1000):
+            pref_vec = torch.rand(pref_dim)
+            pref_vec = pref_vec / torch.sum(pref_vec)
+            vec_len = random.uniform(0, 2)
+            vec_angle = (torch.rand(pref_dim) - 0.5).tolist()
+            logger.step(
+                episode = 0,
+                timestep = i,
+                stat_dict = {
+                    'reward_a': vec_angle[0] * vec_len,
+                    'reward_b': vec_angle[1] * vec_len,
+                    # 'reward_c': random.uniform(-5, 5),
+                    'pref_vec': pref_vec
+                }
+            )
+            if (i + 1) % n_eval_timestep == 0:
+                sim_eval((i + 1) // n_eval_timestep - 1)
+    
+    def sim_eval(eval_step):
+        for i in range(11):
+            pref_vec = torch.rand(pref_dim)
+            pref_vec = pref_vec / torch.sum(pref_vec)
+            vec_len = random.uniform(0, 2)
+            vec_angle = (torch.rand(pref_dim) - 0.5).tolist()
+            logger.step(
+                episode = 0,
+                timestep = i,
+                stat_dict = {
+                    'reward_a': vec_angle[0] * vec_len,
+                    'reward_b': vec_angle[1] * vec_len,
+                    # 'reward_c': random.uniform(-5, 5),
+                    'pref_vec': pref_vec
+                },
+                eval_step = eval_step
+            )
+        if eval_step == 0:
+            logger.step(
+                episode = 0,
+                timestep = i + 1,
+                stat_dict = {
+                    'reward_a': 0.5,
+                    'reward_b': 0.3,
+                    # 'reward_c': random.uniform(-5, 5),
+                    'pref_vec': torch.FloatTensor([0, 0])
+                },
+                eval_step = eval_step
+            )
+    
+    sim_train()
     logger.save_res()
-    logger.save_pareto_front_test(
+    logger.save_pareto_front_train(
         axes_names = ('reward_a', 'reward_b'),
         # axes_names = ('reward_a', 'reward_b', 'reward_c'),
         vecs_name = 'pref_vec'

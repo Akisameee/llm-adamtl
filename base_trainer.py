@@ -9,6 +9,7 @@ from random import randrange
 from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
 from accelerate import Accelerator, dispatch_model
+from accelerate.utils import broadcast
 from transformers import PreTrainedModel
 import numpy as np
 
@@ -158,23 +159,30 @@ class Base_Trainer(nn.Module):
     
     def get_save_timesteps(
         self,
-        n_save_time: int,
+        n_save_step: int,
         n_timestep: int
     ):
-        save_timesteps = np.linspace(0, n_timestep, n_save_time + 1, endpoint = True)[1:]
+        save_timesteps = np.linspace(0, n_timestep, n_save_step + 1, endpoint = True)[1:]
         self.save_timesteps = np.round(save_timesteps, 0).astype(int)
         self.logger.info(f'Save timesteps:{self.save_timesteps}.')
-        self.save_time = 0
+        self.save_step = 0
     
     def check_if_save(
         self,
         timestep: int
     ):
-        if self.save_time >= len(self.save_timesteps):
-            self.logger.warning('Save timesteps maxed out.')
-            return False
-        if timestep >= self.save_timesteps[self.save_time]:
-            self.save_time += 1
-            return True
-        else:
-            return False
+        if self.accelerator.is_main_process:
+            if self.save_step >= len(self.save_timesteps):
+                self.logger.warning('Save timesteps maxed out.')
+                ret = False
+            if timestep >= self.save_timesteps[self.save_step]:
+                ret = True
+            else:
+                ret = False
+        else: ret = False
+        ret = broadcast(torch.BoolTensor([ret]).to(self.device)).item()
+        if ret:
+            self.save_step += 1
+        return ret
+
+        

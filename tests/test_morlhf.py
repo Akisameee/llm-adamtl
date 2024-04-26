@@ -32,7 +32,7 @@ class MORLHF_Tester(MORLHF_Trainer):
             ckpt_path = ckpt_path
         )
 
-    def get_pref_vecs(
+    def get_eval_pref_vecs(
         self,
         n_epoch: int = 11,
         add_ref: bool = True
@@ -81,7 +81,7 @@ class MORLHF_Tester(MORLHF_Trainer):
             drop_last = True
         )
         dataloader = self.accelerator.prepare(dataloader)
-        pref_vecs = self.get_pref_vecs(n_epoch = n_epoch)
+        pref_vecs = self.get_eval_pref_vecs(n_epoch = n_epoch)
 
         max_timestep = len(dataloader) * sample_batch_size * len(pref_vecs)
         timestep = 0

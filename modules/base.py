@@ -337,6 +337,7 @@ class BaseLMWithValueHeads(Base_Warpper):
             raise ValueError("The model does not have a language model head, please use a model that has one.")
         
         self.n_v_head = supported_kwargs.pop("n_v_head", 1)
+        # self.use_ref_head = 
         self.v_heads = nn.ModuleList([
             ValueHead(
                 self.pretrained_model.config,
@@ -439,16 +440,6 @@ class BaseLMWithValueHeads(Base_Warpper):
                         new_output += (output,)
                 return new_output
             self.register_forward_hook(set_device_hook)
-
-            # def set_device_hook_pretrained(module, input, outputs):
-            #     new_output = ()
-            #     for output in outputs:
-            #         if isinstance(output, torch.Tensor):
-            #             new_output += (output.to(first_device),)
-            #         else:
-            #             new_output += (output,)
-            #     return new_output
-            # self.pretrained_model.register_forward_hook(set_device_hook_pretrained)
 
             self.is_sequential_parallel = True
 

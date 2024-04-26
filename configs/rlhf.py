@@ -38,8 +38,6 @@ class RLHF_Config(PPO_Config):
     reward_cfg: RM_Config = RM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'huggingface', 'OpenAssistant', 'reward-model-deberta-v3-base')
     )
-
-    retokenization: bool = True
     
     lr: float = 1e-4
     weight_decay: float = 5e-4

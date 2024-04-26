@@ -1,9 +1,9 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 import torch
 import torch.nn as nn
 import numpy as np
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset
 from einops import rearrange, repeat, reduce
 from collections import deque
 from functools import partial
@@ -25,6 +25,8 @@ from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get
 from logger import Logger
 from trl.core import LengthSampler
 
+TEST = 0
+
 class MORLHF_Trainer(Base_Trainer):
 
     def __init__(
@@ -45,6 +47,11 @@ class MORLHF_Trainer(Base_Trainer):
         self.pref_dim = len(self.reward_names)
         if self.pref_dim <= 1:
             raise ValueError(f'Expected pref_dim > 1, but got pref_dim = {self.pref_dim}')
+        
+        self.reward_scalariztion_type = config.reward_scalariztion_type
+        if self.reward_scalariztion_type is not None and config.loss_manipulator_type is not None:
+            raise ValueError('Cannot set a reward_scalariztion_type with a weighted loss method.\n')
+        self.ex_reward_weights = [reward_cfg.reward_weight for reward_cfg in self.reward_cfgs]
 
         super().__init__(
             config = config,
@@ -63,26 +70,19 @@ class MORLHF_Trainer(Base_Trainer):
             accelerator = self.accelerator,
             logger = self.logger
         )
-        
-        self.reward_scalariztion_type = config.reward_scalariztion_type
-        if self.reward_scalariztion_type is not None and config.loss_manipulator_type is not None:
-            self.reward_scalariztion_type = None
-            raise ValueError(
-                'Cannot set a reward_scalariztion_type with a weighted loss method.\n' + \
-                'Setting reward_scalariztion_type to None.'
-            )
-        self.retokenization = config.retokenization
-        self.n_sample_reuse = config.n_sample_reuse
-        self.n_save_time = config.n_save_time
+
+        # self.n_sample_reuse = config.n_sample_reuse
+        self.n_sample_reuse = 1
+        self.n_save_step = config.n_save_step
         # self.clean_cache_every_iter = True
+        self.n_eval_epoch = config.n_eval_epoch
+        self.n_eval_sample = config.n_eval_sample
         
     def sample_pref_vec(self):
         
         pref_vec = torch.rand(self.pref_dim).to(self.device)
         pref_vec = pref_vec / torch.sum(pref_vec)
-        # print('unbroadcasted', pref_vec)
         pref_vec = broadcast(pref_vec)
-        # print('broadcasted', pref_vec)
 
         return pref_vec
     
@@ -93,8 +93,6 @@ class MORLHF_Trainer(Base_Trainer):
         self.ppo_trainer.set_pref_vec(
             pref_vec = pref_vec
         )
-
-        # self.logger.info(f'pref_vec set to {pref_vec}')
 
     @torch.no_grad()
     def get_ref_logprobs(
@@ -166,7 +164,6 @@ class MORLHF_Trainer(Base_Trainer):
         rms_rewards: list[torch.FloatTensor],
         pref_vec: torch.FloatTensor
     ):  
-        
         rm_rewards_scalar = torch.zeros_like(rms_rewards[0]).unsqueeze(-1)
         if self.reward_scalariztion_type is None:
             rm_rewards_scalar = torch.stack(rms_rewards, dim = -1)
@@ -178,41 +175,21 @@ class MORLHF_Trainer(Base_Trainer):
         
         return rm_rewards_scalar
 
-    def compute_action_log_prob(
-        self,
-        action_len,
-        action_logits,
-        sequence
-    ):
-        # need to shift along sequence dimension by 1, since actions start from the last prompt (state) token
-        action_logits = shift(action_logits, shift = 1, dim = -2)
-        action_prob = action_logits.softmax(dim = -1)
-
-        action_log_prob = log_prob(action_prob, sequence)
-        action_log_prob = action_log_prob[:, -action_len:]
-
-        return action_log_prob, action_prob
-
     def train_ppo(
         self,
-        ds_generator,
-        n_episode: int = 10,
+        train_dataset: Dataset,
+        eval_dataset: Dataset,
+        n_episode: int = 1,
         n_update_timestep: int = 8,
-        sample_batch_size: int = 8,
+        sample_batch_size: int = 1,
     ):
-        if n_update_timestep < self.accelerator.gradient_accumulation_steps:
-            raise ValueError(
-                f'Unable to train, n_update_timestep({n_update_timestep}) < ' + \
-                f'gradient_accumulation_step({self.accelerator.gradient_accumulation_steps}).'
-            )
-        
         set_all_adapters(
             model = self.ppo_trainer.model,
             enable = True
         )
 
         dataloader = DataLoader(
-            dataset = ds_generator,
+            dataset = train_dataset,
             batch_size = sample_batch_size,
             shuffle = True,
             collate_fn = instruct_collator,
@@ -233,7 +210,7 @@ class MORLHF_Trainer(Base_Trainer):
             disable = not self.accelerator.is_main_process
         )
         
-        self.get_save_timesteps(self.n_save_time, tqdm_bar.total)
+        self.get_save_timesteps(self.n_save_step, tqdm_bar.total)
         for episode in range(n_episode):
             for prompts_ids, attention_masks, prompt_texts in dataloader:
                 
@@ -263,7 +240,7 @@ class MORLHF_Trainer(Base_Trainer):
                         action_masks = action_masks,
                         verbose = timestep % n_update_timestep == 0
                         # verbose = True
-                    )
+                    ) * self.ex_reward_weights[idx]
                     rms_rewards.append(rm_rewards)
                     sample_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
                 sample_records.append(sample_record)
@@ -278,31 +255,19 @@ class MORLHF_Trainer(Base_Trainer):
                     sequence,
                     mask,
                     action_mask,
-                    # prob,
-                    # logprob,
-                    # ref_logprob,
                     rm_reward_scalarized,
-                    # value
                 ) in zip(
                     sequences,
                     masks,
                     action_masks,
-                    # probs,
-                    # logprobs,
-                    # ref_logprobs,
                     rm_rewards_scalarized,
-                    # values
                 ):
                     seq_len = torch.sum(mask).item()
                     memories.append(PPOMemory(*map(detach_to_cpu_, (
                         sequence[: seq_len],
                         mask[: seq_len],
                         action_mask[: seq_len],
-                        # prob[: seq_len, :],
-                        # logprob[: seq_len],
-                        # ref_logprob[: seq_len],
                         rm_reward_scalarized,
-                        # value[: seq_len]
                     ))))
 
                 if self.clean_cache_every_iter:
@@ -310,11 +275,7 @@ class MORLHF_Trainer(Base_Trainer):
                         sequences,
                         masks,
                         action_masks,
-                        # probs,
-                        # logprobs,
-                        # ref_logprobs,
                         rm_rewards,
-                        # values
                     )
                     torch.cuda.empty_cache()
                 
@@ -344,11 +305,21 @@ class MORLHF_Trainer(Base_Trainer):
                     sample_records.clear()
 
                     if self.check_if_save(tqdm_bar.n):
+                        # save model
                         if self.accelerator.is_main_process:
                             self.save(
                                 self.ppo_trainer.model,
                                 os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}')
                             )
+                        # eval
+                        self.accelerator.wait_for_everyone()
+                        self.eval_step(
+                            eval_dataset = eval_dataset,
+                            eval_step = self.save_step - 1,
+                            n_eval_epoch = self.n_eval_epoch,
+                            n_eval_sample = self.n_eval_sample
+                        )
+                        torch.cuda.empty_cache()
 
                     if max_timestep - timestep < n_update_timestep:
                         break
@@ -364,11 +335,130 @@ class MORLHF_Trainer(Base_Trainer):
             vecs_name = 'pref_vec'
         )
 
+    def get_eval_pref_vecs(
+        self,
+        n_epoch: int = 11,
+        add_ref: bool = True
+    ):
+        if self.pref_dim == 2:
+            x = torch.linspace(0, 1, steps = n_epoch)
+            pref_vecs = torch.stack([x, 1 - x], dim = -1)
+        else:
+            pref_vecs = torch.rand([n_epoch, self.pref_dim])
+            pref_vecs = pref_vecs / torch.sum(pref_vecs, dim = 1, keepdim = True)
+        
+        if add_ref:
+            pref_vecs = torch.cat([pref_vecs, torch.zeros(1, self.pref_dim)], dim = 0)
+        
+        return pref_vecs
+
+    @torch.no_grad()
+    def eval_step(
+        self,
+        eval_dataset: Dataset,
+        eval_step: int,
+        n_eval_epoch: int = 11,
+        n_eval_sample: int = 100,
+        eval_batch_size: int = 1,
+    ):
+        self.model.eval()
+        set_all_adapters(
+            model = self.ppo_trainer.model,
+            enable = True
+        )
+
+        # print(ds_generator.datas[:n_test_sample])
+        eval_dataset.datas = eval_dataset[:n_eval_sample]
+        dataloader = DataLoader(
+            dataset = eval_dataset,
+            batch_size = eval_batch_size,
+            shuffle = False,
+            collate_fn = instruct_collator,
+            drop_last = True
+        )
+        dataloader = self.accelerator.prepare(dataloader)
+        pref_vecs = self.get_eval_pref_vecs(
+            n_epoch = n_eval_epoch,
+            add_ref = eval_step == 0
+        )
+
+        max_timestep = len(dataloader) * eval_batch_size * len(pref_vecs)
+        timestep = 0
+        sample_records = []
+        tqdm_bar = tqdm(
+            total = max_timestep // eval_batch_size,
+            disable = not self.accelerator.is_main_process
+        )
+        self.logger.info(
+            f'Evaluation step {eval_step}:\n' + \
+            f'Target pref_vecs = {pref_vecs}'
+        )
+        for epoch, pref_vec in enumerate(pref_vecs):
+            if torch.sum(pref_vec) != 0:
+                self.set_pref_vec(pref_vec)
+            else:
+                set_all_adapters(
+                    model = self.ppo_trainer.model,
+                    enable = False
+                )
+            dl_len = len(dataloader)
+            for prompts_ids, attention_masks, prompt_texts in dataloader:
+                
+                batch_size = len(prompts_ids)
+                timestep += batch_size
+                sample_record = {}
+
+                (
+                    sequences,
+                    masks,
+                    action_masks
+                ) = self.ppo_trainer.generate_batch(
+                    prompts_ids = prompts_ids,
+                    attention_masks = attention_masks,
+                    return_padding = True,
+                    **self.generation_config.to_dict()
+                )
+
+                rms_rewards = []
+                for idx, reward_model in enumerate(self.reward_models):
+                    rm_rewards = self.get_rm_rewards(
+                        reward_model = reward_model,
+                        sequences = sequences,
+                        masks = masks,
+                        action_masks = action_masks,
+                        verbose = tqdm_bar.n % dl_len == 0
+                        # verbose = True
+                    )
+                    rms_rewards.append(rm_rewards)
+                    sample_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
+                sample_records.append(sample_record)
+                # print(f'pid: {os.getpid()}, sample_record: {sample_record}')
+                tqdm_bar.update(1)
+            
+            # print(f'pid: {os.getpid()}, sample_records: {sample_records}')
+            sample_records_gathered = self.accelerator.gather_for_metrics(sample_records)
+            # print(f'pid: {os.getpid()}, sample_records_gathered: {sample_records_gathered}')
+            all_sample_records = merge_dict(unmerged_dicts = sample_records_gathered, reduce = 'mean')
+            all_sample_records['pref_vec'] = pref_vec.cpu()
+            self.logger.step(
+                episode = epoch + 1,
+                timestep = timestep,
+                stat_dict = all_sample_records,
+                eval_step = eval_step
+            )
+            sample_records.clear()
+        
+        set_all_adapters(
+            model = self.ppo_trainer.model,
+            enable = True
+        )
+        self.accelerator.wait_for_everyone()
+        self.logger.info(f'Evaluation step {eval_step} complete.')
+        
+
 def main():
 
     config = Panacea_PPO_Config()
-
-    config.reward_scalariztion_type = None
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
     # sub_data_path = ['helpful-base', 'harmless-base']
@@ -376,6 +466,11 @@ def main():
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
+    # Panacea
+    # config.reward_scalariztion_type = 'ls'
+    # config.loss_manipulator_type = None
+
+    config.reward_scalariztion_type = None
     config.loss_manipulator_type = 'mols'
     config.model_cfg.peft_cfg.r = 7
     config.model_cfg.peft_cfg.pref_r = 1
@@ -394,6 +489,13 @@ def main():
     config.reward_cfg_1 = RM_Config(model_pretrain_path = rm_path_2)
     config.reward_name_0 = 'helpful'
     config.reward_name_1 = 'harmless'
+    # config.reward_cfg_0.reward_weight = 0.1
+    # config.reward_cfg_1.reward_weight = 10
+
+    if TEST:
+        config.n_update_timestep = 8
+        config.n_eval_sample = 4
+
     config.parse_args()
 
     trainer = MORLHF_Trainer(
@@ -401,10 +503,13 @@ def main():
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
-    dataset = Instruct_Dataset(config.dateset_cfg)
-    dataset.load(mode = 'train')
+    train_dataset = Instruct_Dataset(config.dateset_cfg)
+    train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 100)
+    eval_dataset = Instruct_Dataset(config.dateset_cfg)
+    eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(
-        ds_generator = dataset.get_generator(),
+        train_dataset = train_dataset.get_generator(),
+        eval_dataset = eval_dataset.get_generator(),
         n_episode = config.n_episode,
         n_update_timestep = config.n_update_timestep,
         sample_batch_size = config.sample_batch_size

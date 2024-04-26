@@ -30,7 +30,7 @@ class Panacea_PPO_Config(MOPPO_Config):
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj'],
             r = 7,
             pref_r = 1,
-            lora_alpha = 64,
+            lora_alpha = 32,
             lora_dropout = 0.1,
             pref_dim = 2
         )
@@ -44,8 +44,6 @@ class Panacea_PPO_Config(MOPPO_Config):
     reward_name_1: str = None
     reward_cfg_2: RM_Config = None
     reward_name_2: str = None
-
-    retokenization: bool = True
     
     lr: float = 1e-4
     weight_decay: float = 5e-4
@@ -53,7 +51,7 @@ class Panacea_PPO_Config(MOPPO_Config):
     pooled_values: bool = False
     max_norm: float = None
     
-    kl_ref_coef: float = 0.2
+    kl_ref_coef: float = 0.5
     kl_type: Optional[Literal['kl', 'abs', 'mse', 'full']] = 'kl'
     eps_clip: float = 0.2
     value_clip: float = 0.2
@@ -72,5 +70,8 @@ class Panacea_PPO_Config(MOPPO_Config):
     train_batch_size: int = 1
     n_update_epoch: int = 1
 
-    n_save_time: int = 3
+    n_save_step: int = 3 # n_eval_time
+    n_eval_epoch: int = 11
+    n_eval_sample: int = 100
+
     output_dir: str = os.path.join('.', 'output')

@@ -145,33 +145,6 @@ class MOPPO_Trainer(PPO_Trainer):
             masks = masks
         )
 
-        # old_values_pref_new = []
-        # advantages_pref = []
-        # returns_pref = []
-        # for i in range(self.pref_dim):
-            
-        #     rm_rewards = rm_rewards_pref[..., i]
-        #     old_values = old_values_pref[..., i]
-        #     rewards, kl_refs = self.compute_rewards(
-        #         rm_rewards = rm_rewards,
-        #         logprobs = old_logprobs,
-        #         ref_logprobs = ref_logprobs,
-        #         masks = all_action_masks
-        #     )
-
-        #     old_values = shift(old_values, shift = 1, dim = -2)
-        #     old_values, advantages, returns = self.compute_advantages(
-        #         old_values,
-        #         rewards,
-        #         all_action_masks
-        #     )
-        #     old_values_pref_new.append(old_values)
-        #     advantages_pref.append(advantages)
-        #     returns_pref.append(returns)
-        # old_values_pref = torch.stack(old_values_pref_new, dim = -1)
-        # advantages_pref = torch.stack(advantages_pref, dim = -1)
-        # returns_pref = torch.stack(returns_pref, dim = -1)
-
         # prepare dataloader
         dataloader = DataLoader(
             ExperienceDataset(
@@ -216,6 +189,11 @@ class MOPPO_Trainer(PPO_Trainer):
 
                 values_pref = shift(values_pref, shift = 1, dim = -2)
 
+                # ref_rewards = self.compute_ref_rewards(
+                #     logprobs = old_logprobs,
+                #     ref_logprobs = ref_logprobs
+                # )
+
                 losses = []
                 for i in range(self.pref_dim):
                     values = values_pref[..., i]
@@ -228,6 +206,10 @@ class MOPPO_Trainer(PPO_Trainer):
                         ref_logprobs = ref_logprobs,
                         masks = action_masks
                     )
+                    # rewards = self.compute_rm_rewards(
+                    #     rm_rewards,
+                    #     masks = action_masks
+                    # )
 
                     old_values, advantages, returns = self.compute_advantages(
                         old_values,
@@ -268,6 +250,31 @@ class MOPPO_Trainer(PPO_Trainer):
         )
         
         return ppo_stats
+    
+    def compute_ref_rewards(
+        self,
+        logprobs: torch.FloatTensor,
+        ref_logprobs: torch.FloatTensor,
+    ):
+        kl_refs = []
+        for logprob, ref_logprob in zip(logprobs, ref_logprobs):
+            kl_ref = -self.kl_penalty(logprob, ref_logprob) * self.kl_ref_coef
+            kl_refs.append(kl_ref)
+        
+        return torch.stack(kl_refs)
+    
+    def compute_rm_rewards(
+        self,
+        rm_rewards: torch.FloatTensor,
+        masks: torch.LongTensor
+    ):
+        rewards = []
+        for rm_reward, mask in zip(rm_rewards, masks):
+            reward = torch.zeros_like(mask)
+            reward[mask.nonzero()[-1]] += rm_reward
+            rewards.append(reward)
+        
+        return torch.stack(rewards)
     
     def get_train_stats(self, masks, **train_records):
 

@@ -40,6 +40,7 @@ class RM_Config(Model_Config):
     model_pretrain_path: str = None
     peft_cfg: Peft_Config = None
     device: str = 'cuda'
+    reward_weight: float = 1
 
     @property
     def model_info(self):
