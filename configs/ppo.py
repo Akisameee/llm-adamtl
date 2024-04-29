@@ -24,7 +24,8 @@ class PPO_Config(Trainer_Config):
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct')
     )
     
-    lr: float = 1e-4
+    lr: float = 1e-5
+    critic_lr: float = 1e-4
     weight_decay: float = 5e-4
 
     pooled_values: bool = False
@@ -42,6 +43,7 @@ class PPO_Config(Trainer_Config):
 
     train_batch_size: int = 8
     n_update_epoch: int = 5
+    critic_pretrain_epoch: int = 10
 
     output_dir: str = os.path.join('.', 'output')
 

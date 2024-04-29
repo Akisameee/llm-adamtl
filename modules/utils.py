@@ -7,9 +7,10 @@ import math
 from typing import Union, Literal, Optional
 from einops import rearrange
 import os
+import numpy as np
 from transformers import AutoModel, AutoConfig, DebertaV2ForSequenceClassification
 from trl import AutoModelForCausalLMWithValueHead
-from accelerate import load_checkpoint_and_dispatch, init_empty_weights, dispatch_model, infer_auto_device_map
+from accelerate import load_checkpoint_and_dispatch, init_empty_weights, dispatch_model, infer_auto_device_map, Accelerator
 from accelerate.utils import get_balanced_memory
 
 from configs import LM_Config, RM_Config
@@ -265,4 +266,41 @@ class ExperienceDataset(Dataset):
     def __getitem__(self, index):
         
         return tuple(map(lambda t: t[index].to(self.device), self.data))
-    
+
+class Reward_Collector():
+
+    def __init__(
+        self,
+        accelerator: Accelerator,
+        pref_dim: int = 1
+    ) -> None:
+        
+        self.accelerator = accelerator
+        self.pref_dim = pref_dim
+        if self.pref_dim >= 1:
+            self.rewards = [[] * self.pref_dim]
+            self.unsynced_rewards = [[] * self.pref_dim]
+        else:
+            raise ValueError(f'Expected pref_dim > 0, but got pref_dim = {pref_dim}')
+        
+    def update(self, reward: float, pref_idx: int = 0):
+
+        assert pref_idx < self.pref_dim and pref_idx >= 0
+        self.unsynced_rewards[pref_idx].append(reward)
+
+    def get_var_mean(self, pref_idx: int = 0):
+
+        assert pref_idx < self.pref_dim and pref_idx >= 0
+        rewards = self.rewards[pref_idx] + self.unsynced_rewards[pref_idx]
+        rewards = np.array(rewards)
+        if len(rewards) > 0:
+            return np.var(rewards), np.mean(rewards)
+        else:
+            return 1, 0
+        
+    def sync(self):
+
+        for pref_idx in range(self.pref_dim):
+            gathered_rewards = self.accelerator.gather_for_metrics(self.unsynced_rewards[pref_idx])
+            self.rewards[pref_idx] += gathered_rewards
+            self.unsynced_rewards[pref_idx].clear()

@@ -193,6 +193,7 @@ class Logger():
         self,
         axes_names: tuple,
         vecs_name: str = None,
+        eval_step: int = 0,
         save_dir: str = None
     ):
         if self.disable:
@@ -203,7 +204,7 @@ class Logger():
             os.makedirs(save_dir)
         
         eval_plot_args = get_eval_plot_args(
-            dataframe = self.eval_historys[0],
+            dataframe = self.eval_historys[eval_step],
             axes_names = axes_names,
             vecs_name = vecs_name
         )

@@ -611,7 +611,13 @@ class PPO_Trainer(nn.Module):
             policy_loss = policy_loss * 0.0
             value_loss = value_loss * 0.0
             if self.accelerator.is_main_process:
-                self.logger.info(f'Current Ratio({avg_ratio:.4g}) > Threshold({self.ratio_threshold}) Skipping Batch')
+                self.logger.info(f'Current ratio({avg_ratio:.4g}) > threshold({self.ratio_threshold}), skipping batch.')
+
+        if torch.isnan(policy_loss) or torch.isinf(policy_loss) or policy_loss.abs().gt(10000.) or \
+            torch.isnan(value_loss) or torch.isinf(value_loss) or value_loss.abs().gt(10000.):
+            policy_loss = policy_loss * 0.0
+            value_loss = value_loss * 0.0
+            self.logger.warning(f'Invalid loss: policy_loss = {policy_loss}, value_loss = {value_loss}, skipping batch.')
 
         return policy_loss, self.value_loss_coef * value_loss
 

@@ -59,6 +59,15 @@ class MORLHF_Trainer(Base_Trainer):
             model_cfg = config.model_cfg,
             ref_cfg = config.ref_cfg,
             reward_cfg = self.reward_cfgs,
+            optimizer_params = [
+                {
+                    'submodule': 'pretrained_model',
+                    'lr': config.lr
+                },{
+                    'submodule': 'v_heads',
+                    'lr': config.critic_lr
+                }
+            ],
             **dict(n_v_head = self.pref_dim)
         )
         
@@ -319,6 +328,12 @@ class MORLHF_Trainer(Base_Trainer):
                             n_eval_epoch = self.n_eval_epoch,
                             n_eval_sample = self.n_eval_sample
                         )
+                        self.logger.save_pareto_front_test(
+                            tuple(self.reward_names),
+                            vecs_name = 'pref_vec',
+                            save_dir = os.path.join(self.logger.dir, f'{self.model_name}_{episode}_{timestep}'),
+                            eval_step = self.save_step - 1
+                        )
                         torch.cuda.empty_cache()
 
                     if max_timestep - timestep < n_update_timestep:
@@ -432,12 +447,9 @@ class MORLHF_Trainer(Base_Trainer):
                     rms_rewards.append(rm_rewards)
                     sample_record[self.reward_names[idx]] = torch.sum(rm_rewards).item()
                 sample_records.append(sample_record)
-                # print(f'pid: {os.getpid()}, sample_record: {sample_record}')
                 tqdm_bar.update(1)
             
-            # print(f'pid: {os.getpid()}, sample_records: {sample_records}')
             sample_records_gathered = self.accelerator.gather_for_metrics(sample_records)
-            # print(f'pid: {os.getpid()}, sample_records_gathered: {sample_records_gathered}')
             all_sample_records = merge_dict(unmerged_dicts = sample_records_gathered, reduce = 'mean')
             all_sample_records['pref_vec'] = pref_vec.cpu()
             self.logger.step(
@@ -472,8 +484,8 @@ def main():
 
     config.reward_scalariztion_type = None
     config.loss_manipulator_type = 'mols'
-    config.model_cfg.peft_cfg.r = 7
-    config.model_cfg.peft_cfg.pref_r = 1
+    config.model_cfg.peft_cfg.r = 4
+    config.model_cfg.peft_cfg.pref_r = 4
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -504,7 +516,7 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     train_dataset = Instruct_Dataset(config.dateset_cfg)
-    train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 100)
+    train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 100)
     eval_dataset = Instruct_Dataset(config.dateset_cfg)
     eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(

@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 import sys
 sys.path.insert(0, '/home/smliu/RLHF')
 import torch
@@ -38,7 +38,7 @@ class MORLHF_Tester(MORLHF_Trainer):
         add_ref: bool = True
     ):
         if self.pref_dim == 2:
-            x = torch.range(0, 1, step = 1 / (n_epoch - 1))
+            x = torch.linspace(0, 1, steps = n_epoch)
             pref_vecs = torch.stack([x, 1 - x], dim = -1)
         else:
             pref_vecs = torch.rand([n_epoch, self.pref_dim])
@@ -139,7 +139,8 @@ class MORLHF_Tester(MORLHF_Trainer):
             self.logger.step(
                 episode = epoch + 1,
                 timestep = timestep,
-                stat_dict = all_sample_records
+                stat_dict = all_sample_records,
+                eval_step = 0
             )
             sample_records.clear()
 
@@ -165,6 +166,7 @@ def main():
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
     config.model_cfg.peft_cfg.r = 6
+    config.model_cfg.peft_cfg.pref_r = 2
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
@@ -178,16 +180,16 @@ def main():
 
     tester = MORLHF_Tester(
         config = config,
-        ckpt_path = './output/completed/Panacea_train 2024-04-21 10-29-42/MindLLM-1b3-chat-zh-v2.0_0_3120/checkpoint.pt'
+        ckpt_path = './output/Panacea_train 2024-04-26 18-31-27/MindLLM-1b3-chat-zh-v2.0_0_8832/checkpoint.pt'
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     dataset = Instruct_Dataset(config.dateset_cfg)
-    dataset.load(mode = 'train')
+    dataset.load(mode = 'eval')
     tester.test(
         ds_generator = dataset.get_generator(),
         n_epoch = 11,
-        n_test_sample = 300,
+        n_test_sample = 10,
         sample_batch_size = 1
     )
 

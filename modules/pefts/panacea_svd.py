@@ -146,6 +146,10 @@ class Panacea_SVD_Linear(Base_Adapter):
 
     def set_pref_vec(self, pref_vec: torch.Tensor):
         
+        is_merged = self.merged
+        if is_merged:
+            self.unmerge()
+
         pref_vec = pref_vec.squeeze()
         if len(pref_vec.shape) != 1:
             raise ValueError(f'Expected pref_vec to be 1 dimension, but got {pref_vec.shape}.')
@@ -154,6 +158,9 @@ class Panacea_SVD_Linear(Base_Adapter):
         
         pref_vec = pref_vec.unsqueeze(1).repeat(self.pref_r, 1)
         self.lora_diag.data[self.r: , :] = pref_vec.to(self.lora_diag.data.device)
+
+        if is_merged:
+            self.merge()
 
     def forward(self, x: torch.Tensor, *args, **kwargs):
         

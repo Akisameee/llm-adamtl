@@ -30,6 +30,7 @@ class Base_Trainer(nn.Module):
         model_cfg: LM_Config,
         ref_cfg: LM_Config = None,
         reward_cfg: RM_Config | list = None,
+        optimizer_params: list = None,
         **model_kwargs,
     ):
         super().__init__()
@@ -98,12 +99,28 @@ class Base_Trainer(nn.Module):
                 ref_model.eval()
         else:
             ref_model = None
-                
-        self.optimizer = torch.optim.AdamW(
-            filter(lambda p: p.requires_grad, self.model.parameters()),
-            lr = config.lr,
-            weight_decay = config.weight_decay
-        )
+        
+        if optimizer_params:
+            self.optimizer = torch.optim.AdamW(
+                filter(lambda p: p.requires_grad, self.model.parameters()),
+                lr = config.lr,
+                weight_decay = config.weight_decay
+            )
+        else:
+            self.optimizer = torch.optim.AdamW(
+                [
+                    {
+                        'params': filter(
+                            lambda p: p.requires_grad,
+                            getattr(self.model, optimizer_param['submodule']).parameters()
+                        ),
+                        'lr': optimizer_param['lr']
+                    }
+                    for optimizer_param in optimizer_params
+                ],
+                lr = config.lr,
+                weight_decay = config.weight_decay
+            )
 
         # prepare with accelerator
         (

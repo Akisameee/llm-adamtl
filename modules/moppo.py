@@ -189,12 +189,8 @@ class MOPPO_Trainer(PPO_Trainer):
 
                 values_pref = shift(values_pref, shift = 1, dim = -2)
 
-                # ref_rewards = self.compute_ref_rewards(
-                #     logprobs = old_logprobs,
-                #     ref_logprobs = ref_logprobs
-                # )
-
                 losses = []
+                skip_batch = False
                 for i in range(self.pref_dim):
                     values = values_pref[..., i]
                     rm_rewards = rm_rewards_pref[..., i]
@@ -206,10 +202,6 @@ class MOPPO_Trainer(PPO_Trainer):
                         ref_logprobs = ref_logprobs,
                         masks = action_masks
                     )
-                    # rewards = self.compute_rm_rewards(
-                    #     rm_rewards,
-                    #     masks = action_masks
-                    # )
 
                     old_values, advantages, returns = self.compute_advantages(
                         old_values,
@@ -226,12 +218,16 @@ class MOPPO_Trainer(PPO_Trainer):
                         values,
                         old_values
                     )
+                    if policy_loss.item() == 0 or value_loss.item() == 0:
+                        skip_batch = True
                     
                     # combine losses
                     loss = policy_loss + value_loss
                     losses.append(loss)
                 losses = torch.stack(losses, dim = 0)
-
+                if skip_batch:
+                    losses = losses * 0.0
+                
                 # update
                 weighted_loss, losses = self.manipulator.backward(
                     losses = losses

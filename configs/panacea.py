@@ -13,7 +13,7 @@ class Panacea_PPO_Config(MOPPO_Config):
 
     task_name: str = 'Panacea_train'
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
-        gradient_accumulation_steps = 8
+        gradient_accumulation_steps = 16
     )
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
@@ -45,7 +45,8 @@ class Panacea_PPO_Config(MOPPO_Config):
     reward_cfg_2: RM_Config = None
     reward_name_2: str = None
     
-    lr: float = 1e-4
+    lr: float = 5e-5
+    critic_lr: float = 1e-4
     weight_decay: float = 5e-4
 
     pooled_values: bool = False
@@ -66,7 +67,7 @@ class Panacea_PPO_Config(MOPPO_Config):
     n_episode: int = 1
     sample_batch_size: int = 1
     n_sample_reuse: int = 1
-    n_update_timestep: int = 16
+    n_update_timestep: int = 64
     train_batch_size: int = 1
     n_update_epoch: int = 1
 
