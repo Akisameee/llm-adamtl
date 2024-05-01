@@ -214,6 +214,28 @@ class Logger():
         plt.savefig(save_path, dpi = 400)
         plt.close()
 
+    def save_tensors(
+        self,
+        tensors: list[torch.Tensor | np.ndarray] | torch.Tensor | np.ndarray,
+        name: str
+    ):
+        if self.disable:
+            return
+        
+        if isinstance(tensors, list):
+            if isinstance(tensors[0], torch.Tensor):
+                tensors = torch.stack(tensors, dim = 0)
+            elif isinstance(tensors[0], np.ndarray):
+                tensors = np.stack(tensors, dim = 0)
+            else:
+                raise TypeError(f'Invalid tensors type {type(tensors)}.')
+        if isinstance(tensors, torch.Tensor):
+            tensors = tensors.cpu().numpy()
+        
+        save_path = os.path.join(self.dir, name)
+        np.save(save_path, tensors)
+        
+
 def check_line_is_pareto_front(
     point_line,
     points

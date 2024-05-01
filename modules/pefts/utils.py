@@ -3,55 +3,31 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import torch
 import torch.nn as nn
-from configs.pefts import Peft_Config, Lora_Config
+import torch.nn.functional as F
+import random
+from copy import copy
 
+from configs.pefts import Peft_Config, Lora_Config, Panacea_SVD_Config
 from modules.pefts.base import Base_Adapter
-from modules.pefts import Lora_Linear, Panacea_SVD_Linear
 
-adapter_maps = {
-    'lora': {
-        nn.Linear: Lora_Linear
-    },
-    'panacea': {
-        nn.Linear: Panacea_SVD_Linear,
-        Lora_Linear: Panacea_SVD_Linear
-    }
-}
+def get_adapter_iter(model: nn.Module):
 
-def replace_peft_layers(
-    model: nn.Module,
-    peft_config: Peft_Config,
-    return_info: bool = False
-):
-    for name, module in model._modules.items():
-        # print(name, module)
-        if len(list(module.children())) > 0:
-            model._modules[name] = replace_peft_layers(module, peft_config)
-        else:
-            if name in peft_config.target_modules:
-                adapter_map = adapter_maps[peft_config.adapter_name]
-                if type(module) in adapter_map.keys():
-                    peft_module = adapter_map[type(module)](
-                        config = peft_config,
-                        base_layer = module
-                    )
-                else:
-                    raise NotImplementedError
-                model._modules[name] = peft_module
-            else:
-                model._modules[name].requires_grad_(False)
-    
-    if return_info:
-        total_params = sum(p.numel() for p in model.parameters())
-        total_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-        total_non_trainable_params = total_params - total_trainable_params
-        peft_info = f'Peft Info:\n' + \
-        f'total parameters: {total_params}\n' + \
-        f'trainable parameters: {total_trainable_params}\n' + \
-        f'non-trainable parameters: {total_non_trainable_params}'
-        return model, peft_info
-    else:
-        return model
+    return filter(lambda m: isinstance(m, Base_Adapter), model.modules())
+
+def get_random_split(peft_config: Panacea_SVD_Config, n_svd_lora: int, n_split: int):
+
+    r_total = peft_config.r + peft_config.pref_r
+    assert r_total * n_svd_lora >= n_split
+    random_split = [0] * n_svd_lora
+    for _ in range(n_split):
+        idx = random.randint(0, n_svd_lora - 1)
+        while random_split[idx] >= r_total:
+            if idx < n_svd_lora: idx += 1
+            else: idx = 0
+        random_split[idx] += 1
+    random.shuffle(random_split)
+
+    return random_split
 
 def freeze_except_adapters():
     pass
@@ -67,5 +43,14 @@ def set_all_adapters(
         elif len(list(module.children())) > 0:
             set_all_adapters(module, enable = enable, base_enable = base_enable)
 
-def compute_angle(x, y):
-    pass
+def compute_consine_similarities(tensors: list[torch.FloatTensor], dim: int):
+    
+    assert len(tensors) > 1
+    cosine_similarities = []
+    for i in range(len(tensors)):
+        for j in range(i + 1, len(tensors)):
+            x, y = tensors[i], tensors[j]
+            cosine_similarities.append(F.cosine_similarity(x, y, dim = dim))
+
+    cosine_similarities = torch.stack(cosine_similarities, dim = 0).mean(dim = 0)
+    return cosine_similarities

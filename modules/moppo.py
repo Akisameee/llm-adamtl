@@ -123,7 +123,7 @@ class MOPPO_Trainer(PPO_Trainer):
             torch.cat(all_ref_logprobs, dim = 0)
         )
 
-    def learn(
+    def step(
         self,
         memories: deque[PPOMemory]
     ):
@@ -133,7 +133,7 @@ class MOPPO_Trainer(PPO_Trainer):
             masks,
             action_masks,
             rm_rewards_pref,
-        ) = list(map(partial(pad_sequence_fixed, batch_first = True), zip(*memories)))
+        ) = self.pad_memories(memories)
 
         self.model.train()
         (

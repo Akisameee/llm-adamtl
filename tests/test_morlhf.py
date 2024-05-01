@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '6'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import sys
 sys.path.insert(0, '/home/smliu/RLHF')
 import torch
@@ -165,8 +165,8 @@ def main():
 
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
-    config.model_cfg.peft_cfg.r = 6
-    config.model_cfg.peft_cfg.pref_r = 2
+    config.model_cfg.peft_cfg.r = 5
+    config.model_cfg.peft_cfg.pref_r = 3
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
@@ -180,7 +180,7 @@ def main():
 
     tester = MORLHF_Tester(
         config = config,
-        ckpt_path = './output/Panacea_train 2024-04-26 18-31-27/MindLLM-1b3-chat-zh-v2.0_0_8832/checkpoint.pt'
+        ckpt_path = './output/completed/Panacea_train 53/MindLLM-1b3-chat-zh-v2.0_0_17664/checkpoint.pt'
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'

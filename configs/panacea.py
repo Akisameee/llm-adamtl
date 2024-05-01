@@ -13,7 +13,7 @@ class Panacea_PPO_Config(MOPPO_Config):
 
     task_name: str = 'Panacea_train'
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
-        gradient_accumulation_steps = 16
+        gradient_accumulation_steps = 8
     )
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
@@ -26,7 +26,6 @@ class Panacea_PPO_Config(MOPPO_Config):
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         model_class = None,
         peft_cfg = Panacea_SVD_Config(
-            use_peft = True,
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj'],
             r = 7,
             pref_r = 1,
@@ -52,7 +51,7 @@ class Panacea_PPO_Config(MOPPO_Config):
     pooled_values: bool = False
     max_norm: float = None
     
-    kl_ref_coef: float = 0.5
+    kl_ref_coef: float = 0.2
     kl_type: Optional[Literal['kl', 'abs', 'mse', 'full']] = 'kl'
     eps_clip: float = 0.2
     value_clip: float = 0.2
@@ -68,7 +67,7 @@ class Panacea_PPO_Config(MOPPO_Config):
     sample_batch_size: int = 1
     n_sample_reuse: int = 1
     n_update_timestep: int = 64
-    train_batch_size: int = 1
+    train_batch_size: int = 2
     n_update_epoch: int = 1
 
     n_save_step: int = 3 # n_eval_time

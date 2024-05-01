@@ -19,12 +19,30 @@ from modules.base import BaseLM, BaseRM, BaseLMWithValueHeads
 
 lora_module_classes = ["Lora_linear"]
 
+def split_peft_kwargs(kwargs):
+
+    supported_kwargs = {}
+    unsupported_kwargs = {}
+
+    for key, value in kwargs.items():
+        if key in [
+            'svd_lora_init_strategy',
+            'svd_lora_split_percentage'
+        ]:
+            supported_kwargs[key] = value
+        else:
+            unsupported_kwargs[key] = value
+
+    return supported_kwargs, unsupported_kwargs
+
 def get_model(
     config: LM_Config | RM_Config,
     dispatch: bool = True,
     device_map = 'auto',
     **kwargs
 ):
+    peft_kwargs, model_kwargs = split_peft_kwargs(kwargs)
+
     if config.model_class is None:
         if isinstance(config, LM_Config):
             model_class = BaseLM
@@ -36,7 +54,7 @@ def get_model(
         model_class = config.model_class
     
     if model_class in [BaseLM, BaseRM, BaseLMWithValueHeads]:
-        full_model = model_class(config, **kwargs)
+        full_model = model_class(config, **model_kwargs)
         model = full_model.pretrained_model
     else:
         # full_model = model_class.from_pretrained(config.model_pretrain_path, **kwargs)
@@ -52,7 +70,8 @@ def get_model(
             model, peft_info = replace_peft_layers(
                 model = model,
                 peft_config = config.peft_cfg,
-                return_info = True
+                return_info = True,
+                **peft_kwargs
             )
             
     if dispatch:

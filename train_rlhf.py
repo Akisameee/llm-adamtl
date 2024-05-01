@@ -267,7 +267,7 @@ class RLHF_Trainer(Base_Trainer):
                 tqdm_bar.update(1)
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
-                    ppo_stats = [self.ppo_trainer.learn(memories)]
+                    ppo_stats = [self.ppo_trainer.step(memories)]
                     torch.cuda.empty_cache()
                     ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
                     if self.accelerator.is_main_process:

@@ -431,7 +431,7 @@ class PPO_Trainer(nn.Module):
             torch.cat(all_ref_logprobs, dim = 0)
         )
 
-    def learn(
+    def pad_memories(
         self,
         memories: deque[PPOMemory]
     ):
@@ -442,13 +442,20 @@ class PPO_Trainer(nn.Module):
                 f'train_batch_size({self.train_batch_size}).'
             )
 
+        return list(map(partial(pad_sequence_fixed, batch_first = True), zip(*memories)))
+
+    def step(
+        self,
+        memories: deque[PPOMemory]
+    ):
+        
         # stack all data stored in the memories
         (
             sequences,
             masks,
             action_masks,
             rm_rewards,
-        ) = list(map(partial(pad_sequence_fixed, batch_first = True), zip(*memories)))
+        ) = self.pad_memories(memories)
 
         self.model.train()
         (

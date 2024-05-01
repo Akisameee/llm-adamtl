@@ -6,8 +6,13 @@ from .panacea_svd import (
     Panacea_SVD_Linear
 )
 
-from .utils import (
+from .replace import (
     replace_peft_layers,
+)
+
+from .utils import (
+    # replace_peft_layers,
+    get_adapter_iter,
     freeze_except_adapters,
     set_all_adapters
 )

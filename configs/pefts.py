@@ -4,7 +4,6 @@ from .base import *
 class Peft_Config(Base_Config):
 
     adapter_name: str = None
-    use_peft: bool = False
     target_modules: list[str] = None
 
 @dataclass

@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '6'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -20,9 +20,8 @@ from configs import Panacea_PPO_Config, RM_Config, model_infos
 from modules.base import BaseLMWithValueHeads
 from modules.ppo import PPO_Trainer, PPOMemory
 from modules.moppo import MOPPO_Trainer
-from modules.pefts import set_all_adapters
-from modules.utils import shift, log_prob, default, masked_mean, merge_dict, get_model
-from logger import Logger
+from modules.pefts import set_all_adapters, get_adapter_iter
+from modules.utils import shift, log_prob, merge_dict, get_model
 from trl.core import LengthSampler
 
 TEST = 0
@@ -68,7 +67,10 @@ class MORLHF_Trainer(Base_Trainer):
                     'lr': config.critic_lr
                 }
             ],
-            **dict(n_v_head = self.pref_dim)
+            **dict(
+                n_v_head = self.pref_dim,
+                # svd_lora_init_strategy = 'random'
+            )
         )
         
         self.ppo_trainer = MOPPO_Trainer(
@@ -86,7 +88,8 @@ class MORLHF_Trainer(Base_Trainer):
         # self.clean_cache_every_iter = True
         self.n_eval_epoch = config.n_eval_epoch
         self.n_eval_sample = config.n_eval_sample
-        
+    
+    # randomly sample a preference vector from simplex
     def sample_pref_vec(self):
         
         pref_vec = torch.rand(self.pref_dim).to(self.device)
@@ -292,7 +295,7 @@ class MORLHF_Trainer(Base_Trainer):
                 if timestep >= (updatestep + 1) * n_update_timestep:
                     updatestep += 1
                     self.accelerator.wait_for_everyone()
-                    ppo_stats = [self.ppo_trainer.learn(memories)]
+                    ppo_stats = [self.ppo_trainer.step(memories)]
                     torch.cuda.empty_cache()
 
                     ppo_stats_gathered = self.accelerator.gather_for_metrics(ppo_stats)
@@ -349,7 +352,20 @@ class MORLHF_Trainer(Base_Trainer):
             tuple(self.reward_names),
             vecs_name = 'pref_vec'
         )
+        self.logger.save_tensors(
+            [torch.stack(svd_layer.diags) for svd_layer in get_adapter_iter(self.model)],
+            name = 'diags'
+        )
+        self.logger.save_tensors(
+            [torch.stack(svd_layer.conflict_cos_sims) for svd_layer in get_adapter_iter(self.model)],
+            name = 'conflict_cos_sims'
+        )
+        self.logger.save_tensors(
+            [torch.stack(svd_layer.grad_conflict_scores) for svd_layer in get_adapter_iter(self.model)],
+            name = 'grad_conflict_scores'
+        )
 
+    # sample preference vectors from simplex
     def get_eval_pref_vecs(
         self,
         n_epoch: int = 11,
@@ -484,8 +500,8 @@ def main():
 
     config.reward_scalariztion_type = None
     config.loss_manipulator_type = 'mols'
-    config.model_cfg.peft_cfg.r = 4
-    config.model_cfg.peft_cfg.pref_r = 4
+    config.model_cfg.peft_cfg.r = 6
+    config.model_cfg.peft_cfg.pref_r = 2
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -505,8 +521,11 @@ def main():
     # config.reward_cfg_1.reward_weight = 10
 
     if TEST:
+        config.accelertor_cfg.gradient_accumulation_steps = 2
         config.n_update_timestep = 8
         config.n_eval_sample = 4
+        config.n_save_step = 1
+        config.n_eval_epoch = 6
 
     config.parse_args()
 
@@ -516,7 +535,7 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     train_dataset = Instruct_Dataset(config.dateset_cfg)
-    train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 100)
+    train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 60)
     eval_dataset = Instruct_Dataset(config.dateset_cfg)
     eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(

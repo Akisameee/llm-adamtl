@@ -155,7 +155,7 @@ class Accelertor_Config(Base_Config):
 class Trainer_Config(Base_Config):
 
     task_name: str = None
-    n_save_time: int = None
+    n_save_step: int = None
     output_dir: str = os.path.join('.', 'output')
 
 
