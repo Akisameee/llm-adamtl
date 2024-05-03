@@ -157,6 +157,7 @@ class PPO_Trainer(nn.Module):
             model = self.model,
             accelerator = self.accelerator,
             optimizer = self.optimizer,
+            logger = self.logger,
             max_norm = config.max_norm
         )
 

@@ -10,24 +10,12 @@ from copy import copy
 from configs.pefts import Peft_Config, Lora_Config, Panacea_SVD_Config
 from modules.pefts.base import Base_Adapter
 
-def get_adapter_iter(model: nn.Module):
+def get_adapter_iter(model: nn.Module, return_name: bool = False):
 
-    return filter(lambda m: isinstance(m, Base_Adapter), model.modules())
-
-def get_random_split(peft_config: Panacea_SVD_Config, n_svd_lora: int, n_split: int):
-
-    r_total = peft_config.r + peft_config.pref_r
-    assert r_total * n_svd_lora >= n_split
-    random_split = [0] * n_svd_lora
-    for _ in range(n_split):
-        idx = random.randint(0, n_svd_lora - 1)
-        while random_split[idx] >= r_total:
-            if idx < n_svd_lora: idx += 1
-            else: idx = 0
-        random_split[idx] += 1
-    random.shuffle(random_split)
-
-    return random_split
+    if not return_name:
+        return filter(lambda m: isinstance(m, Base_Adapter), model.modules())
+    else:
+        return filter(lambda m: isinstance(m[1], Base_Adapter), model.named_modules())
 
 def freeze_except_adapters():
     pass

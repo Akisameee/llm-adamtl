@@ -1,139 +1,0 @@
-nohup: 忽略输入
-The following values were not passed to `accelerate launch` and had defaults used instead:
-		More than one GPU was found, enabling multi-GPU training.
-		If this was unintended please pass in `--num_processes=1`.
-	`--num_machines` was set to a value of `1`
-	`--mixed_precision` was set to a value of `'no'`
-	`--dynamo_backend` was set to a value of `'no'`
-To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
-Using RTX 3090 or 4000 series which doesn't support faster communication speedups. Ensuring P2P and IB communications are disabled.
-Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
-(INFO) 2024-05-02 02:53:40,184 - Panacea_train_logger:
-Args Info:
---task_name Panacea_train
---n_save_step 3
---output_dir ./output
---accelertor_cfg_log_with None
---accelertor_cfg_gradient_accumulation_steps 8
---dateset_cfg_data_path /home/smliu/datasets/hf/hh-rlhf
---dateset_cfg_sub_data_path ['harmless-base']
---dateset_cfg_tokenizer_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---dateset_cfg_max_len 512
---dateset_cfg_remove_chinese True
---dateset_cfg_padding_side left
---dateset_cfg_prompt_only False
---dateset_cfg_tokenize_type prompt_not_pad
---model_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---model_cfg_model_class None
---model_cfg_peft_cfg_adapter_name panacea
---model_cfg_peft_cfg_target_modules ['q_proj', 'k_proj', 'v_proj', 'out_proj']
---model_cfg_peft_cfg_r 6
---model_cfg_peft_cfg_pref_r 2
---model_cfg_peft_cfg_lora_alpha 32
---model_cfg_peft_cfg_lora_dropout 0.1
---model_cfg_peft_cfg_pref_dim 2
---model_cfg_ckpt_path ./ckpts
---model_cfg_use_ckpt False
---model_cfg_ckpt_load_path None
---model_cfg_device cuda
---model_cfg_max_len 512
---ref_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---ref_cfg_model_class None
---ref_cfg_peft_cfg_adapter_name None
---ref_cfg_peft_cfg_target_modules None
---ref_cfg_ckpt_path ./ckpts
---ref_cfg_use_ckpt False
---ref_cfg_ckpt_load_path None
---ref_cfg_device cuda
---ref_cfg_max_len 512
---lr 5e-05
---critic_lr 0.0001
---weight_decay 0.0005
---pooled_values False
---max_norm None
---kl_ref_coef 0.2
---kl_type kl
---eps_clip 0.2
---value_clip 0.2
---beta_s 0.01
---lam 0.95
---gae_gamma 1
---ratio_threshold 10
---value_loss_coef 0.1
---train_batch_size 2
---n_update_epoch 1
---critic_pretrain_epoch 10
---loss_manipulator_type mols
---reward_cfg_0_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-helpful-reward_model
---reward_cfg_0_model_class None
---reward_cfg_0_peft_cfg_adapter_name None
---reward_cfg_0_peft_cfg_target_modules None
---reward_cfg_0_device cuda
---reward_cfg_0_reward_weight 1
---reward_name_0 helpful
---reward_cfg_1_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-harmless-reward_model
---reward_cfg_1_model_class None
---reward_cfg_1_peft_cfg_adapter_name None
---reward_cfg_1_peft_cfg_target_modules None
---reward_cfg_1_device cuda
---reward_cfg_1_reward_weight 1
---reward_name_1 harmless
---reward_cfg_2_model_pretrain_path None
---reward_cfg_2_model_class None
---reward_cfg_2_peft_cfg_adapter_name None
---reward_cfg_2_peft_cfg_target_modules None
---reward_cfg_2_device cuda
---reward_cfg_2_reward_weight 1
---reward_name_2 None
---reward_scalariztion_type None
---n_episode 1
---sample_batch_size 1
---n_sample_reuse 1
---n_update_timestep 64
---n_eval_epoch 11
---n_eval_sample 100
-
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-(INFO) 2024-05-02 02:53:47,529 - Panacea_train_logger:
-Peft Info:
-total parameters: 1370530944
-trainable parameters: 3933312
-non-trainable parameters: 1366597632
-(INFO) 2024-05-02 02:53:50,066 - Panacea_train_logger:
-Disabling target model peft layers as reference model.
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-  0%|          | 0/17664 [00:00<?, ?it/s]                                         (INFO) 2024-05-02 02:54:25,490 - Panacea_train_logger:
-Save timesteps:[ 5888 11776 17664].
-  0%|          | 0/17664 [00:00<?, ?it/s]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-  0%|          | 1/17664 [00:01<6:41:47,  1.36s/it]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
-  0%|          | 2/17664 [00:08<22:21:50,  4.56s/it]  0%|          | 3/17664 [00:12<22:27:54,  4.58s/it]  0%|          | 4/17664 [00:13<14:24:53,  2.94s/it]  0%|          | 5/17664 [00:17<17:35:31,  3.59s/it]  0%|          | 6/17664 [00:19<13:35:28,  2.77s/it]  0%|          | 7/17664 [00:20<11:04:32,  2.26s/it]  0%|          | 8/17664 [00:20<8:32:32,  1.74s/it]   0%|          | 9/17664 [00:22<8:08:41,  1.66s/it]  0%|          | 10/17664 [00:24<8:01:54,  1.64s/it]  0%|          | 11/17664 [00:24<6:42:15,  1.37s/it]  0%|          | 12/17664 [00:29<11:20:35,  2.31s/it]  0%|          | 13/17664 [00:34<16:05:31,  3.28s/it]  0%|          | 14/17664 [00:36<13:13:32,  2.70s/it]  0%|          | 15/17664 [00:38<12:35:05,  2.57s/it]  0%|          | 16/17664 [00:39<10:27:56,  2.13s/it]  0%|          | 17/17664 [00:41<10:34:55,  2.16s/it]  0%|          | 18/17664 [00:43<9:42:46,  1.98s/it]   0%|          | 19/17664 [00:47<13:25:43,  2.74s/it]  0%|          | 20/17664 [00:49<11:22:33,  2.32s/it]  0%|          | 21/17664 [00:49<9:08:26,  1.87s/it]   0%|          | 22/17664 [00:51<7:58:29,  1.63s/it]  0%|          | 23/17664 [00:51<6:55:05,  1.41s/it]  0%|          | 24/17664 [00:53<6:50:55,  1.40s/it]  0%|          | 25/17664 [00:54<6:34:19,  1.34s/it]  0%|          | 26/17664 [00:56<7:12:50,  1.47s/it]  0%|          | 27/17664 [00:57<7:04:27,  1.44s/it]  0%|          | 28/17664 [00:59<6:56:48,  1.42s/it]

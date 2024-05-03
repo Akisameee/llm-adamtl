@@ -23,3 +23,5 @@ class Panacea_SVD_Config(Peft_Config):
     lora_alpha: int = 1
     lora_dropout: float = 0.0
     pref_dim: int = 2
+
+    init_strategy: Optional[Literal['b_zero', 'diag_zero']] = None

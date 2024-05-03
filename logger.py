@@ -1,6 +1,7 @@
 import time
 import datetime
 import os
+import json
 import logging
 import seaborn as sns
 import pandas as pd
@@ -14,6 +15,8 @@ from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 from scipy import spatial
 from tqdm.auto import tqdm
+
+from modules.pefts import get_adapter_iter
 
 arrow_kwargs = {
     'color': 'C0',
@@ -217,11 +220,13 @@ class Logger():
     def save_tensors(
         self,
         tensors: list[torch.Tensor | np.ndarray] | torch.Tensor | np.ndarray,
-        name: str
+        name: str,
+        save_dir: str = None
     ):
         if self.disable:
             return
         
+        save_dir = self.dir if save_dir is None else save_dir
         if isinstance(tensors, list):
             if isinstance(tensors[0], torch.Tensor):
                 tensors = torch.stack(tensors, dim = 0)
@@ -232,8 +237,41 @@ class Logger():
         if isinstance(tensors, torch.Tensor):
             tensors = tensors.cpu().numpy()
         
-        save_path = os.path.join(self.dir, name)
+        save_path = os.path.join(save_dir, name)
         np.save(save_path, tensors)
+
+    def save_conflict_scores(
+        self,
+        model
+    ):
+        save_path = os.path.join(self.dir, 'conflict_scores')
+        if not os.path.exists(save_path):
+            os.mkdir(save_path)
+        
+        self.save_tensors(
+            [torch.stack(svd_layer.diags) for svd_layer in get_adapter_iter(model)],
+            name = 'diags',
+            save_dir = save_path
+        )
+        self.save_tensors(
+            [torch.stack(svd_layer.conflict_cos_sims) for svd_layer in get_adapter_iter(model)],
+            name = 'conflict_cos_sims',
+            save_dir = save_path
+        )
+        self.save_tensors(
+            [torch.stack(svd_layer.grad_conflict_scores) for svd_layer in get_adapter_iter(model)],
+            name = 'grad_conflict_scores',
+            save_dir = save_path
+        )
+        self.save_tensors(
+            [torch.stack(svd_layer.split_flags) for svd_layer in get_adapter_iter(model)],
+            name = 'split_flags',
+            save_dir = save_path
+        )
+
+        module_names = {idx: m[0] for idx, m in enumerate(get_adapter_iter(model, return_name = True))}
+        with open(os.path.join(save_path, 'module_names.json'), 'w') as file:
+            json.dump(module_names, file)
         
 
 def check_line_is_pareto_front(

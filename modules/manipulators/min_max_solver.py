@@ -196,24 +196,3 @@ class MinNormSolver:
             if np.sum(np.abs(change)) < MinNormSolver.STOP_CRIT:
                 return sol_vec, nd
             sol_vec = new_sol_vec
-
-
-def gradient_normalizers(grads, losses, normalization_type):
-    gn = {}
-    if normalization_type == "norm":
-        for t in grads:
-            gn[t] = np.sqrt(np.sum([gr.pow(2).sum().data[0] for gr in grads[t]]))
-    elif normalization_type == "loss":
-        for t in grads:
-            gn[t] = losses[t]
-    elif normalization_type == "loss+":
-        for t in grads:
-            gn[t] = losses[t] * np.sqrt(
-                np.sum([gr.pow(2).sum().data[0] for gr in grads[t]])
-            )
-    elif normalization_type == "none":
-        for t in grads:
-            gn[t] = 1.0
-    else:
-        print("ERROR: Invalid Normalization Type")
-    return gn

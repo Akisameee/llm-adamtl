@@ -3,7 +3,7 @@ from .base import *
 # from peft.utils.peft_types import TaskType
 # from trl import AutoModelForCausalLMWithValueHead
 
-from .ppo import PPO_Config, MOPPO_Config
+from .ppo import PPO_Config, MOPPO_Config, Manipulator_Config
 from .datasets_config import Instruct_Dataset_Config
 from .pefts import Lora_Config, Panacea_SVD_Config
 from .model import LM_Config, RM_Config
@@ -61,7 +61,11 @@ class Panacea_PPO_Config(MOPPO_Config):
     ratio_threshold: float = 10
     value_loss_coef: float = 0.1
     reward_scalariztion_type: Optional[Literal['ls', 'tche']] = None
-    loss_manipulator_type: Optional[Literal['ls', 'sils', 'mo', 'mols']] = 'mols'
+    manipulator_cfg: Manipulator_Config = Manipulator_Config(
+        loss_manipulator_type = 'mols',
+        svd_lora_type = None,
+        n_adapt_step = 8
+    )
 
     n_episode: int = 1
     sample_batch_size: int = 1

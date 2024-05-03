@@ -6,7 +6,6 @@ import torch.nn as nn
 
 from configs.pefts import Peft_Config, Lora_Config, Panacea_SVD_Config
 from modules.pefts import Lora_Linear, Panacea_SVD_Linear
-from modules.pefts.utils import get_random_split
 
 adapter_maps = {
     'lora': {
@@ -25,29 +24,6 @@ def replace_peft_layers(
     **kwargs
 ):
     model = _replace_peft_layers(model, peft_config)
-
-    svd_lora_init_strategy = kwargs.pop('svd_lora_init_strategy', None)
-    svd_lora_split_percentage = kwargs.pop('svd_lora_split_percentage', None)
-
-    if isinstance(peft_config, Panacea_SVD_Config) and svd_lora_init_strategy is not None:
-        if svd_lora_init_strategy == 'random':
-            n_svd_lora = sum(1 for module in model.modules() if isinstance(module, Panacea_SVD_Linear))
-            split_percentage = peft_config.pref_r / (peft_config.r + peft_config.pref_r) \
-                if svd_lora_split_percentage is None else svd_lora_split_percentage
-            n_split = int((peft_config.r + peft_config.pref_r) * n_svd_lora * split_percentage)
-            random_split = get_random_split(peft_config, n_svd_lora, n_split)
-            
-            idx = 0
-            for module in model.modules():
-                if isinstance(module, Panacea_SVD_Linear):
-                    while module.pref_r != random_split[idx]:
-                        if module.pref_r > random_split[idx]:
-                            module.unsplit(0)
-                        else:
-                            module.split(0)
-            assert idx != len(random_split) - 1
-        else:
-            raise NotImplementedError
 
     if return_info:
         total_params = sum(p.numel() for p in model.parameters())

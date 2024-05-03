@@ -57,13 +57,15 @@ class MOPPO_Trainer(PPO_Trainer):
             logger = logger
         )
 
-        self.loss_manipulator_type = config.loss_manipulator_type
+        self.loss_manipulator_type = config.manipulator_cfg.loss_manipulator_type
         self.manipulator: Base_Weight_Manipulator = manipulator_map[self.loss_manipulator_type](
             model = self.model,
             accelerator = self.accelerator,
             optimizer = self.optimizer,
+            logger = self.logger,
             pref_dim = self.pref_dim,
-            max_norm = self.max_norm
+            max_norm = self.max_norm,
+            **config.manipulator_cfg.to_dict()
         )
 
     def set_pref_vec(

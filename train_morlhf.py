@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -20,7 +20,7 @@ from configs import Panacea_PPO_Config, RM_Config, model_infos
 from modules.base import BaseLMWithValueHeads
 from modules.ppo import PPO_Trainer, PPOMemory
 from modules.moppo import MOPPO_Trainer
-from modules.pefts import set_all_adapters, get_adapter_iter
+from modules.pefts import set_all_adapters
 from modules.utils import shift, log_prob, merge_dict, get_model
 from trl.core import LengthSampler
 
@@ -48,7 +48,7 @@ class MORLHF_Trainer(Base_Trainer):
             raise ValueError(f'Expected pref_dim > 1, but got pref_dim = {self.pref_dim}')
         
         self.reward_scalariztion_type = config.reward_scalariztion_type
-        if self.reward_scalariztion_type is not None and config.loss_manipulator_type is not None:
+        if self.reward_scalariztion_type is not None and config.manipulator_cfg.loss_manipulator_type is not None:
             raise ValueError('Cannot set a reward_scalariztion_type with a weighted loss method.\n')
         self.ex_reward_weights = [reward_cfg.reward_weight for reward_cfg in self.reward_cfgs]
 
@@ -68,8 +68,7 @@ class MORLHF_Trainer(Base_Trainer):
                 }
             ],
             **dict(
-                n_v_head = self.pref_dim,
-                # svd_lora_init_strategy = 'random'
+                n_v_head = self.pref_dim
             )
         )
         
@@ -84,6 +83,10 @@ class MORLHF_Trainer(Base_Trainer):
 
         # self.n_sample_reuse = config.n_sample_reuse
         self.n_sample_reuse = 1
+        if config.n_sample_reuse != 1:
+            self.logger.info(
+                f'Unable to reuse samples generated with preferences, setting n_sample_reuse to 1.'
+            )
         self.n_save_step = config.n_save_step
         # self.clean_cache_every_iter = True
         self.n_eval_epoch = config.n_eval_epoch
@@ -352,18 +355,7 @@ class MORLHF_Trainer(Base_Trainer):
             tuple(self.reward_names),
             vecs_name = 'pref_vec'
         )
-        self.logger.save_tensors(
-            [torch.stack(svd_layer.diags) for svd_layer in get_adapter_iter(self.model)],
-            name = 'diags'
-        )
-        self.logger.save_tensors(
-            [torch.stack(svd_layer.conflict_cos_sims) for svd_layer in get_adapter_iter(self.model)],
-            name = 'conflict_cos_sims'
-        )
-        self.logger.save_tensors(
-            [torch.stack(svd_layer.grad_conflict_scores) for svd_layer in get_adapter_iter(self.model)],
-            name = 'grad_conflict_scores'
-        )
+        self.logger.save_conflict_scores(self.model)
 
     # sample preference vectors from simplex
     def get_eval_pref_vecs(
@@ -486,6 +478,7 @@ class MORLHF_Trainer(Base_Trainer):
 
 def main():
 
+    # Accelerator()
     config = Panacea_PPO_Config()
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
@@ -499,9 +492,9 @@ def main():
     # config.loss_manipulator_type = None
 
     config.reward_scalariztion_type = None
-    config.loss_manipulator_type = 'mols'
-    config.model_cfg.peft_cfg.r = 6
-    config.model_cfg.peft_cfg.pref_r = 2
+    config.manipulator_cfg.loss_manipulator_type = 'mols'
+    config.model_cfg.peft_cfg.r = 4
+    config.model_cfg.peft_cfg.pref_r = 4
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -519,6 +512,12 @@ def main():
     config.reward_name_1 = 'harmless'
     # config.reward_cfg_0.reward_weight = 0.1
     # config.reward_cfg_1.reward_weight = 10
+    # config.manipulator_cfg.svd_lora_type = 'adaptive'
+    # config.manipulator_cfg.svd_lora_type = 'random'
+    # config.manipulator_cfg.svd_lora_split_percentage = 0.125
+
+    config.lr = 1e-4
+    config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
 
     if TEST:
         config.accelertor_cfg.gradient_accumulation_steps = 2
@@ -526,6 +525,7 @@ def main():
         config.n_eval_sample = 4
         config.n_save_step = 1
         config.n_eval_epoch = 6
+        config.manipulator_cfg.n_adapt_step = 2
 
     config.parse_args()
 
@@ -535,7 +535,8 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     train_dataset = Instruct_Dataset(config.dateset_cfg)
-    train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 60)
+    # train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 60)
+    train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 60)
     eval_dataset = Instruct_Dataset(config.dateset_cfg)
     eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(

@@ -5,6 +5,14 @@ from .datasets_config import Instruct_Dataset_Config
 from .model import LM_Config, RM_Config
 
 @dataclass
+class Manipulator_Config(Base_Config):
+
+    loss_manipulator_type: Optional[Literal['ls', 'sils', 'mo', 'mols']] = 'mols'
+    svd_lora_type: Optional[Literal['random', 'adaptive']] = None
+    svd_lora_split_percentage: float = None
+    n_adapt_step: int = 4
+
+@dataclass
 class PPO_Config(Trainer_Config):
 
     accelertor_cfg: Accelertor_Config = Accelertor_Config()
@@ -49,5 +57,5 @@ class PPO_Config(Trainer_Config):
 @dataclass
 class MOPPO_Config(PPO_Config):
 
-    loss_manipulator_type: Optional[Literal['ls', 'sils', 'mo', 'mols']] = None
+    manipulator_cfg: Manipulator_Config = None
     
