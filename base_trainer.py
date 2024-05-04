@@ -39,11 +39,11 @@ class Base_Trainer(nn.Module):
         if isinstance(accelerator_cfg, Accelerator):
             self.accelerator = accelerator_cfg
         elif isinstance(accelerator_cfg, Accelertor_Config):
-            ddp_kwargs = DistributedDataParallelKwargs(find_unused_parameters = True)
+            # ddp_kwargs = DistributedDataParallelKwargs(find_unused_parameters = True)
             self.accelerator = Accelerator(
                 log_with = accelerator_cfg.log_with,
                 gradient_accumulation_steps = accelerator_cfg.gradient_accumulation_steps,
-                kwargs_handlers=[ddp_kwargs]
+                # kwargs_handlers=[ddp_kwargs]
             )
         self.dispatch_models = self.accelerator.state.num_processes == 1 and torch.cuda.device_count() > 1
 

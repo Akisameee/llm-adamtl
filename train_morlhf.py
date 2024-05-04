@@ -493,8 +493,8 @@ def main():
 
     config.reward_scalariztion_type = None
     config.manipulator_cfg.loss_manipulator_type = 'mols'
-    config.model_cfg.peft_cfg.r = 4
-    config.model_cfg.peft_cfg.pref_r = 4
+    config.model_cfg.peft_cfg.r = 7
+    config.model_cfg.peft_cfg.pref_r = 1
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -512,7 +512,11 @@ def main():
     config.reward_name_1 = 'harmless'
     # config.reward_cfg_0.reward_weight = 0.1
     # config.reward_cfg_1.reward_weight = 10
+
     # config.manipulator_cfg.svd_lora_type = 'adaptive'
+    # config.manipulator_cfg.n_adapt_step = 128
+    # config.manipulator_cfg.svd_lora_split_percentage = 0.125
+
     # config.manipulator_cfg.svd_lora_type = 'random'
     # config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
@@ -535,8 +539,8 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     train_dataset = Instruct_Dataset(config.dateset_cfg)
-    # train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 60)
-    train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 60)
+    train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 60)
+    # train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 60)
     eval_dataset = Instruct_Dataset(config.dateset_cfg)
     eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(

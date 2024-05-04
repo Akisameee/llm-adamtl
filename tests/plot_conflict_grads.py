@@ -20,7 +20,7 @@ def plot_lines(
 
 if __name__ == '__main__':
 
-    dir_path = './output/Panacea_train adaptive test'
+    dir_path = './output/Panacea_train randtest'
     # dir_path = './output/completed/Panacea_train 71 random'
     data_path = os.path.join(dir_path, 'conflict_scores')
     res_path = os.path.join(dir_path, 'conflict_scores_plot')
