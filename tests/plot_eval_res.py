@@ -8,20 +8,11 @@ import matplotlib.lines as mlines
 
 
 if __name__ == '__main__':
-
+    
+    output_dir = './output/completed'
     dir_paths = [
-        './output/completed/Panacea_train 71 final',
-        './output/completed/Panacea_train 62 final',
-        './output/completed/Panacea_train 53 final',
-        './output/completed/Panacea_train 44 final',
-        './output/completed/Panacea_train 35 final'
-    ]
-    eval_names = [
-        '7:1:1',
-        '6:2:2',
-        '5:3:3',
-        '4:4:4',
-        '3:5:5'
+        os.path.join(output_dir, dir_path) for dir_path in os.listdir(output_dir) \
+        if os.path.exists(os.path.join(output_dir, dir_path, 'Panacea_train.log')) and '2024-' not in dir_path
     ]
 
     helpful_pattern = r'helpful: ([\-]*\d+\.\d+)'
@@ -83,7 +74,7 @@ if __name__ == '__main__':
             color = f'C{idx}',
             marker = '_',
             markersize = 15,
-            label = eval_names[idx]
+            label = os.path.split(dir_path)[-1]
         )
         legend_handles.append(legend_handle)
 

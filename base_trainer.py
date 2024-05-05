@@ -103,7 +103,7 @@ class Base_Trainer(nn.Module):
         else:
             ref_model = None
         
-        if optimizer_params:
+        if optimizer_params is None:
             self.optimizer = torch.optim.AdamW(
                 filter(lambda p: p.requires_grad, self.model.parameters()),
                 lr = config.lr,

@@ -88,8 +88,8 @@ class Panacea_SVD_Linear(Base_Adapter):
             nn.init.zeros_(self.lora_diag[: self.r])
             nn.init.zeros_(self.pref_scaling)
         else:
-            nn.init.normal_(self.lora_diag[: self.r], mean = 0.0, std = 0.1)
-            nn.init.normal_(self.pref_scaling, mean = 0.0, std = 0.1)
+            nn.init.normal_(self.lora_diag[: self.r], mean = 0.0, std = 0.02)
+            nn.init.normal_(self.pref_scaling, mean = 0.0, std = 0.02)
 
     def get_split_flag(self):
 
@@ -164,7 +164,7 @@ class Panacea_SVD_Linear(Base_Adapter):
         
         diag = torch.cat(
             [
-                self.lora_diag.data[: self.r].squeeze(),
+                self.lora_diag.data[: self.r, :].squeeze(1),
                 self.pref_scaling.data
             ], dim = 0
         ).to(conflict_cos_sim.device)
@@ -175,9 +175,6 @@ class Panacea_SVD_Linear(Base_Adapter):
         self.conflict_cos_sims.append(conflict_cos_sim)
         self.grad_conflict_scores.append(grad_conflict_score.to(lora_A_grad.device))
         # print(self.grad_conflict_scores[-1])
-        # split_flag = torch.zeros(self.r + self.pref_r).to(lora_A_grad.device)
-        # split_flag[self.r: ] += 1
-        # self.split_flags.append(split_flag.index_select(0, remap_index))
         self.split_flags.append(self.get_split_flag())
 
         return grad_dict
@@ -187,19 +184,16 @@ class Panacea_SVD_Linear(Base_Adapter):
         device = self.device if device is None else device
 
         pref_grad_mask = torch.zeros(self.pref_dim, device = device)
-        pref_grad_mask[pref_idx] = 1
+        pref_grad_mask[pref_idx] = 1 / self.pref_vec[pref_idx].item()
         grad_mask = torch.cat([torch.ones(self.r, device = device), pref_grad_mask.repeat(self.pref_r)], dim = 0)
 
         lora_A_grad_mask = grad_mask.unsqueeze(1).expand(-1, self.in_features)
         lora_B_grad_mask = grad_mask.unsqueeze(0).expand(self.out_features, -1)
 
-        # pref_scaling_grad_mask = 
-
         return lora_A_grad_mask, lora_B_grad_mask
 
     def get_delta_weights(self):
 
-        # self.set_pref_vec(self.pref_vec)
         pref_scaling = self.pref_scaling.unsqueeze(1).repeat(1, self.pref_dim).view(-1, 1)
         lora_daig_scaled = torch.cat(
             [
@@ -246,7 +240,6 @@ class Panacea_SVD_Linear(Base_Adapter):
 
     def set_pref_vec(self, pref_vec: torch.Tensor):
         
-        self.pref_vec = pref_vec
         if self.pref_r == 0:
             return
         
@@ -259,6 +252,7 @@ class Panacea_SVD_Linear(Base_Adapter):
             raise ValueError(f'Expected pref_vec to be 1 dimension, but got {pref_vec.shape}.')
         if pref_vec.shape[0] != self.pref_dim:
             raise ValueError(f'Expected pref_vec_len = {self.pref_dim}, but got {pref_vec.shape[0]}.')
+        self.pref_vec = pref_vec.clone()
         
         pref_vec = pref_vec.unsqueeze(1).repeat(self.pref_r, 1)
         self.lora_diag.data[self.r: , :] = pref_vec.to(self.lora_diag.data.device)
@@ -268,7 +262,6 @@ class Panacea_SVD_Linear(Base_Adapter):
 
     def forward(self, x: torch.Tensor, *args, **kwargs):
         
-        # print(f'x.device{x.device}, self.lora_A.device{self.lora_A.device}')
         if self.disabled:
             if self.merged:
                 self.unmerge()
@@ -277,7 +270,6 @@ class Panacea_SVD_Linear(Base_Adapter):
             res = self.base_layer(x, *args, **kwargs)
         else:
             res = self.base_layer(x, *args, **kwargs)
-            # self.set_pref_vec(self.pref_vec)
             pref_scaling = self.pref_scaling.unsqueeze(1).repeat(1, self.pref_dim).view(-1, 1)
             lora_daig_scaled = torch.cat(
                 [
@@ -354,38 +346,27 @@ class Panacea_SVD_Linear(Base_Adapter):
             lora_diag_tensor = self.lora_diag.data,
             pref_scaling_tensor = self.pref_scaling.data
         )
-        # del self.lora_A
-        # del self.lora_B
-        # del self.lora_diag
-        # del self.pref_scaling
         self.lora_A = nn.Parameter(lora_A_splitted, requires_grad = True)
         self.lora_B = nn.Parameter(lora_B_splitted, requires_grad = True)
         self.lora_diag = nn.Parameter(lora_diag_splitted, requires_grad = True)
         self.pref_scaling = nn.Parameter(pref_scaling_splitted, requires_grad = True)
-        # self.lora_A.data = lora_A_splitted
-        # self.lora_A.grad = torch.zeros_like(self.lora_A.data)
-        # self.lora_B.data = lora_B_splitted
-        # self.lora_B.grad = torch.zeros_like(self.lora_B.data)
-        # self.lora_diag.data = lora_diag_splitted
-        # self.lora_diag.grad = torch.zeros_like(self.lora_diag.data)
-        # self.pref_scaling.data = pref_scaling_splitted
-        # self.pref_scaling.grad = torch.zeros_like(self.pref_scaling.data)
-        # self.register_parameter('lora_A', self.lora_A)
-        # self.register_parameter('lora_B', self.lora_B)
-        # self.register_parameter('lora_diag', self.lora_diag)
-        # self.register_parameter('pref_scaling', self.pref_scaling)
+
+        if packed_tensors is not None:
+            assert len(packed_tensors) == 4
+            if isinstance(packed_tensors[0], dict):
+                for key in packed_tensors[0].keys():
+                    if isinstance(packed_tensors[0][key], torch.Tensor):
+                        tensors = tuple(tensor[key] for tensor in packed_tensors)
+                        splitted_tensors = self.split_tensors(r_idx, *tensors)
+                        for i in range(len(packed_tensors)):
+                            packed_tensors[i][key] = splitted_tensors[i]
         
         self.r_index[r_idx: self.r + self.pref_r - 1] = self.r_index[r_idx + 1: self.r + self.pref_r].clone()
         self.r_index[self.r + self.pref_r - 1] = idx
         self.r -= 1
-        self.pref_r += 1
+        self.pref_r += 1        
 
-        splitted_tensors = []
-        if packed_tensors is not None:
-            for tensors in packed_tensors:
-                splitted_tensors.append(self.split_tensors(r_idx = idx, *tensors))
-
-        return splitted_tensors
+        return packed_tensors
     
     def unsplit_tensors(
         self,
@@ -458,17 +439,22 @@ class Panacea_SVD_Linear(Base_Adapter):
         self.lora_diag = nn.Parameter(lora_diag_unsplitted, requires_grad = True)
         self.pref_scaling = nn.Parameter(pref_scaling_unsplitted, requires_grad = True)
 
+        if packed_tensors is not None:
+            assert len(packed_tensors) == 4
+            if isinstance(packed_tensors[0], dict):
+                for key in packed_tensors[0].keys():
+                    if isinstance(packed_tensors[0][key], torch.Tensor):
+                        tensors = tuple(tensor[key] for tensor in packed_tensors)
+                        splitted_tensors = self.unsplit_tensors(r_idx, remain_idx, *tensors)
+                        for i in range(len(packed_tensors)):
+                            packed_tensors[i][key] = splitted_tensors[i]
+
         self.r_index[1: r_idx + 1] = self.r_index[0: r_idx].clone()
         self.r_index[0] = idx
         self.r += 1
         self.pref_r -= 1
 
-        unsplitted_tensors = []
-        if packed_tensors is not None:
-            for tensors in packed_tensors:
-                unsplitted_tensors.append(self.unsplit_tensors(r_idx = idx, remain_idx = remain_idx, *tensors))
-
-        return unsplitted_tensors
+        return packed_tensors
 
 if __name__ == '__main__':
     

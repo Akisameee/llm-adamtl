@@ -199,13 +199,12 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
         self,
         pack_params: bool = False
     ):
-        optimizer_param_maps = []
+        optimizer_param_maps = {}
         idx_s = 0
         init_param_list = list(self.get_named_parameters())
         module_names = [n for n, m in self.model.named_modules()]
         assert len(init_param_list) == sum(len(param_group['params']) for param_group in self.optimizer.param_groups)
-        for param_group in self.optimizer.param_groups:
-            param_map = {}
+        for g_idx, param_group in enumerate(self.optimizer.param_groups):
             for idx, param in enumerate(param_group['params']):
                 if param is init_param_list[idx_s + idx][1]:
                     name = init_param_list[idx_s + idx][0]
@@ -222,14 +221,14 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
                             p_name = '.'.join(names[1:])
                             break
                     if m_name in module_names:
-                        if m_name in param_map.keys():
-                            param_map[m_name][p_name] = idx
+                        if m_name in optimizer_param_maps.keys():
+                            assert g_idx == optimizer_param_maps[m_name][0]
+                            optimizer_param_maps[m_name][1][p_name] = idx
                         else:
-                            param_map[m_name] = {p_name: idx}
+                            optimizer_param_maps[m_name] = (g_idx, {p_name: idx})
                     else: raise ValueError(f'Invalid Param {name}.')
-                else: param_map[name] = idx
+                else: optimizer_param_maps[name] = (g_idx, idx)
 
-            optimizer_param_maps.append(param_map)
             idx_s += len(param_group['params'])
         
         return optimizer_param_maps
@@ -253,15 +252,17 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
             self.model._ddp_init_helper(parameters, expect_sparse_gradient, param_to_name_mapping)
 
         current_params = {n: m for n, m in self.get_named_parameters()}
-        for param_map, param_group in zip(
-            self.optimizer_param_maps,
-            self.optimizer.param_groups
-        ):
-            for m_name, p_dict in param_map.items():
-                for p_name, p_idx in p_dict.items():
-                    name = m_name + '.' + p_name
-                    if not current_params[name] is param_group['params'][p_idx]:
-                        param_group['params'][p_idx] = current_params[name]
+        for m_name, param_map in self.optimizer_param_maps.items():
+            for p_name, p_idx in param_map[1].items():
+                param_group = self.optimizer.param_groups[param_map[0]]
+                name = m_name + '.' + p_name
+                if not current_params[name] is param_group['params'][p_idx]:
+                    if len(self.optimizer.state) > 0:
+                        param_state = self.optimizer.state.pop(param_group['params'][p_idx])
+                        self.optimizer.state[current_params[name]] = param_state
+                    param_group['params'][p_idx] = current_params[name]
+        
+        torch.cuda.empty_cache()
 
     def get_weighted_loss(
         self,
@@ -273,6 +274,7 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
         self,
         obj_idx: int
     ):
+        # flag = 1
         for name, param in self.get_named_parameters():
             if name in self.grad_dict.keys():
                 assert len(self.grad_dict[name]) >= obj_idx
@@ -283,6 +285,10 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
             else:
                 assert obj_idx == 0
                 self.grad_dict[name] = [param.grad.detach().cpu()]
+            # self.accelerator.wait_for_everyone()
+            # if flag:
+            #     print(f'{os.getpid()}: {name}\n{param.shape}\n{param}\n{param.grad}')
+            #     flag -= 1
             param.grad.zero_()
 
     def restore_gradient(
@@ -306,6 +312,47 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
                 #     print(f'{os.getpid()}: {name}\n{param.shape}\n{param}\n{param.grad}')
                 #     flag -= 1
     
+    def get_svd_lora_optimizer_states(
+        self
+    ):
+        optimizer_state_dict = self.optimizer.state_dict()
+        optimizer_states = optimizer_state_dict['state']
+        svd_lora_states = {}
+        for name, module in self.svd_lora_layers.items():
+            param_idxs = self.optimizer_param_maps[name][1]
+            svd_lora_state = (
+                optimizer_states[param_idxs['lora_A']],
+                optimizer_states[param_idxs['lora_B']],
+                optimizer_states[param_idxs['lora_diag']],
+                optimizer_states[param_idxs['pref_scaling']]
+            )
+            svd_lora_states[name] = svd_lora_state
+        return svd_lora_states
+    
+    def update_optimizer_states(
+        self,
+        optimizer_states_new: dict
+    ):
+        optimizer_state_dict = self.optimizer.state_dict()
+        optimizer_state_dict['state'].update(optimizer_states_new)
+ 
+        self.optimizer.load_state_dict(optimizer_state_dict)
+
+    # def get_unsplit_remain_idx(
+    #     self,
+    #     m_name: str,
+    #     r_idx: int
+    # ):
+    #     layer = self.svd_lora_layers[m_name]
+    #     lora_A_grad = self.grad_dict[f'{m_name}.lora_A']
+    #     lora_B_grad = self.grad_dict[f'{m_name}.lora_B']
+    #     lora_grad = torch.cat(
+    #         [lora_A_grad, lora_B_grad.T],
+    #         dim = 1
+    #     )[layer.r + layer.pref_dim * :, :]
+    #     gard_mags = 
+        
+        
     def adapt_svd_lora(
         self
     ):
@@ -325,17 +372,29 @@ class Base_MO_Manipulator(Base_Weight_Manipulator):
             }
             split_names = []
             unsplit_names = []
-            optimizer_state_dict = self.optimizer.state_dict()
+            svd_lora_optimizer_states = self.get_svd_lora_optimizer_states()
+            optimizer_states_new = {}
             for name, module in self.svd_lora_layers.items():
                 split_flag = module.get_split_flag()
+                optimizer_state = svd_lora_optimizer_states[name]
+                
+                splitted_flag = 0
                 for r_idx, splitted in enumerate(split_flag):
                     if not splitted and sorted_layers[f'{name}_{r_idx}']:
-                        module.split(r_idx)
+                        optimizer_state = module.split(r_idx, optimizer_state)
                         split_names.append(f'{name}_{r_idx}')
+                        splitted_flag = 1
                     elif splitted and not sorted_layers[f'{name}_{r_idx}']:
-                        module.unsplit(r_idx)
+                        optimizer_state = module.unsplit(r_idx, 0, optimizer_state)
                         unsplit_names.append(f'{name}_{r_idx}')
-            
+                        splitted_flag = 1
+                if splitted_flag:
+                    param_map = self.optimizer_param_maps[name]
+                    for p_idx, state in zip(param_map[1].values(), optimizer_state):
+                        optimizer_states_new[p_idx] = state
+            self.update_optimizer_states(optimizer_states_new)
+            self.update_params()
+
             split_info = 'Module splitted:\n' + '\n'.join(split_names) \
                 if len(split_names) > 0 else 'No module splitted.'
             unsplit_info = 'Module unsplitted:\n' + '\n'.join(unsplit_names) \
