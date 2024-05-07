@@ -20,7 +20,7 @@ def plot_lines(
 
 if __name__ == '__main__':
 
-    dir_path = './output/Panacea_train 71-64-ada'
+    dir_path = './output/Panacea_train 71-128-diagzero'
     # dir_path = './output/completed/Panacea_train 71 random'
     data_path = os.path.join(dir_path, 'conflict_scores')
     res_path = os.path.join(dir_path, 'conflict_scores_plot')

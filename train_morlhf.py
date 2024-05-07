@@ -479,7 +479,6 @@ class MORLHF_Trainer(Base_Trainer):
 
 def main():
 
-    # Accelerator()
     config = Panacea_PPO_Config()
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
@@ -496,7 +495,7 @@ def main():
     config.manipulator_cfg.loss_manipulator_type = 'mols'
     config.model_cfg.peft_cfg.r = 7
     config.model_cfg.peft_cfg.pref_r = 1
-    config.model_cfg.peft_cfg.lora_alpha = 32
+    config.model_cfg.peft_cfg.lora_alpha = 512
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -516,15 +515,15 @@ def main():
     # config.reward_cfg_1.reward_weight = 10
 
     config.manipulator_cfg.svd_lora_type = 'adaptive'
-    config.manipulator_cfg.n_adapt_step = 128
+    config.manipulator_cfg.n_adapt_step = 256
     config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
     # config.manipulator_cfg.svd_lora_type = 'random'
     # config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
     config.lr = 1e-4
-    # config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
-    config.model_cfg.peft_cfg.init_strategy = 'b_zero'
+    config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
+    # config.model_cfg.peft_cfg.init_strategy = 'b_zero'
 
     if TEST:
         config.accelertor_cfg.gradient_accumulation_steps = 2

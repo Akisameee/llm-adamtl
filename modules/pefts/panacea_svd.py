@@ -184,7 +184,8 @@ class Panacea_SVD_Linear(Base_Adapter):
         device = self.device if device is None else device
 
         pref_grad_mask = torch.zeros(self.pref_dim, device = device)
-        pref_grad_mask[pref_idx] = 1 / self.pref_vec[pref_idx].item()
+        # pref_grad_mask[pref_idx] = 1 / self.pref_vec[pref_idx].item()
+        pref_grad_mask[pref_idx] = 1
         grad_mask = torch.cat([torch.ones(self.r, device = device), pref_grad_mask.repeat(self.pref_r)], dim = 0)
 
         lora_A_grad_mask = grad_mask.unsqueeze(1).expand(-1, self.in_features)

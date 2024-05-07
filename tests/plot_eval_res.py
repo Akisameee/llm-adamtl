@@ -9,7 +9,7 @@ import matplotlib.lines as mlines
 
 if __name__ == '__main__':
     
-    output_dir = './output/completed'
+    output_dir = './output/'
     dir_paths = [
         os.path.join(output_dir, dir_path) for dir_path in os.listdir(output_dir) \
         if os.path.exists(os.path.join(output_dir, dir_path, 'Panacea_train.log')) and '2024-' not in dir_path
