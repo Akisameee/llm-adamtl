@@ -1,8 +1,8 @@
 import numpy as np
 import random
 
-from configs.pefts import Panacea_SVD_Config
-from modules.pefts import Panacea_SVD_Linear
+from configs.pefts import SVD_Lora_Config
+from modules.pefts import SVD_Lora_Linear
 
 def get_random_split(n_svd_lora: int, n_split: int, max_r: int):
     

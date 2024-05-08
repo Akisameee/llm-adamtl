@@ -5,7 +5,7 @@ from .base import *
 
 from .ppo import PPO_Config, MOPPO_Config, Manipulator_Config
 from .datasets_config import Instruct_Dataset_Config
-from .pefts import Lora_Config, Panacea_SVD_Config
+from .pefts import Lora_Config, SVD_Lora_Config
 from .model import LM_Config, RM_Config
 
 @dataclass
@@ -25,7 +25,7 @@ class Panacea_PPO_Config(MOPPO_Config):
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         model_class = None,
-        peft_cfg = Panacea_SVD_Config(
+        peft_cfg = SVD_Lora_Config(
             target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj'],
             r = 7,
             pref_r = 1,
@@ -62,7 +62,7 @@ class Panacea_PPO_Config(MOPPO_Config):
     value_loss_coef: float = 0.1
     reward_scalariztion_type: Optional[Literal['ls', 'tche']] = None
     manipulator_cfg: Manipulator_Config = Manipulator_Config(
-        loss_manipulator_type = 'mols',
+        weighted_loss_type = 'mols',
         svd_lora_type = None,
         n_adapt_step = 128
     )

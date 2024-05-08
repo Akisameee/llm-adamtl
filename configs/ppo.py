@@ -7,7 +7,7 @@ from .model import LM_Config, RM_Config
 @dataclass
 class Manipulator_Config(Base_Config):
 
-    loss_manipulator_type: Optional[Literal['ls', 'sils', 'mo', 'mols']] = 'mols'
+    weighted_loss_type: Optional[Literal['ls', 'sils', 'mo', 'mols']] = 'mols'
     svd_lora_type: Optional[Literal['random', 'adaptive']] = None
     svd_lora_split_percentage: float = None
     n_adapt_step: int = 128

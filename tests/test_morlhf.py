@@ -12,7 +12,7 @@ from transformers.generation.configuration_utils import GenerationConfig
 from datas import Instruct_Dataset, instruct_collator
 from modules.utils import get_model, merge_dict
 from modules.base import BaseLMWithValueHeads, BaseLM
-from modules.pefts import Panacea_SVD_Linear, set_all_adapters
+from modules.pefts import SVD_Lora_Linear, set_all_adapters
 from configs import Panacea_PPO_Config, RM_Config
 from train_morlhf import MORLHF_Trainer
 
@@ -54,7 +54,7 @@ class MORLHF_Tester(MORLHF_Trainer):
         pref_vec: torch.Tensor
     ):
         for module in self.ppo_trainer.model.modules():
-            if isinstance(module, Panacea_SVD_Linear):
+            if isinstance(module, SVD_Lora_Linear):
                 module.set_pref_vec(pref_vec)
 
     @torch.no_grad()

@@ -3,7 +3,11 @@ from .lora import (
 )
 
 from .panacea_svd import (
-    Panacea_SVD_Linear
+    SVD_Lora_Linear
+)
+
+from .svd_lora_altered import (
+    SVD_Lora_Linear_Altered
 )
 
 from .replace import (

@@ -33,6 +33,42 @@ class Base_Adapter(nn.Module):
             self.base_layer.requires_grad_(base_enable)
             self.disabled = True
 
+    def get_delta_weights():
+
+        raise NotImplementedError
+
+    def merge(self, safe_mode: bool = False):
+
+        if self.merged:
+            return
+        
+        delta_weights = self.get_delta_weights()
+        if safe_mode:
+            orig_weights = self.base_layer.weight.data.clone()
+            orig_weights += delta_weights
+            self.base_layer.weight.data = orig_weights
+        else:
+            self.base_layer.weight.data += delta_weights
+        self.merged = True
+
+    def unmerge(self):
+
+        if not self.merged:
+            return
+        
+        delta_weights = self.get_delta_weights()
+        self.base_layer.weight.data -= delta_weights
+        self.merged = False
+
+    def train(self, mode: bool = True):
+        
+        # self.train(mode)
+        super().train(mode = mode)
+        if mode:
+            self.unmerge()
+        else:
+            self.merge()
+
     def forward(self, x: torch.Tensor, *args, **kwargs):
 
         return self.base_layer(x, *args, **kwargs)

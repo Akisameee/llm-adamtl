@@ -13,27 +13,24 @@ from accelerate import Accelerator
 import tqdm
 import os
 
-from configs import MOPPO_Config
+from configs import MOPPO_Config, SVD_Lora_Config, SVD_Lora_Altered_Config
 from modules.ppo import PPO_Trainer, PPOMemory, pad_sequence_fixed
 from modules.manipulators import (
-    Base_Weight_Manipulator,
     Base_MO_Manipulator,
-    Weight_Linear_Scalarization,
-    Weight_ScaleInvariant_Linear_Scalarization,
-    MO_Linear_Scalarization
+    Base_MO_Manipulator_Altered
 )
-from modules.pefts import Panacea_SVD_Linear
+from modules.pefts import SVD_Lora_Linear, SVD_Lora_Linear_Altered
 from modules.base import BaseLMWithValueHeads
 from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, default, masked_whiten
 from logger import Logger
 
-manipulator_map = {
-    None: Base_Weight_Manipulator,
-    'ls': Weight_Linear_Scalarization,
-    'sils': Weight_ScaleInvariant_Linear_Scalarization,
-    'mo': Base_MO_Manipulator,
-    'mols': MO_Linear_Scalarization
-}
+# manipulator_map = {
+#     None: Base_Weight_Manipulator,
+#     'ls': Weight_Linear_Scalarization,
+#     'sils': Weight_ScaleInvariant_Linear_Scalarization,
+#     'mo': Base_MO_Manipulator,
+#     'mols': MO_Linear_Scalarization
+# }
 
 class MOPPO_Trainer(PPO_Trainer):
 
@@ -57,8 +54,11 @@ class MOPPO_Trainer(PPO_Trainer):
             logger = logger
         )
 
-        self.loss_manipulator_type = config.manipulator_cfg.loss_manipulator_type
-        self.manipulator: Base_Weight_Manipulator = manipulator_map[self.loss_manipulator_type](
+        self.is_alted = isinstance(config.model_cfg.peft_cfg, SVD_Lora_Altered_Config)
+        manipulator_type = Base_MO_Manipulator_Altered \
+            if self.is_alted else Base_MO_Manipulator
+        
+        self.manipulator = manipulator_type(
             model = self.model,
             accelerator = self.accelerator,
             optimizer = self.optimizer,
@@ -73,7 +73,7 @@ class MOPPO_Trainer(PPO_Trainer):
         pref_vec
     ):
         for module in self.model.modules():
-            if isinstance(module, Panacea_SVD_Linear):
+            if isinstance(module, (SVD_Lora_Linear, SVD_Lora_Linear_Altered)):
                 module.set_pref_vec(pref_vec)
 
         self.manipulator.set_pref_vec(pref_vec)

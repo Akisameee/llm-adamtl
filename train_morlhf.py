@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -15,7 +15,7 @@ from accelerate.utils import broadcast
 
 from base_trainer import Base_Trainer
 from datas.instruct_dataset import Instruct_Dataset, instruct_collator
-from configs import Panacea_PPO_Config, RM_Config, model_infos
+from configs import Panacea_PPO_Config, RM_Config, SVD_Lora_Config, SVD_Lora_Altered_Config
 # from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHeads
 from modules.ppo import PPO_Trainer, PPOMemory
@@ -24,7 +24,7 @@ from modules.pefts import set_all_adapters
 from modules.utils import shift, log_prob, merge_dict, get_model
 from trl.core import LengthSampler
 
-TEST = 0
+TEST = 1
 
 class MORLHF_Trainer(Base_Trainer):
 
@@ -58,16 +58,15 @@ class MORLHF_Trainer(Base_Trainer):
             model_cfg = config.model_cfg,
             ref_cfg = config.ref_cfg,
             reward_cfg = self.reward_cfgs,
-            # all svd lora layers should be in one param group
-            optimizer_params = [
-                {
-                    'submodule': 'pretrained_model',
-                    'lr': config.lr
-                },{
-                    'submodule': 'v_heads',
-                    'lr': config.critic_lr
-                }
-            ],
+            # optimizer_params = [
+            #     {
+            #         'submodule': 'pretrained_model',
+            #         'lr': config.lr
+            #     },{
+            #         'submodule': 'v_heads',
+            #         'lr': config.critic_lr
+            #     }
+            # ],
             **dict(
                 n_v_head = self.pref_dim
             )
@@ -492,10 +491,11 @@ def main():
     # config.loss_manipulator_type = None
 
     config.reward_scalariztion_type = None
-    config.manipulator_cfg.loss_manipulator_type = 'mols'
+    config.manipulator_cfg.weighted_loss_type = 'mols'
+    config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
     config.model_cfg.peft_cfg.r = 7
     config.model_cfg.peft_cfg.pref_r = 1
-    config.model_cfg.peft_cfg.lora_alpha = 512
+    config.model_cfg.peft_cfg.lora_alpha = 32
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -514,9 +514,9 @@ def main():
     # config.reward_cfg_0.reward_weight = 0.1
     # config.reward_cfg_1.reward_weight = 10
 
-    config.manipulator_cfg.svd_lora_type = 'adaptive'
-    config.manipulator_cfg.n_adapt_step = 256
-    config.manipulator_cfg.svd_lora_split_percentage = 0.125
+    # config.manipulator_cfg.svd_lora_type = 'adaptive'
+    # config.manipulator_cfg.n_adapt_step = 256
+    # config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
     # config.manipulator_cfg.svd_lora_type = 'random'
     # config.manipulator_cfg.svd_lora_split_percentage = 0.125
@@ -531,7 +531,7 @@ def main():
         config.n_eval_sample = 4
         config.n_save_step = 1
         config.n_eval_epoch = 6
-        config.manipulator_cfg.n_adapt_step = 2
+        config.manipulator_cfg.n_adapt_step = 1
 
     config.parse_args()
 

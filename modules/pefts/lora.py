@@ -66,35 +66,8 @@ class Lora_Linear(Base_Adapter):
 
         return delta_weights
 
-    def merge(self, safe_mode: bool = False):
-
-        if self.merged:
-            return
-        
-        delta_weights = self.get_delta_weights()
-        if safe_mode:
-            orig_weights = self.base_layer.weight.data.clone()
-            orig_weights += delta_weights
-            self.base_layer.weight.data = orig_weights
-        else:
-            self.base_layer.weight.data += delta_weights
-        self.merged = True
-        # print('merged')
-
-    def unmerge(self):
-
-        if not self.merged:
-            return
-        
-        delta_weights = self.get_delta_weights()
-        self.base_layer.weight.data -= delta_weights
-        self.merged = False
-        # print('unmerged')
-
     def train(self, mode: bool = True):
 
-        self.lora_A.train(mode)
-        self.lora_B.train(mode)
         self.dropout.train(mode)
         if mode:
             self.unmerge()

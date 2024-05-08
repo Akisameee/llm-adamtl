@@ -4,16 +4,20 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import torch
 import torch.nn as nn
 
-from configs.pefts import Peft_Config, Lora_Config, Panacea_SVD_Config
-from modules.pefts import Lora_Linear, Panacea_SVD_Linear
+from configs.pefts import Peft_Config, Lora_Config, SVD_Lora_Config, SVD_Lora_Altered_Config
+from modules.pefts import Lora_Linear, SVD_Lora_Linear, SVD_Lora_Linear_Altered
 
 adapter_maps = {
-    'lora': {
+    Lora_Config: {
         nn.Linear: Lora_Linear
     },
-    'panacea': {
-        nn.Linear: Panacea_SVD_Linear,
-        Lora_Linear: Panacea_SVD_Linear
+    SVD_Lora_Config: {
+        nn.Linear: SVD_Lora_Linear,
+        Lora_Linear: SVD_Lora_Linear
+    },
+    SVD_Lora_Altered_Config: {
+        nn.Linear: SVD_Lora_Linear_Altered,
+        Lora_Linear: SVD_Lora_Linear_Altered
     }
 }
 
@@ -48,7 +52,7 @@ def _replace_peft_layers(
             model._modules[name] = _replace_peft_layers(module, peft_config)
         else:
             if name in peft_config.target_modules:
-                adapter_map = adapter_maps[peft_config.adapter_name]
+                adapter_map = adapter_maps[type(peft_config)]
                 if type(module) in adapter_map.keys():
                     peft_module = adapter_map[type(module)](
                         config = peft_config,

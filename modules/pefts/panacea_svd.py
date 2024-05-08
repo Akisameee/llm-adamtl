@@ -8,16 +8,16 @@ import random
 # from configs.peft_configs import Peft_Config, Lora_Config
 import peft
 
-from configs.pefts import Panacea_SVD_Config
+from configs.pefts import SVD_Lora_Config
 from modules.pefts.base import Base_Adapter
 from modules.pefts.lora import Lora_Linear
 from modules.pefts.utils import compute_consine_similarities
 
-class Panacea_SVD_Linear(Base_Adapter):
+class SVD_Lora_Linear(Base_Adapter):
 
     def __init__(
         self,
-        config: Panacea_SVD_Config,
+        config: SVD_Lora_Config,
         base_layer: nn.Module,
     ) -> None:
         if not isinstance(base_layer, (nn.Linear, Lora_Linear)):
@@ -59,7 +59,20 @@ class Panacea_SVD_Linear(Base_Adapter):
         self.conflict_cos_sims = []
         self.grad_conflict_scores = []
         self.split_flags = []
+        self.records = {
+            'diags': [],
+            'conflict_cos_sims': [],
+            'grad_conflict_scores': [],
+            'split_flags': []
+        }
         self.r_index = torch.arange(self.r + self.pref_r)
+
+    def record_step(self, **kwargs):
+
+        for key, value in kwargs.items():
+            if isinstance(value, torch.Tensor):
+                value = value.detach().to('cpu')
+            self.records[key].append(value)
 
     def reset_lora_weight(self, init_strategy = None):
         
@@ -91,7 +104,7 @@ class Panacea_SVD_Linear(Base_Adapter):
             nn.init.normal_(self.lora_diag[: self.r], mean = 0.0, std = 0.02)
             nn.init.normal_(self.pref_scaling, mean = 0.0, std = 0.02)
 
-    def get_split_flag(self):
+    def get_task_flag(self):
 
         split_flag = torch.zeros(self.r + self.pref_r)
         split_flag[self.r: ] += 1
@@ -171,11 +184,17 @@ class Panacea_SVD_Linear(Base_Adapter):
         diag = diag.index_select(0, remap_index)
         grad_conflict_score = conflict_cos_sim * diag.abs()
 
-        self.diags.append(diag)
-        self.conflict_cos_sims.append(conflict_cos_sim)
-        self.grad_conflict_scores.append(grad_conflict_score.to(lora_A_grad.device))
-        # print(self.grad_conflict_scores[-1])
-        self.split_flags.append(self.get_split_flag())
+        # self.diags.append(diag)
+        # self.conflict_cos_sims.append(conflict_cos_sim)
+        # self.grad_conflict_scores.append(grad_conflict_score.to(lora_A_grad.device))
+        # # print(self.grad_conflict_scores[-1])
+        # self.split_flags.append(self.get_task_flag())
+        self.record_step(**dict(
+            diags = diag,
+            conflict_cos_sims = conflict_cos_sim,
+            grad_conflict_scores = grad_conflict_score,
+            split_flags = self.get_task_flag()
+        ))
 
         return grad_dict
     
@@ -207,37 +226,6 @@ class Panacea_SVD_Linear(Base_Adapter):
         delta_weights = self.lora_B @ lora_weight_A_diag * self.scaling
 
         return delta_weights.data
-
-    def merge(self, safe_mode: bool = False):
-
-        if self.merged:
-            return
-        
-        delta_weights = self.get_delta_weights()
-        if safe_mode:
-            orig_weights = self.base_layer.weight.data.clone()
-            orig_weights += delta_weights
-            self.base_layer.weight.data = orig_weights
-        else:
-            self.base_layer.weight.data += delta_weights
-        self.merged = True
-
-    def unmerge(self):
-
-        if not self.merged:
-            return
-        
-        delta_weights = self.get_delta_weights()
-        self.base_layer.weight.data -= delta_weights
-        self.merged = False
-
-    def train(self, mode: bool = True):
-        
-        self.dropout.train(mode)
-        if mode:
-            self.unmerge()
-        else:
-            self.merge()
 
     def set_pref_vec(self, pref_vec: torch.Tensor):
         
@@ -328,11 +316,11 @@ class Panacea_SVD_Linear(Base_Adapter):
             pref_scaling_tensor
         )
 
-    def split(self, idx: int, packed_tensors = None):
+    def to_task_specific(self, idx: int, packed_tensors = None):
 
         assert idx < self.r + self.pref_r and idx >= 0
         if not torch.any(self.r_index[: self.r] == idx):
-            raise ValueError(f'Index {idx} has already splitted.')
+            raise ValueError(f'Index {idx} has already set to task specific.')
 
         r_idx = torch.nonzero(self.r_index == idx)[0].item()
         (
@@ -369,7 +357,7 @@ class Panacea_SVD_Linear(Base_Adapter):
 
         return packed_tensors
     
-    def unsplit_tensors(
+    def merge_tensors(
         self,
         r_idx: int,
         remain_idx: int,
@@ -412,14 +400,14 @@ class Panacea_SVD_Linear(Base_Adapter):
             pref_scaling_tensor
         )
 
-    def unsplit(self, idx: int, remain_idx: int = None, packed_tensors = None):
+    def to_shared(self, idx: int, remain_idx: int = None, packed_tensors = None):
 
         assert idx < self.r + self.pref_r and idx >= 0
         if remain_idx is None:
             remain_idx = 0
         assert remain_idx < self.pref_dim and remain_idx >= 0
         if not torch.any(self.r_index[self.r: ] == idx):
-            raise ValueError(f'Index {idx} has already unsplitted.')
+            raise ValueError(f'Index {idx} has already set to shared')
 
         r_idx = torch.nonzero(self.r_index == idx)[0].item()
         (
@@ -427,7 +415,7 @@ class Panacea_SVD_Linear(Base_Adapter):
             lora_B_unsplitted,
             lora_diag_unsplitted,
             pref_scaling_unsplitted
-        ) = self.unsplit_tensors(
+        ) = self.merge_tensors(
             r_idx = r_idx,
             remain_idx = remain_idx,
             lora_A_tensor = self.lora_A.data,
@@ -446,7 +434,7 @@ class Panacea_SVD_Linear(Base_Adapter):
                 for key in packed_tensors[0].keys():
                     if isinstance(packed_tensors[0][key], torch.Tensor):
                         tensors = tuple(tensor[key] for tensor in packed_tensors)
-                        splitted_tensors = self.unsplit_tensors(r_idx, remain_idx, *tensors)
+                        splitted_tensors = self.merge_tensors(r_idx, remain_idx, *tensors)
                         for i in range(len(packed_tensors)):
                             packed_tensors[i][key] = splitted_tensors[i]
 
@@ -460,8 +448,8 @@ class Panacea_SVD_Linear(Base_Adapter):
 if __name__ == '__main__':
     
     linear_layer = nn.Linear(in_features = 1024, out_features = 256, bias = False)
-    svd_lora_layer = Panacea_SVD_Linear(
-        config = Panacea_SVD_Config(
+    svd_lora_layer = SVD_Lora_Linear(
+        config = SVD_Lora_Config(
             r = 6,
             pref_r = 2,
             pref_dim = 2
@@ -485,19 +473,19 @@ if __name__ == '__main__':
         optimizer.step()
         optimizer.zero_grad()
         if i + 1 == 20:
-            svd_lora_layer.split(idx = 0)
+            svd_lora_layer.to_task_specific(idx = 0)
             
         if i + 1 == 25:
-            svd_lora_layer.split(idx = 3)
+            svd_lora_layer.to_task_specific(idx = 3)
             
         if i + 1 == 30:
-            svd_lora_layer.unsplit(idx = 0)
+            svd_lora_layer.to_shared(idx = 0)
             
         if i + 1 == 40:
-            svd_lora_layer.split(idx = 4)
+            svd_lora_layer.to_task_specific(idx = 4)
         
         if i + 1 == 50:
-            svd_lora_layer.unsplit(idx = 3)
+            svd_lora_layer.to_shared(idx = 3)
 
             
 

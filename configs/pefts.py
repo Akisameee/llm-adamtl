@@ -15,7 +15,7 @@ class Lora_Config(Peft_Config):
     lora_dropout: float = 0.0
 
 @dataclass
-class Panacea_SVD_Config(Peft_Config):
+class SVD_Lora_Config(Peft_Config):
 
     adapter_name: str = 'panacea'
     r: int = 8
@@ -25,3 +25,8 @@ class Panacea_SVD_Config(Peft_Config):
     pref_dim: int = 2
 
     init_strategy: Optional[Literal['b_zero', 'diag_zero']] = None
+
+@dataclass
+class SVD_Lora_Altered_Config(SVD_Lora_Config):
+
+    adapter_name: str = 'svd_lora_altered'

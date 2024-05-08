@@ -248,26 +248,18 @@ class Logger():
         if not os.path.exists(save_path):
             os.mkdir(save_path)
         
-        self.save_tensors(
-            [torch.stack(svd_layer.diags) for svd_layer in get_adapter_iter(model)],
-            name = 'diags',
-            save_dir = save_path
-        )
-        self.save_tensors(
-            [torch.stack(svd_layer.conflict_cos_sims) for svd_layer in get_adapter_iter(model)],
-            name = 'conflict_cos_sims',
-            save_dir = save_path
-        )
-        self.save_tensors(
-            [torch.stack(svd_layer.grad_conflict_scores) for svd_layer in get_adapter_iter(model)],
-            name = 'grad_conflict_scores',
-            save_dir = save_path
-        )
-        self.save_tensors(
-            [torch.stack(svd_layer.split_flags) for svd_layer in get_adapter_iter(model)],
-            name = 'split_flags',
-            save_dir = save_path
-        )
+        for adapter in get_adapter_iter(model):
+            if not hasattr(adapter, 'records'):
+                return
+            tensor_names = [k for k, v in adapter.records.items() if len(v) > 0]
+            break
+
+        for tensor_name in tensor_names:
+            self.save_tensors(
+                [torch.stack(svd_layer.records[tensor_name]) for svd_layer in get_adapter_iter(model)],
+                name = tensor_name,
+                save_dir = save_path
+            )
 
         module_names = {idx: m[0] for idx, m in enumerate(get_adapter_iter(model, return_name = True))}
         with open(os.path.join(save_path, 'module_names.json'), 'w') as file:
