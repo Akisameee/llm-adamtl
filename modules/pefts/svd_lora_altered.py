@@ -55,6 +55,7 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
         self.merged = False
         self.set_adapter(enable = True)
         self.pref_vec = torch.zeros(self.pref_dim)
+        self.name = None
 
         self.records = {
             'diags': [],
@@ -89,59 +90,92 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
         if init_strategy == 'diag_zero':
             nn.init.zeros_(self.lora_diag)
         else:
-            nn.init.normal_(self.lora_diag, mean = 0.0, std = 0.02)
+            # nn.init.normal_(self.lora_diag, mean = 0.0, std = 0.02)
+            # nn.init.normal_(self.lora_diag[-self.pref_dim * self.pref_r:], mean = 0.0, std = 0.5)
+            nn.init.normal_(self.lora_diag, mean = 0.0, std = 0.5)
 
     def get_task_flag(self):
 
         return self.task_flag.clone()
     
     def compute_scores(self, grad_dict: dict):
-        pass
 
-    def restore_gradient(self, grad_dict: dict):
+        if self.name is None:
+            lora_A_key = list(filter(lambda k: k.endswith('lora_A'), grad_dict.keys()))[0]
+            lora_B_key = list(filter(lambda k: k.endswith('lora_B'), grad_dict.keys()))[0]
+            lora_diag_key = list(filter(lambda k: k.endswith('lora_diag'), grad_dict.keys()))[0]
+        else:
+            lora_A_key = self.name + '.lora_A'
+            lora_B_key = self.name + '.lora_B'
+            lora_diag_key = self.name + '.lora_diag'
 
-        lora_A_key = list(filter(lambda k: k.endswith('lora_A'), grad_dict.keys()))[0]
-        lora_B_key = list(filter(lambda k: k.endswith('lora_B'), grad_dict.keys()))[0]
-
-        lora_A_grads = []
-        lora_B_grads = []
-        lora_AB_grads = []
-        for pref_idx, (lora_A_grad, lora_B_grad) in enumerate(zip(grad_dict[lora_A_key], grad_dict[lora_B_key])):
-            lora_A_grad_mask, lora_B_grad_mask = self.get_grad_mask(pref_idx, device = lora_A_grad.device)
-            lora_A_grads.append(lora_A_grad * lora_A_grad_mask)
-            lora_B_grads.append(lora_B_grad * lora_B_grad_mask)
-            lora_AB_grads.append(
-                torch.cat(
-                    [
-                        lora_A_grad,
-                        lora_B_grad.T
-                    ], dim = 1
-                )
+        lora_AB_grads = [torch.cat(
+                [
+                    lora_A_grad,
+                    lora_diag_grad,
+                    lora_B_grad.T
+                ], dim = 1
+            ) for lora_A_grad, lora_diag_grad, lora_B_grad in zip(
+                grad_dict[lora_A_key],
+                grad_dict[lora_diag_key],
+                grad_dict[lora_B_key]
             )
-
-        grad_dict[lora_A_key] = torch.stack(lora_A_grads, dim = 0).sum(dim = 0)
-        grad_dict[lora_B_key] = torch.stack(lora_B_grads, dim = 0).sum(dim = 0)
+        ]
         
         # compute conflict scores
         lora_AB = torch.cat(
             [
                 self.lora_A.data,
+                self.lora_diag.data,
                 self.lora_B.data.T
             ], dim = 1
         )
         conflict_cos_sim = compute_consine_similarities(lora_AB_grads, dim = 1)
-        sh_ts_conflict_score = compute_conflict_scores(
+        sh_ts_conflict_score, ts_ts_conflict_score = compute_conflict_scores(
             grads = lora_AB_grads,
             params = lora_AB,
-            weight = self.pref_vec.to(lora_A_grad.device),
+            weight = self.pref_vec.to(lora_AB_grads[0].device),
             dim = 1
         )
         self.record_step(**dict(
             diags = self.lora_diag.data.squeeze(),
             conflict_cos_sims = conflict_cos_sim,
             sh_ts_conflict_scores = sh_ts_conflict_score,
+            ts_ts_conflict_scores = ts_ts_conflict_score,
             task_flags = self.get_task_flag()
         ))
+
+    def restore_gradient(self, grad_dict: dict):
+
+        if self.name is None:
+            lora_A_key = list(filter(lambda k: k.endswith('lora_A'), grad_dict.keys()))[0]
+            lora_B_key = list(filter(lambda k: k.endswith('lora_B'), grad_dict.keys()))[0]
+            lora_diag_key = list(filter(lambda k: k.endswith('lora_diag'), grad_dict.keys()))[0]
+        else:
+            lora_A_key = self.name + '.lora_A'
+            lora_B_key = self.name + '.lora_B'
+            lora_diag_key = self.name + '.lora_diag'
+
+        lora_A_grads = []
+        lora_B_grads = []
+        lora_diag_grads = []
+        for pref_idx, (lora_A_grad, lora_diag_grad, lora_B_grad) in enumerate(zip(
+            grad_dict[lora_A_key],
+            grad_dict[lora_diag_key],
+            grad_dict[lora_B_key]
+        )):
+            (
+                lora_A_grad_mask,
+                lora_B_grad_mask,
+                lora_diag_grad_mask
+            ) = self.get_grad_mask(pref_idx, device = lora_A_grad.device)
+            lora_A_grads.append(lora_A_grad * lora_A_grad_mask)
+            lora_B_grads.append(lora_B_grad * lora_B_grad_mask)
+            lora_diag_grads.append(lora_diag_grad * lora_diag_grad_mask)
+
+        grad_dict[lora_A_key] = torch.stack(lora_A_grads, dim = 0).sum(dim = 0)
+        grad_dict[lora_B_key] = torch.stack(lora_B_grads, dim = 0).sum(dim = 0)
+        grad_dict[lora_diag_key] = torch.stack(lora_diag_grads, dim = 0).sum(dim = 0)
 
         return grad_dict
     
@@ -156,8 +190,9 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
 
         lora_A_grad_mask = grad_mask.unsqueeze(1).expand(-1, self.in_features)
         lora_B_grad_mask = grad_mask.unsqueeze(0).expand(self.out_features, -1)
+        lora_diag_grad_mask = grad_mask.unsqueeze(1)
 
-        return lora_A_grad_mask, lora_B_grad_mask
+        return lora_A_grad_mask, lora_B_grad_mask, lora_diag_grad_mask
 
     @torch.no_grad()
     def get_delta_weights(self):
@@ -252,8 +287,8 @@ if __name__ == '__main__':
         # print(svd_lora_layer.lora_A.grad)
         # print(svd_lora_layer.lora_B.grad)
         # print(svd_lora_layer.lora_diag.grad)
-        # print(svd_lora_layer.get_grad_mask(pref_idx=0, device='cpu'))
-        # print(svd_lora_layer.get_grad_mask(pref_idx=1, device='cpu'))
+        print(svd_lora_layer.get_grad_mask(pref_idx=0, device='cpu'))
+        print(svd_lora_layer.get_grad_mask(pref_idx=1, device='cpu'))
         optimizer.step()
         optimizer.zero_grad()
         if i + 1 == 20:

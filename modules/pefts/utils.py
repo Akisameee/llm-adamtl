@@ -64,20 +64,46 @@ def compute_conflict_scores(
     dim: int
 ):
 
+    if len(weight.shape) > 1:
+        weight = weight.squeeze()
+    assert len(weight.shape) == 1
+
     assert len(grads) > 1 and len(grads) == len(weight)
     t_dim = len(grads)
-    assert len(weight.squeeze().shape) == 1
     assert all(t.shape == params.shape and len(t.shape) == 2 for t in grads) and dim < 2
-    sh_ts_conflict_scores = torch.zeros(t_dim, grads[0].shape[0 if dim == 1 else 0]).to(weight.device)
+    n_r = grads[0].shape[0 if dim == 1 else 0]
+    sh_ts_conflict_scores = torch.zeros(t_dim, n_r).to(weight.device)
+    ts_ts_conflict_scores = torch.zeros(t_dim, t_dim, n_r).to(weight.device)
     
-    magnitudes = [torch.norm(grad, dim = dim) ** 2 for grad in grads]
+    # magnitudes = [torch.norm(grad, dim = dim) ** 2 for grad in grads]
     # cross_dot_prod = [[torch.einsum() for j in range(i, t_dim)] for i in range(t_dim - 1)]
+    cross_dot_prod = torch.zeros(t_dim, t_dim, n_r)
     for i in range(t_dim):
-        for j, w_task in enumerate(weight.squeeze()):
-            if i == j: continue
-            sh_ts_conflict_scores[i] += w_task * (magnitudes[i] - batch_dot(grads[j], grads[i], dim = dim))
+        for j in range(i, t_dim):
+            if i == j:
+                cross_dot_prod[i, j, :] = torch.norm(grads[i], dim = dim) ** 2
+            else:
+                dot_prod = batch_dot(grads[j], grads[i], dim = dim)
+                cross_dot_prod[i, j, :] = dot_prod
+                cross_dot_prod[j, i, :] = dot_prod
+    # for i in range(t_dim):
+    #     for j, w_task in enumerate(weight.squeeze()):
+    #         if i == j: continue
+            # sh_ts_conflict_scores[i] += w_task * (magnitudes[i] - batch_dot(grads[j], grads[i], dim = dim))
+    for i, w_i in enumerate(weight):
+        sh_ts_penality = 0
+        for j, w_j in enumerate(weight):
+            for k, w_k in enumerate(weight):
+                sh_ts_penality += w_j * w_k * cross_dot_prod[k, j, :]
 
-    return sh_ts_conflict_scores
+        sh_ts_conflict_scores[i] = w_i * cross_dot_prod[i, i, :] - sh_ts_penality
+
+    for i, w_i in enumerate(weight):
+        for j, w_j in enumerate(weight):
+            if i == j: continue
+            ts_ts_conflict_scores[i, j, :] = w_j * cross_dot_prod[j, j, :] - w_i * cross_dot_prod[i, i, :]
+
+    return sh_ts_conflict_scores, ts_ts_conflict_scores
 
 if __name__ == '__main__':
 

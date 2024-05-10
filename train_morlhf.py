@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -24,7 +24,7 @@ from modules.pefts import set_all_adapters
 from modules.utils import shift, log_prob, merge_dict, get_model
 from trl.core import LengthSampler
 
-TEST = 1
+TEST = 0
 
 class MORLHF_Trainer(Base_Trainer):
 
@@ -58,15 +58,15 @@ class MORLHF_Trainer(Base_Trainer):
             model_cfg = config.model_cfg,
             ref_cfg = config.ref_cfg,
             reward_cfg = self.reward_cfgs,
-            # optimizer_params = [
-            #     {
-            #         'submodule': 'pretrained_model',
-            #         'lr': config.lr
-            #     },{
-            #         'submodule': 'v_heads',
-            #         'lr': config.critic_lr
-            #     }
-            # ],
+            optimizer_params = [
+                {
+                    'submodule': 'pretrained_model',
+                    'lr': config.lr
+                },{
+                    'submodule': 'v_heads',
+                    'lr': config.critic_lr
+                }
+            ],
             **dict(
                 n_v_head = self.pref_dim
             )
@@ -514,12 +514,10 @@ def main():
     # config.reward_cfg_0.reward_weight = 0.1
     # config.reward_cfg_1.reward_weight = 10
 
-    # config.manipulator_cfg.svd_lora_type = 'adaptive'
-    # config.manipulator_cfg.n_adapt_step = 256
-    # config.manipulator_cfg.svd_lora_split_percentage = 0.125
-
+    config.manipulator_cfg.svd_lora_type = 'adaptive'
     # config.manipulator_cfg.svd_lora_type = 'random'
-    # config.manipulator_cfg.svd_lora_split_percentage = 0.125
+    config.manipulator_cfg.n_adapt_step = 64
+    config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
     config.lr = 1e-4
     config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
@@ -531,7 +529,7 @@ def main():
         config.n_eval_sample = 4
         config.n_save_step = 1
         config.n_eval_epoch = 6
-        config.manipulator_cfg.n_adapt_step = 1
+        config.manipulator_cfg.n_adapt_step = 2
 
     config.parse_args()
 
@@ -541,8 +539,8 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     train_dataset = Instruct_Dataset(config.dateset_cfg)
-    train_dataset.load(mode = 'train', max_sample = 40000 if not TEST else 60)
-    # train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 60)
+    # train_dataset.load(mode = 'train', max_sample = 0 if not TEST else 60)
+    train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 60)
     eval_dataset = Instruct_Dataset(config.dateset_cfg)
     eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(
