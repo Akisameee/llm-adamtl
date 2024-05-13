@@ -64,6 +64,7 @@ class Panacea_PPO_Config(MOPPO_Config):
     manipulator_cfg: Manipulator_Config = Manipulator_Config(
         weighted_loss_type = 'mols',
         svd_lora_type = None,
+        svd_lora_random_init = None,
         n_adapt_step = 128
     )
 

@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '5'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -488,12 +488,14 @@ def main():
 
     # Panacea
     # config.reward_scalariztion_type = 'ls'
-    # config.loss_manipulator_type = None
+    # config.manipulator_cfg.weighted_loss_type = None
+    # config.model_cfg.peft_cfg = SVD_Lora_Config(pref_dim = 2)
 
     config.reward_scalariztion_type = None
     config.manipulator_cfg.weighted_loss_type = 'mols'
     config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
-    config.model_cfg.peft_cfg.r = 7
+    
+    config.model_cfg.peft_cfg.r = 6
     config.model_cfg.peft_cfg.pref_r = 1
     config.model_cfg.peft_cfg.lora_alpha = 32
     
@@ -515,13 +517,26 @@ def main():
     # config.reward_cfg_1.reward_weight = 10
 
     config.manipulator_cfg.svd_lora_type = 'adaptive'
-    # config.manipulator_cfg.svd_lora_type = 'random'
-    config.manipulator_cfg.n_adapt_step = 64
-    config.manipulator_cfg.svd_lora_split_percentage = 0.125
+    config.manipulator_cfg.svd_lora_random_init = True
+    config.manipulator_cfg.svd_lora_split_percentage = 0.02
 
     config.lr = 1e-4
     config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
     # config.model_cfg.peft_cfg.init_strategy = 'b_zero'
+
+    # whole dataset
+    # max_sample = 0
+    # config.n_update_timestep = 128
+    # config.accelertor_cfg.gradient_accumulation_steps = 16
+    # config.train_batch_size = 2
+    # config.manipulator_cfg.n_adapt_step = 128
+
+    # # 1/2 dataset
+    max_sample = 20000
+    config.n_update_timestep = 64
+    config.accelertor_cfg.gradient_accumulation_steps = 8
+    config.train_batch_size = 2
+    config.manipulator_cfg.n_adapt_step = 256
 
     if TEST:
         config.accelertor_cfg.gradient_accumulation_steps = 2
@@ -539,8 +554,7 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     train_dataset = Instruct_Dataset(config.dateset_cfg)
-    # train_dataset.load(mode = 'train', max_sample = 0 if not TEST else 60)
-    train_dataset.load(mode = 'train', max_sample = 20000 if not TEST else 60)
+    train_dataset.load(mode = 'train', max_sample = max_sample if not TEST else 60)
     eval_dataset = Instruct_Dataset(config.dateset_cfg)
     eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(

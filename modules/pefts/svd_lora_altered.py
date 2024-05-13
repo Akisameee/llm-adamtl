@@ -90,9 +90,9 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
         if init_strategy == 'diag_zero':
             nn.init.zeros_(self.lora_diag)
         else:
-            # nn.init.normal_(self.lora_diag, mean = 0.0, std = 0.02)
+            nn.init.normal_(self.lora_diag, mean = 0.0, std = 0.02)
             # nn.init.normal_(self.lora_diag[-self.pref_dim * self.pref_r:], mean = 0.0, std = 0.5)
-            nn.init.normal_(self.lora_diag, mean = 0.0, std = 0.5)
+            # nn.init.normal_(self.lora_diag, mean = 0.0, std = 0.5)
 
     def get_task_flag(self):
 

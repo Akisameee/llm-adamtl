@@ -17,13 +17,6 @@ from scipy import spatial
 from tqdm.auto import tqdm
 
 from modules.pefts import get_adapter_iter
-
-arrow_kwargs = {
-    'color': 'C0',
-    'linewidth': 0.05,
-    # 'headwidth': 0.1,
-    # 'headlength': 0.1
-}
     
 def get_logger(name='logger', file_name='./log.txt'):
     
