@@ -96,7 +96,8 @@ def compute_conflict_scores(
     for i, w_i in enumerate(weight):
         for j, w_j in enumerate(weight):
             if i == j: continue
-            ts_ts_conflict_scores[i, j, :] = w_j * cross_dot_prod[j, j, :] - w_i * cross_dot_prod[i, i, :]
+            ts_ts_conflict_scores[i, j, :] = w_j * cross_dot_prod[j, j, :] - w_i * cross_dot_prod[i, i, :] - \
+                (w_j - w_i) * cross_dot_prod[j, i, :]
 
     return sh_ts_conflict_scores, ts_ts_conflict_scores
 

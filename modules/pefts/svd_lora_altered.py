@@ -210,9 +210,6 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
     
     def set_pref_vec(self, pref_vec: torch.Tensor):
         
-        if self.pref_r == 0:
-            return
-        
         is_merged = self.merged
         if is_merged:
             self.unmerge()
@@ -254,6 +251,7 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
             raise ValueError(f'Index {idx} has already set to task {task_idx} specific.')
         
         self.task_flag[idx] = task_idx
+        # self.lora_diag.data[idx] *= 2
 
     def to_shared(self, idx: int):
 
@@ -262,6 +260,7 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
             raise ValueError(f'Index {idx} has already set to shared.')
 
         self.task_flag[idx] = -1
+        # self.lora_diag.data[idx] *= 0.5
 
 if __name__ == '__main__':
     

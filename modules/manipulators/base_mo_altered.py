@@ -5,6 +5,7 @@ import os
 from torch.optim.optimizer import Optimizer as Optimizer
 from accelerate.utils import broadcast
 import torch.distributed as dist
+from functools import reduce
 
 from logger import Logger
 from modules.pefts import SVD_Lora_Linear_Altered
@@ -143,18 +144,18 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
         if self.svd_lora_type == 'adaptive':
             
             for name, module in self.svd_lora_layers.items():
-
-                weights = torch.linspace(0.5, 1, self.restore_step)
+                
                 sh_ts_conflict_score = torch.stack(module.records['sh_ts_conflict_scores'])
                 ts_ts_conflict_score = torch.stack(module.records['ts_ts_conflict_scores'])
 
-                # sh_ts_conflict_score = sh_ts_conflict_score.mean(dim = 0)
-                sh_ts_weights = weights.view(-1, 1, 1).expand_as(sh_ts_conflict_score)
-                sh_ts_conflict_score = torch.sum(sh_ts_conflict_score * sh_ts_weights, dim = 0) / sh_ts_weights.sum(dim = 0)
+                sh_ts_conflict_score = sh_ts_conflict_score.mean(dim = 0)
+                ts_ts_conflict_score = ts_ts_conflict_score.mean(dim = 0)
 
-                # ts_ts_conflict_score = ts_ts_conflict_score.mean(dim = 0)
-                ts_ts_weights = weights.view(-1, 1, 1, 1).expand_as(ts_ts_conflict_score)
-                ts_ts_conflict_score = torch.sum(ts_ts_conflict_score * ts_ts_weights, dim = 0) / ts_ts_weights.sum(dim = 0)
+                # weights = torch.linspace(0.5, 1, self.restore_step)
+                # sh_ts_weights = weights.view(-1, 1, 1).expand_as(sh_ts_conflict_score)
+                # sh_ts_conflict_score = torch.sum(sh_ts_conflict_score * sh_ts_weights, dim = 0) / sh_ts_weights.sum(dim = 0)
+                # ts_ts_weights = weights.view(-1, 1, 1, 1).expand_as(ts_ts_conflict_score)
+                # ts_ts_conflict_score = torch.sum(ts_ts_conflict_score * ts_ts_weights, dim = 0) / ts_ts_weights.sum(dim = 0)
 
                 for r_idx, ts_flag in enumerate(module.get_task_flag().tolist()):
                     m_scores = self.conflict_scores[f'{name}_{r_idx}']
@@ -162,28 +163,14 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
                     m_scores['sh_ts_score'] = sh_ts_conflict_score[:, r_idx].squeeze()
                     m_scores['ts_ts_score'] = ts_ts_conflict_score[:, :, r_idx].squeeze()
                     
-            sh_ts_ranks = [
-                {
-                    name: rank for rank, (name, s) in \
-                    enumerate(sorted(
-                        self.conflict_scores.items(),
-                        key = lambda item: item[1]['sh_ts_score'][t_idx],
-                        reverse = True
-                    ))
-                }
-                for t_idx in range(self.pref_dim)
-            ]
             sh_params = dict(filter(lambda item: item[1]['ts_flag'] == -1, self.conflict_scores.items()))
             ts_param_groups = [
                 dict(filter(lambda item: item[1]['ts_flag'] == t_idx, self.conflict_scores.items()))
                 for t_idx in range(self.pref_dim)
             ]
             
-            sh_params, ts_param_groups = self.convers_sh_ts(
-                sh_ts_ranks = sh_ts_ranks,
-                sh_params = sh_params,
-                ts_param_groups = ts_param_groups
-            )
+            sh_params, ts_param_groups = self.convers_sh_ts(self.conflict_scores)
+            print(len(sh_params), [len(ts_params) for ts_params in ts_param_groups])
 
             # ts_param_groups = self.convers_ts_ts(
             #     ts_param_groups = ts_param_groups
@@ -195,49 +182,99 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
 
     def convers_sh_ts(
         self,
-        sh_ts_ranks: list[dict],
-        sh_params: dict,
-        ts_param_groups: list[dict]
+        conflict_scores: dict
     ):
+        sh_ts_ranks = [
+            {
+                name: rank for rank, (name, s) in \
+                enumerate(sorted(
+                    conflict_scores.items(),
+                    key = lambda item: item[1]['sh_ts_score'][t_idx],
+                    reverse = True
+                ))
+            }
+            for t_idx in range(self.pref_dim)
+        ]
+        
+        n_rank_top = [n_r for n_r in self.n_rs]
+        ts_param_groups_new = [
+            {name: conflict_scores[name] for name, rank in sh_ts_ranks[t_idx].items() if rank < n_rank_top[t_idx + 1]}
+            for t_idx in range(self.pref_dim)
+        ]
+        conflict_params = reduce(
+            lambda a, b: a & set(b.keys()),
+            ts_param_groups_new,
+            set(ts_param_groups_new[0].keys())
+        )
+        while len(conflict_params) > 0:
+            for name in conflict_params:
+                m_scores = conflict_scores[name]
+                target_idxs = torch.LongTensor([name in ts_params for ts_params in ts_param_groups_new])
+                sh_ts_score = m_scores['sh_ts_score'].clone()
+                sh_ts_score[~target_idxs] = float('-inf')
+                target_idx = torch.argmax(sh_ts_score).item()
+                conflict_scores[name]['ts_flag'] = target_idx
+                target_idxs[target_idx] = 0
+                for t_idx, flag in enumerate(target_idxs):
+                    if flag:
+                        del sh_ts_ranks[t_idx][name]
+                        n_rank_top[t_idx + 1] += 1
+            ts_param_groups_new = [
+                {name: conflict_scores[name] for name, rank in sh_ts_ranks[t_idx].items() if rank < n_rank_top[t_idx + 1]}
+                for t_idx in range(self.pref_dim)
+            ]
+            conflict_params = reduce(
+                lambda a, b: a & set(b.keys()),
+                ts_param_groups_new,
+                set(ts_param_groups_new[0].keys())
+            )
+        for t_idx, ts_params in enumerate(ts_param_groups_new):
+            for name, m_score in ts_params.items():
+                m_score['ts_flag'] = t_idx
+
         sh_params_new = {}
-        for name, m_scores in sh_params.items():
-            costs = torch.zeros(self.pref_dim)
-            for t_idx in range(self.pref_dim):
-                if sh_ts_ranks[t_idx][name] < self.n_rs[t_idx + 1]:
-                    costs[t_idx] = self.pref_vec[t_idx] * m_scores['sh_ts_score'][t_idx]
-            if torch.any(costs != 0):
-                ts_idx = torch.argmax(costs).item()
-                m_scores['ts_flag'] = ts_idx
-                ts_param_groups[ts_idx][name] = m_scores
-            else:
-                sh_params_new[name] = m_scores
-        sh_params = sh_params_new
-        print(len(sh_params), [len(ts_params) for ts_params in ts_param_groups])
+        for name, m_scores in filter(
+            lambda item: all([item[0] not in ts_params.keys() for ts_params in ts_param_groups_new]),
+            conflict_scores.items()
+        ):
+            m_scores = conflict_scores[name]
+            m_scores['ts_flags'] = -1
+            sh_params_new[name] = m_scores
 
-        for t_idx, ts_params in enumerate(ts_param_groups):
-            n_to_sh = len(ts_params) - self.n_rs[t_idx + 1]
-            if n_to_sh > 0:
-                to_sh_list = [
-                    name for name, rank in \
-                    sorted(
-                        filter(lambda item: item[0] in ts_params.keys(), sh_ts_ranks[t_idx].items()),
-                        key = lambda item: item[1]
-                    )
-                ][-n_to_sh: ]
-                for name in to_sh_list:
-                    m_scores = ts_params.pop(name)
-                    m_scores['ts_flag'] = -1
-                    sh_params[name] = m_scores
-        print(len(sh_params), [len(ts_params) for ts_params in ts_param_groups])
-
-        return sh_params, ts_param_groups
+        return sh_params_new, ts_param_groups_new
     
     def convers_ts_ts(
         self,
-        ts_param_groups: list[dict]
+        conflict_scores: dict
     ):
-        pass
-        
+        ts_param_groups_new = [{} for _ in range(self.pref_dim)]
+        ts_ts_ranks = [{} for _ in range(self.pref_dim)]
+        for t_idx_1 in range(self.pref_dim):
+            for t_idx_2 in range(t_idx_1 + 1, self.pref_dim):
+                ts_ts_rank = {
+                    name: rank for rank, (name, s) in \
+                    enumerate(sorted(
+                        {**ts_param_groups_new[t_idx_1], **ts_param_groups_new[t_idx_2]},
+                        key = lambda item: item[1]['ts_ts_score'][t_idx_1][t_idx_2],
+                        reverse = True
+                    ))
+                }
+                ts_ts_ranks[t_idx_1][t_idx_2] = ts_ts_rank
+                tsrs = self.n_rs[t_idx_1 + 1] + self.n_rs[t_idx_2 + 1]
+                ts_ts_ranks[t_idx_2][t_idx_1] = {name: tsrs - rank for name, rank in ts_ts_rank.items()}
+
+        # ts_param_groups_new = [
+        #     {name: conflict_scores[name] for name, rank in sh_ts_ranks[t_idx].items() if rank < n_rank_top[t_idx + 1]}
+        #     for t_idx in range(self.pref_dim)
+        # ]
+        # conflict_params = reduce(
+        #     lambda a, b: a & set(b.keys()),
+        #     ts_param_groups_new,
+        #     set(ts_param_groups_new[0].keys())
+        # )
+
+        return ts_param_groups_new
+            
     
     def update_svd_lora_layers(self):
 

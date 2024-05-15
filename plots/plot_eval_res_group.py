@@ -10,10 +10,19 @@ import matplotlib.lines as mlines
 if __name__ == '__main__':
     
     output_dir = './output/'
+    prefixs = ['rand02', 'ada02']
+
     dir_paths = [
         os.path.join(output_dir, dir_path) for dir_path in os.listdir(output_dir) \
         if os.path.exists(os.path.join(output_dir, dir_path, 'Panacea_train.log')) and '2024-' not in dir_path
     ]
+    color_idx = len(prefixs)
+    dir_paths_color_map = {}
+    for c_idx, prefix in enumerate(prefixs):
+        for dir_path in dir_paths:
+            if os.path.split(dir_path)[-1].startswith(prefix):
+                dir_paths_color_map[dir_path] = f'C{c_idx}'
+
 
     helpful_pattern = r'helpful: ([\-]*\d+\.\d+)'
     harmless_pattern = r'harmless: ([\-]*\d+\.\d+)'
@@ -50,7 +59,7 @@ if __name__ == '__main__':
     print(all_eval_res)
     axes = None
     axes_names = ('helpful', 'harmless')
-    legend_handles = []
+    
     for idx, (dir_path, eval_ress) in enumerate(all_eval_res.items()):
         eval_res = eval_ress[-1]
         x = [res[0] for res in eval_res]
@@ -62,24 +71,27 @@ if __name__ == '__main__':
             y = y,
             lines = lines,
             axes_names = axes_names,
-            p_alphas = [1] * len(x),
-            l_alphas = [1] * len(lines),
+            p_alphas = [0.5] * len(x),
+            l_alphas = [0.5] * len(lines),
             scaling = 1,
-            color = f'C{idx}',
+            color = dir_paths_color_map[dir_path],
             arrows = pref_vecs,
             prev_axes = axes
         )
+
+    legend_handles = []
+    for c_idx, prefix in enumerate(prefix):
         legend_handle = mlines.Line2D(
             [], [],
-            color = f'C{idx}',
+            color = f'C{c_idx}',
             marker = '_',
             markersize = 15,
-            label = os.path.split(dir_path)[-1]
+            label = prefix
         )
         legend_handles.append(legend_handle)
 
     plt.legend(handles = legend_handles)
-    save_path = os.path.join(dir_paths[0], 'all_eval_res')
+    save_path = os.path.join(dir_paths[0], 'grouped_eval_res') 
     print(f'saved result at {dir_paths[0]}')
     plt.savefig(save_path, dpi = 400)
     plt.close()

@@ -495,8 +495,8 @@ def main():
     config.manipulator_cfg.weighted_loss_type = 'mols'
     config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
     
-    config.model_cfg.peft_cfg.r = 6
-    config.model_cfg.peft_cfg.pref_r = 1
+    config.model_cfg.peft_cfg.r = 8
+    config.model_cfg.peft_cfg.pref_r = 0
     config.model_cfg.peft_cfg.lora_alpha = 32
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
@@ -516,7 +516,7 @@ def main():
     # config.reward_cfg_0.reward_weight = 0.1
     # config.reward_cfg_1.reward_weight = 10
 
-    config.manipulator_cfg.svd_lora_type = 'adaptive'
+    # config.manipulator_cfg.svd_lora_type = 'adaptive'
     config.manipulator_cfg.svd_lora_random_init = True
     config.manipulator_cfg.svd_lora_split_percentage = 0.02
 
@@ -536,7 +536,7 @@ def main():
     config.n_update_timestep = 64
     config.accelertor_cfg.gradient_accumulation_steps = 8
     config.train_batch_size = 2
-    config.manipulator_cfg.n_adapt_step = 256
+    config.manipulator_cfg.n_adapt_step = 64
 
     if TEST:
         config.accelertor_cfg.gradient_accumulation_steps = 2
