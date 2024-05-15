@@ -387,10 +387,7 @@ class BaseLMWithValueHeads(Base_Warpper):
         for v_head in self.v_heads:
             value = v_head(last_hidden_state).squeeze(-1)
             values.append(value)
-        if self.n_v_head > 1:
-            values = torch.stack(values, dim = -1)
-        else:
-            values = values[0]
+        values = torch.stack(values, dim = -1)
 
         # force upcast in fp32 if logits are in half-precision
         if lm_logits.dtype != torch.float32:

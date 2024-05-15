@@ -16,6 +16,7 @@ import os
 from configs import MOPPO_Config, SVD_Lora_Config, SVD_Lora_Altered_Config
 from modules.ppo import PPO_Trainer, PPOMemory, pad_sequence_fixed
 from modules.manipulators import (
+    Base_Weight_Manipulator,
     Base_MO_Manipulator,
     Base_MO_Manipulator_Altered
 )
@@ -24,13 +25,13 @@ from modules.base import BaseLMWithValueHeads
 from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, default, masked_whiten
 from logger import Logger
 
-# manipulator_map = {
-#     None: Base_Weight_Manipulator,
-#     'ls': Weight_Linear_Scalarization,
-#     'sils': Weight_ScaleInvariant_Linear_Scalarization,
-#     'mo': Base_MO_Manipulator,
-#     'mols': MO_Linear_Scalarization
-# }
+manipulator_map = {
+    None: Base_Weight_Manipulator,
+    'ls': Base_Weight_Manipulator,
+    'sils': Base_Weight_Manipulator,
+    'mols': Base_MO_Manipulator,
+    'mosils': Base_MO_Manipulator
+}
 
 class MOPPO_Trainer(PPO_Trainer):
 
@@ -54,9 +55,10 @@ class MOPPO_Trainer(PPO_Trainer):
             logger = logger
         )
 
+        manipulator_type = manipulator_map[config.manipulator_cfg.weighted_loss_type]
         self.is_alted = isinstance(config.model_cfg.peft_cfg, SVD_Lora_Altered_Config)
         manipulator_type = Base_MO_Manipulator_Altered \
-            if self.is_alted else Base_MO_Manipulator
+            if self.is_alted and manipulator_type == Base_MO_Manipulator else manipulator_type
         
         self.manipulator = manipulator_type(
             model = self.model,
@@ -179,6 +181,8 @@ class MOPPO_Trainer(PPO_Trainer):
                 rm_rewards_pref,
                 old_values_pref,
             ) in dataloader:
+                assert old_values_pref.size(-1) == rm_rewards_pref.size(-1)
+                n_reward_dim = rm_rewards_pref.size(-1)
                 
                 logits, values_pref = self.batch_forward(
                     sequences,
@@ -193,7 +197,7 @@ class MOPPO_Trainer(PPO_Trainer):
 
                 losses = []
                 skip_batch = False
-                for i in range(self.pref_dim):
+                for i in range(n_reward_dim):
                     values = values_pref[..., i]
                     rm_rewards = rm_rewards_pref[..., i]
                     old_values = old_values_pref[..., i]
@@ -239,7 +243,7 @@ class MOPPO_Trainer(PPO_Trainer):
 
                 self.manipulator.step()
 
-        multi_losses = {f'losses_{i}': [losses[i] for losses in multi_losses] for i in range(self.pref_dim)}
+        multi_losses = {f'losses_{i}': [losses[i] for losses in multi_losses] for i in range(n_reward_dim)}
         ppo_stats = self.get_train_stats(
             masks = action_masks,
             weighted_losses = weighted_losses,
@@ -276,11 +280,12 @@ class MOPPO_Trainer(PPO_Trainer):
     
     def get_train_stats(self, masks, **train_records):
 
+        loss_keys = [key for key, value in train_records.items() if key.startswith('losses_')]
         train_stats = {}
-        for i in range(self.pref_dim):
-            losses = train_records.pop(f'losses_{i}')
+        for loss_key in loss_keys:
+            losses = train_records.pop(loss_key)
             loss_mean = sum(losses) / len(losses)
-            train_stats[f'loss_{i}'] = loss_mean
+            train_stats[loss_key] = loss_mean
 
         weighted_losses = train_records.pop('weighted_losses')
         weighted_loss_mean = sum(weighted_losses) / len(weighted_losses)

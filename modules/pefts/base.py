@@ -76,3 +76,10 @@ class Base_Adapter(nn.Module):
     def post_init(self):
 
         self.to(self.base_layer.device)
+    
+    def record_step(self, **kwargs):
+
+        for key, value in kwargs.items():
+            if isinstance(value, torch.Tensor):
+                value = value.detach().to('cpu')
+            self.records[key].append(value)

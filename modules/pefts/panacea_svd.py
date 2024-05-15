@@ -54,11 +54,7 @@ class SVD_Lora_Linear(Base_Adapter):
         self.merged = False
         self.set_adapter(enable = True)
         self.pref_vec = None
-
-        self.diags = []
-        self.conflict_cos_sims = []
-        self.grad_conflict_scores = []
-        self.split_flags = []
+        
         self.records = {
             'diags': [],
             'conflict_cos_sims': [],
@@ -66,13 +62,6 @@ class SVD_Lora_Linear(Base_Adapter):
             'split_flags': []
         }
         self.r_index = torch.arange(self.r + self.pref_r)
-
-    def record_step(self, **kwargs):
-
-        for key, value in kwargs.items():
-            if isinstance(value, torch.Tensor):
-                value = value.detach().to('cpu')
-            self.records[key].append(value)
 
     def reset_lora_weight(self, init_strategy = None):
         

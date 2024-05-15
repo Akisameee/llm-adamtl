@@ -71,13 +71,6 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
                 self.r + (pref_r_idx + 1) * self.pref_dim
             ] = torch.arange(self.pref_dim)
 
-    def record_step(self, **kwargs):
-
-        for key, value in kwargs.items():
-            if isinstance(value, torch.Tensor):
-                value = value.detach().to('cpu')
-            self.records[key].append(value)
-
     def reset_lora_weight(self, init_strategy = None):
         
         # nn.init.kaiming_uniform_(self.lora_A, a = math.sqrt(5))

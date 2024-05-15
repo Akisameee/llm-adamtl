@@ -10,7 +10,6 @@ from functools import partial
 from random import randrange
 from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
-from accelerate import Accelerator
 from accelerate.utils import broadcast
 
 from base_trainer import Base_Trainer
@@ -22,7 +21,6 @@ from modules.ppo import PPO_Trainer, PPOMemory
 from modules.moppo import MOPPO_Trainer
 from modules.pefts import set_all_adapters
 from modules.utils import shift, log_prob, merge_dict, get_model
-from trl.core import LengthSampler
 
 TEST = 0
 
@@ -48,7 +46,7 @@ class MORLHF_Trainer(Base_Trainer):
             raise ValueError(f'Expected pref_dim > 1, but got pref_dim = {self.pref_dim}')
         
         self.reward_scalariztion_type = config.reward_scalariztion_type
-        if self.reward_scalariztion_type is not None and config.manipulator_cfg.loss_manipulator_type is not None:
+        if self.reward_scalariztion_type is not None and config.manipulator_cfg.weighted_loss_type is not None:
             raise ValueError('Cannot set a reward_scalariztion_type with a weighted loss method.\n')
         self.ex_reward_weights = [reward_cfg.reward_weight for reward_cfg in self.reward_cfgs]
 
@@ -68,7 +66,7 @@ class MORLHF_Trainer(Base_Trainer):
                 }
             ],
             **dict(
-                n_v_head = self.pref_dim
+                n_v_head = self.pref_dim if self.reward_scalariztion_type is None else 1
             )
         )
         
@@ -487,16 +485,16 @@ def main():
     config.dateset_cfg.sub_data_path = sub_data_path
 
     # Panacea
-    # config.reward_scalariztion_type = 'ls'
-    # config.manipulator_cfg.weighted_loss_type = None
-    # config.model_cfg.peft_cfg = SVD_Lora_Config(pref_dim = 2)
+    config.reward_scalariztion_type = 'ls'
+    config.manipulator_cfg.weighted_loss_type = None
+    config.model_cfg.peft_cfg = SVD_Lora_Config(pref_dim = 2)
 
-    config.reward_scalariztion_type = None
-    config.manipulator_cfg.weighted_loss_type = 'mols'
-    config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
+    # config.reward_scalariztion_type = None
+    # config.manipulator_cfg.weighted_loss_type = 'mols'
+    # config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
     
-    config.model_cfg.peft_cfg.r = 8
-    config.model_cfg.peft_cfg.pref_r = 0
+    config.model_cfg.peft_cfg.r = 6
+    config.model_cfg.peft_cfg.pref_r = 1
     config.model_cfg.peft_cfg.lora_alpha = 32
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
@@ -517,8 +515,8 @@ def main():
     # config.reward_cfg_1.reward_weight = 10
 
     # config.manipulator_cfg.svd_lora_type = 'adaptive'
-    config.manipulator_cfg.svd_lora_random_init = True
-    config.manipulator_cfg.svd_lora_split_percentage = 0.02
+    # config.manipulator_cfg.svd_lora_random_init = True
+    config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
     config.lr = 1e-4
     config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
@@ -526,12 +524,12 @@ def main():
 
     # whole dataset
     # max_sample = 0
-    # config.n_update_timestep = 128
-    # config.accelertor_cfg.gradient_accumulation_steps = 16
+    # config.n_update_timestep = 64
+    # config.accelertor_cfg.gradient_accumulation_steps = 8
     # config.train_batch_size = 2
     # config.manipulator_cfg.n_adapt_step = 128
 
-    # # 1/2 dataset
+    # 1/2 dataset
     max_sample = 20000
     config.n_update_timestep = 64
     config.accelertor_cfg.gradient_accumulation_steps = 8

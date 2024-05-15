@@ -80,7 +80,7 @@ if __name__ == '__main__':
         )
 
     legend_handles = []
-    for c_idx, prefix in enumerate(prefix):
+    for c_idx, prefix in enumerate(prefixs):
         legend_handle = mlines.Line2D(
             [], [],
             color = f'C{c_idx}',
