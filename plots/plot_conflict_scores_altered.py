@@ -27,8 +27,8 @@ def plot_lines(
 
 if __name__ == '__main__':
 
-    dir_path = './output/rand02-32-half-1'
-    # dir_path = './output/completed/Panacea_train 71 random'
+    # dir_path = './output/rand02-32-half-1'
+    dir_path = './output/completed/sh_ts_joint_compare/Panacea_train 61-32-full-ada-2'
     data_path = os.path.join(dir_path, 'conflict_scores')
     res_path = os.path.join(dir_path, 'conflict_scores_plot')
     if not os.path.exists(res_path):
@@ -136,7 +136,6 @@ if __name__ == '__main__':
             
             if name == 'diags':
                 axe.legend()
-        # plt.legend()
 
         split_flag = task_flags[idx]
         colors = []
@@ -169,8 +168,8 @@ if __name__ == '__main__':
             
             if name == 'diags':
                 axe.legend(handles = task_legend_handles)
-        # plt.legend()
         
+        plt.suptitle(f'{module_names[idx]}')
         plt.tight_layout()
         save_path = os.path.join(res_path, f'{module_names[idx]}_scores')
         plt.savefig(save_path, dpi = 400)

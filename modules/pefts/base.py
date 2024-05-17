@@ -17,6 +17,7 @@ class Base_Adapter(nn.Module):
 
         self.base_layer = base_layer
         self.disabled = False
+        self.records = {}
 
     @property
     def device(self):
@@ -29,7 +30,6 @@ class Base_Adapter(nn.Module):
             self.base_layer.requires_grad_(False)
             self.disabled = False
         else:
-            self.base_layer.requires_grad_(base_enable)
             self.base_layer.requires_grad_(base_enable)
             self.disabled = True
 

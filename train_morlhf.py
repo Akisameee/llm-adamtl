@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+os.environ['CUDA_VISIBLE_DEVICES'] = '5'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -22,7 +22,7 @@ from modules.moppo import MOPPO_Trainer
 from modules.pefts import set_all_adapters
 from modules.utils import shift, log_prob, merge_dict, get_model
 
-TEST = 0
+TEST = 1
 
 class MORLHF_Trainer(Base_Trainer):
 

@@ -298,10 +298,4 @@ class MOPPO_Trainer(PPO_Trainer):
         response_len_mean = torch.sum(masks).item() / masks.shape[0]
         train_stats['generate_length'] = response_len_mean
 
-        # train_stats = {
-        #     'weighted_loss': weighted_loss_mean,
-        #     'ref_kl': kl_ref_mean,
-        #     'generate_length': response_len_mean
-        # }
-
         return train_stats
