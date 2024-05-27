@@ -171,6 +171,7 @@ class Base_Trainer(nn.Module):
     def load(self, model, ckpt_path = './checkpoint.pt'):
 
         unwrapped_model = self.accelerator.unwrap_model(model)
+        # print(torch.load(ckpt_path))
         unwrapped_model.load_state_dict(torch.load(ckpt_path))
 
     @property

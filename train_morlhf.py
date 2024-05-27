@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -22,7 +22,7 @@ from modules.moppo import MOPPO_Trainer
 from modules.pefts import set_all_adapters
 from modules.utils import shift, log_prob, merge_dict, get_model
 
-TEST = 1
+TEST = 0
 
 class MORLHF_Trainer(Base_Trainer):
 
@@ -485,21 +485,21 @@ def main():
     config.dateset_cfg.sub_data_path = sub_data_path
 
     # Panacea
-    config.reward_scalariztion_type = 'ls'
-    config.manipulator_cfg.weighted_loss_type = None
-    config.model_cfg.peft_cfg = SVD_Lora_Config(pref_dim = 2)
+    # config.reward_scalariztion_type = 'ls'
+    # config.manipulator_cfg.weighted_loss_type = None
+    # config.model_cfg.peft_cfg = SVD_Lora_Config(pref_dim = 2)
 
-    # config.reward_scalariztion_type = None
-    # config.manipulator_cfg.weighted_loss_type = 'mols'
-    # config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
+    config.reward_scalariztion_type = None
+    config.manipulator_cfg.weighted_loss_type = 'mols'
+    config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
     
     config.model_cfg.peft_cfg.r = 6
     config.model_cfg.peft_cfg.pref_r = 1
     config.model_cfg.peft_cfg.lora_alpha = 32
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
-    config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
     # model_path = '/home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf'
+    config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
     # config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj']
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
@@ -514,7 +514,7 @@ def main():
     # config.reward_cfg_0.reward_weight = 0.1
     # config.reward_cfg_1.reward_weight = 10
 
-    # config.manipulator_cfg.svd_lora_type = 'adaptive'
+    config.manipulator_cfg.svd_lora_type = 'adaptive'
     # config.manipulator_cfg.svd_lora_random_init = True
     config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
@@ -533,8 +533,8 @@ def main():
     max_sample = 20000
     config.n_update_timestep = 64
     config.accelertor_cfg.gradient_accumulation_steps = 8
-    config.train_batch_size = 2
-    config.manipulator_cfg.n_adapt_step = 64
+    config.train_batch_size = 1
+    config.manipulator_cfg.n_adapt_step = 128
 
     if TEST:
         config.accelertor_cfg.gradient_accumulation_steps = 2

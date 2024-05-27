@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -45,7 +45,6 @@ class RLHF_Trainer(Base_Trainer):
             logger = self.logger
         )
         
-        self.retokenization = config.retokenization
         self.n_sample_reuse = config.n_sample_reuse
         self.kl_ref_coef = config.kl_ref_coef
         self.n_save_time = config.n_save_time
@@ -198,21 +197,9 @@ class RLHF_Trainer(Base_Trainer):
                 ) = self.ppo_trainer.generate_batch(
                     prompts_ids = prompts_ids,
                     attention_masks = attention_masks,
-                    # length_sampler = length_sampler,
                     return_padding = True,
                     **self.generation_config.to_dict()
                 )
-
-                # with torch.no_grad():
-                #     logits, values = self.ppo_trainer.batch_forward(
-                #         sequences,
-                #         mask = masks
-                #     )
-                #     logits = shift(logits, shift = 1, dim = -2)
-                #     probs = logits.softmax(dim = -1)
-                #     logprobs = log_prob(probs, sequences)
-
-                #     values = shift(values, shift = 1, dim = -1)
 
                 rm_rewards = self.get_rm_rewards(
                     reward_model = self.reward_model,
@@ -228,28 +215,19 @@ class RLHF_Trainer(Base_Trainer):
                     sequence,
                     mask,
                     action_mask,
-                    # prob,
-                    # logprob,
-                    rm_reward,
-                    # value
+                    rm_reward
                 ) in zip(
                     sequences,
                     masks,
                     action_masks,
-                    # probs,
-                    # logprobs,
-                    rm_rewards,
-                    # values
+                    rm_rewards
                 ):
                     seq_len = torch.sum(mask).item()
                     memories.append(PPOMemory(*map(detach_to_cpu_, (
                         sequence[: seq_len],
                         mask[: seq_len],
                         action_mask[: seq_len],
-                        # prob[: seq_len, :],
-                        # logprob[: seq_len],
-                        rm_reward,
-                        # value[: seq_len]
+                        rm_reward
                     ))))
 
                 if self.clean_cache_every_iter:
@@ -257,10 +235,7 @@ class RLHF_Trainer(Base_Trainer):
                         sequences,
                         masks,
                         action_masks,
-                        # probs,
-                        # logprobs,
-                        rm_rewards,
-                        # values
+                        rm_rewards
                     )
                     torch.cuda.empty_cache()
                 
@@ -321,7 +296,7 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     dataset = Instruct_Dataset(config.dateset_cfg)
-    dataset.load(mode = 'train')
+    dataset.load(mode = 'train', max_sample = 10000)
     trainer.train(
         ds_generator = dataset.get_generator(),
         n_episode = config.n_episode,

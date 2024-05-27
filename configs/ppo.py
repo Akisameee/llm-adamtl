@@ -16,7 +16,9 @@ class Manipulator_Config(Base_Config):
 @dataclass
 class PPO_Config(Trainer_Config):
 
-    accelertor_cfg: Accelertor_Config = Accelertor_Config()
+    accelertor_cfg: Accelertor_Config = Accelertor_Config(
+        gradient_accumulation_steps = 8
+    )
     dateset_cfg: Instruct_Dataset_Config = None
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
@@ -50,7 +52,7 @@ class PPO_Config(Trainer_Config):
     value_loss_coef: float = 0.1
 
     train_batch_size: int = 8
-    n_update_epoch: int = 5
+    n_update_epoch: int = 1
     critic_pretrain_epoch: int = 10
 
     output_dir: str = os.path.join('.', 'output')
