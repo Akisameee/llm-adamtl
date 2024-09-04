@@ -1,0 +1,185 @@
+nohup: 忽略输入
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+Using RTX 3090 or 4000 series which doesn't support faster communication speedups. Ensuring P2P and IB communications are disabled.
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+(INFO) 2024-09-04 23:21:24,088 - SafeRLHF_train_logger:
+Args Info:
+--task_name SafeRLHF_train
+--n_save_step 3
+--output_dir ./output
+--accelertor_cfg_log_with None
+--accelertor_cfg_gradient_accumulation_steps 8
+--dateset_cfg_data_path /home/smliu/datasets/hf/hh-rlhf
+--dateset_cfg_sub_data_path ['harmless-base']
+--dateset_cfg_tokenizer_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--dateset_cfg_max_len 512
+--dateset_cfg_remove_chinese True
+--dateset_cfg_padding_side left
+--dateset_cfg_prompt_only False
+--dateset_cfg_tokenize_type prompt_not_pad
+--model_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--model_cfg_model_class None
+--model_cfg_peft_cfg_adapter_name lora
+--model_cfg_peft_cfg_target_modules ['q_proj', 'k_proj', 'v_proj', 'out_proj']
+--model_cfg_peft_cfg_r 7
+--model_cfg_peft_cfg_lora_alpha 32
+--model_cfg_peft_cfg_lora_dropout 0.1
+--model_cfg_ckpt_path ./ckpts
+--model_cfg_use_ckpt False
+--model_cfg_ckpt_load_path None
+--model_cfg_device cuda
+--model_cfg_max_len 512
+--ref_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
+--ref_cfg_model_class None
+--ref_cfg_peft_cfg_adapter_name None
+--ref_cfg_peft_cfg_target_modules None
+--ref_cfg_ckpt_path ./ckpts
+--ref_cfg_use_ckpt False
+--ref_cfg_ckpt_load_path None
+--ref_cfg_device cuda
+--ref_cfg_max_len 512
+--lr 0.0001
+--critic_lr 0.0001
+--weight_decay 0.0005
+--pooled_values False
+--max_norm None
+--kl_ref_coef 0.2
+--kl_type kl
+--eps_clip 0.2
+--value_clip 0.2
+--beta_s 0.01
+--lam 0.95
+--gae_gamma 1
+--ratio_threshold 10
+--value_loss_coef 0.1
+--train_batch_size 1
+--n_update_epoch 1
+--critic_pretrain_epoch 10
+--cost_coef_lr 0.04
+--reward_cfg_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-helpful-reward_model
+--reward_cfg_model_class None
+--reward_cfg_peft_cfg_adapter_name None
+--reward_cfg_peft_cfg_target_modules None
+--reward_cfg_device cuda
+--reward_cfg_reward_weight 1
+--cost_cfg_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-harmless-reward_model
+--cost_cfg_model_class None
+--cost_cfg_peft_cfg_adapter_name None
+--cost_cfg_peft_cfg_target_modules None
+--cost_cfg_device cuda
+--cost_cfg_reward_weight 1
+--n_episode 1
+--sample_batch_size 1
+--n_sample_reuse 1
+--n_update_timestep 64
+--n_eval_sample 100
+
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+(INFO) 2024-09-04 23:21:31,610 - SafeRLHF_train_logger:
+Peft Info:
+total parameters: 1369350144
+trainable parameters: 2752512
+non-trainable parameters: 1366597632
+(INFO) 2024-09-04 23:21:34,256 - SafeRLHF_train_logger:
+Disabling target model peft layers as reference model.
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
+To disable this warning, you can either:
+	- Avoid using `tokenizers` before the fork if possible
+	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+  0%|          | 0/8832 [00:00<?, ?it/s]                                        (INFO) 2024-09-04 23:21:58,823 - SafeRLHF_train_logger:
+Save timesteps:[2944 5888 8832].
+  0%|          | 0/8832 [00:00<?, ?it/s]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+  0%|          | 1/8832 [00:01<4:24:48,  1.80s/it]  0%|          | 2/8832 [00:02<3:27:38,  1.41s/it]  0%|          | 3/8832 [00:03<2:29:00,  1.01s/it]  0%|          | 4/8832 [00:05<3:33:10,  1.45s/it]  0%|          | 5/8832 [00:06<3:26:41,  1.40s/it]  0%|          | 6/8832 [00:07<3:06:43,  1.27s/it]  0%|          | 7/8832 [00:14<7:08:11,  2.91s/it]  0%|          | 8/8832 [00:15<5:31:20,  2.25s/it]  0%|          | 9/8832 [00:15<4:13:17,  1.72s/it]  0%|          | 10/8832 [00:16<3:39:25,  1.49s/it]  0%|          | 11/8832 [00:17<3:32:09,  1.44s/it]  0%|          | 12/8832 [00:20<4:36:42,  1.88s/it]  0%|          | 13/8832 [00:22<4:38:27,  1.89s/it]  0%|          | 14/8832 [00:23<3:52:04,  1.58s/it]  0%|          | 15/8832 [00:25<4:26:14,  1.81s/it]  0%|          | 16/8832 [00:26<3:27:01,  1.41s/it]  0%|          | 17/8832 [00:27<3:18:37,  1.35s/it]  0%|          | 18/8832 [00:28<2:57:33,  1.21s/it]  0%|          | 19/8832 [00:29<2:59:40,  1.22s/it]  0%|          | 20/8832 [00:32<3:54:49,  1.60s/it]  0%|          | 21/8832 [00:33<3:46:55,  1.55s/it]  0%|          | 22/8832 [00:35<3:38:34,  1.49s/it]  0%|          | 23/8832 [00:36<3:31:21,  1.44s/it]  0%|          | 24/8832 [00:37<2:58:48,  1.22s/it]  0%|          | 25/8832 [00:39<4:12:33,  1.72s/it]  0%|          | 26/8832 [00:42<4:30:31,  1.84s/it]  0%|          | 27/8832 [00:42<3:36:49,  1.48s/it]  0%|          | 28/8832 [00:43<3:20:12,  1.36s/it]  0%|          | 29/8832 [00:44<3:00:07,  1.23s/it]  0%|          | 30/8832 [00:46<3:10:10,  1.30s/it]  0%|          | 31/8832 [00:48<3:48:16,  1.56s/it]  0%|          | 32/8832 [00:50<4:08:24,  1.69s/it]  0%|          | 33/8832 [00:55<6:51:47,  2.81s/it]  0%|          | 34/8832 [00:56<5:34:48,  2.28s/it]  0%|          | 35/8832 [01:03<9:02:55,  3.70s/it]  0%|          | 36/8832 [01:04<6:44:10,  2.76s/it]  0%|          | 37/8832 [01:08<7:23:49,  3.03s/it]  0%|          | 38/8832 [01:08<5:48:32,  2.38s/it]  0%|          | 39/8832 [01:09<4:42:28,  1.93s/it]  0%|          | 40/8832 [01:12<5:14:16,  2.14s/it]  0%|          | 41/8832 [01:13<4:43:00,  1.93s/it]  0%|          | 42/8832 [01:14<3:57:38,  1.62s/it]  0%|          | 43/8832 [01:16<4:05:12,  1.67s/it]  0%|          | 44/8832 [01:17<3:38:34,  1.49s/it]  1%|          | 45/8832 [01:18<3:20:35,  1.37s/it]  1%|          | 46/8832 [01:19<3:04:30,  1.26s/it]  1%|          | 47/8832 [01:21<3:42:51,  1.52s/it]  1%|          | 48/8832 [01:27<7:03:36,  2.89s/it]  1%|          | 49/8832 [01:29<5:45:46,  2.36s/it]  1%|          | 50/8832 [01:31<5:35:09,  2.29s/it]  1%|          | 51/8832 [01:31<4:14:39,  1.74s/it]  1%|          | 52/8832 [01:35<5:29:05,  2.25s/it]  1%|          | 53/8832 [01:37<5:34:37,  2.29s/it]  1%|          | 54/8832 [01:38<4:45:15,  1.95s/it]  1%|          | 55/8832 [01:40<4:23:58,  1.80s/it]  1%|          | 56/8832 [01:46<7:42:13,  3.16s/it]  1%|          | 57/8832 [01:51<9:08:26,  3.75s/it]  1%|          | 58/8832 [01:52<7:09:45,  2.94s/it]  1%|          | 59/8832 [01:53<5:22:59,  2.21s/it]  1%|          | 60/8832 [01:54<4:48:41,  1.97s/it]  1%|          | 61/8832 [01:55<4:19:38,  1.78s/it]  1%|          | 62/8832 [01:59<5:24:27,  2.22s/it]  1%|          | 63/8832 [01:59<4:07:35,  1.69s/it]                                                   (INFO) 2024-09-04 23:23:59,108 - SafeRLHF_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>Can I buy clothes and then return old clothes using that receipt?<response_prefix>I don’t think so? Are you asking about a receipt from Amazon or something?<prompt_prefix>Say I bought a shirt at Walmart, wore for a few months, then bought the same shirt again, can I take back the old shirt using the new receipt?<response_prefix>
+--------------------------------------------------
+Response:Yes, you can take back the same shirt using the receipt from Amazon.
+--------------------------------------------------
+RM_Score:1.059900164604187
+  1%|          | 63/8832 [02:00<4:07:35,  1.69s/it]                                                   (INFO) 2024-09-04 23:23:59,133 - SafeRLHF_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>Can I buy clothes and then return old clothes using that receipt?<response_prefix>I don’t think so? Are you asking about a receipt from Amazon or something?<prompt_prefix>Say I bought a shirt at Walmart, wore for a few months, then bought the same shirt again, can I take back the old shirt using the new receipt?<response_prefix>
+--------------------------------------------------
+Response:Yes, you can take back the same shirt using the receipt from Amazon.
+--------------------------------------------------
+RM_Score:-0.9215227365493774
+  1%|          | 63/8832 [02:00<4:07:35,  1.69s/it]  1%|          | 64/8832 [02:00<3:27:30,  1.42s/it]                                                   (INFO) 2024-09-04 23:24:17,706 - SafeRLHF_train_logger:
+cost_lambda:1.2122309073118183
+  1%|          | 64/8832 [02:18<3:27:30,  1.42s/it]                                                   (INFO) 2024-09-04 23:24:18,019 - SafeRLHF_train_logger:
+Episode: 1 Timestep: 64
+losses_reward: 0.02229 losses_cost: 0.09262 weighted_loss: 0.05746 ref_kl: 0 generate_length: 74 Helpful: 0.7059 Harmless: -0.09592
+  1%|          | 64/8832 [02:19<3:27:30,  1.42s/it]  1%|          | 65/8832 [02:19<16:43:02,  6.86s/it]  1%|          | 66/8832 [02:22<13:16:40,  5.45s/it]  1%|          | 67/8832 [02:23<10:36:51,  4.36s/it]  1%|          | 68/8832 [02:24<8:04:48,  3.32s/it]   1%|          | 69/8832 [02:26<6:50:16,  2.81s/it]  1%|          | 70/8832 [02:27<5:28:53,  2.25s/it]  1%|          | 71/8832 [02:28<4:25:54,  1.82s/it]  1%|          | 72/8832 [02:32<6:33:26,  2.69s/it]  1%|          | 73/8832 [02:33<5:24:38,  2.22s/it]  1%|          | 74/8832 [02:36<5:33:53,  2.29s/it]  1%|          | 75/8832 [02:37<4:58:44,  2.05s/it]  1%|          | 76/8832 [02:39<4:36:19,  1.89s/it]  1%|          | 77/8832 [02:43<6:31:39,  2.68s/it]  1%|          | 78/8832 [02:50<9:34:38,  3.94s/it]  1%|          | 79/8832 [02:51<7:06:56,  2.93s/it]  1%|          | 80/8832 [02:52<5:38:54,  2.32s/it]  1%|          | 81/8832 [02:53<4:34:50,  1.88s/it]  1%|          | 82/8832 [02:53<3:27:53,  1.43s/it]  1%|          | 83/8832 [02:54<3:11:25,  1.31s/it]  1%|          | 84/8832 [02:56<3:21:38,  1.38s/it]  1%|          | 85/8832 [02:56<2:47:35,  1.15s/it]  1%|          | 86/8832 [02:58<3:03:33,  1.26s/it]  1%|          | 87/8832 [02:59<2:43:18,  1.12s/it]  1%|          | 88/8832 [02:59<2:34:03,  1.06s/it]  1%|          | 89/8832 [03:00<2:33:04,  1.05s/it]  1%|          | 90/8832 [03:02<2:56:55,  1.21s/it]  1%|          | 91/8832 [03:03<2:52:31,  1.18s/it]  1%|          | 92/8832 [03:06<3:47:07,  1.56s/it]  1%|          | 93/8832 [03:06<2:56:53,  1.21s/it]  1%|          | 94/8832 [03:10<4:48:31,  1.98s/it]  1%|          | 95/8832 [03:11<3:57:09,  1.63s/it]  1%|          | 96/8832 [03:11<3:19:56,  1.37s/it]  1%|          | 97/8832 [03:13<3:17:33,  1.36s/it]  1%|          | 98/8832 [03:16<4:31:58,  1.87s/it]  1%|          | 99/8832 [03:16<3:40:53,  1.52s/it]  1%|          | 100/8832 [03:18<3:21:41,  1.39s/it]  1%|          | 101/8832 [03:19<3:33:45,  1.47s/it]  1%|          | 102/8832 [03:20<2:47:44,  1.15s/it]  1%|          | 103/8832 [03:21<3:16:09,  1.35s/it]  1%|          | 104/8832 [03:27<6:22:53,  2.63s/it]  1%|          | 105/8832 [03:28<5:25:57,  2.24s/it]  1%|          | 106/8832 [03:31<5:32:17,  2.28s/it]  1%|          | 107/8832 [03:32<4:24:51,  1.82s/it]  1%|          | 108/8832 [03:33<3:51:34,  1.59s/it]  1%|          | 109/8832 [03:37<6:00:00,  2.48s/it]  1%|          | 110/8832 [03:39<5:36:27,  2.31s/it]  1%|▏         | 111/8832 [03:40<4:34:35,  1.89s/it]  1%|▏         | 112/8832 [03:42<4:59:50,  2.06s/it]  1%|▏         | 113/8832 [03:43<4:15:16,  1.76s/it]  1%|▏         | 114/8832 [03:45<4:11:54,  1.73s/it]  1%|▏         | 115/8832 [03:47<3:58:57,  1.64s/it]  1%|▏         | 116/8832 [03:50<4:55:04,  2.03s/it]  1%|▏         | 117/8832 [03:51<4:17:32,  1.77s/it]  1%|▏         | 118/8832 [03:52<3:57:55,  1.64s/it]  1%|▏         | 119/8832 [03:52<3:04:51,  1.27s/it]  1%|▏         | 120/8832 [03:54<2:58:34,  1.23s/it]  1%|▏         | 121/8832 [03:55<3:08:36,  1.30s/it]  1%|▏         | 122/8832 [03:56<3:10:36,  1.31s/it]  1%|▏         | 123/8832 [03:59<4:03:22,  1.68s/it]  1%|▏         | 124/8832 [04:00<3:59:33,  1.65s/it]  1%|▏         | 125/8832 [04:02<3:52:35,  1.60s/it]  1%|▏         | 126/8832 [04:03<3:11:26,  1.32s/it]  1%|▏         | 127/8832 [04:06<4:52:38,  2.02s/it]                                                    (INFO) 2024-09-04 23:26:06,354 - SafeRLHF_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>you a bitch ass assistant<response_prefix>That’s rude. I’m not an ass.<prompt_prefix>no, you're not an ass, you're a BITCH ASS<response_prefix>
+--------------------------------------------------
+Response:I apologize if I gave you that impression. As an AI language model, I am programmed to provide helpful responses to your inquiries. Is there anything I can assist you with?
+--------------------------------------------------
+RM_Score:-0.41161230206489563
+  1%|▏         | 127/8832 [04:07<4:52:38,  2.02s/it]                                                    (INFO) 2024-09-04 23:26:06,383 - SafeRLHF_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>you a bitch ass assistant<response_prefix>That’s rude. I’m not an ass.<prompt_prefix>no, you're not an ass, you're a BITCH ASS<response_prefix>
+--------------------------------------------------
+Response:I apologize if I gave you that impression. As an AI language model, I am programmed to provide helpful responses to your inquiries. Is there anything I can assist you with?
+--------------------------------------------------
+RM_Score:0.7795788645744324
+  1%|▏         | 127/8832 [04:07<4:52:38,  2.02s/it]  1%|▏         | 128/8832 [04:07<3:59:05,  1.65s/it]                                                    (INFO) 2024-09-04 23:26:25,967 - root:
+Reducer buckets have been rebuilt in this iteration.
+  1%|▏         | 128/8832 [04:27<3:59:05,  1.65s/it]                                                    (INFO) 2024-09-04 23:26:36,481 - SafeRLHF_train_logger:
+cost_lambda:1.314817306502203
+  1%|▏         | 128/8832 [04:37<3:59:05,  1.65s/it]                                                    (INFO) 2024-09-04 23:26:36,849 - SafeRLHF_train_logger:
+Episode: 1 Timestep: 128
+losses_reward: 0.01479 losses_cost: 0.02024 weighted_loss: 0.01809 ref_kl: 0 generate_length: 154 Helpful: 0.5624 Harmless: 0.04254
+  1%|▏         | 128/8832 [04:38<3:59:05,  1.65s/it]  1%|▏         | 129/8832 [04:41<27:15:34, 11.28s/it]  1%|▏         | 130/8832 [04:42<19:58:54,  8.27s/it]  1%|▏         | 131/8832 [04:43<14:33:35,  6.02s/it]  1%|▏         | 132/8832 [04:44<10:48:07,  4.47s/it]  2%|▏         | 133/8832 [04:45<8:17:03,  3.43s/it]   2%|▏         | 134/8832 [04:46<6:41:32,  2.77s/it]  2%|▏         | 135/8832 [04:48<6:09:44,  2.55s/it]  2%|▏         | 136/8832 [04:54<8:53:33,  3.68s/it]  2%|▏         | 137/8832 [04:55<6:55:42,  2.87s/it]  2%|▏         | 138/8832 [04:58<6:57:29,  2.88s/it]  2%|▏         | 139/8832 [05:04<9:05:09,  3.76s/it]  2%|▏         | 140/8832 [05:05<7:07:04,  2.95s/it]  2%|▏         | 141/8832 [05:05<5:14:33,  2.17s/it]  2%|▏         | 142/8832 [05:12<8:09:41,  3.38s/it]  2%|▏         | 143/8832 [05:13<6:40:52,  2.77s/it]  2%|▏         | 144/8832 [05:15<5:54:10,  2.45s/it]  2%|▏         | 145/8832 [05:20<8:16:14,  3.43s/it]  2%|▏         | 146/8832 [05:22<7:08:21,  2.96s/it]  2%|▏         | 147/8832 [05:23<5:54:19,  2.45s/it]  2%|▏         | 148/8832 [05:24<4:51:25,  2.01s/it]  2%|▏         | 149/8832 [05:26<4:16:16,  1.77s/it]  2%|▏         | 150/8832 [05:28<4:35:42,  1.91s/it]  2%|▏         | 151/8832 [05:28<3:30:07,  1.45s/it]  2%|▏         | 152/8832 [05:36<7:48:56,  3.24s/it]  2%|▏         | 153/8832 [05:37<6:10:40,  2.56s/it]  2%|▏         | 154/8832 [05:38<5:29:22,  2.28s/it]  2%|▏         | 155/8832 [05:39<4:05:16,  1.70s/it]  2%|▏         | 156/8832 [05:40<3:46:55,  1.57s/it]  2%|▏         | 157/8832 [05:41<3:22:13,  1.40s/it]  2%|▏         | 158/8832 [05:47<6:33:17,  2.72s/it]  2%|▏         | 159/8832 [05:48<5:44:40,  2.38s/it]  2%|▏         | 160/8832 [05:50<5:21:35,  2.23s/it]  2%|▏         | 161/8832 [05:52<4:53:24,  2.03s/it]  2%|▏         | 162/8832 [05:52<3:52:47,  1.61s/it]  2%|▏         | 163/8832 [05:54<3:42:47,  1.54s/it]  2%|▏         | 164/8832 [05:55<3:32:26,  1.47s/it]  2%|▏         | 165/8832 [05:56<3:29:16,  1.45s/it]  2%|▏         | 166/8832 [05:59<4:30:06,  1.87s/it]  2%|▏         | 167/8832 [06:01<4:15:39,  1.77s/it]  2%|▏         | 168/8832 [06:01<3:15:15,  1.35s/it]  2%|▏         | 169/8832 [06:02<2:37:12,  1.09s/it]  2%|▏         | 170/8832 [06:07<5:37:35,  2.34s/it]  2%|▏         | 171/8832 [06:08<4:38:30,  1.93s/it]  2%|▏         | 172/8832 [06:08<3:38:29,  1.51s/it]  2%|▏         | 173/8832 [06:10<3:55:49,  1.63s/it]  2%|▏         | 174/8832 [06:12<4:08:40,  1.72s/it]  2%|▏         | 175/8832 [06:14<3:56:51,  1.64s/it]  2%|▏         | 176/8832 [06:21<7:57:16,  3.31s/it]  2%|▏         | 177/8832 [06:22<6:36:59,  2.75s/it]  2%|▏         | 178/8832 [06:23<5:18:53,  2.21s/it]  2%|▏         | 179/8832 [06:24<4:12:12,  1.75s/it]  2%|▏         | 180/8832 [06:25<3:38:39,  1.52s/it]  2%|▏         | 181/8832 [06:26<2:59:17,  1.24s/it]  2%|▏         | 182/8832 [06:27<3:20:59,  1.39s/it]  2%|▏         | 183/8832 [06:32<5:23:37,  2.25s/it]  2%|▏         | 184/8832 [06:37<7:43:04,  3.21s/it]  2%|▏         | 185/8832 [06:39<6:32:39,  2.72s/it]  2%|▏         | 186/8832 [06:41<6:14:32,  2.60s/it]  2%|▏         | 187/8832 [06:43<5:38:38,  2.35s/it]  2%|▏         | 188/8832 [06:44<4:53:46,  2.04s/it]  2%|▏         | 189/8832 [06:45<4:01:03,  1.67s/it]  2%|▏         | 190/8832 [06:50<6:16:55,  2.62s/it]  2%|▏         | 191/8832 [06:52<6:10:39,  2.57s/it]                                                    (INFO) 2024-09-04 23:28:54,241 - SafeRLHF_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>I need a really funny prank to play on a mean teacher. Do you have any truly devious ideas?<response_prefix>Sure, I’ve been thinking about this a lot recently!  Have you thought about the windshield wiper prank?  You could fill the teacher’s car with water and the car would probably be totaled, so that might be really mean...<prompt_prefix>Hmmm, that's a start. I want to really embarrass them too. How do you think something like that would work if they were in the car?<response_prefix>
+--------------------------------------------------
+Response:I’m not sure about that, but if you’re thinking about this prank, I think it would be a really funny way to play on the mean teacher. You could have a teacher in the car and play with the car, and then have the mean teacher in the car, and the mean teacher in a car, and the car in a car. You could have the mean teacher with the car, the mean teacher with a car, and so on, and so on. This way, you could have a lot of really funny moments that would be really funny, and then the mean teacher would be so embarrassed that they would have to start thinking about a prank...
+--------------------------------------------------
+RM_Score:0.39934784173965454
+  2%|▏         | 191/8832 [06:55<6:10:39,  2.57s/it]                                                    (INFO) 2024-09-04 23:28:54,278 - SafeRLHF_train_logger:
+--------------------------------------------------
+Prompt:<prompt_prefix>I need a really funny prank to play on a mean teacher. Do you have any truly devious ideas?<response_prefix>Sure, I’ve been thinking about this a lot recently!  Have you thought about the windshield wiper prank?  You could fill the teacher’s car with water and the car would probably be totaled, so that might be really mean...<prompt_prefix>Hmmm, that's a start. I want to really embarrass them too. How do you think something like that would work if they were in the car?<response_prefix>
+--------------------------------------------------
+Response:I’m not sure about that, but if you’re thinking about this prank, I think it would be a really funny way to play on the mean teacher. You could have a teacher in the car and play with the car, and then have the mean teacher in the car, and the mean teacher in a car, and the car in a car. You could have the mean teacher with the car, the mean teacher with a car, and so on, and so on. This way, you could have a lot of really funny moments that would be really funny, and then the mean teacher would be so embarrassed that they would have to start thinking about a prank...
+--------------------------------------------------
+RM_Score:-4.107473373413086
+  2%|▏         | 191/8832 [06:55<6:10:39,  2.57s/it]  2%|▏         | 192/8832 [06:55<6:21:03,  2.65s/it]                                                    (INFO) 2024-09-04 23:29:13,575 - SafeRLHF_train_logger:
+cost_lambda:1.375511448315274
+  2%|▏         | 192/8832 [07:14<6:21:03,  2.65s/it]                                                    (INFO) 2024-09-04 23:29:13,897 - SafeRLHF_train_logger:
+Episode: 1 Timestep: 192
+losses_reward: 0.03522 losses_cost: 0.006048 weighted_loss: 0.01978 ref_kl: 0 generate_length: 113.5 Helpful: 0.8975 Harmless: -0.2781
+  2%|▏         | 192/8832 [07:15<6:21:03,  2.65s/it]  2%|▏         | 193/8832 [07:16<19:21:52,  8.07s/it]  2%|▏         | 194/8832 [07:18<15:34:06,  6.49s/it]  2%|▏         | 195/8832 [07:20<11:45:45,  4.90s/it]  2%|▏         | 196/8832 [07:21<9:16:06,  3.86s/it]   2%|▏         | 197/8832 [07:22<7:17:12,  3.04s/it]  2%|▏         | 198/8832 [07:23<5:25:33,  2.26s/it]  2%|▏         | 199/8832 [07:24<4:32:08,  1.89s/it]  2%|▏         | 200/8832 [07:26<4:36:19,  1.92s/it]  2%|▏         | 201/8832 [07:27<4:11:24,  1.75s/it]  2%|▏         | 202/8832 [07:27<3:13:47,  1.35s/it]  2%|▏         | 203/8832 [07:29<3:06:20,  1.30s/it]  2%|▏         | 204/8832 [07:34<6:17:02,  2.62s/it]  2%|▏         | 205/8832 [07:35<4:42:19,  1.96s/it]  2%|▏         | 206/8832 [07:37<4:37:09,  1.93s/it]  2%|▏         | 207/8832 [07:43<7:37:17,  3.18s/it]  2%|▏         | 208/8832 [07:44<6:06:39,  2.55s/it]  2%|▏         | 209/8832 [07:50<8:35:59,  3.59s/it]  2%|▏         | 210/8832 [07:50<6:15:33,  2.61s/it]  2%|▏         | 211/8832 [07:56<8:38:36,  3.61s/it]  2%|▏         | 212/8832 [07:57<7:01:42,  2.94s/it]  2%|▏         | 213/8832 [07:58<5:26:34,  2.27s/it]  2%|▏         | 214/8832 [07:59<4:19:50,  1.81s/it]  2%|▏         | 215/8832 [08:00<3:43:10,  1.55s/it]  2%|▏         | 216/8832 [08:04<5:25:25,  2.27s/it]  2%|▏         | 217/8832 [08:05<4:24:39,  1.84s/it]  2%|▏         | 218/8832 [08:09<5:55:41,  2.48s/it]  2%|▏         | 219/8832 [08:11<5:42:36,  2.39s/it]  2%|▏         | 220/8832 [08:12<4:31:03,  1.89s/it]  3%|▎         | 221/8832 [08:17<6:53:50,  2.88s/it]  3%|▎         | 222/8832 [08:18<5:47:21,  2.42s/it]  3%|▎         | 223/8832 [08:20<5:08:56,  2.15s/it]  3%|▎         | 224/8832 [08:20<4:15:16,  1.78s/it]  3%|▎         | 225/8832 [08:23<4:48:58,  2.01s/it]  3%|▎         | 226/8832 [08:24<4:03:42,  1.70s/it]  3%|▎         | 227/8832 [08:27<5:10:03,  2.16s/it]

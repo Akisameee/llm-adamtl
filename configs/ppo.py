@@ -61,4 +61,9 @@ class PPO_Config(Trainer_Config):
 class MOPPO_Config(PPO_Config):
 
     manipulator_cfg: Manipulator_Config = None
+
+@dataclass
+class SafePPO_Config(PPO_Config):
+
+    cost_coef_lr: float = 0.04
     

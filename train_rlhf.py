@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -21,6 +21,8 @@ from modules.pefts import replace_peft_layers, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict
 from logger import Logger
 from trl.core import LengthSampler
+
+TEST = 0
 
 class RLHF_Trainer(Base_Trainer):
 
@@ -276,7 +278,7 @@ def main():
     config = RLHF_Config()
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
-    sub_data_path = ['helpful-base']
+    sub_data_path = ['harmless-base']
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
@@ -286,8 +288,31 @@ def main():
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
     
-    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
+    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-harmless-reward_model')
     config.reward_cfg.model_pretrain_path = rm_path
+
+    # whole dataset
+    # max_sample = 0
+    # config.n_update_timestep = 64
+    # config.accelertor_cfg.gradient_accumulation_steps = 8
+    # config.train_batch_size = 2
+    # config.manipulator_cfg.n_adapt_step = 128
+
+    # 1/2 dataset
+    # max_sample = 20000
+    max_sample = 15000
+    config.n_update_timestep = 16
+    config.accelertor_cfg.gradient_accumulation_steps = 4
+    config.train_batch_size = 2
+
+    config.value_loss_coef = 0.1
+    config.n_update_epoch = 2
+
+    if TEST:
+        config.accelertor_cfg.gradient_accumulation_steps = 2
+        config.n_update_timestep = 8
+        config.n_save_step = 1
+
     config.parse_args()
 
     trainer = RLHF_Trainer(
@@ -296,7 +321,7 @@ def main():
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
     dataset = Instruct_Dataset(config.dateset_cfg)
-    dataset.load(mode = 'train', max_sample = 10000)
+    dataset.load(mode = 'train', max_sample = max_sample)
     trainer.train(
         ds_generator = dataset.get_generator(),
         n_episode = config.n_episode,

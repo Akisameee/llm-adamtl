@@ -31,7 +31,8 @@ from .sft import (
 
 from .ppo import (
     PPO_Config,
-    MOPPO_Config
+    MOPPO_Config,
+    SafePPO_Config
 )
 
 from .rlhf import (
@@ -44,6 +45,10 @@ from .dpo import (
 
 from .panacea import (
     Panacea_PPO_Config
+)
+
+from .saferlhf import (
+    Safe_RLHF_Config
 )
 
 from .pefts import (
