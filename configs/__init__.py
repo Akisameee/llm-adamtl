@@ -51,6 +51,10 @@ from .saferlhf import (
     Safe_RLHF_Config
 )
 
+from .instruct_mtl import (
+    Instruct_MTL_Config
+)
+
 from .pefts import (
     Peft_Config,
     Lora_Config,

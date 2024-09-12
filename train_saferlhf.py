@@ -405,17 +405,17 @@ def main():
     config.lr = 1e-4
 
     # whole dataset
-    # max_sample = 0
-    # config.n_update_timestep = 64
-    # config.accelertor_cfg.gradient_accumulation_steps = 8
-    # config.train_batch_size = 2
+    max_sample = 0
+    config.n_update_timestep = 64
+    config.accelertor_cfg.gradient_accumulation_steps = 16
+    config.train_batch_size = 1
 
     # 1/2 dataset
-    max_sample = 20000
-    # max_sample = 15000
-    config.n_update_timestep = 64
-    config.accelertor_cfg.gradient_accumulation_steps = 8
-    config.train_batch_size = 1
+    # max_sample = 20000
+    # # max_sample = 15000
+    # config.n_update_timestep = 64
+    # config.accelertor_cfg.gradient_accumulation_steps = 8
+    # config.train_batch_size = 1
 
     if TEST:
         config.accelertor_cfg.gradient_accumulation_steps = 2

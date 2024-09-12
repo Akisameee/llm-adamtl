@@ -230,7 +230,7 @@ class SafePPO_Trainer(PPO_Trainer):
             losses = torch.stack([reward_loss, cost_loss], dim = 0)
             
             weighted_loss = (reward_loss + self.cost_coef * cost_loss) / (1 + self.cost_coef)
-            self.update_cost_lambda(cost_score = torch.mean(cost_scores).detach().cpu())
+            self.update_cost_lambda(cost_score = cost_scores)
             # update
             self.manipulator.backward(
                 losses = weighted_loss
@@ -288,7 +288,8 @@ class SafePPO_Trainer(PPO_Trainer):
         cost_score: torch.FloatTensor
     ):
         
-        self.cost_avg = (self.cost_avg * self.update_epoch - cost_score.item()) / (self.update_epoch + 1)
+        cost_score = self.accelerator.gather(cost_score).mean().detach().cpu().item()
+        self.cost_avg = (self.cost_avg * self.update_epoch - cost_score) / (self.update_epoch + 1)
         self.update_epoch += 1
 
         self.cost_coef = math.exp(math.log(self.cost_coef) + self.cost_coef_lr * self.cost_coef * self.cost_avg)

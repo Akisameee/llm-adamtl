@@ -38,6 +38,14 @@ class Instruct_Dataset_Config(Dataset_Config):
     tokenize_type: Optional[Literal['prompt_pad', 'prompt_not_pad', 'prompt_response']] = 'prompt_pad'
 
 @dataclass
+class Instruct_Dataset_Config(Dataset_Config):
+
+    data_paths: list = None
+    padding_side: Optional[Literal['left', 'right']] = 'left'
+    prompt_only: bool = False
+    tokenize_type: Optional[Literal['prompt_pad', 'prompt_not_pad', 'prompt_response']] = 'prompt_pad'
+
+@dataclass
 class HumanFeedback_Dataset_Config(Dataset_Config):
 
     data_path: str = None
