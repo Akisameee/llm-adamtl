@@ -17,7 +17,11 @@ class Dataset_Config(Base_Config):
 
     @property
     def name(self):
-        return os.path.split(self.data_path)[-1]
+        if 'Infinity_Instruct' in self.data_path:
+            path_split = os.path.split(self.data_path)
+            return '/'.join(path_split[path_split.index('Infinity_Instruct'):])
+        else:
+            return os.path.split(self.data_path)[-1]
     
     @property
     def model_info(self):
@@ -33,14 +37,6 @@ class Instruct_Dataset_Config(Dataset_Config):
 
     data_path: str = None
     sub_data_path: list = None
-    padding_side: Optional[Literal['left', 'right']] = 'left'
-    prompt_only: bool = False
-    tokenize_type: Optional[Literal['prompt_pad', 'prompt_not_pad', 'prompt_response']] = 'prompt_pad'
-
-@dataclass
-class Instruct_Dataset_Config(Dataset_Config):
-
-    data_paths: list = None
     padding_side: Optional[Literal['left', 'right']] = 'left'
     prompt_only: bool = False
     tokenize_type: Optional[Literal['prompt_pad', 'prompt_not_pad', 'prompt_response']] = 'prompt_pad'

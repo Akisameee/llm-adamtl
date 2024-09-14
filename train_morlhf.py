@@ -13,7 +13,7 @@ from trl import AutoModelForCausalLMWithValueHead
 from accelerate.utils import broadcast
 
 from base_trainer import Base_Trainer
-from datas.instruct_dataset import Instruct_Dataset, instruct_collator
+from datas import Instruct_Pref_Dataset, instruct_prompt_collator
 from configs import Panacea_PPO_Config, RM_Config, SVD_Lora_Config, SVD_Lora_Altered_Config
 # from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHeads
@@ -205,7 +205,7 @@ class MORLHF_Trainer(Base_Trainer):
             dataset = train_dataset,
             batch_size = sample_batch_size,
             shuffle = True,
-            collate_fn = instruct_collator,
+            collate_fn = instruct_prompt_collator,
             drop_last = True
         )
         dataloader = self.accelerator.prepare(dataloader)
@@ -394,7 +394,7 @@ class MORLHF_Trainer(Base_Trainer):
             dataset = eval_dataset,
             batch_size = eval_batch_size,
             shuffle = False,
-            collate_fn = instruct_collator,
+            collate_fn = instruct_prompt_collator,
             drop_last = True
         )
         dataloader = self.accelerator.prepare(dataloader)
@@ -554,9 +554,9 @@ def main():
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
-    train_dataset = Instruct_Dataset(config.dateset_cfg)
+    train_dataset = Instruct_Pref_Dataset(config.dateset_cfg)
     train_dataset.load(mode = 'train', max_sample = max_sample if not TEST else 60)
-    eval_dataset = Instruct_Dataset(config.dateset_cfg)
+    eval_dataset = Instruct_Pref_Dataset(config.dateset_cfg)
     eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train_ppo(
         train_dataset = train_dataset.get_generator(),

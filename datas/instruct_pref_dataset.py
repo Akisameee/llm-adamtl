@@ -16,7 +16,7 @@ from configs import dataset_infos, model_infos
 csv.field_size_limit(10000000)
 TEST = 1000
 
-def instruct_collator(batch):
+def instruct_prompt_collator(batch):
 
     input_ids = [data[0].squeeze() for data in batch]
     attention_masks = [data[1].squeeze() for data in batch]
@@ -45,7 +45,7 @@ class Generator_Dataset(Dataset):
 
         return len(self.datas[0])
 
-class Instruct_Dataset():
+class Instruct_Pref_Dataset():
 
     def __init__(
             self,
@@ -202,7 +202,6 @@ class Instruct_Dataset():
         datas = self.tokenize(prompt_texts, response_texts)
 
         return datas
-        
 
     def get_generator(self):
 
@@ -222,12 +221,12 @@ if __name__ == '__main__':
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
-    dataset = Instruct_Dataset(config.dateset_cfg)
+    dataset = Instruct_Pref_Dataset(config.dateset_cfg)
     dataset.load(
         mode = 'train'
     )
     instruct_ds = dataset.get_generator()
-    loader = torch.utils.data.DataLoader(instruct_ds, batch_size = 8, collate_fn = instruct_collator, shuffle = True)
+    loader = torch.utils.data.DataLoader(instruct_ds, batch_size = 8, collate_fn = instruct_prompt_collator, shuffle = True)
     for batch in loader:
         print('Decode', dataset.tokenizer.decode(batch[0][0]))
         print('Prompt',batch[2][0])

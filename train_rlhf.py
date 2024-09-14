@@ -12,7 +12,7 @@ from trl import AutoModelForCausalLMWithValueHead
 from accelerate import Accelerator, dispatch_model
 
 from base_trainer import Base_Trainer
-from datas.instruct_dataset import Instruct_Dataset, instruct_collator
+from datas.instruct_dataset import Instruct_Pref_Dataset, instruct_prompt_collator
 from configs import RLHF_Config, model_infos
 # from modules.lms import BaseLM, RewardLM, get_model
 from modules import BaseLMWithValueHeads
@@ -168,7 +168,7 @@ class RLHF_Trainer(Base_Trainer):
             dataset = ds_generator,
             batch_size = sample_batch_size,
             shuffle = True,
-            collate_fn = instruct_collator,
+            collate_fn = instruct_prompt_collator,
             drop_last = True
         )
         dataloader = self.accelerator.prepare(dataloader)
@@ -320,7 +320,7 @@ def main():
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
-    dataset = Instruct_Dataset(config.dateset_cfg)
+    dataset = Instruct_Pref_Dataset(config.dateset_cfg)
     dataset.load(mode = 'train', max_sample = max_sample)
     trainer.train(
         ds_generator = dataset.get_generator(),

@@ -8,6 +8,7 @@ import csv
 import re
 import numpy as np
 from transformers import AutoTokenizer, AutoConfig
+from datasets import load_dataset
 
 from configs import dataset_infos, model_infos, Dataset_Config, Panacea_PPO_Config
 
@@ -71,6 +72,13 @@ class Dataset_Parser(object):
                 mode = mode,
                 max_sample = max_sample
             )
+        elif self.dataset_name == 'Infinity_Instruct/7M_domains':
+            for sub_path in self.sub_paths:
+                datas += self.parse_infinity_instruct_dataset(
+                    os.path.join(self.data_dir, sub_path),
+                    mode = mode,
+                    max_sample = max_sample
+                )
 
         return datas
 
@@ -185,22 +193,70 @@ class Dataset_Parser(object):
                 break
         
         return res
+    
+    def parse_infinity_instruct_dataset(self, data_path, mode, max_sample = None):
 
-    def add_instruct_prompt(self, text_splitted):
+        dataset_raw = load_dataset(data_path, split = 'train')
+
+        dataset_df = dataset_raw.data.to_pandas()
+        dataset_df = dataset_df[dataset_df['langdetect'] == 'en']
+        if max_sample is not None:
+            dataset_df = dataset_df[: max_sample + 100]
+        dataset_dict = dataset_df.to_dict(orient = 'records')
+        
+        datas = []
+        for conversations in dataset_dict['conversations']:
+            if len(conversations) // 2 != 0:
+                continue
+            text_splitted = []
+            role_flag = 0
+            for text in conversations:
+                if text['from'] == 'human':
+                    if role_flag != 0:
+                        continue
+                    role_flag = 1
+                    prompt_splitted = text['value']
+                else:
+                    if role_flag != 1:
+                        continue
+                    role_flag = 0
+                    text_splitted.append((prompt_splitted, text['value']))
             
-        prompt_full = ''
-        response_full = ''
-        for idx, (prompt_text, response_text) in enumerate(text_splitted):
-            prompt_text = prompt_text.strip()
-            response_text = response_text.strip()
-            prompt_full += self.model_info['prompt_prefix'] + prompt_text + self.model_info['prompt_suffix']
-            if idx == len(text_splitted) - 1:
-                prompt_full += self.model_info['response_prefix']
-                response_full = response_text
-            else:
-                prompt_full += self.model_info['response_prefix'] + response_text + self.model_info['response_suffix']
+            data = self.add_instruct_prompt(text_splitted, merge = False)
+            datas.append(data)
 
-        return prompt_full, response_full
+            if len(datas) == max_sample:
+                break
+
+        return datas
+
+    def add_instruct_prompt(self, text_splitted, merge = True):
+        
+        if merge:
+            prompt_full = ''
+            response_full = ''
+            for idx, (prompt_text, response_text) in enumerate(text_splitted):
+                prompt_text = prompt_text.strip()
+                response_text = response_text.strip()
+                prompt_full += self.model_info['prompt_prefix'] + prompt_text + self.model_info['prompt_suffix']
+                if idx == len(text_splitted) - 1:
+                    prompt_full += self.model_info['response_prefix']
+                    response_full = response_text
+                else:
+                    prompt_full += self.model_info['response_prefix'] + response_text + self.model_info['response_suffix']
+
+            return prompt_full, response_full
+        else:
+            res = []
+            for idx, (prompt_text, response_text) in enumerate(text_splitted):
+                prompt_text = prompt_text.strip()
+                response_text = response_text.strip()
+                res.append(
+                    self.model_info['prompt_prefix'] + prompt_text + self.model_info['prompt_suffix'],
+                    self.model_info['response_prefix'] + response_text + self.model_info['response_suffix']
+                )
+            
+            return res
 
 if __name__ == '__main__':
 
