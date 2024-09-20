@@ -14,7 +14,6 @@ from transformers import PreTrainedModel
 from accelerate import DistributedDataParallelKwargs
 import numpy as np
 
-from datas.instruct_dataset import Instruct_Pref_Dataset, instruct_prompt_collator
 from configs import RLHF_Config, LM_Config, RM_Config, Accelertor_Config, Trainer_Config
 # from modules.lms import BaseLM, RewardLM, get_model
 from modules.ppo import PPO_Trainer, PPOMemory

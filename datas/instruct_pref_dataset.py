@@ -216,8 +216,8 @@ if __name__ == '__main__':
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
-    # model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
-    model_path = '/home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf'
+    model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
+    # model_path = '/home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf'
     config.dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path

@@ -10,6 +10,11 @@ dataset_infos = {
     'sharegpt': {
         'prompt_prefix': r'Human: ',
         'response_prefix': r'Assistant: '
+    },
+
+    'infinity-instruct': {
+        'prompt_prefix': '',
+        'response_prefix': ''
     }
 }
 
@@ -42,7 +47,7 @@ model_infos = {
     },
 
     'MindLLM-1b3-chat-zh-v2.0': {
-        'prompt_prefix': '<|endoftext|><user>\n',
+        'prompt_prefix': '<user>\n',
         'prompt_suffix': '',
         'response_prefix': '\n<assistant>\n',
         'response_suffix': '',

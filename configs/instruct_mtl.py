@@ -11,7 +11,13 @@ class Instruct_MTL_Config(Trainer_Config):
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
         gradient_accumulation_steps = 8
     )
-    dateset_cfg: Instruct_Dataset_Config = None
+    base_dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
+        tokenizer_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
+        padding_side = 'left',
+        max_len = 512,
+        tokenize_type = 'prompt_response'
+    )
+    dataset_data_paths: list[str] = None
     model_cfg: LM_Config = LM_Config(
         model_pretrain_path = os.path.join('/home', 'smliu', 'Pretrain_Models', 'LocutusqueXFelladrin-TinyMistral248M-Instruct'),
         model_class = None,
@@ -37,3 +43,13 @@ class Instruct_MTL_Config(Trainer_Config):
     train_batch_size: int = 8
 
     output_dir: str = os.path.join('.', 'output')
+
+    def get_dataset_cfgs(self):
+
+        dataset_configs = []
+        for data_path in self.dataset_data_paths:
+            dataset_config = deepcopy(self.base_dateset_cfg)
+            dataset_config.data_path = data_path
+            dataset_configs.append(dataset_config)
+                                   
+        return dataset_configs

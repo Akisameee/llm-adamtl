@@ -72,13 +72,12 @@ class Dataset_Parser(object):
                 mode = mode,
                 max_sample = max_sample
             )
-        elif self.dataset_name == 'Infinity_Instruct/7M_domains':
-            for sub_path in self.sub_paths:
-                datas += self.parse_infinity_instruct_dataset(
-                    os.path.join(self.data_dir, sub_path),
-                    mode = mode,
-                    max_sample = max_sample
-                )
+        elif self.dataset_name == 'infinity-instruct':
+            datas += self.parse_infinity_instruct_dataset(
+                os.path.join(self.data_dir),
+                mode = mode,
+                max_sample = max_sample
+            )
 
         return datas
 
@@ -202,11 +201,12 @@ class Dataset_Parser(object):
         dataset_df = dataset_df[dataset_df['langdetect'] == 'en']
         if max_sample is not None:
             dataset_df = dataset_df[: max_sample + 100]
-        dataset_dict = dataset_df.to_dict(orient = 'records')
+        dataset_dicts = dataset_df.to_dict(orient = 'records')
         
         datas = []
-        for conversations in dataset_dict['conversations']:
-            if len(conversations) // 2 != 0:
+        for dataset_dict in dataset_dicts:
+            conversations = dataset_dict['conversations']
+            if conversations.shape[0] % 2 != 0:
                 continue
             text_splitted = []
             role_flag = 0
@@ -221,7 +221,7 @@ class Dataset_Parser(object):
                         continue
                     role_flag = 0
                     text_splitted.append((prompt_splitted, text['value']))
-            
+                
             data = self.add_instruct_prompt(text_splitted, merge = False)
             datas.append(data)
 
@@ -252,8 +252,10 @@ class Dataset_Parser(object):
                 prompt_text = prompt_text.strip()
                 response_text = response_text.strip()
                 res.append(
-                    self.model_info['prompt_prefix'] + prompt_text + self.model_info['prompt_suffix'],
-                    self.model_info['response_prefix'] + response_text + self.model_info['response_suffix']
+                    (
+                        self.model_info['prompt_prefix'] + prompt_text + self.model_info['prompt_suffix'],
+                        self.model_info['response_prefix'] + response_text + self.model_info['response_suffix']
+                    )
                 )
             
             return res

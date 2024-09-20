@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -13,7 +13,7 @@ from trl import AutoModelForCausalLMWithValueHead
 from accelerate.utils import broadcast
 
 from base_trainer import Base_Trainer
-from datas import Instruct_MTL_Dataset
+from datas import Instruct_MTL_Dataset, instruct_mtl_collator
 from configs import Panacea_PPO_Config, RM_Config, SVD_Lora_Altered_Config, Instruct_MTL_Config
 # from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHeads
@@ -21,7 +21,7 @@ from modules.manipulators import Base_MO_Manipulator_Altered
 from modules.pefts import set_all_adapters, SVD_Lora_Linear, SVD_Lora_Linear_Altered
 from modules.utils import shift, log_prob, merge_dict, get_model
 
-TEST = 1
+TEST = 0
 
 class MTL_Trainer(Base_Trainer):
 
@@ -40,6 +40,7 @@ class MTL_Trainer(Base_Trainer):
             accelerator = self.accelerator,
             optimizer = self.optimizer,
             logger = self.logger,
+            pref_dim = len(config.dataset_data_paths),
             svd_lora_type = 'adaptive'
         )
 
@@ -56,7 +57,7 @@ class MTL_Trainer(Base_Trainer):
     def train(
         self,
         train_dataset: Dataset,
-        eval_dataset: Dataset,
+        # eval_dataset: Dataset,
         train_batch_size: int,
         n_episode: int = 1
     ):
@@ -69,35 +70,32 @@ class MTL_Trainer(Base_Trainer):
             dataset = train_dataset,
             batch_size = train_batch_size,
             shuffle = True,
-            collate_fn = instruct_prompt_collator,
+            collate_fn = instruct_mtl_collator,
             drop_last = True
         )
         dataloader = self.accelerator.prepare(dataloader)
         max_timestep = len(dataloader) * train_batch_size * n_episode
 
         for episode in range(n_episode):
-            for prompts_ids, attention_masks, prompt_texts in dataloader:
-                pass
+            for all_batch_inputs in dataloader:
+                for task_idx, batch_inputs in enumerate(all_batch_inputs):
+                    out = self.model(**batch_inputs)
+                    print(out)
         
 
 def main():
 
     config = Instruct_MTL_Config()
+    config.dataset_data_paths = [
+        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/code',
+        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/commonsense',
+        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/math',
+        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective'
+    ]
 
-    data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
-    # sub_data_path = ['helpful-base', 'harmless-base']
-    sub_data_path = ['harmless-base']
-    config.dateset_cfg.data_path = data_path
-    config.dateset_cfg.sub_data_path = sub_data_path
-
-    # Panacea
-    # config.reward_scalariztion_type = 'ls'
-    # config.manipulator_cfg.weighted_loss_type = None
-    # config.model_cfg.peft_cfg = SVD_Lora_Config(pref_dim = 2)
-
-    config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = 2)
+    config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = len(config.dataset_data_paths))
     
-    config.model_cfg.peft_cfg.r = 6
+    config.model_cfg.peft_cfg.r = 4
     config.model_cfg.peft_cfg.pref_r = 1
     config.model_cfg.peft_cfg.lora_alpha = 32
     
@@ -107,7 +105,7 @@ def main():
     # model_path = '/home/share/models/huggingface/meta-llama/Llama-2-7b-chat-hf'
     # config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'o_proj']
 
-    config.dateset_cfg.tokenizer_pretrain_path = model_path
+    config.base_dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
 
     config.manipulator_cfg.svd_lora_type = 'adaptive'
@@ -142,14 +140,12 @@ def main():
         config = config
     )
     
-    config.dateset_cfg.tokenize_type = 'prompt_not_pad'
-    train_dataset = Instruct_MTL_Dataset(config.dateset_cfg)
+    config.base_dateset_cfg.tokenize_type = 'prompt_response'
+    train_dataset = Instruct_MTL_Dataset(config.get_dataset_cfgs())
     train_dataset.load(mode = 'train', max_sample = max_sample if not TEST else 60)
-    eval_dataset = Instruct_MTL_Dataset(config.dateset_cfg)
-    eval_dataset.load(mode = 'eval', max_sample = 500 if not TEST else 50)
     trainer.train(
         train_dataset = train_dataset.get_generator(),
-        eval_dataset = eval_dataset.get_generator(),
+        # eval_dataset = None,
         train_batch_size = config.train_batch_size,
         n_episode = config.n_episode
     )
