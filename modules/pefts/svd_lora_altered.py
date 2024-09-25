@@ -178,7 +178,8 @@ class SVD_Lora_Linear_Altered(Base_Adapter):
 
         grad_mask_map = torch.zeros(self.pref_dim + 1, device = device)
         grad_mask_map[0] = 1
-        grad_mask_map[pref_idx + 1] = 1 / self.pref_vec[pref_idx].item()
+        if self.pref_vec[pref_idx].item() != 0:
+            grad_mask_map[pref_idx + 1] = 1 / self.pref_vec[pref_idx].item()
         grad_mask = grad_mask_map.index_select(0, self.task_flag + 1)
 
         lora_A_grad_mask = grad_mask.unsqueeze(1).expand(-1, self.in_features)

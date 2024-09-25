@@ -8,6 +8,8 @@ from .model import LM_Config, RM_Config
 @dataclass
 class Instruct_MTL_Config(Trainer_Config):
 
+    task_name: str = 'MultiTask_train'
+    
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
         gradient_accumulation_steps = 8
     )

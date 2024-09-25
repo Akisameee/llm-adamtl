@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -10,7 +10,7 @@ from functools import partial
 from random import randrange
 from tqdm import tqdm
 from trl import AutoModelForCausalLMWithValueHead
-from accelerate.utils import broadcast
+from accelerate.utils import gather, reduce
 
 from base_trainer import Base_Trainer
 from datas import Instruct_MTL_Dataset, instruct_mtl_collator
@@ -41,6 +41,7 @@ class MTL_Trainer(Base_Trainer):
             optimizer = self.optimizer,
             logger = self.logger,
             pref_dim = len(config.dataset_data_paths),
+            weighted_loss_type = 'mols',
             svd_lora_type = 'adaptive'
         )
 
@@ -61,9 +62,13 @@ class MTL_Trainer(Base_Trainer):
         train_batch_size: int,
         n_episode: int = 1
     ):
+        pref_dim = self.manipulator.pref_dim
         set_all_adapters(
             model = self.model,
             enable = True
+        )
+        self.manipulator.set_pref_vec(
+            pref_vec = torch.ones(pref_dim).float()
         )
 
         dataloader = DataLoader(
@@ -75,12 +80,48 @@ class MTL_Trainer(Base_Trainer):
         )
         dataloader = self.accelerator.prepare(dataloader)
         max_timestep = len(dataloader) * train_batch_size * n_episode
+        timestep = 0
+        tqdm_bar = tqdm(
+            total = max_timestep // train_batch_size,
+            disable = not self.accelerator.is_main_process
+        )
 
         for episode in range(n_episode):
+            multi_losses = []
             for all_batch_inputs in dataloader:
+                timestep += len(all_batch_inputs)
+                losses = []
                 for task_idx, batch_inputs in enumerate(all_batch_inputs):
-                    out = self.model(**batch_inputs)
-                    print(out)
+
+                    pref_vec = torch.zeros(pref_dim).float()
+                    pref_vec[task_idx] = 1
+                    self.set_pref_vec(pref_vec)
+
+                    loss = self.model(**batch_inputs)[2]
+                    loss = self.manipulator.backward_single(loss)
+                    losses.append(loss.item())
+                losses = torch.FloatTensor(losses)
+                # losses = torch.stack(losses, dim = 0)
+                # weighted_loss, losses = self.manipulator.backward(losses)
+
+                multi_losses.append(losses.detach())
+                if self.manipulator.gradient_accumulation_step + 1 == self.manipulator.n_gradient_accumulation_step:
+                    losses_mean = torch.stack(multi_losses, dim = 0).mean(dim = 0)
+                    losses_mean = self.accelerator.reduce(losses_mean.to(self.accelerator.device), reduction = 'mean').tolist()
+                    if self.accelerator.is_main_process:
+                        self.logger.step(
+                            episode = episode,
+                            timestep = timestep,
+                            stat_dict = {f'loss_{t_idx}': t_loss for t_idx, t_loss in enumerate(losses_mean)}
+                        )
+                    multi_losses.clear()
+
+                self.manipulator.step()
+                tqdm_bar.update(1)
+
+        self.accelerator.wait_for_everyone()
+        self.logger.info(f'{self.task_name} complete.')
+        self.logger.save_res()
         
 
 def main():
@@ -117,7 +158,7 @@ def main():
     # config.model_cfg.peft_cfg.init_strategy = 'b_zero'
 
     # whole dataset
-    max_sample = 0
+    max_sample = None
     config.accelertor_cfg.gradient_accumulation_steps = 8
     config.train_batch_size = 2
     config.manipulator_cfg.n_adapt_step = 128

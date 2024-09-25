@@ -30,14 +30,18 @@ def instruct_mtl_collator(batch):
 
 class Instruct_MTL_Generator(Dataset):
 
-    def __init__(self, all_datas) -> None:
+    def __init__(self, all_datas, tokenize_func = None) -> None:
         super().__init__()
 
         self.all_datas = all_datas
+        self.tokenize_func = tokenize_func
 
     def __getitem__(self, index):
 
-        return [datas[index] for datas in self.all_datas]
+        if self.tokenize_func is not None:
+            return [self.tokenize_func(datas[index]) for datas in self.all_datas]
+        else:
+            return [datas[index] for datas in self.all_datas]
     
     def __len__(self):
 
@@ -66,18 +70,22 @@ class Instruct_MTL_Dataset():
         self.tokenize = {
             'prompt_response': self.tokenize_prompt_response
         }[config.tokenize_type]
+        self.pre_tokenize = False
 
     def load(
         self,
         mode = 'train',
-        max_sample = None
+        max_sample = None,
+        pre_tokenize = False
     ):
-        self.all_texts = []
+        self.pre_tokenize = pre_tokenize
         self.all_datas = []
         for dataset_parser in self.dataset_parsers:
             texts = dataset_parser.parse_dataset(mode = mode, max_sample = max_sample)
-            self.all_texts.append(texts)
-            self.all_datas.append(self.tokenize_parsed_texts(texts))
+            if pre_tokenize:
+                self.all_datas.append(self.tokenize_parsed_texts(texts))
+            else:
+                self.all_datas.append(texts)
 
     def tokenize_parsed_texts(self, texts):
 
@@ -149,7 +157,10 @@ class Instruct_MTL_Dataset():
 
     def get_generator(self):
 
-        generator = Instruct_MTL_Generator(self.all_datas)
+        generator = Instruct_MTL_Generator(
+            all_datas = self.all_datas,
+            tokenize_func = None if self.pre_tokenize else self.tokenize
+        )
         return generator
 
 if __name__ == '__main__':

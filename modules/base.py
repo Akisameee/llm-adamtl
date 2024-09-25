@@ -5,7 +5,7 @@ import sys
 from collections import OrderedDict
 import torch
 import torch.nn as nn
-from transformers import AutoModelForCausalLM, AutoTokenizer, GPT2Tokenizer, AutoModelForSequenceClassification, LlamaForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer, GPT2Tokenizer, AutoModelForSequenceClassification, LlamaForCausalLM, GPTNeoModel
 from trl import AutoModelForCausalLMWithValueHead
 from trl.models.modeling_base import PreTrainedModelWrapper
 

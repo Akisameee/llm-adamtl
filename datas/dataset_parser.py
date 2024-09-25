@@ -199,7 +199,7 @@ class Dataset_Parser(object):
 
         dataset_df = dataset_raw.data.to_pandas()
         dataset_df = dataset_df[dataset_df['langdetect'] == 'en']
-        if max_sample is not None:
+        if max_sample != 0:
             dataset_df = dataset_df[: max_sample + 100]
         dataset_dicts = dataset_df.to_dict(orient = 'records')
         
