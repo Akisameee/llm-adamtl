@@ -14,10 +14,10 @@ from accelerate.utils import gather, reduce
 
 from base_trainer import Base_Trainer
 from datas import Instruct_MTL_Dataset, instruct_mtl_collator
-from configs import Panacea_PPO_Config, RM_Config, SVD_Lora_Altered_Config, Instruct_MTL_Config
+from configs import Lora_Config, SVD_Lora_Altered_Config, Instruct_MTL_Config
 # from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHeads
-from modules.manipulators import Base_MO_Manipulator_Altered
+from modules.manipulators import Base_MO_Manipulator_Altered, Base_Weight_Manipulator
 from modules.pefts import set_all_adapters, SVD_Lora_Linear, SVD_Lora_Linear_Altered
 from modules.utils import shift, log_prob, merge_dict, get_model
 
@@ -34,14 +34,17 @@ class MTL_Trainer(Base_Trainer):
             accelerator_cfg = config.accelertor_cfg,
             model_cfg = config.model_cfg
         )
-        
-        self.manipulator = Base_MO_Manipulator_Altered(
+        self.task_type = config.task_type
+
+        self.manipulator_cls = Base_MO_Manipulator_Altered \
+            if self.task_type == 'ada' else Base_Weight_Manipulator
+        self.manipulator = self.manipulator_cls(
             model = self.model,
             accelerator = self.accelerator,
             optimizer = self.optimizer,
             logger = self.logger,
             pref_dim = len(config.dataset_data_paths),
-            weighted_loss_type = 'mols',
+            weighted_loss_type = 'mols' if self.task_type == 'ada' else None,
             svd_lora_type = 'adaptive'
         )
 
@@ -62,14 +65,16 @@ class MTL_Trainer(Base_Trainer):
         train_batch_size: int,
         n_episode: int = 1
     ):
-        pref_dim = self.manipulator.pref_dim
         set_all_adapters(
             model = self.model,
             enable = True
         )
+
+        pref_dim = self.manipulator.pref_dim
         self.manipulator.set_pref_vec(
             pref_vec = torch.ones(pref_dim).float()
         )
+        self.set_pref_vec(torch.ones(pref_dim).float())
 
         dataloader = DataLoader(
             dataset = train_dataset,
@@ -92,7 +97,7 @@ class MTL_Trainer(Base_Trainer):
                 timestep += len(all_batch_inputs)
                 losses = []
                 for task_idx, batch_inputs in enumerate(all_batch_inputs):
-
+                    
                     pref_vec = torch.zeros(pref_dim).float()
                     pref_vec[task_idx] = 1
                     self.set_pref_vec(pref_vec)
@@ -122,7 +127,7 @@ class MTL_Trainer(Base_Trainer):
         self.accelerator.wait_for_everyone()
         self.logger.info(f'{self.task_name} complete.')
         self.logger.save_res()
-        
+        self.logger.save_conflict_scores(self.model)
 
 def main():
 
@@ -134,11 +139,18 @@ def main():
         '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective'
     ]
 
+    config.task_type = 'ada'
+
+    # config.model_cfg.peft_cfg = Lora_Config()
+    # config.model_cfg.peft_cfg.r = 8
+    # config.model_cfg.peft_cfg.lora_alpha = 32
+
     config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = len(config.dataset_data_paths))
-    
-    config.model_cfg.peft_cfg.r = 4
+    config.model_cfg.peft_cfg.r = 7
     config.model_cfg.peft_cfg.pref_r = 1
     config.model_cfg.peft_cfg.lora_alpha = 32
+    # config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
+    config.model_cfg.peft_cfg.init_strategy = 'b_zero'
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -153,12 +165,10 @@ def main():
     # config.manipulator_cfg.svd_lora_random_init = True
     config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
-    config.lr = 1e-4
-    config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
-    # config.model_cfg.peft_cfg.init_strategy = 'b_zero'
+    config.lr = 1e-5
 
     # whole dataset
-    max_sample = None
+    max_sample = 50000
     config.accelertor_cfg.gradient_accumulation_steps = 8
     config.train_batch_size = 2
     config.manipulator_cfg.n_adapt_step = 128
@@ -183,7 +193,7 @@ def main():
     
     config.base_dateset_cfg.tokenize_type = 'prompt_response'
     train_dataset = Instruct_MTL_Dataset(config.get_dataset_cfgs())
-    train_dataset.load(mode = 'train', max_sample = max_sample if not TEST else 60)
+    train_dataset.load(mode = 'train', max_sample = max_sample if not TEST else 120)
     trainer.train(
         train_dataset = train_dataset.get_generator(),
         # eval_dataset = None,

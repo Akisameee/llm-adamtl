@@ -239,6 +239,9 @@ class Logger():
         self,
         model
     ):
+        if self.disable:
+            return
+        
         save_path = os.path.join(self.dir, 'conflict_scores')
         if not os.path.exists(save_path):
             os.mkdir(save_path)

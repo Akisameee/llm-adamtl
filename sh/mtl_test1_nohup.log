@@ -1,1234 +1,0 @@
-nohup: 忽略输入
-The following values were not passed to `accelerate launch` and had defaults used instead:
-		More than one GPU was found, enabling multi-GPU training.
-		If this was unintended please pass in `--num_processes=1`.
-	`--num_machines` was set to a value of `1`
-	`--mixed_precision` was set to a value of `'no'`
-	`--dynamo_backend` was set to a value of `'no'`
-To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
-Using RTX 3090 or 4000 series which doesn't support faster communication speedups. Ensuring P2P and IB communications are disabled.
-Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
-(INFO) 2024-09-25 20:20:02,206 - MultiTask_train_logger:
-Args Info:
---task_name MultiTask_train
---n_save_step None
---output_dir ./output
---accelertor_cfg_log_with None
---accelertor_cfg_gradient_accumulation_steps 8
---base_dateset_cfg_data_path None
---base_dateset_cfg_sub_data_path None
---base_dateset_cfg_tokenizer_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---base_dateset_cfg_max_len 512
---base_dateset_cfg_remove_chinese True
---base_dateset_cfg_padding_side left
---base_dateset_cfg_prompt_only False
---base_dateset_cfg_tokenize_type prompt_response
---dataset_data_paths ['/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/code', '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/commonsense', '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/math', '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective']
---model_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---model_cfg_model_class None
---model_cfg_peft_cfg_adapter_name svd_lora_altered
---model_cfg_peft_cfg_target_modules ['q_proj', 'k_proj', 'v_proj', 'out_proj']
---model_cfg_peft_cfg_r 4
---model_cfg_peft_cfg_pref_r 1
---model_cfg_peft_cfg_lora_alpha 32
---model_cfg_peft_cfg_lora_dropout 0.0
---model_cfg_peft_cfg_pref_dim 4
---model_cfg_peft_cfg_init_strategy diag_zero
---model_cfg_ckpt_path ./ckpts
---model_cfg_use_ckpt False
---model_cfg_ckpt_load_path None
---model_cfg_device cuda
---model_cfg_max_len 512
---manipulator_cfg_weighted_loss_type mols
---manipulator_cfg_svd_lora_type adaptive
---manipulator_cfg_svd_lora_random_init None
---manipulator_cfg_svd_lora_split_percentage 0.125
---manipulator_cfg_n_adapt_step 128
---lr 0.0001
---weight_decay 0.0005
---n_episode 1
---train_batch_size 2
-
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-(INFO) 2024-09-25 20:20:10,349 - MultiTask_train_logger:
-Peft Info:
-total parameters: 1369744128
-trainable parameters: 3146496
-non-trainable parameters: 1366597632
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable To disable this warning, you can either:
-TOKENIZERS_PARALLELISM	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable 	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-=(true | false)
-TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-(INFO) 2024-09-25 20:20:16,980 - MultiTask_train_logger:
-shared params: 384
-task 0 specific params: 96
-task 1 specific params: 96
-task 2 specific params: 96
-task 3 specific params: 96
-module.pretrained_model.transformer.h.0.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-module.pretrained_model.transformer.h.0.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-module.pretrained_model.transformer.h.0.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.0.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.0.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.0.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.1.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.1.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.1.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.1.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.1.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.2.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.2.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.2.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.2.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.2.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.3.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.3.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.3.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.3.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.3.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.4.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.4.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.4.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.4.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.4.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.5.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.5.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.5.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.5.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.5.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.6.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.6.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.6.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.6.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.6.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.7.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.7.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.7.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.7.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.7.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.8.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.8.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.8.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.8.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.8.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.9.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.9.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.9.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.9.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.9.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.10.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.10.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.10.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.10.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.10.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.11.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.11.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.11.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.11.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.11.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-module.pretrained_model.transformer.h.11.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-module.pretrained_model.transformer.h.12.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.12.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.12.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.12.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.12.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.13.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.13.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.13.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.13.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.13.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.14.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.14.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.14.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.14.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.14.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.15.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.15.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.15.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.15.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.15.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.16.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.16.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.16.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.16.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.16.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.17.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.17.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.17.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.17.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.17.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.18.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.18.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.18.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.18.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.18.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.19.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.19.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.19.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.19.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.19.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.20.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.20.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.20.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.20.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.20.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.21.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.21.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.21.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.21.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.21.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.22.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.22.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.22.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.22.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.22.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.23.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.k_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.23.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.v_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.23.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.q_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-module.pretrained_model.transformer.h.23.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])module.pretrained_model.transformer.h.23.attn.attention.out_proj, ([-1, -1, -1, -1, 0, 1, 2, 3])
-
-
-
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Resolving data files:   0%|          | 0/33 [00:00<?, ?it/s]Resolving data files: 100%|██████████| 33/33 [00:00<00:00, 62488.50it/s]
-Resolving data files:   0%|          | 0/33 [00:00<?, ?it/s]Resolving data files: 100%|██████████| 33/33 [00:00<00:00, 72619.11it/s]
-Resolving data files:   0%|          | 0/33 [00:00<?, ?it/s]Resolving data files: 100%|██████████| 33/33 [00:00<00:00, 243683.15it/s]
-Resolving data files:   0%|          | 0/33 [00:00<?, ?it/s]Resolving data files: 100%|██████████| 33/33 [00:00<00:00, 37358.17it/s]
-  0%|          | 0/74409 [00:00<?, ?it/s]Token indices sequence length is longer than the specified maximum sequence length for this model (8739 > 2048). Running this sequence through the model will result in indexing errors
-  0%|          | 1/74409 [00:06<127:13:23,  6.16s/it]  0%|          | 2/74409 [00:07<69:46:48,  3.38s/it] Token indices sequence length is longer than the specified maximum sequence length for this model (2106 > 2048). Running this sequence through the model will result in indexing errors
-  0%|          | 3/74409 [00:08<51:08:09,  2.47s/it]  0%|          | 4/74409 [00:10<42:18:59,  2.05s/it]  0%|          | 5/74409 [00:11<37:31:58,  1.82s/it]  0%|          | 6/74409 [00:13<34:36:44,  1.67s/it]  0%|          | 7/74409 [00:14<32:55:09,  1.59s/it]                                                    (INFO) 2024-09-25 20:21:46,365 - MultiTask_train_logger:
-Episode: 0 Timestep: 32
-loss_0: 9.982 loss_1: 11.03 loss_2: 11.23 loss_3: 11.93
-  0%|          | 7/74409 [00:16<32:55:09,  1.59s/it]  0%|          | 8/74409 [00:16<33:47:51,  1.64s/it]  0%|          | 9/74409 [00:17<32:23:30,  1.57s/it]  0%|          | 10/74409 [00:19<31:20:36,  1.52s/it]  0%|          | 11/74409 [00:20<30:39:13,  1.48s/it]  0%|          | 12/74409 [00:21<30:13:21,  1.46s/it]  0%|          | 13/74409 [00:23<29:47:39,  1.44s/it]  0%|          | 14/74409 [00:24<29:33:54,  1.43s/it]Token indices sequence length is longer than the specified maximum sequence length for this model (2712 > 2048). Running this sequence through the model will result in indexing errors
-  0%|          | 15/74409 [00:26<29:29:32,  1.43s/it]                                                     (INFO) 2024-09-25 20:21:57,970 - MultiTask_train_logger:
-Episode: 0 Timestep: 64
-loss_0: 10.64 loss_1: 11.23 loss_2: 10.99 loss_3: 11.72
-  0%|          | 15/74409 [00:27<29:29:32,  1.43s/it]  0%|          | 16/74409 [00:27<31:26:10,  1.52s/it]  0%|          | 17/74409 [00:29<30:47:46,  1.49s/it]  0%|          | 18/74409 [00:30<30:14:54,  1.46s/it]  0%|          | 19/74409 [00:32<29:51:48,  1.45s/it]  0%|          | 20/74409 [00:33<29:37:12,  1.43s/it]  0%|          | 21/74409 [00:34<29:32:06,  1.43s/it]  0%|          | 22/74409 [00:36<29:29:04,  1.43s/it]  0%|          | 23/74409 [00:37<29:25:43,  1.42s/it]                                                     (INFO) 2024-09-25 20:22:09,589 - MultiTask_train_logger:
-Episode: 0 Timestep: 96
-loss_0: 10.52 loss_1: 11.34 loss_2: 11.14 loss_3: 11.74
-  0%|          | 23/74409 [00:39<29:25:43,  1.42s/it]  0%|          | 24/74409 [00:39<31:20:01,  1.52s/it]  0%|          | 25/74409 [00:40<30:39:51,  1.48s/it]Token indices sequence length is longer than the specified maximum sequence length for this model (2323 > 2048). Running this sequence through the model will result in indexing errors
-  0%|          | 26/74409 [00:42<30:11:14,  1.46s/it]  0%|          | 27/74409 [00:43<29:50:01,  1.44s/it]  0%|          | 28/74409 [00:45<29:34:54,  1.43s/it]  0%|          | 29/74409 [00:46<29:30:25,  1.43s/it]  0%|          | 30/74409 [00:48<29:21:02,  1.42s/it]  0%|          | 31/74409 [00:49<29:17:05,  1.42s/it]                                                     (INFO) 2024-09-25 20:22:21,157 - MultiTask_train_logger:
-Episode: 0 Timestep: 128
-loss_0: 10.22 loss_1: 11.43 loss_2: 11.05 loss_3: 11.9
-  0%|          | 31/74409 [00:50<29:17:05,  1.42s/it]  0%|          | 32/74409 [00:51<31:05:57,  1.51s/it]  0%|          | 33/74409 [00:52<30:32:49,  1.48s/it]  0%|          | 34/74409 [00:53<30:09:11,  1.46s/it]  0%|          | 35/74409 [00:55<29:51:27,  1.45s/it]  0%|          | 36/74409 [00:56<29:35:05,  1.43s/it]  0%|          | 37/74409 [00:58<29:53:53,  1.45s/it]  0%|          | 38/74409 [00:59<29:41:41,  1.44s/it]  0%|          | 39/74409 [01:01<29:28:51,  1.43s/it]                                                     (INFO) 2024-09-25 20:22:32,814 - MultiTask_train_logger:
-Episode: 0 Timestep: 160
-loss_0: 10.62 loss_1: 11.36 loss_2: 10.86 loss_3: 12.19
-  0%|          | 39/74409 [01:02<29:28:51,  1.43s/it]  0%|          | 40/74409 [01:02<31:15:12,  1.51s/it]  0%|          | 41/74409 [01:04<30:35:35,  1.48s/it]  0%|          | 42/74409 [01:05<30:09:21,  1.46s/it]  0%|          | 43/74409 [01:07<29:50:07,  1.44s/it]  0%|          | 44/74409 [01:08<29:37:31,  1.43s/it]  0%|          | 45/74409 [01:09<29:27:41,  1.43s/it]  0%|          | 46/74409 [01:11<29:21:56,  1.42s/it]  0%|          | 47/74409 [01:12<29:15:37,  1.42s/it]                                                     (INFO) 2024-09-25 20:22:44,397 - MultiTask_train_logger:
-Episode: 0 Timestep: 192
-loss_0: 9.948 loss_1: 11.36 loss_2: 10.69 loss_3: 12.12
-  0%|          | 47/74409 [01:14<29:15:37,  1.42s/it]  0%|          | 48/74409 [01:14<31:12:21,  1.51s/it]  0%|          | 49/74409 [01:15<30:37:58,  1.48s/it]  0%|          | 50/74409 [01:17<30:20:57,  1.47s/it]  0%|          | 51/74409 [01:18<30:05:38,  1.46s/it]  0%|          | 52/74409 [01:20<29:49:58,  1.44s/it]  0%|          | 53/74409 [01:21<29:43:03,  1.44s/it]  0%|          | 54/74409 [01:22<29:45:58,  1.44s/it]  0%|          | 55/74409 [01:24<29:38:20,  1.44s/it]                                                     (INFO) 2024-09-25 20:22:56,138 - MultiTask_train_logger:
-Episode: 0 Timestep: 224
-loss_0: 10.12 loss_1: 11.32 loss_2: 10.78 loss_3: 12.02
-  0%|          | 55/74409 [01:25<29:38:20,  1.44s/it]  0%|          | 56/74409 [01:26<31:31:33,  1.53s/it]  0%|          | 57/74409 [01:27<30:57:46,  1.50s/it]  0%|          | 58/74409 [01:28<30:30:36,  1.48s/it]  0%|          | 59/74409 [01:30<30:05:57,  1.46s/it]  0%|          | 60/74409 [01:31<29:51:28,  1.45s/it]  0%|          | 61/74409 [01:33<29:41:52,  1.44s/it]  0%|          | 62/74409 [01:34<29:33:08,  1.43s/it]  0%|          | 63/74409 [01:36<29:37:58,  1.43s/it]                                                     (INFO) 2024-09-25 20:23:07,846 - MultiTask_train_logger:
-Episode: 0 Timestep: 256
-loss_0: 10.5 loss_1: 11.61 loss_2: 10.8 loss_3: 11.61
-  0%|          | 63/74409 [01:37<29:37:58,  1.43s/it]  0%|          | 64/74409 [01:37<31:30:41,  1.53s/it]  0%|          | 65/74409 [01:39<31:01:57,  1.50s/it]  0%|          | 66/74409 [01:40<30:42:57,  1.49s/it]  0%|          | 67/74409 [01:42<30:20:55,  1.47s/it]  0%|          | 68/74409 [01:43<30:05:45,  1.46s/it]  0%|          | 69/74409 [01:44<29:46:48,  1.44s/it]  0%|          | 70/74409 [01:46<29:34:44,  1.43s/it]  0%|          | 71/74409 [01:47<29:32:20,  1.43s/it]                                                     (INFO) 2024-09-25 20:23:19,570 - MultiTask_train_logger:
-Episode: 0 Timestep: 288
-loss_0: 10.37 loss_1: 10.99 loss_2: 10.73 loss_3: 12.04
-  0%|          | 71/74409 [01:49<29:32:20,  1.43s/it]  0%|          | 72/74409 [01:49<31:21:59,  1.52s/it]  0%|          | 73/74409 [01:50<30:55:41,  1.50s/it]  0%|          | 74/74409 [01:52<30:26:22,  1.47s/it]  0%|          | 75/74409 [01:53<30:00:39,  1.45s/it]  0%|          | 76/74409 [01:55<29:46:05,  1.44s/it]  0%|          | 77/74409 [01:56<29:34:44,  1.43s/it]  0%|          | 78/74409 [01:58<29:25:09,  1.42s/it]  0%|          | 79/74409 [01:59<29:28:34,  1.43s/it]                                                     (INFO) 2024-09-25 20:23:31,246 - MultiTask_train_logger:
-Episode: 0 Timestep: 320
-loss_0: 10.06 loss_1: 11.19 loss_2: 10.74 loss_3: 11.75
-  0%|          | 79/74409 [02:00<29:28:34,  1.43s/it]  0%|          | 80/74409 [02:01<31:22:55,  1.52s/it]  0%|          | 81/74409 [02:02<30:53:51,  1.50s/it]  0%|          | 82/74409 [02:04<30:26:29,  1.47s/it]  0%|          | 83/74409 [02:05<30:13:24,  1.46s/it]  0%|          | 84/74409 [02:06<29:56:17,  1.45s/it]  0%|          | 85/74409 [02:08<29:52:32,  1.45s/it]  0%|          | 86/74409 [02:09<29:52:42,  1.45s/it]  0%|          | 87/74409 [02:11<29:52:44,  1.45s/it]                                                     (INFO) 2024-09-25 20:23:43,055 - MultiTask_train_logger:
-Episode: 0 Timestep: 352
-loss_0: 10.33 loss_1: 11.06 loss_2: 10.88 loss_3: 12.07
-  0%|          | 87/74409 [02:12<29:52:44,  1.45s/it]  0%|          | 88/74409 [02:13<31:46:10,  1.54s/it]  0%|          | 89/74409 [02:14<31:10:32,  1.51s/it]  0%|          | 90/74409 [02:15<30:49:22,  1.49s/it]  0%|          | 91/74409 [02:17<30:23:58,  1.47s/it]  0%|          | 92/74409 [02:18<30:03:39,  1.46s/it]  0%|          | 93/74409 [02:20<29:51:36,  1.45s/it]  0%|          | 94/74409 [02:21<29:39:37,  1.44s/it]  0%|          | 95/74409 [02:23<29:30:12,  1.43s/it]                                                     (INFO) 2024-09-25 20:23:54,785 - MultiTask_train_logger:
-Episode: 0 Timestep: 384
-loss_0: 10.54 loss_1: 11.06 loss_2: 10.84 loss_3: 12.01
-  0%|          | 95/74409 [02:24<29:30:12,  1.43s/it]  0%|          | 96/74409 [02:24<31:27:41,  1.52s/it]  0%|          | 97/74409 [02:26<30:53:41,  1.50s/it]  0%|          | 98/74409 [02:27<30:32:04,  1.48s/it]  0%|          | 99/74409 [02:29<30:17:26,  1.47s/it]  0%|          | 100/74409 [02:30<30:09:07,  1.46s/it]  0%|          | 101/74409 [02:31<30:06:21,  1.46s/it]  0%|          | 102/74409 [02:33<30:07:21,  1.46s/it]  0%|          | 103/74409 [02:34<30:01:18,  1.45s/it]                                                      (INFO) 2024-09-25 20:24:06,662 - MultiTask_train_logger:
-Episode: 0 Timestep: 416
-loss_0: 10.6 loss_1: 10.57 loss_2: 11.1 loss_3: 12.52
-  0%|          | 103/74409 [02:36<30:01:18,  1.45s/it]  0%|          | 104/74409 [02:36<31:54:34,  1.55s/it]  0%|          | 105/74409 [02:38<31:15:44,  1.51s/it]  0%|          | 106/74409 [02:39<30:50:30,  1.49s/it]  0%|          | 107/74409 [02:40<30:32:28,  1.48s/it]  0%|          | 108/74409 [02:42<30:17:19,  1.47s/it]  0%|          | 109/74409 [02:43<30:07:40,  1.46s/it]  0%|          | 110/74409 [02:45<30:05:50,  1.46s/it]  0%|          | 111/74409 [02:46<29:58:58,  1.45s/it]                                                      (INFO) 2024-09-25 20:24:18,537 - MultiTask_train_logger:
-Episode: 0 Timestep: 448
-loss_0: 10.4 loss_1: 11.71 loss_2: 11.07 loss_3: 11.43
-  0%|          | 111/74409 [02:48<29:58:58,  1.45s/it]  0%|          | 112/74409 [02:48<31:57:54,  1.55s/it]  0%|          | 113/74409 [02:49<31:20:08,  1.52s/it]  0%|          | 114/74409 [02:51<30:50:45,  1.49s/it]  0%|          | 115/74409 [02:52<30:33:57,  1.48s/it]  0%|          | 116/74409 [02:54<30:19:18,  1.47s/it]  0%|          | 117/74409 [02:55<30:04:14,  1.46s/it]  0%|          | 118/74409 [02:57<29:54:05,  1.45s/it]  0%|          | 119/74409 [02:58<29:44:40,  1.44s/it]                                                      (INFO) 2024-09-25 20:24:30,345 - MultiTask_train_logger:
-Episode: 0 Timestep: 480
-loss_0: 10.29 loss_1: 11.42 loss_2: 10.84 loss_3: 11.88
-  0%|          | 119/74409 [03:00<29:44:40,  1.44s/it]  0%|          | 120/74409 [03:00<31:38:43,  1.53s/it]  0%|          | 121/74409 [03:01<30:59:44,  1.50s/it]  0%|          | 122/74409 [03:03<31:17:35,  1.52s/it]  0%|          | 123/74409 [03:04<30:55:36,  1.50s/it]  0%|          | 124/74409 [03:06<30:39:50,  1.49s/it]  0%|          | 125/74409 [03:07<30:16:48,  1.47s/it]  0%|          | 126/74409 [03:09<31:08:15,  1.51s/it]  0%|          | 127/74409 [03:10<30:38:17,  1.48s/it]                                                      (INFO) 2024-09-25 20:24:42,448 - MultiTask_train_logger:
-Episode: 0 Timestep: 512
-loss_0: 10.39 loss_1: 11.72 loss_2: 10.94 loss_3: 11.71
-  0%|          | 127/74409 [03:12<30:38:17,  1.48s/it]  0%|          | 128/74409 [03:12<32:16:10,  1.56s/it]  0%|          | 129/74409 [03:13<31:35:47,  1.53s/it]  0%|          | 130/74409 [03:15<31:05:05,  1.51s/it]  0%|          | 131/74409 [03:16<30:39:42,  1.49s/it]  0%|          | 132/74409 [03:18<30:17:05,  1.47s/it]  0%|          | 133/74409 [03:19<30:12:17,  1.46s/it]  0%|          | 134/74409 [03:21<29:53:26,  1.45s/it]  0%|          | 135/74409 [03:22<29:47:02,  1.44s/it]                                                      (INFO) 2024-09-25 20:24:54,280 - MultiTask_train_logger:
-Episode: 0 Timestep: 544
-loss_0: 10.41 loss_1: 11.11 loss_2: 10.92 loss_3: 11.89
-  0%|          | 135/74409 [03:23<29:47:02,  1.44s/it]  0%|          | 136/74409 [03:24<31:47:00,  1.54s/it]  0%|          | 137/74409 [03:25<31:04:50,  1.51s/it]  0%|          | 138/74409 [03:27<30:41:29,  1.49s/it]  0%|          | 139/74409 [03:28<30:17:42,  1.47s/it]  0%|          | 140/74409 [03:29<29:59:44,  1.45s/it]  0%|          | 141/74409 [03:31<29:50:13,  1.45s/it]  0%|          | 142/74409 [03:32<29:47:24,  1.44s/it]  0%|          | 143/74409 [03:34<29:39:03,  1.44s/it]                                                      (INFO) 2024-09-25 20:25:06,048 - MultiTask_train_logger:
-Episode: 0 Timestep: 576
-loss_0: 10.34 loss_1: 10.98 loss_2: 10.77 loss_3: 11.81
-  0%|          | 143/74409 [03:35<29:39:03,  1.44s/it]  0%|          | 144/74409 [03:36<31:39:41,  1.53s/it]  0%|          | 145/74409 [03:37<31:09:47,  1.51s/it]  0%|          | 146/74409 [03:38<30:40:42,  1.49s/it]  0%|          | 147/74409 [03:40<30:25:37,  1.48s/it]  0%|          | 148/74409 [03:41<30:10:38,  1.46s/it]  0%|          | 149/74409 [03:43<30:06:30,  1.46s/it]  0%|          | 150/74409 [03:44<29:59:55,  1.45s/it]  0%|          | 151/74409 [03:46<29:47:25,  1.44s/it]                                                      (INFO) 2024-09-25 20:25:17,869 - MultiTask_train_logger:
-Episode: 0 Timestep: 608
-loss_0: 10.18 loss_1: 11.03 loss_2: 10.86 loss_3: 11.76
-  0%|          | 151/74409 [03:47<29:47:25,  1.44s/it]  0%|          | 152/74409 [03:47<31:36:14,  1.53s/it]  0%|          | 153/74409 [03:49<31:05:32,  1.51s/it]  0%|          | 154/74409 [03:50<30:42:03,  1.49s/it]  0%|          | 155/74409 [03:52<30:21:03,  1.47s/it]  0%|          | 156/74409 [03:53<30:09:52,  1.46s/it]  0%|          | 157/74409 [03:55<29:56:16,  1.45s/it]  0%|          | 158/74409 [03:56<29:54:07,  1.45s/it]  0%|          | 159/74409 [03:57<29:51:41,  1.45s/it]                                                      (INFO) 2024-09-25 20:25:29,696 - MultiTask_train_logger:
-Episode: 0 Timestep: 640
-loss_0: 10.36 loss_1: 10.81 loss_2: 10.8 loss_3: 11.85
-  0%|          | 159/74409 [03:59<29:51:41,  1.45s/it]  0%|          | 160/74409 [03:59<31:43:31,  1.54s/it]  0%|          | 161/74409 [04:01<31:08:15,  1.51s/it]  0%|          | 162/74409 [04:02<30:42:04,  1.49s/it]  0%|          | 163/74409 [04:03<30:17:39,  1.47s/it]  0%|          | 164/74409 [04:05<29:58:34,  1.45s/it]  0%|          | 165/74409 [04:06<29:43:34,  1.44s/it]  0%|          | 166/74409 [04:08<29:38:01,  1.44s/it]  0%|          | 167/74409 [04:09<29:34:21,  1.43s/it]                                                      (INFO) 2024-09-25 20:25:41,475 - MultiTask_train_logger:
-Episode: 0 Timestep: 672
-loss_0: 9.976 loss_1: 10.81 loss_2: 10.79 loss_3: 12.01
-  0%|          | 167/74409 [04:11<29:34:21,  1.43s/it]  0%|          | 168/74409 [04:11<31:46:38,  1.54s/it]  0%|          | 169/74409 [04:12<31:08:51,  1.51s/it]  0%|          | 170/74409 [04:14<30:40:15,  1.49s/it]  0%|          | 171/74409 [04:15<30:24:48,  1.47s/it]  0%|          | 172/74409 [04:17<30:09:21,  1.46s/it]  0%|          | 173/74409 [04:18<30:05:29,  1.46s/it]  0%|          | 174/74409 [04:20<29:50:23,  1.45s/it]  0%|          | 175/74409 [04:21<29:42:50,  1.44s/it]                                                      (INFO) 2024-09-25 20:25:53,273 - MultiTask_train_logger:
-Episode: 0 Timestep: 704
-loss_0: 10.17 loss_1: 11.24 loss_2: 10.83 loss_3: 12.12
-  0%|          | 175/74409 [04:22<29:42:50,  1.44s/it]  0%|          | 176/74409 [04:23<31:36:14,  1.53s/it]  0%|          | 177/74409 [04:24<30:58:26,  1.50s/it]  0%|          | 178/74409 [04:26<30:29:37,  1.48s/it]  0%|          | 179/74409 [04:27<30:12:22,  1.46s/it]  0%|          | 180/74409 [04:28<29:52:03,  1.45s/it]  0%|          | 181/74409 [04:30<29:50:35,  1.45s/it]  0%|          | 182/74409 [04:31<29:44:17,  1.44s/it]  0%|          | 183/74409 [04:33<29:36:14,  1.44s/it]                                                      (INFO) 2024-09-25 20:26:05,010 - MultiTask_train_logger:
-Episode: 0 Timestep: 736
-loss_0: 10.51 loss_1: 10.9 loss_2: 10.89 loss_3: 12.01
-  0%|          | 183/74409 [04:34<29:36:14,  1.44s/it]  0%|          | 184/74409 [04:34<31:28:55,  1.53s/it]  0%|          | 185/74409 [04:36<31:06:10,  1.51s/it]  0%|          | 186/74409 [04:37<30:47:56,  1.49s/it]  0%|          | 187/74409 [04:39<30:39:05,  1.49s/it]  0%|          | 188/74409 [04:40<30:22:25,  1.47s/it]  0%|          | 189/74409 [04:42<30:04:39,  1.46s/it]  0%|          | 190/74409 [04:43<29:57:30,  1.45s/it]  0%|          | 191/74409 [04:45<29:55:06,  1.45s/it]                                                      (INFO) 2024-09-25 20:26:16,906 - MultiTask_train_logger:
-Episode: 0 Timestep: 768
-loss_0: 10.59 loss_1: 11.84 loss_2: 10.79 loss_3: 11.95
-  0%|          | 191/74409 [04:46<29:55:06,  1.45s/it]  0%|          | 192/74409 [04:46<31:45:52,  1.54s/it]  0%|          | 193/74409 [04:48<31:02:46,  1.51s/it]  0%|          | 194/74409 [04:49<30:35:15,  1.48s/it]  0%|          | 195/74409 [04:51<30:16:53,  1.47s/it]  0%|          | 196/74409 [04:52<30:02:54,  1.46s/it]  0%|          | 197/74409 [04:54<30:13:24,  1.47s/it]  0%|          | 198/74409 [04:55<30:00:02,  1.46s/it]  0%|          | 199/74409 [04:56<29:53:29,  1.45s/it]                                                      (INFO) 2024-09-25 20:26:28,728 - MultiTask_train_logger:
-Episode: 0 Timestep: 800
-loss_0: 10.41 loss_1: 10.95 loss_2: 10.99 loss_3: 11.9
-  0%|          | 199/74409 [04:58<29:53:29,  1.45s/it]  0%|          | 200/74409 [04:58<31:42:27,  1.54s/it]  0%|          | 201/74409 [05:00<31:04:53,  1.51s/it]  0%|          | 202/74409 [05:01<30:36:54,  1.49s/it]  0%|          | 203/74409 [05:03<30:19:10,  1.47s/it]  0%|          | 204/74409 [05:04<30:06:12,  1.46s/it]  0%|          | 205/74409 [05:05<30:00:53,  1.46s/it]  0%|          | 206/74409 [05:07<30:03:33,  1.46s/it]  0%|          | 207/74409 [05:08<30:00:45,  1.46s/it]                                                      (INFO) 2024-09-25 20:26:40,584 - MultiTask_train_logger:
-Episode: 0 Timestep: 832
-loss_0: 10.22 loss_1: 10.87 loss_2: 11.03 loss_3: 12
-  0%|          | 207/74409 [05:10<30:00:45,  1.46s/it]  0%|          | 208/74409 [05:10<31:49:35,  1.54s/it]  0%|          | 209/74409 [05:11<31:07:50,  1.51s/it]  0%|          | 210/74409 [05:13<30:44:32,  1.49s/it]  0%|          | 211/74409 [05:14<30:26:29,  1.48s/it]  0%|          | 212/74409 [05:16<30:13:31,  1.47s/it]  0%|          | 213/74409 [05:17<30:01:20,  1.46s/it]  0%|          | 214/74409 [05:19<30:05:44,  1.46s/it]  0%|          | 215/74409 [05:20<30:01:52,  1.46s/it]                                                      (INFO) 2024-09-25 20:26:52,457 - MultiTask_train_logger:
-Episode: 0 Timestep: 864
-loss_0: 10.17 loss_1: 11.15 loss_2: 10.6 loss_3: 11.87
-  0%|          | 215/74409 [05:22<30:01:52,  1.46s/it]  0%|          | 216/74409 [05:22<31:53:18,  1.55s/it]  0%|          | 217/74409 [05:23<31:14:38,  1.52s/it]  0%|          | 218/74409 [05:25<30:50:06,  1.50s/it]  0%|          | 219/74409 [05:26<30:32:22,  1.48s/it]  0%|          | 220/74409 [05:29<36:55:11,  1.79s/it]  0%|          | 221/74409 [05:30<34:33:37,  1.68s/it]  0%|          | 222/74409 [05:32<32:54:39,  1.60s/it]  0%|          | 223/74409 [05:33<31:48:26,  1.54s/it]                                                      (INFO) 2024-09-25 20:27:05,287 - MultiTask_train_logger:
-Episode: 0 Timestep: 896
-loss_0: 10.54 loss_1: 10.8 loss_2: 10.84 loss_3: 11.79
-  0%|          | 223/74409 [05:34<31:48:26,  1.54s/it]  0%|          | 224/74409 [05:35<33:00:02,  1.60s/it]  0%|          | 225/74409 [05:36<31:54:21,  1.55s/it]  0%|          | 226/74409 [05:38<31:15:04,  1.52s/it]  0%|          | 227/74409 [05:39<31:13:27,  1.52s/it]  0%|          | 228/74409 [05:41<30:43:07,  1.49s/it]  0%|          | 229/74409 [05:42<30:22:08,  1.47s/it]  0%|          | 230/74409 [05:44<31:18:16,  1.52s/it]  0%|          | 231/74409 [05:45<30:49:10,  1.50s/it]                                                      (INFO) 2024-09-25 20:27:17,344 - MultiTask_train_logger:
-Episode: 0 Timestep: 928
-loss_0: 10.37 loss_1: 11.27 loss_2: 10.67 loss_3: 11.75
-  0%|          | 231/74409 [05:47<30:49:10,  1.50s/it]  0%|          | 232/74409 [05:47<32:22:00,  1.57s/it]  0%|          | 233/74409 [05:48<31:28:08,  1.53s/it]  0%|          | 234/74409 [05:50<30:51:03,  1.50s/it]  0%|          | 235/74409 [05:51<30:20:10,  1.47s/it]  0%|          | 236/74409 [05:53<30:00:33,  1.46s/it]  0%|          | 237/74409 [05:54<29:41:50,  1.44s/it]  0%|          | 238/74409 [05:55<29:28:19,  1.43s/it]  0%|          | 239/74409 [05:57<29:27:53,  1.43s/it]                                                      (INFO) 2024-09-25 20:27:29,014 - MultiTask_train_logger:
-Episode: 0 Timestep: 960
-loss_0: 10.34 loss_1: 10.84 loss_2: 10.78 loss_3: 11.47
-  0%|          | 239/74409 [05:58<29:27:53,  1.43s/it]  0%|          | 240/74409 [05:58<31:22:14,  1.52s/it]  0%|          | 241/74409 [06:00<30:51:02,  1.50s/it]  0%|          | 242/74409 [06:01<30:33:08,  1.48s/it]  0%|          | 243/74409 [06:04<40:01:35,  1.94s/it]  0%|          | 244/74409 [06:06<36:54:23,  1.79s/it]  0%|          | 245/74409 [06:07<34:41:24,  1.68s/it]  0%|          | 246/74409 [06:09<33:17:07,  1.62s/it]  0%|          | 247/74409 [06:10<32:16:03,  1.57s/it]                                                      (INFO) 2024-09-25 20:27:42,450 - MultiTask_train_logger:
-Episode: 0 Timestep: 992
-loss_0: 10.43 loss_1: 11.02 loss_2: 10.73 loss_3: 11.7
-  0%|          | 247/74409 [06:12<32:16:03,  1.57s/it]  0%|          | 248/74409 [06:12<33:25:13,  1.62s/it]  0%|          | 249/74409 [06:13<32:16:49,  1.57s/it]  0%|          | 250/74409 [06:15<31:31:41,  1.53s/it]  0%|          | 251/74409 [06:16<30:57:40,  1.50s/it]  0%|          | 252/74409 [06:18<30:35:34,  1.49s/it]  0%|          | 253/74409 [06:19<30:13:32,  1.47s/it]  0%|          | 254/74409 [06:21<30:02:02,  1.46s/it]  0%|          | 255/74409 [06:22<29:52:20,  1.45s/it]                                                      (INFO) 2024-09-25 20:27:54,251 - MultiTask_train_logger:
-Episode: 0 Timestep: 1024
-loss_0: 10.03 loss_1: 11.29 loss_2: 10.91 loss_3: 11.96
-  0%|          | 255/74409 [06:23<29:52:20,  1.45s/it]  0%|          | 256/74409 [06:24<31:39:54,  1.54s/it]  0%|          | 257/74409 [06:25<31:05:06,  1.51s/it]  0%|          | 258/74409 [06:27<30:30:49,  1.48s/it]  0%|          | 259/74409 [06:28<30:05:17,  1.46s/it]  0%|          | 260/74409 [06:29<29:49:11,  1.45s/it]  0%|          | 261/74409 [06:31<29:35:03,  1.44s/it]  0%|          | 262/74409 [06:32<29:26:58,  1.43s/it]  0%|          | 263/74409 [06:34<29:18:00,  1.42s/it]                                                      (INFO) 2024-09-25 20:28:05,906 - MultiTask_train_logger:
-Episode: 0 Timestep: 1056
-loss_0: 10.49 loss_1: 11.26 loss_2: 10.88 loss_3: 11.6
-  0%|          | 263/74409 [06:35<29:18:00,  1.42s/it]  0%|          | 264/74409 [06:35<31:13:34,  1.52s/it]  0%|          | 265/74409 [06:37<30:47:01,  1.49s/it]  0%|          | 266/74409 [06:38<30:25:50,  1.48s/it]  0%|          | 267/74409 [06:40<30:11:34,  1.47s/it]  0%|          | 268/74409 [06:41<29:59:04,  1.46s/it]  0%|          | 269/74409 [06:43<29:49:29,  1.45s/it]  0%|          | 270/74409 [06:44<29:46:54,  1.45s/it]  0%|          | 271/74409 [06:45<29:42:30,  1.44s/it]                                                      (INFO) 2024-09-25 20:28:17,724 - MultiTask_train_logger:
-Episode: 0 Timestep: 1088
-loss_0: 9.691 loss_1: 11.1 loss_2: 10.68 loss_3: 11.35
-  0%|          | 271/74409 [06:47<29:42:30,  1.44s/it]  0%|          | 272/74409 [06:47<31:40:17,  1.54s/it]  0%|          | 273/74409 [06:49<31:01:53,  1.51s/it]  0%|          | 274/74409 [06:50<30:35:56,  1.49s/it]  0%|          | 275/74409 [06:51<30:11:29,  1.47s/it]  0%|          | 276/74409 [06:53<29:51:00,  1.45s/it]  0%|          | 277/74409 [06:54<29:45:10,  1.44s/it]  0%|          | 278/74409 [06:56<29:35:38,  1.44s/it]  0%|          | 279/74409 [06:57<29:26:51,  1.43s/it]                                                      (INFO) 2024-09-25 20:28:29,425 - MultiTask_train_logger:
-Episode: 0 Timestep: 1120
-loss_0: 10.4 loss_1: 11.04 loss_2: 10.72 loss_3: 11.81
-  0%|          | 279/74409 [06:59<29:26:51,  1.43s/it]  0%|          | 280/74409 [06:59<31:17:59,  1.52s/it]  0%|          | 281/74409 [07:00<30:48:14,  1.50s/it]  0%|          | 282/74409 [07:02<30:23:56,  1.48s/it]  0%|          | 283/74409 [07:03<30:06:59,  1.46s/it]  0%|          | 284/74409 [07:05<29:55:19,  1.45s/it]  0%|          | 285/74409 [07:06<29:50:18,  1.45s/it]  0%|          | 286/74409 [07:07<29:44:17,  1.44s/it]  0%|          | 287/74409 [07:09<29:39:07,  1.44s/it]                                                      (INFO) 2024-09-25 20:28:41,212 - MultiTask_train_logger:
-Episode: 0 Timestep: 1152
-loss_0: 10.38 loss_1: 10.72 loss_2: 10.78 loss_3: 11.69
-  0%|          | 287/74409 [07:10<29:39:07,  1.44s/it]  0%|          | 288/74409 [07:11<31:34:40,  1.53s/it]  0%|          | 289/74409 [07:12<31:00:10,  1.51s/it]  0%|          | 290/74409 [07:14<30:32:33,  1.48s/it]  0%|          | 291/74409 [07:15<30:19:47,  1.47s/it]  0%|          | 292/74409 [07:16<30:02:35,  1.46s/it]  0%|          | 293/74409 [07:18<29:57:59,  1.46s/it]  0%|          | 294/74409 [07:19<29:47:48,  1.45s/it]  0%|          | 295/74409 [07:21<30:10:13,  1.47s/it]                                                      (INFO) 2024-09-25 20:28:53,085 - MultiTask_train_logger:
-Episode: 0 Timestep: 1184
-loss_0: 9.946 loss_1: 10.44 loss_2: 10.47 loss_3: 11.49
-  0%|          | 295/74409 [07:22<30:10:13,  1.47s/it]  0%|          | 296/74409 [07:23<31:53:46,  1.55s/it]  0%|          | 297/74409 [07:24<31:06:48,  1.51s/it]  0%|          | 298/74409 [07:25<30:39:32,  1.49s/it]  0%|          | 299/74409 [07:27<30:22:38,  1.48s/it]  0%|          | 300/74409 [07:28<30:08:25,  1.46s/it]  0%|          | 301/74409 [07:30<29:56:53,  1.45s/it]  0%|          | 302/74409 [07:31<29:50:07,  1.45s/it]  0%|          | 303/74409 [07:33<29:47:27,  1.45s/it]                                                      (INFO) 2024-09-25 20:29:04,894 - MultiTask_train_logger:
-Episode: 0 Timestep: 1216
-loss_0: 10.7 loss_1: 10.63 loss_2: 10.57 loss_3: 11.4
-  0%|          | 303/74409 [07:34<29:47:27,  1.45s/it]  0%|          | 304/74409 [07:34<31:41:54,  1.54s/it]  0%|          | 305/74409 [07:36<31:04:06,  1.51s/it]  0%|          | 306/74409 [07:37<30:27:17,  1.48s/it]  0%|          | 307/74409 [07:39<30:09:01,  1.46s/it]  0%|          | 308/74409 [07:40<30:13:04,  1.47s/it]  0%|          | 309/74409 [07:42<30:00:51,  1.46s/it]  0%|          | 310/74409 [07:43<29:53:43,  1.45s/it]  0%|          | 311/74409 [07:44<29:50:37,  1.45s/it]                                                      (INFO) 2024-09-25 20:29:16,729 - MultiTask_train_logger:
-Episode: 0 Timestep: 1248
-loss_0: 10.38 loss_1: 10.69 loss_2: 10.58 loss_3: 11.49
-  0%|          | 311/74409 [07:46<29:50:37,  1.45s/it]  0%|          | 312/74409 [07:46<31:44:41,  1.54s/it]  0%|          | 313/74409 [07:48<30:59:18,  1.51s/it]  0%|          | 314/74409 [07:49<30:28:28,  1.48s/it]  0%|          | 315/74409 [07:50<30:10:05,  1.47s/it]  0%|          | 316/74409 [07:52<29:51:41,  1.45s/it]  0%|          | 317/74409 [07:53<29:43:21,  1.44s/it]  0%|          | 318/74409 [07:55<29:35:39,  1.44s/it]  0%|          | 319/74409 [07:56<29:35:01,  1.44s/it]                                                      (INFO) 2024-09-25 20:29:28,504 - MultiTask_train_logger:
-Episode: 0 Timestep: 1280
-loss_0: 9.711 loss_1: 11.29 loss_2: 10.6 loss_3: 11.46
-  0%|          | 319/74409 [07:58<29:35:01,  1.44s/it]  0%|          | 320/74409 [07:58<31:48:38,  1.55s/it]  0%|          | 321/74409 [07:59<31:02:37,  1.51s/it]  0%|          | 322/74409 [08:01<30:37:08,  1.49s/it]  0%|          | 323/74409 [08:02<30:18:30,  1.47s/it]  0%|          | 324/74409 [08:04<29:58:24,  1.46s/it]  0%|          | 325/74409 [08:05<29:48:22,  1.45s/it]  0%|          | 326/74409 [08:07<29:49:03,  1.45s/it]  0%|          | 327/74409 [08:08<29:44:26,  1.45s/it]                                                      (INFO) 2024-09-25 20:29:40,321 - MultiTask_train_logger:
-Episode: 0 Timestep: 1312
-loss_0: 9.924 loss_1: 10.99 loss_2: 10.6 loss_3: 11.62
-  0%|          | 327/74409 [08:09<29:44:26,  1.45s/it]  0%|          | 328/74409 [08:10<31:49:37,  1.55s/it]  0%|          | 329/74409 [08:11<31:09:29,  1.51s/it]  0%|          | 330/74409 [08:13<30:46:38,  1.50s/it]  0%|          | 331/74409 [08:14<30:17:53,  1.47s/it]  0%|          | 332/74409 [08:16<29:59:58,  1.46s/it]  0%|          | 333/74409 [08:17<29:48:19,  1.45s/it]  0%|          | 334/74409 [08:18<29:39:29,  1.44s/it]  0%|          | 335/74409 [08:20<29:26:31,  1.43s/it]                                                      (INFO) 2024-09-25 20:29:52,044 - MultiTask_train_logger:
-Episode: 0 Timestep: 1344
-loss_0: 10.01 loss_1: 11.26 loss_2: 10.51 loss_3: 11.13
-  0%|          | 335/74409 [08:21<29:26:31,  1.43s/it]  0%|          | 336/74409 [08:22<31:18:41,  1.52s/it]  0%|          | 337/74409 [08:23<30:52:01,  1.50s/it]  0%|          | 338/74409 [08:24<30:30:12,  1.48s/it]  0%|          | 339/74409 [08:26<30:07:51,  1.46s/it]  0%|          | 340/74409 [08:27<29:49:50,  1.45s/it]  0%|          | 341/74409 [08:29<29:43:42,  1.44s/it]  0%|          | 342/74409 [08:30<29:43:05,  1.44s/it]  0%|          | 343/74409 [08:32<29:34:40,  1.44s/it]                                                      (INFO) 2024-09-25 20:30:03,821 - MultiTask_train_logger:
-Episode: 0 Timestep: 1376
-loss_0: 9.656 loss_1: 11.13 loss_2: 10.37 loss_3: 11.03
-  0%|          | 343/74409 [08:33<29:34:40,  1.44s/it]  0%|          | 344/74409 [08:33<31:30:54,  1.53s/it]  0%|          | 345/74409 [08:35<30:51:19,  1.50s/it]  0%|          | 346/74409 [08:36<30:24:21,  1.48s/it]  0%|          | 347/74409 [08:38<30:08:14,  1.46s/it]  0%|          | 348/74409 [08:39<29:57:41,  1.46s/it]  0%|          | 349/74409 [08:40<29:49:22,  1.45s/it]  0%|          | 350/74409 [08:42<29:44:23,  1.45s/it]  0%|          | 351/74409 [08:43<29:40:28,  1.44s/it]                                                      (INFO) 2024-09-25 20:30:15,610 - MultiTask_train_logger:
-Episode: 0 Timestep: 1408
-loss_0: 9.625 loss_1: 10.6 loss_2: 10.46 loss_3: 11.4
-  0%|          | 351/74409 [08:45<29:40:28,  1.44s/it]  0%|          | 352/74409 [08:45<31:36:41,  1.54s/it]  0%|          | 353/74409 [08:47<31:00:30,  1.51s/it]  0%|          | 354/74409 [08:48<30:34:33,  1.49s/it]  0%|          | 355/74409 [08:49<30:16:08,  1.47s/it]  0%|          | 356/74409 [08:51<30:03:57,  1.46s/it]  0%|          | 357/74409 [08:52<29:51:50,  1.45s/it]  0%|          | 358/74409 [08:54<30:00:03,  1.46s/it]  0%|          | 359/74409 [08:55<29:54:29,  1.45s/it]                                                      (INFO) 2024-09-25 20:30:27,451 - MultiTask_train_logger:
-Episode: 0 Timestep: 1440
-loss_0: 10 loss_1: 10.85 loss_2: 10.36 loss_3: 11.07
-  0%|          | 359/74409 [08:57<29:54:29,  1.45s/it]  0%|          | 360/74409 [08:57<31:42:36,  1.54s/it]  0%|          | 361/74409 [08:58<31:02:58,  1.51s/it]  0%|          | 362/74409 [09:00<30:34:00,  1.49s/it]  0%|          | 363/74409 [09:01<30:13:40,  1.47s/it]  0%|          | 364/74409 [09:03<29:58:40,  1.46s/it]  0%|          | 365/74409 [09:04<29:53:11,  1.45s/it]  0%|          | 366/74409 [09:06<29:45:26,  1.45s/it]  0%|          | 367/74409 [09:07<29:45:47,  1.45s/it]                                                      (INFO) 2024-09-25 20:30:39,257 - MultiTask_train_logger:
-Episode: 0 Timestep: 1472
-loss_0: 10.02 loss_1: 10.44 loss_2: 10.42 loss_3: 10.88
-  0%|          | 367/74409 [09:08<29:45:47,  1.45s/it]  0%|          | 368/74409 [09:09<31:39:52,  1.54s/it]  0%|          | 369/74409 [09:10<30:56:07,  1.50s/it]  0%|          | 370/74409 [09:12<30:36:24,  1.49s/it]  0%|          | 371/74409 [09:13<30:11:18,  1.47s/it]  0%|          | 372/74409 [09:14<29:55:04,  1.45s/it]  1%|          | 373/74409 [09:16<29:38:18,  1.44s/it]  1%|          | 374/74409 [09:17<29:34:03,  1.44s/it]  1%|          | 375/74409 [09:19<29:25:51,  1.43s/it]                                                      (INFO) 2024-09-25 20:30:50,963 - MultiTask_train_logger:
-Episode: 0 Timestep: 1504
-loss_0: 10.09 loss_1: 11.04 loss_2: 10.16 loss_3: 10.99
-  1%|          | 375/74409 [09:20<29:25:51,  1.43s/it]  1%|          | 376/74409 [09:20<31:21:23,  1.52s/it]  1%|          | 377/74409 [09:22<30:47:40,  1.50s/it]  1%|          | 378/74409 [09:23<30:32:38,  1.49s/it]  1%|          | 379/74409 [09:25<30:11:45,  1.47s/it]  1%|          | 380/74409 [09:26<30:08:58,  1.47s/it]  1%|          | 381/74409 [09:28<29:49:06,  1.45s/it]  1%|          | 382/74409 [09:29<29:44:12,  1.45s/it]  1%|          | 383/74409 [09:31<29:48:17,  1.45s/it]                                                      (INFO) 2024-09-25 20:31:02,793 - MultiTask_train_logger:
-Episode: 0 Timestep: 1536
-loss_0: 9.934 loss_1: 10.64 loss_2: 9.978 loss_3: 10.66
-  1%|          | 383/74409 [09:32<29:48:17,  1.45s/it]  1%|          | 384/74409 [09:32<31:35:23,  1.54s/it]  1%|          | 385/74409 [09:34<30:56:51,  1.51s/it]  1%|          | 386/74409 [09:35<30:35:08,  1.49s/it]  1%|          | 387/74409 [09:37<30:20:58,  1.48s/it]  1%|          | 388/74409 [09:38<30:06:07,  1.46s/it]  1%|          | 389/74409 [09:39<29:53:35,  1.45s/it]  1%|          | 390/74409 [09:41<29:45:17,  1.45s/it]  1%|          | 391/74409 [09:42<29:40:56,  1.44s/it]                                                      (INFO) 2024-09-25 20:31:14,612 - MultiTask_train_logger:
-Episode: 0 Timestep: 1568
-loss_0: 9.655 loss_1: 11.23 loss_2: 10.15 loss_3: 10.28
-  1%|          | 391/74409 [09:44<29:40:56,  1.44s/it]  1%|          | 392/74409 [09:44<31:35:56,  1.54s/it]  1%|          | 393/74409 [09:46<30:58:28,  1.51s/it]  1%|          | 394/74409 [09:47<30:49:18,  1.50s/it]  1%|          | 395/74409 [09:48<30:23:09,  1.48s/it]  1%|          | 396/74409 [09:50<30:13:00,  1.47s/it]  1%|          | 397/74409 [09:51<30:05:06,  1.46s/it]  1%|          | 398/74409 [09:53<29:57:12,  1.46s/it]  1%|          | 399/74409 [09:54<29:56:25,  1.46s/it]                                                      (INFO) 2024-09-25 20:31:26,499 - MultiTask_train_logger:
-Episode: 0 Timestep: 1600
-loss_0: 9.515 loss_1: 10.39 loss_2: 10.13 loss_3: 11.14
-  1%|          | 399/74409 [09:56<29:56:25,  1.46s/it]  1%|          | 400/74409 [09:56<31:42:18,  1.54s/it]  1%|          | 401/74409 [09:57<31:05:53,  1.51s/it]  1%|          | 402/74409 [09:59<30:35:20,  1.49s/it]  1%|          | 403/74409 [10:00<30:12:22,  1.47s/it]  1%|          | 404/74409 [10:02<29:59:41,  1.46s/it]  1%|          | 405/74409 [10:03<29:54:57,  1.46s/it]  1%|          | 406/74409 [10:05<29:48:39,  1.45s/it]  1%|          | 407/74409 [10:06<29:42:11,  1.44s/it]                                                      (INFO) 2024-09-25 20:31:38,300 - MultiTask_train_logger:
-Episode: 0 Timestep: 1632
-loss_0: 9.613 loss_1: 10.63 loss_2: 10 loss_3: 10.81
-  1%|          | 407/74409 [10:07<29:42:11,  1.44s/it]  1%|          | 408/74409 [10:08<31:35:10,  1.54s/it]  1%|          | 409/74409 [10:09<30:57:59,  1.51s/it]  1%|          | 410/74409 [10:11<30:28:21,  1.48s/it]  1%|          | 411/74409 [10:12<30:08:19,  1.47s/it]  1%|          | 412/74409 [10:13<29:55:20,  1.46s/it]  1%|          | 413/74409 [10:15<29:42:28,  1.45s/it]  1%|          | 414/74409 [10:16<29:32:55,  1.44s/it]  1%|          | 415/74409 [10:18<29:31:01,  1.44s/it]                                                      (INFO) 2024-09-25 20:31:50,049 - MultiTask_train_logger:
-Episode: 0 Timestep: 1664
-loss_0: 9.654 loss_1: 10.89 loss_2: 9.936 loss_3: 10.54
-  1%|          | 415/74409 [10:19<29:31:01,  1.44s/it]  1%|          | 416/74409 [10:20<31:29:16,  1.53s/it]  1%|          | 417/74409 [10:21<30:53:51,  1.50s/it]  1%|          | 418/74409 [10:22<30:28:28,  1.48s/it]  1%|          | 419/74409 [10:24<30:16:19,  1.47s/it]  1%|          | 420/74409 [10:25<30:02:51,  1.46s/it]  1%|          | 421/74409 [10:27<29:52:30,  1.45s/it]  1%|          | 422/74409 [10:28<29:50:38,  1.45s/it]  1%|          | 423/74409 [10:30<29:39:53,  1.44s/it]                                                      (INFO) 2024-09-25 20:32:01,860 - MultiTask_train_logger:
-Episode: 0 Timestep: 1696
-loss_0: 9.498 loss_1: 10.75 loss_2: 9.877 loss_3: 10.73
-  1%|          | 423/74409 [10:31<29:39:53,  1.44s/it]  1%|          | 424/74409 [10:31<31:32:58,  1.54s/it]  1%|          | 425/74409 [10:33<31:00:16,  1.51s/it]  1%|          | 426/74409 [10:34<30:25:13,  1.48s/it]  1%|          | 427/74409 [10:36<30:00:05,  1.46s/it]  1%|          | 428/74409 [10:37<29:47:28,  1.45s/it]  1%|          | 429/74409 [10:38<29:35:02,  1.44s/it]  1%|          | 430/74409 [10:40<29:26:47,  1.43s/it]  1%|          | 431/74409 [10:41<29:27:43,  1.43s/it]                                                      (INFO) 2024-09-25 20:32:13,575 - MultiTask_train_logger:
-Episode: 0 Timestep: 1728
-loss_0: 9.42 loss_1: 9.823 loss_2: 9.839 loss_3: 10.32
-  1%|          | 431/74409 [10:43<29:27:43,  1.43s/it]  1%|          | 432/74409 [10:43<31:21:21,  1.53s/it]  1%|          | 433/74409 [10:44<30:49:03,  1.50s/it]  1%|          | 434/74409 [10:46<30:22:52,  1.48s/it]  1%|          | 435/74409 [10:47<30:01:37,  1.46s/it]  1%|          | 436/74409 [10:49<29:47:25,  1.45s/it]  1%|          | 437/74409 [10:50<29:37:57,  1.44s/it]  1%|          | 438/74409 [10:52<29:27:59,  1.43s/it]  1%|          | 439/74409 [10:53<29:27:03,  1.43s/it]                                                      (INFO) 2024-09-25 20:32:25,282 - MultiTask_train_logger:
-Episode: 0 Timestep: 1760
-loss_0: 9.659 loss_1: 10.15 loss_2: 9.875 loss_3: 10.31
-  1%|          | 439/74409 [10:54<29:27:03,  1.43s/it]  1%|          | 440/74409 [10:55<31:14:20,  1.52s/it]  1%|          | 441/74409 [10:56<30:56:51,  1.51s/it]  1%|          | 442/74409 [10:58<30:24:08,  1.48s/it]  1%|          | 443/74409 [10:59<30:02:44,  1.46s/it]  1%|          | 444/74409 [11:00<29:52:34,  1.45s/it]  1%|          | 445/74409 [11:02<29:55:03,  1.46s/it]  1%|          | 446/74409 [11:03<29:50:58,  1.45s/it]  1%|          | 447/74409 [11:05<29:50:07,  1.45s/it]                                                      (INFO) 2024-09-25 20:32:37,155 - MultiTask_train_logger:
-Episode: 0 Timestep: 1792
-loss_0: 9.653 loss_1: 10.29 loss_2: 9.858 loss_3: 10.19
-  1%|          | 447/74409 [11:06<29:50:07,  1.45s/it]  1%|          | 448/74409 [11:07<31:50:49,  1.55s/it]  1%|          | 449/74409 [11:08<31:11:34,  1.52s/it]  1%|          | 450/74409 [11:10<30:44:27,  1.50s/it]  1%|          | 451/74409 [11:11<30:25:38,  1.48s/it]  1%|          | 452/74409 [11:12<30:08:46,  1.47s/it]  1%|          | 453/74409 [11:14<30:00:23,  1.46s/it]  1%|          | 454/74409 [11:15<29:51:34,  1.45s/it]  1%|          | 455/74409 [11:17<29:46:27,  1.45s/it]                                                      (INFO) 2024-09-25 20:32:49,012 - MultiTask_train_logger:
-Episode: 0 Timestep: 1824
-loss_0: 9.339 loss_1: 10.48 loss_2: 9.83 loss_3: 10.32
-  1%|          | 455/74409 [11:18<29:46:27,  1.45s/it]  1%|          | 456/74409 [11:18<31:39:29,  1.54s/it]  1%|          | 457/74409 [11:20<31:02:17,  1.51s/it]  1%|          | 458/74409 [11:21<30:34:02,  1.49s/it]  1%|          | 459/74409 [11:23<30:26:07,  1.48s/it]  1%|          | 460/74409 [11:24<30:11:45,  1.47s/it]  1%|          | 461/74409 [11:26<30:08:04,  1.47s/it]  1%|          | 462/74409 [11:27<29:58:33,  1.46s/it]  1%|          | 463/74409 [11:29<29:59:00,  1.46s/it]                                                      (INFO) 2024-09-25 20:33:00,904 - MultiTask_train_logger:
-Episode: 0 Timestep: 1856
-loss_0: 9.365 loss_1: 10.55 loss_2: 9.841 loss_3: 10.25
-  1%|          | 463/74409 [11:30<29:59:00,  1.46s/it]  1%|          | 464/74409 [11:30<31:45:08,  1.55s/it]  1%|          | 465/74409 [11:32<31:03:32,  1.51s/it]  1%|          | 466/74409 [11:33<30:38:08,  1.49s/it]  1%|          | 467/74409 [11:35<30:28:08,  1.48s/it]  1%|          | 468/74409 [11:36<30:09:43,  1.47s/it]  1%|          | 469/74409 [11:38<29:56:57,  1.46s/it]  1%|          | 470/74409 [11:39<29:53:23,  1.46s/it]  1%|          | 471/74409 [11:40<29:54:05,  1.46s/it]                                                      (INFO) 2024-09-25 20:33:12,774 - MultiTask_train_logger:
-Episode: 0 Timestep: 1888
-loss_0: 9.04 loss_1: 10.43 loss_2: 9.63 loss_3: 10.17
-  1%|          | 471/74409 [11:42<29:54:05,  1.46s/it]  1%|          | 472/74409 [11:42<31:43:36,  1.54s/it]  1%|          | 473/74409 [11:44<31:06:09,  1.51s/it]  1%|          | 474/74409 [11:45<30:36:22,  1.49s/it]  1%|          | 475/74409 [11:47<30:08:29,  1.47s/it]  1%|          | 476/74409 [11:48<29:52:57,  1.46s/it]  1%|          | 477/74409 [11:49<29:42:11,  1.45s/it]  1%|          | 478/74409 [11:51<29:31:32,  1.44s/it]  1%|          | 479/74409 [11:52<29:29:51,  1.44s/it]                                                      (INFO) 2024-09-25 20:33:24,497 - MultiTask_train_logger:
-Episode: 0 Timestep: 1920
-loss_0: 8.746 loss_1: 10.32 loss_2: 9.547 loss_3: 9.734
-  1%|          | 479/74409 [11:54<29:29:51,  1.44s/it]  1%|          | 480/74409 [11:54<31:17:37,  1.52s/it]  1%|          | 481/74409 [11:55<30:52:09,  1.50s/it]  1%|          | 482/74409 [11:57<30:29:42,  1.49s/it]  1%|          | 483/74409 [11:58<30:04:44,  1.46s/it]  1%|          | 484/74409 [12:00<29:57:46,  1.46s/it]  1%|          | 485/74409 [12:01<29:46:50,  1.45s/it]  1%|          | 486/74409 [12:03<29:34:48,  1.44s/it]  1%|          | 487/74409 [12:04<29:29:38,  1.44s/it]                                                      (INFO) 2024-09-25 20:33:36,267 - MultiTask_train_logger:
-Episode: 0 Timestep: 1952
-loss_0: 9.303 loss_1: 10 loss_2: 9.534 loss_3: 9.832
-  1%|          | 487/74409 [12:05<29:29:38,  1.44s/it]  1%|          | 488/74409 [12:06<31:19:59,  1.53s/it]  1%|          | 489/74409 [12:07<31:09:56,  1.52s/it]  1%|          | 490/74409 [12:09<30:37:59,  1.49s/it]  1%|          | 491/74409 [12:10<30:09:56,  1.47s/it]  1%|          | 492/74409 [12:12<30:08:42,  1.47s/it]  1%|          | 493/74409 [12:13<29:48:24,  1.45s/it]  1%|          | 494/74409 [12:14<29:34:51,  1.44s/it]  1%|          | 495/74409 [12:16<29:24:52,  1.43s/it]                                                      (INFO) 2024-09-25 20:33:48,046 - MultiTask_train_logger:
-Episode: 0 Timestep: 1984
-loss_0: 9.143 loss_1: 10.67 loss_2: 9.436 loss_3: 9.792
-  1%|          | 495/74409 [12:17<29:24:52,  1.43s/it]  1%|          | 496/74409 [12:18<31:12:18,  1.52s/it]  1%|          | 497/74409 [12:19<30:41:13,  1.49s/it]  1%|          | 498/74409 [12:20<30:29:49,  1.49s/it]  1%|          | 499/74409 [12:22<30:07:32,  1.47s/it]  1%|          | 500/74409 [12:23<29:51:21,  1.45s/it]  1%|          | 501/74409 [12:25<29:34:52,  1.44s/it]  1%|          | 502/74409 [12:26<29:27:51,  1.44s/it]  1%|          | 503/74409 [12:28<29:28:14,  1.44s/it]                                                      (INFO) 2024-09-25 20:33:59,822 - MultiTask_train_logger:
-Episode: 0 Timestep: 2016
-loss_0: 8.97 loss_1: 9.909 loss_2: 9.441 loss_3: 9.958
-  1%|          | 503/74409 [12:29<29:28:14,  1.44s/it]  1%|          | 504/74409 [12:29<31:28:03,  1.53s/it]  1%|          | 505/74409 [12:31<30:51:12,  1.50s/it]  1%|          | 506/74409 [12:32<30:23:28,  1.48s/it]  1%|          | 507/74409 [12:34<30:06:33,  1.47s/it]  1%|          | 508/74409 [12:35<29:50:45,  1.45s/it]  1%|          | 509/74409 [12:36<29:36:19,  1.44s/it]  1%|          | 510/74409 [12:38<29:30:36,  1.44s/it]  1%|          | 511/74409 [12:39<29:23:36,  1.43s/it]                                                      (INFO) 2024-09-25 20:34:11,550 - MultiTask_train_logger:
-Episode: 0 Timestep: 2048
-loss_0: 8.854 loss_1: 9.778 loss_2: 9.413 loss_3: 9.51
-  1%|          | 511/74409 [12:41<29:23:36,  1.43s/it]  1%|          | 512/74409 [12:41<31:20:20,  1.53s/it]  1%|          | 513/74409 [12:42<30:46:46,  1.50s/it]  1%|          | 514/74409 [12:44<30:26:00,  1.48s/it]  1%|          | 515/74409 [12:45<30:07:29,  1.47s/it]  1%|          | 516/74409 [12:47<29:46:47,  1.45s/it]  1%|          | 517/74409 [12:48<29:35:29,  1.44s/it]  1%|          | 518/74409 [12:50<29:27:37,  1.44s/it]  1%|          | 519/74409 [12:51<29:23:15,  1.43s/it]                                                      (INFO) 2024-09-25 20:34:23,423 - MultiTask_train_logger:
-Episode: 0 Timestep: 2080
-loss_0: 8.924 loss_1: 9.958 loss_2: 9.166 loss_3: 9.449
-  1%|          | 519/74409 [12:53<29:23:15,  1.43s/it]  1%|          | 520/74409 [12:53<32:16:25,  1.57s/it]  1%|          | 521/74409 [12:54<31:23:51,  1.53s/it]  1%|          | 522/74409 [12:56<30:47:19,  1.50s/it]  1%|          | 523/74409 [12:57<30:28:33,  1.48s/it]  1%|          | 524/74409 [12:59<30:16:07,  1.47s/it]  1%|          | 525/74409 [13:00<30:00:41,  1.46s/it]  1%|          | 526/74409 [13:02<30:00:37,  1.46s/it]  1%|          | 527/74409 [13:03<29:52:00,  1.46s/it]                                                      (INFO) 2024-09-25 20:34:35,273 - MultiTask_train_logger:
-Episode: 0 Timestep: 2112
-loss_0: 8.851 loss_1: 10.23 loss_2: 9.245 loss_3: 9.653
-  1%|          | 527/74409 [13:04<29:52:00,  1.46s/it]  1%|          | 528/74409 [13:05<31:46:11,  1.55s/it]  1%|          | 529/74409 [13:06<31:13:09,  1.52s/it]  1%|          | 530/74409 [13:08<30:41:38,  1.50s/it]  1%|          | 531/74409 [13:09<30:16:28,  1.48s/it]  1%|          | 532/74409 [13:11<29:58:48,  1.46s/it]  1%|          | 533/74409 [13:12<29:43:04,  1.45s/it]  1%|          | 534/74409 [13:13<29:33:01,  1.44s/it]  1%|          | 535/74409 [13:15<29:25:24,  1.43s/it]                                                      (INFO) 2024-09-25 20:34:47,035 - MultiTask_train_logger:
-Episode: 0 Timestep: 2144
-loss_0: 8.726 loss_1: 10.02 loss_2: 9.107 loss_3: 9.643
-  1%|          | 535/74409 [13:16<29:25:24,  1.43s/it]  1%|          | 536/74409 [13:17<31:16:21,  1.52s/it]  1%|          | 537/74409 [13:18<30:40:52,  1.50s/it]  1%|          | 538/74409 [13:19<30:12:49,  1.47s/it]  1%|          | 539/74409 [13:21<29:50:37,  1.45s/it]  1%|          | 540/74409 [13:22<29:49:26,  1.45s/it]  1%|          | 541/74409 [13:24<29:38:22,  1.44s/it]  1%|          | 542/74409 [13:25<29:34:48,  1.44s/it]  1%|          | 543/74409 [13:26<29:27:37,  1.44s/it]                                                      (INFO) 2024-09-25 20:34:58,784 - MultiTask_train_logger:
-Episode: 0 Timestep: 2176
-loss_0: 8.875 loss_1: 9.829 loss_2: 8.979 loss_3: 9.946
-  1%|          | 543/74409 [13:28<29:27:37,  1.44s/it]  1%|          | 544/74409 [13:28<31:23:28,  1.53s/it]  1%|          | 545/74409 [13:30<30:52:49,  1.51s/it]  1%|          | 546/74409 [13:31<30:22:16,  1.48s/it]  1%|          | 547/74409 [13:33<30:09:05,  1.47s/it]  1%|          | 548/74409 [13:34<30:06:06,  1.47s/it]  1%|          | 549/74409 [13:35<29:50:25,  1.45s/it]  1%|          | 550/74409 [13:37<29:43:34,  1.45s/it]  1%|          | 551/74409 [13:38<29:49:49,  1.45s/it]                                                      (INFO) 2024-09-25 20:35:10,641 - MultiTask_train_logger:
-Episode: 0 Timestep: 2208
-loss_0: 8.714 loss_1: 10.31 loss_2: 9.106 loss_3: 9.797
-  1%|          | 551/74409 [13:40<29:49:49,  1.45s/it]  1%|          | 552/74409 [13:40<31:42:22,  1.55s/it]  1%|          | 553/74409 [13:42<31:04:25,  1.51s/it]  1%|          | 554/74409 [13:43<30:38:57,  1.49s/it]  1%|          | 555/74409 [13:44<30:18:35,  1.48s/it]  1%|          | 556/74409 [13:46<30:07:46,  1.47s/it]  1%|          | 557/74409 [13:47<30:23:05,  1.48s/it]  1%|          | 558/74409 [13:49<30:02:56,  1.46s/it]  1%|          | 559/74409 [13:50<29:57:28,  1.46s/it]                                                      (INFO) 2024-09-25 20:35:22,561 - MultiTask_train_logger:
-Episode: 0 Timestep: 2240
-loss_0: 8.812 loss_1: 10.02 loss_2: 9.181 loss_3: 9.586
-  1%|          | 559/74409 [13:52<29:57:28,  1.46s/it]  1%|          | 560/74409 [13:52<31:45:11,  1.55s/it]  1%|          | 561/74409 [13:53<31:06:30,  1.52s/it]  1%|          | 562/74409 [13:55<30:34:45,  1.49s/it]  1%|          | 563/74409 [13:56<30:14:13,  1.47s/it]  1%|          | 564/74409 [13:58<29:55:54,  1.46s/it]  1%|          | 565/74409 [13:59<29:45:00,  1.45s/it]  1%|          | 566/74409 [14:01<29:39:12,  1.45s/it]  1%|          | 567/74409 [14:02<29:29:30,  1.44s/it]                                                      (INFO) 2024-09-25 20:35:34,327 - MultiTask_train_logger:
-Episode: 0 Timestep: 2272
-loss_0: 8.373 loss_1: 9.707 loss_2: 8.863 loss_3: 9.053
-  1%|          | 567/74409 [14:03<29:29:30,  1.44s/it]  1%|          | 568/74409 [14:04<31:26:31,  1.53s/it]  1%|          | 569/74409 [14:05<30:45:07,  1.50s/it]  1%|          | 570/74409 [14:07<30:18:49,  1.48s/it]  1%|          | 571/74409 [14:08<29:57:30,  1.46s/it]  1%|          | 572/74409 [14:09<29:42:31,  1.45s/it]  1%|          | 573/74409 [14:11<29:35:01,  1.44s/it]  1%|          | 574/74409 [14:12<29:24:15,  1.43s/it]  1%|          | 575/74409 [14:14<29:18:00,  1.43s/it]                                                      (INFO) 2024-09-25 20:35:46,012 - MultiTask_train_logger:
-Episode: 0 Timestep: 2304
-loss_0: 8.654 loss_1: 9.718 loss_2: 8.932 loss_3: 9.355
-  1%|          | 575/74409 [14:15<29:18:00,  1.43s/it]  1%|          | 576/74409 [14:15<31:11:41,  1.52s/it]  1%|          | 577/74409 [14:17<30:50:16,  1.50s/it]  1%|          | 578/74409 [14:18<30:23:22,  1.48s/it]  1%|          | 579/74409 [14:20<30:02:08,  1.46s/it]  1%|          | 580/74409 [14:21<29:44:34,  1.45s/it]  1%|          | 581/74409 [14:23<29:29:45,  1.44s/it]  1%|          | 582/74409 [14:24<29:20:26,  1.43s/it]  1%|          | 583/74409 [14:25<29:24:23,  1.43s/it]                                                      (INFO) 2024-09-25 20:35:57,747 - MultiTask_train_logger:
-Episode: 0 Timestep: 2336
-loss_0: 8.658 loss_1: 9.511 loss_2: 8.709 loss_3: 9.505
-  1%|          | 583/74409 [14:27<29:24:23,  1.43s/it]  1%|          | 584/74409 [14:27<31:14:35,  1.52s/it]  1%|          | 585/74409 [14:29<30:40:26,  1.50s/it]  1%|          | 586/74409 [14:30<30:19:42,  1.48s/it]  1%|          | 587/74409 [14:32<30:08:10,  1.47s/it]  1%|          | 588/74409 [14:33<29:59:58,  1.46s/it]  1%|          | 589/74409 [14:34<29:44:35,  1.45s/it]  1%|          | 590/74409 [14:36<29:32:59,  1.44s/it]  1%|          | 591/74409 [14:37<29:30:32,  1.44s/it]                                                      (INFO) 2024-09-25 20:36:09,519 - MultiTask_train_logger:
-Episode: 0 Timestep: 2368
-loss_0: 8.601 loss_1: 9.438 loss_2: 8.907 loss_3: 9.332
-  1%|          | 591/74409 [14:39<29:30:32,  1.44s/it]  1%|          | 592/74409 [14:39<31:16:53,  1.53s/it]  1%|          | 593/74409 [14:40<30:47:20,  1.50s/it]  1%|          | 594/74409 [14:42<30:22:25,  1.48s/it]  1%|          | 595/74409 [14:43<30:00:19,  1.46s/it]  1%|          | 596/74409 [14:45<29:42:44,  1.45s/it]  1%|          | 597/74409 [14:46<29:47:38,  1.45s/it]  1%|          | 598/74409 [14:48<30:05:01,  1.47s/it]  1%|          | 599/74409 [14:49<29:45:04,  1.45s/it]                                                      (INFO) 2024-09-25 20:36:21,344 - MultiTask_train_logger:
-Episode: 0 Timestep: 2400
-loss_0: 8.57 loss_1: 9.97 loss_2: 8.769 loss_3: 9.467
-  1%|          | 599/74409 [14:50<29:45:04,  1.45s/it]  1%|          | 600/74409 [14:51<31:30:45,  1.54s/it]  1%|          | 601/74409 [14:52<30:49:08,  1.50s/it]  1%|          | 602/74409 [14:54<30:24:21,  1.48s/it]  1%|          | 603/74409 [14:55<30:06:17,  1.47s/it]  1%|          | 604/74409 [14:57<29:51:08,  1.46s/it]  1%|          | 605/74409 [14:58<29:44:40,  1.45s/it]  1%|          | 606/74409 [14:59<29:36:24,  1.44s/it]  1%|          | 607/74409 [15:01<29:30:26,  1.44s/it]                                                      (INFO) 2024-09-25 20:36:33,141 - MultiTask_train_logger:
-Episode: 0 Timestep: 2432
-loss_0: 8.522 loss_1: 9.381 loss_2: 8.819 loss_3: 9.141
-  1%|          | 607/74409 [15:02<29:30:26,  1.44s/it]  1%|          | 608/74409 [15:03<31:34:21,  1.54s/it]  1%|          | 609/74409 [15:04<30:50:57,  1.50s/it]  1%|          | 610/74409 [15:05<30:24:47,  1.48s/it]  1%|          | 611/74409 [15:07<30:07:14,  1.47s/it]  1%|          | 612/74409 [15:08<29:53:42,  1.46s/it]  1%|          | 613/74409 [15:10<29:44:37,  1.45s/it]  1%|          | 614/74409 [15:11<29:37:41,  1.45s/it]  1%|          | 615/74409 [15:13<29:31:40,  1.44s/it]                                                      (INFO) 2024-09-25 20:36:44,899 - MultiTask_train_logger:
-Episode: 0 Timestep: 2464
-loss_0: 8.179 loss_1: 10.09 loss_2: 8.711 loss_3: 9.395
-  1%|          | 615/74409 [15:14<29:31:40,  1.44s/it]  1%|          | 616/74409 [15:14<31:21:15,  1.53s/it]  1%|          | 617/74409 [15:16<30:48:04,  1.50s/it]  1%|          | 618/74409 [15:17<30:22:33,  1.48s/it]  1%|          | 619/74409 [15:19<30:08:40,  1.47s/it]  1%|          | 620/74409 [15:20<29:57:50,  1.46s/it]  1%|          | 621/74409 [15:22<29:47:37,  1.45s/it]  1%|          | 622/74409 [15:23<29:44:38,  1.45s/it]  1%|          | 623/74409 [15:24<29:38:40,  1.45s/it]                                                      (INFO) 2024-09-25 20:36:56,721 - MultiTask_train_logger:
-Episode: 0 Timestep: 2496
-loss_0: 8.127 loss_1: 9.318 loss_2: 8.701 loss_3: 9.314
-  1%|          | 623/74409 [15:26<29:38:40,  1.45s/it]  1%|          | 624/74409 [15:26<31:29:57,  1.54s/it]  1%|          | 625/74409 [15:28<30:54:58,  1.51s/it]  1%|          | 626/74409 [15:29<30:25:43,  1.48s/it]  1%|          | 627/74409 [15:31<30:12:41,  1.47s/it]  1%|          | 628/74409 [15:32<29:58:49,  1.46s/it]  1%|          | 629/74409 [15:33<29:51:53,  1.46s/it]  1%|          | 630/74409 [15:35<29:48:03,  1.45s/it]  1%|          | 631/74409 [15:36<29:47:43,  1.45s/it]                                                      (INFO) 2024-09-25 20:37:08,569 - MultiTask_train_logger:
-Episode: 0 Timestep: 2528
-loss_0: 8.322 loss_1: 9.295 loss_2: 8.493 loss_3: 9.306
-  1%|          | 631/74409 [15:38<29:47:43,  1.45s/it]  1%|          | 632/74409 [15:38<31:36:25,  1.54s/it]  1%|          | 633/74409 [15:39<31:00:15,  1.51s/it]  1%|          | 634/74409 [15:41<30:40:01,  1.50s/it]  1%|          | 635/74409 [15:42<30:14:36,  1.48s/it]  1%|          | 636/74409 [15:44<29:58:01,  1.46s/it]  1%|          | 637/74409 [15:45<29:51:41,  1.46s/it]  1%|          | 638/74409 [15:47<29:45:12,  1.45s/it]  1%|          | 639/74409 [15:48<29:31:03,  1.44s/it]                                                      (INFO) 2024-09-25 20:37:20,358 - MultiTask_train_logger:
-Episode: 0 Timestep: 2560
-loss_0: 8.371 loss_1: 9.563 loss_2: 8.577 loss_3: 9.183
-  1%|          | 639/74409 [15:50<29:31:03,  1.44s/it]  1%|          | 640/74409 [15:50<31:17:42,  1.53s/it]  1%|          | 641/74409 [15:51<30:31:35,  1.49s/it]  1%|          | 642/74409 [15:53<30:05:27,  1.47s/it]  1%|          | 643/74409 [15:54<29:48:40,  1.45s/it]  1%|          | 644/74409 [15:56<29:40:26,  1.45s/it]  1%|          | 645/74409 [15:57<29:30:13,  1.44s/it]  1%|          | 646/74409 [15:58<29:25:34,  1.44s/it]  1%|          | 647/74409 [16:00<29:29:30,  1.44s/it]                                                      (INFO) 2024-09-25 20:37:32,088 - MultiTask_train_logger:
-Episode: 0 Timestep: 2592
-loss_0: 8.516 loss_1: 9.249 loss_2: 8.679 loss_3: 9.212
-  1%|          | 647/74409 [16:01<29:29:30,  1.44s/it]  1%|          | 648/74409 [16:02<31:25:53,  1.53s/it]  1%|          | 649/74409 [16:03<30:53:20,  1.51s/it]  1%|          | 650/74409 [16:04<30:27:59,  1.49s/it]  1%|          | 651/74409 [16:06<30:16:24,  1.48s/it]  1%|          | 652/74409 [16:07<30:09:34,  1.47s/it]  1%|          | 653/74409 [16:09<29:56:08,  1.46s/it]  1%|          | 654/74409 [16:10<29:53:45,  1.46s/it]  1%|          | 655/74409 [16:12<29:46:55,  1.45s/it]                                                      (INFO) 2024-09-25 20:37:43,975 - MultiTask_train_logger:
-Episode: 0 Timestep: 2624
-loss_0: 8.282 loss_1: 9.31 loss_2: 8.422 loss_3: 9.124
-  1%|          | 655/74409 [16:13<29:46:55,  1.45s/it]  1%|          | 656/74409 [16:13<31:40:14,  1.55s/it]  1%|          | 657/74409 [16:15<31:12:42,  1.52s/it]  1%|          | 658/74409 [16:16<30:48:13,  1.50s/it]  1%|          | 659/74409 [16:18<30:27:14,  1.49s/it]  1%|          | 660/74409 [16:19<30:12:45,  1.47s/it]  1%|          | 661/74409 [16:21<30:02:48,  1.47s/it]  1%|          | 662/74409 [16:22<29:47:34,  1.45s/it]  1%|          | 663/74409 [16:24<29:44:57,  1.45s/it]                                                      (INFO) 2024-09-25 20:37:55,871 - MultiTask_train_logger:
-Episode: 0 Timestep: 2656
-loss_0: 8.524 loss_1: 9.223 loss_2: 8.548 loss_3: 9.274
-  1%|          | 663/74409 [16:25<29:44:57,  1.45s/it]  1%|          | 664/74409 [16:25<31:34:45,  1.54s/it]  1%|          | 665/74409 [16:27<30:55:53,  1.51s/it]  1%|          | 666/74409 [16:28<30:25:59,  1.49s/it]  1%|          | 667/74409 [16:30<30:11:56,  1.47s/it]  1%|          | 668/74409 [16:31<29:56:14,  1.46s/it]  1%|          | 669/74409 [16:33<29:54:25,  1.46s/it]  1%|          | 670/74409 [16:34<29:43:54,  1.45s/it]  1%|          | 671/74409 [16:35<29:34:46,  1.44s/it]                                                      (INFO) 2024-09-25 20:38:07,688 - MultiTask_train_logger:
-Episode: 0 Timestep: 2688
-loss_0: 8.13 loss_1: 9.784 loss_2: 8.47 loss_3: 8.892
-  1%|          | 671/74409 [16:37<29:34:46,  1.44s/it]  1%|          | 672/74409 [16:37<31:32:35,  1.54s/it]  1%|          | 673/74409 [16:39<31:08:35,  1.52s/it]  1%|          | 674/74409 [16:40<30:59:03,  1.51s/it]  1%|          | 675/74409 [16:42<30:43:38,  1.50s/it]  1%|          | 676/74409 [16:43<30:19:33,  1.48s/it]  1%|          | 677/74409 [16:44<30:10:11,  1.47s/it]  1%|          | 678/74409 [16:46<29:55:19,  1.46s/it]  1%|          | 679/74409 [16:47<29:49:21,  1.46s/it]                                                      (INFO) 2024-09-25 20:38:19,662 - MultiTask_train_logger:
-Episode: 0 Timestep: 2720
-loss_0: 8.016 loss_1: 9.387 loss_2: 8.384 loss_3: 8.992
-  1%|          | 679/74409 [16:49<29:49:21,  1.46s/it]  1%|          | 680/74409 [16:49<31:40:15,  1.55s/it]  1%|          | 681/74409 [16:51<31:00:30,  1.51s/it]  1%|          | 682/74409 [16:52<30:29:38,  1.49s/it]  1%|          | 683/74409 [16:53<30:10:31,  1.47s/it]  1%|          | 684/74409 [16:55<30:00:13,  1.47s/it]  1%|          | 685/74409 [16:56<29:51:52,  1.46s/it]  1%|          | 686/74409 [16:58<29:47:35,  1.45s/it]  1%|          | 687/74409 [16:59<29:41:09,  1.45s/it]                                                      (INFO) 2024-09-25 20:38:31,492 - MultiTask_train_logger:
-Episode: 0 Timestep: 2752
-loss_0: 8.171 loss_1: 9.363 loss_2: 8.45 loss_3: 9.316
-  1%|          | 687/74409 [17:01<29:41:09,  1.45s/it]  1%|          | 688/74409 [17:01<31:32:23,  1.54s/it]  1%|          | 689/74409 [17:02<30:53:09,  1.51s/it]  1%|          | 690/74409 [17:04<30:24:26,  1.48s/it]  1%|          | 691/74409 [17:05<30:08:58,  1.47s/it]  1%|          | 692/74409 [17:07<29:55:08,  1.46s/it]  1%|          | 693/74409 [17:08<29:51:30,  1.46s/it]  1%|          | 694/74409 [17:10<29:42:21,  1.45s/it]  1%|          | 695/74409 [17:11<29:37:43,  1.45s/it]                                                      (INFO) 2024-09-25 20:38:43,308 - MultiTask_train_logger:
-Episode: 0 Timestep: 2784
-loss_0: 8.388 loss_1: 9.441 loss_2: 8.464 loss_3: 8.976
-  1%|          | 695/74409 [17:12<29:37:43,  1.45s/it]  1%|          | 696/74409 [17:13<31:31:53,  1.54s/it]  1%|          | 697/74409 [17:14<30:59:35,  1.51s/it]  1%|          | 698/74409 [17:16<30:30:36,  1.49s/it]  1%|          | 699/74409 [17:17<30:11:00,  1.47s/it]  1%|          | 700/74409 [17:19<29:57:41,  1.46s/it]  1%|          | 701/74409 [17:20<29:45:30,  1.45s/it]  1%|          | 702/74409 [17:21<29:37:14,  1.45s/it]  1%|          | 703/74409 [17:23<29:34:44,  1.44s/it]                                                      (INFO) 2024-09-25 20:38:55,125 - MultiTask_train_logger:
-Episode: 0 Timestep: 2816
-loss_0: 8.415 loss_1: 9.275 loss_2: 8.303 loss_3: 8.794
-  1%|          | 703/74409 [17:24<29:34:44,  1.44s/it]  1%|          | 704/74409 [17:25<31:26:19,  1.54s/it]  1%|          | 705/74409 [17:26<30:48:00,  1.50s/it]  1%|          | 706/74409 [17:27<30:26:58,  1.49s/it]  1%|          | 707/74409 [17:29<30:15:52,  1.48s/it]  1%|          | 708/74409 [17:30<30:21:08,  1.48s/it]  1%|          | 709/74409 [17:32<30:07:21,  1.47s/it]  1%|          | 710/74409 [17:33<29:57:57,  1.46s/it]  1%|          | 711/74409 [17:35<29:57:24,  1.46s/it]                                                      (INFO) 2024-09-25 20:39:07,057 - MultiTask_train_logger:
-Episode: 0 Timestep: 2848
-loss_0: 8.148 loss_1: 9.199 loss_2: 8.364 loss_3: 9.074
-  1%|          | 711/74409 [17:36<29:57:24,  1.46s/it]  1%|          | 712/74409 [17:37<31:43:56,  1.55s/it]  1%|          | 713/74409 [17:38<30:56:49,  1.51s/it]  1%|          | 714/74409 [17:39<30:28:38,  1.49s/it]  1%|          | 715/74409 [17:41<30:04:22,  1.47s/it]  1%|          | 716/74409 [17:42<29:46:48,  1.45s/it]  1%|          | 717/74409 [17:44<29:43:50,  1.45s/it]  1%|          | 718/74409 [17:45<29:34:12,  1.44s/it]  1%|          | 719/74409 [17:47<29:30:08,  1.44s/it]                                                      (INFO) 2024-09-25 20:39:18,814 - MultiTask_train_logger:
-Episode: 0 Timestep: 2880
-loss_0: 7.95 loss_1: 9.23 loss_2: 8.478 loss_3: 8.96
-  1%|          | 719/74409 [17:48<29:30:08,  1.44s/it]  1%|          | 720/74409 [17:48<31:22:08,  1.53s/it]  1%|          | 721/74409 [17:50<30:41:54,  1.50s/it]  1%|          | 722/74409 [17:51<30:16:18,  1.48s/it]  1%|          | 723/74409 [17:53<30:01:17,  1.47s/it]  1%|          | 724/74409 [17:54<29:46:47,  1.45s/it]  1%|          | 725/74409 [17:55<29:41:06,  1.45s/it]  1%|          | 726/74409 [17:57<29:33:14,  1.44s/it]  1%|          | 727/74409 [17:58<29:30:53,  1.44s/it]                                                      (INFO) 2024-09-25 20:39:30,586 - MultiTask_train_logger:
-Episode: 0 Timestep: 2912
-loss_0: 8.184 loss_1: 9.135 loss_2: 8.442 loss_3: 8.917
-  1%|          | 727/74409 [18:00<29:30:53,  1.44s/it]  1%|          | 728/74409 [18:00<31:24:39,  1.53s/it]  1%|          | 729/74409 [18:01<30:47:45,  1.50s/it]  1%|          | 730/74409 [18:03<30:20:32,  1.48s/it]  1%|          | 731/74409 [18:04<30:05:35,  1.47s/it]  1%|          | 732/74409 [18:06<29:53:57,  1.46s/it]  1%|          | 733/74409 [18:07<29:46:00,  1.45s/it]  1%|          | 734/74409 [18:09<29:44:09,  1.45s/it]  1%|          | 735/74409 [18:10<29:42:46,  1.45s/it]                                                      (INFO) 2024-09-25 20:39:42,430 - MultiTask_train_logger:
-Episode: 0 Timestep: 2944
-loss_0: 8.108 loss_1: 9.116 loss_2: 8.294 loss_3: 8.813
-  1%|          | 735/74409 [18:12<29:42:46,  1.45s/it]  1%|          | 736/74409 [18:12<31:35:36,  1.54s/it]  1%|          | 737/74409 [18:13<30:52:02,  1.51s/it]  1%|          | 738/74409 [18:15<30:21:37,  1.48s/it]  1%|          | 739/74409 [18:16<30:04:15,  1.47s/it]  1%|          | 740/74409 [18:18<29:51:59,  1.46s/it]  1%|          | 741/74409 [18:19<29:47:26,  1.46s/it]  1%|          | 742/74409 [18:21<29:41:32,  1.45s/it]  1%|          | 743/74409 [18:22<29:34:54,  1.45s/it]                                                      (INFO) 2024-09-25 20:39:54,254 - MultiTask_train_logger:
-Episode: 0 Timestep: 2976
-loss_0: 7.766 loss_1: 8.966 loss_2: 8.248 loss_3: 8.971
-  1%|          | 743/74409 [18:23<29:34:54,  1.45s/it]  1%|          | 744/74409 [18:24<31:36:35,  1.54s/it]  1%|          | 745/74409 [18:25<30:53:44,  1.51s/it]  1%|          | 746/74409 [18:27<30:27:39,  1.49s/it]  1%|          | 747/74409 [18:28<30:17:00,  1.48s/it]  1%|          | 748/74409 [18:29<30:02:11,  1.47s/it]  1%|          | 749/74409 [18:31<29:43:33,  1.45s/it]  1%|          | 750/74409 [18:32<29:31:17,  1.44s/it]  1%|          | 751/74409 [18:34<29:21:11,  1.43s/it]                                                      (INFO) 2024-09-25 20:40:06,005 - MultiTask_train_logger:
-Episode: 0 Timestep: 3008
-loss_0: 7.987 loss_1: 9.099 loss_2: 8.11 loss_3: 8.869
-  1%|          | 751/74409 [18:35<29:21:11,  1.43s/it]  1%|          | 752/74409 [18:35<31:10:07,  1.52s/it]  1%|          | 753/74409 [18:37<30:47:43,  1.51s/it]  1%|          | 754/74409 [18:38<30:19:21,  1.48s/it]  1%|          | 755/74409 [18:40<30:03:42,  1.47s/it]  1%|          | 756/74409 [18:41<29:50:10,  1.46s/it]  1%|          | 757/74409 [18:43<29:43:54,  1.45s/it]  1%|          | 758/74409 [18:44<29:38:25,  1.45s/it]  1%|          | 759/74409 [18:46<29:35:34,  1.45s/it]                                                      (INFO) 2024-09-25 20:40:17,847 - MultiTask_train_logger:
-Episode: 0 Timestep: 3040
-loss_0: 7.772 loss_1: 9.199 loss_2: 8.263 loss_3: 8.991
-  1%|          | 759/74409 [18:47<29:35:34,  1.45s/it]  1%|          | 760/74409 [18:47<31:31:40,  1.54s/it]  1%|          | 761/74409 [18:49<30:57:26,  1.51s/it]  1%|          | 762/74409 [18:50<30:24:31,  1.49s/it]  1%|          | 763/74409 [18:52<30:50:34,  1.51s/it]  1%|          | 764/74409 [18:53<30:30:34,  1.49s/it]  1%|          | 765/74409 [18:55<30:12:08,  1.48s/it]  1%|          | 766/74409 [18:56<29:58:15,  1.47s/it]  1%|          | 767/74409 [18:58<29:46:46,  1.46s/it]                                                      (INFO) 2024-09-25 20:40:29,801 - MultiTask_train_logger:
-Episode: 0 Timestep: 3072
-loss_0: 8.065 loss_1: 9.512 loss_2: 8.071 loss_3: 8.519
-  1%|          | 767/74409 [18:59<29:46:46,  1.46s/it]  1%|          | 768/74409 [18:59<31:36:24,  1.55s/it]  1%|          | 769/74409 [19:01<30:56:05,  1.51s/it]  1%|          | 770/74409 [19:02<30:24:56,  1.49s/it]  1%|          | 771/74409 [19:04<30:21:14,  1.48s/it]  1%|          | 772/74409 [19:05<30:10:11,  1.47s/it]  1%|          | 773/74409 [19:06<29:54:27,  1.46s/it]  1%|          | 774/74409 [19:08<29:43:48,  1.45s/it]  1%|          | 775/74409 [19:09<29:47:35,  1.46s/it]                                                      (INFO) 2024-09-25 20:40:41,660 - MultiTask_train_logger:
-Episode: 0 Timestep: 3104
-loss_0: 8.189 loss_1: 8.712 loss_2: 8.233 loss_3: 8.581
-  1%|          | 775/74409 [19:11<29:47:35,  1.46s/it]  1%|          | 776/74409 [19:11<31:29:36,  1.54s/it]  1%|          | 777/74409 [19:13<30:47:18,  1.51s/it]  1%|          | 778/74409 [19:14<30:17:07,  1.48s/it]  1%|          | 779/74409 [19:15<29:58:11,  1.47s/it]  1%|          | 780/74409 [19:17<29:46:52,  1.46s/it]  1%|          | 781/74409 [19:18<29:43:52,  1.45s/it]  1%|          | 782/74409 [19:20<29:33:15,  1.45s/it]  1%|          | 783/74409 [19:21<29:29:15,  1.44s/it]                                                      (INFO) 2024-09-25 20:40:53,427 - MultiTask_train_logger:
-Episode: 0 Timestep: 3136
-loss_0: 7.877 loss_1: 9.199 loss_2: 8.115 loss_3: 8.888
-  1%|          | 783/74409 [19:23<29:29:15,  1.44s/it]  1%|          | 784/74409 [19:23<31:22:47,  1.53s/it]  1%|          | 785/74409 [19:24<30:43:20,  1.50s/it]  1%|          | 786/74409 [19:26<30:16:51,  1.48s/it]  1%|          | 787/74409 [19:27<29:58:17,  1.47s/it]  1%|          | 788/74409 [19:29<29:54:38,  1.46s/it]  1%|          | 789/74409 [19:30<29:45:36,  1.46s/it]  1%|          | 790/74409 [19:32<29:36:15,  1.45s/it]  1%|          | 791/74409 [19:33<29:31:57,  1.44s/it]                                                      (INFO) 2024-09-25 20:41:05,238 - MultiTask_train_logger:
-Episode: 0 Timestep: 3168
-loss_0: 7.702 loss_1: 9.137 loss_2: 8.094 loss_3: 8.842
-  1%|          | 791/74409 [19:34<29:31:57,  1.44s/it]  1%|          | 792/74409 [19:35<31:29:52,  1.54s/it]  1%|          | 793/74409 [19:36<30:46:11,  1.50s/it]  1%|          | 794/74409 [19:38<30:22:41,  1.49s/it]  1%|          | 795/74409 [19:39<30:00:53,  1.47s/it]  1%|          | 796/74409 [19:40<29:46:40,  1.46s/it]  1%|          | 797/74409 [19:42<29:37:52,  1.45s/it]  1%|          | 798/74409 [19:43<29:38:28,  1.45s/it]  1%|          | 799/74409 [19:45<29:30:26,  1.44s/it]                                                      (INFO) 2024-09-25 20:41:17,012 - MultiTask_train_logger:
-Episode: 0 Timestep: 3200
-loss_0: 7.801 loss_1: 9.114 loss_2: 8.101 loss_3: 9.043
-  1%|          | 799/74409 [19:46<29:30:26,  1.44s/it]  1%|          | 800/74409 [19:46<31:21:17,  1.53s/it]  1%|          | 801/74409 [19:48<30:40:04,  1.50s/it]  1%|          | 802/74409 [19:49<30:17:59,  1.48s/it]  1%|          | 803/74409 [19:51<30:04:01,  1.47s/it]  1%|          | 804/74409 [19:52<29:52:05,  1.46s/it]  1%|          | 805/74409 [19:54<29:50:22,  1.46s/it]  1%|          | 806/74409 [19:55<29:40:26,  1.45s/it]  1%|          | 807/74409 [19:57<29:35:14,  1.45s/it]                                                      (INFO) 2024-09-25 20:41:28,847 - MultiTask_train_logger:
-Episode: 0 Timestep: 3232
-loss_0: 7.605 loss_1: 8.956 loss_2: 8.071 loss_3: 8.6
-  1%|          | 807/74409 [19:58<29:35:14,  1.45s/it]  1%|          | 808/74409 [19:58<31:32:05,  1.54s/it]  1%|          | 809/74409 [20:00<30:56:10,  1.51s/it]  1%|          | 810/74409 [20:01<30:23:12,  1.49s/it]  1%|          | 811/74409 [20:03<30:37:19,  1.50s/it]  1%|          | 812/74409 [20:04<30:16:21,  1.48s/it]  1%|          | 813/74409 [20:06<30:00:56,  1.47s/it]  1%|          | 814/74409 [20:07<30:03:08,  1.47s/it]  1%|          | 815/74409 [20:08<29:49:46,  1.46s/it]                                                      (INFO) 2024-09-25 20:41:40,778 - MultiTask_train_logger:
-Episode: 0 Timestep: 3264
-loss_0: 7.738 loss_1: 8.915 loss_2: 8.193 loss_3: 8.965
-  1%|          | 815/74409 [20:10<29:49:46,  1.46s/it]  1%|          | 816/74409 [20:10<31:36:13,  1.55s/it]  1%|          | 817/74409 [20:12<30:58:05,  1.51s/it]  1%|          | 818/74409 [20:13<30:40:09,  1.50s/it]  1%|          | 819/74409 [20:15<30:21:29,  1.49s/it]  1%|          | 820/74409 [20:16<30:04:57,  1.47s/it]  1%|          | 821/74409 [20:17<29:58:43,  1.47s/it]  1%|          | 822/74409 [20:19<29:47:48,  1.46s/it]  1%|          | 823/74409 [20:20<29:55:55,  1.46s/it]                                                      (INFO) 2024-09-25 20:41:52,693 - MultiTask_train_logger:
-Episode: 0 Timestep: 3296
-loss_0: 7.836 loss_1: 9.229 loss_2: 8.011 loss_3: 8.728
-  1%|          | 823/74409 [20:22<29:55:55,  1.46s/it]  1%|          | 824/74409 [20:22<31:38:15,  1.55s/it]  1%|          | 825/74409 [20:24<30:57:43,  1.51s/it]  1%|          | 826/74409 [20:25<30:24:36,  1.49s/it]  1%|          | 827/74409 [20:26<30:05:05,  1.47s/it]  1%|          | 828/74409 [20:28<29:56:20,  1.46s/it]  1%|          | 829/74409 [20:29<29:45:08,  1.46s/it]  1%|          | 830/74409 [20:31<29:39:03,  1.45s/it]  1%|          | 831/74409 [20:32<29:32:52,  1.45s/it]                                                      (INFO) 2024-09-25 20:42:04,487 - MultiTask_train_logger:
-Episode: 0 Timestep: 3328
-loss_0: 8.006 loss_1: 8.896 loss_2: 8.095 loss_3: 8.628
-  1%|          | 831/74409 [20:34<29:32:52,  1.45s/it]  1%|          | 832/74409 [20:34<31:22:33,  1.54s/it]  1%|          | 833/74409 [20:35<30:39:00,  1.50s/it]  1%|          | 834/74409 [20:37<30:11:36,  1.48s/it]  1%|          | 835/74409 [20:38<29:56:27,  1.47s/it]  1%|          | 836/74409 [20:40<29:44:29,  1.46s/it]  1%|          | 837/74409 [20:41<29:37:12,  1.45s/it]  1%|          | 838/74409 [20:43<29:34:07,  1.45s/it]  1%|          | 839/74409 [20:44<29:27:10,  1.44s/it]                                                      (INFO) 2024-09-25 20:42:16,241 - MultiTask_train_logger:
-Episode: 0 Timestep: 3360
-loss_0: 7.866 loss_1: 8.821 loss_2: 8.14 loss_3: 8.671
-  1%|          | 839/74409 [20:45<29:27:10,  1.44s/it]  1%|          | 840/74409 [20:46<31:16:22,  1.53s/it]  1%|          | 841/74409 [20:47<30:35:49,  1.50s/it]  1%|          | 842/74409 [20:49<30:22:36,  1.49s/it]  1%|          | 843/74409 [20:50<30:27:03,  1.49s/it]  1%|          | 844/74409 [20:52<30:05:23,  1.47s/it]  1%|          | 845/74409 [20:53<29:56:40,  1.47s/it]  1%|          | 846/74409 [20:54<30:03:01,  1.47s/it]  1%|          | 847/74409 [20:56<29:52:57,  1.46s/it]                                                      (INFO) 2024-09-25 20:42:28,174 - MultiTask_train_logger:
-Episode: 0 Timestep: 3392
-loss_0: 7.764 loss_1: 8.539 loss_2: 8.003 loss_3: 8.467
-  1%|          | 847/74409 [20:57<29:52:57,  1.46s/it]  1%|          | 848/74409 [20:58<31:36:20,  1.55s/it]  1%|          | 849/74409 [20:59<30:52:11,  1.51s/it]  1%|          | 850/74409 [21:00<30:22:46,  1.49s/it]  1%|          | 851/74409 [21:02<30:03:27,  1.47s/it]  1%|          | 852/74409 [21:03<29:57:52,  1.47s/it]  1%|          | 853/74409 [21:05<29:47:47,  1.46s/it]  1%|          | 854/74409 [21:06<29:41:37,  1.45s/it]  1%|          | 855/74409 [21:08<29:37:25,  1.45s/it]                                                      (INFO) 2024-09-25 20:42:39,992 - MultiTask_train_logger:
-Episode: 0 Timestep: 3424
-loss_0: 7.667 loss_1: 8.586 loss_2: 7.892 loss_3: 8.347
-  1%|          | 855/74409 [21:09<29:37:25,  1.45s/it]  1%|          | 856/74409 [21:09<31:27:08,  1.54s/it]  1%|          | 857/74409 [21:11<30:45:16,  1.51s/it]  1%|          | 858/74409 [21:12<30:17:19,  1.48s/it]  1%|          | 859/74409 [21:14<29:57:04,  1.47s/it]  1%|          | 860/74409 [21:15<29:46:05,  1.46s/it]  1%|          | 861/74409 [21:17<29:42:48,  1.45s/it]  1%|          | 862/74409 [21:18<29:41:22,  1.45s/it]  1%|          | 863/74409 [21:20<29:32:53,  1.45s/it]                                                      (INFO) 2024-09-25 20:42:51,778 - MultiTask_train_logger:
-Episode: 0 Timestep: 3456
-loss_0: 7.75 loss_1: 8.821 loss_2: 7.963 loss_3: 8.408
-  1%|          | 863/74409 [21:21<29:32:53,  1.45s/it]  1%|          | 864/74409 [21:21<31:20:44,  1.53s/it]  1%|          | 865/74409 [21:23<30:42:24,  1.50s/it]  1%|          | 866/74409 [21:24<30:19:23,  1.48s/it]  1%|          | 867/74409 [21:26<30:01:06,  1.47s/it]  1%|          | 868/74409 [21:27<29:53:18,  1.46s/it]  1%|          | 869/74409 [21:28<29:48:14,  1.46s/it]  1%|          | 870/74409 [21:30<29:38:02,  1.45s/it]  1%|          | 871/74409 [21:31<29:37:05,  1.45s/it]                                                      (INFO) 2024-09-25 20:43:03,606 - MultiTask_train_logger:
-Episode: 0 Timestep: 3488
-loss_0: 7.578 loss_1: 8.672 loss_2: 7.962 loss_3: 8.182
-  1%|          | 871/74409 [21:33<29:37:05,  1.45s/it]  1%|          | 872/74409 [21:33<31:25:40,  1.54s/it]  1%|          | 873/74409 [21:35<30:46:53,  1.51s/it]  1%|          | 874/74409 [21:36<30:23:09,  1.49s/it]  1%|          | 875/74409 [21:37<30:03:20,  1.47s/it]  1%|          | 876/74409 [21:39<29:47:48,  1.46s/it]  1%|          | 877/74409 [21:40<29:39:12,  1.45s/it]  1%|          | 878/74409 [21:42<29:32:56,  1.45s/it]  1%|          | 879/74409 [21:43<29:30:57,  1.45s/it]                                                      (INFO) 2024-09-25 20:43:15,421 - MultiTask_train_logger:
-Episode: 0 Timestep: 3520
-loss_0: 7.581 loss_1: 8.692 loss_2: 7.945 loss_3: 8.279
-  1%|          | 879/74409 [21:45<29:30:57,  1.45s/it]  1%|          | 880/74409 [21:45<31:27:49,  1.54s/it]  1%|          | 881/74409 [21:46<30:52:36,  1.51s/it]  1%|          | 882/74409 [21:48<30:26:56,  1.49s/it]  1%|          | 883/74409 [21:49<30:07:51,  1.48s/it]  1%|          | 884/74409 [21:51<29:52:05,  1.46s/it]  1%|          | 885/74409 [21:52<29:38:32,  1.45s/it]  1%|          | 886/74409 [21:53<29:31:00,  1.45s/it]  1%|          | 887/74409 [21:55<29:30:16,  1.44s/it]                                                      (INFO) 2024-09-25 20:43:27,278 - MultiTask_train_logger:
-Episode: 0 Timestep: 3552
-loss_0: 7.665 loss_1: 8.534 loss_2: 7.89 loss_3: 8.392
-  1%|          | 887/74409 [21:56<29:30:16,  1.44s/it]  1%|          | 888/74409 [21:57<31:40:19,  1.55s/it]  1%|          | 889/74409 [21:58<31:09:50,  1.53s/it]  1%|          | 890/74409 [22:00<30:34:09,  1.50s/it]  1%|          | 891/74409 [22:01<30:16:26,  1.48s/it]  1%|          | 892/74409 [22:03<29:56:49,  1.47s/it]  1%|          | 893/74409 [22:04<29:43:12,  1.46s/it]  1%|          | 894/74409 [22:05<29:34:47,  1.45s/it]  1%|          | 895/74409 [22:07<29:28:14,  1.44s/it]                                                      (INFO) 2024-09-25 20:43:39,091 - MultiTask_train_logger:
-Episode: 0 Timestep: 3584
-loss_0: 7.672 loss_1: 8.695 loss_2: 7.883 loss_3: 8.296
-  1%|          | 895/74409 [22:08<29:28:14,  1.44s/it]  1%|          | 896/74409 [22:09<31:19:43,  1.53s/it]  1%|          | 897/74409 [22:10<30:41:13,  1.50s/it]  1%|          | 898/74409 [22:11<30:13:28,  1.48s/it]  1%|          | 899/74409 [22:13<30:02:48,  1.47s/it]  1%|          | 900/74409 [22:14<29:50:21,  1.46s/it]  1%|          | 901/74409 [22:16<29:42:13,  1.45s/it]  1%|          | 902/74409 [22:17<29:37:40,  1.45s/it]  1%|          | 903/74409 [22:19<29:32:09,  1.45s/it]                                                      (INFO) 2024-09-25 20:43:50,904 - MultiTask_train_logger:
-Episode: 0 Timestep: 3616
-loss_0: 7.597 loss_1: 8.509 loss_2: 7.93 loss_3: 8.478
-  1%|          | 903/74409 [22:20<29:32:09,  1.45s/it]  1%|          | 904/74409 [22:20<31:22:55,  1.54s/it]  1%|          | 905/74409 [22:22<30:42:33,  1.50s/it]  1%|          | 906/74409 [22:23<30:17:03,  1.48s/it]  1%|          | 907/74409 [22:25<30:04:45,  1.47s/it]  1%|          | 908/74409 [22:26<29:50:10,  1.46s/it]  1%|          | 909/74409 [22:28<29:39:31,  1.45s/it]  1%|          | 910/74409 [22:29<29:31:22,  1.45s/it]  1%|          | 911/74409 [22:30<29:25:20,  1.44s/it]                                                      (INFO) 2024-09-25 20:44:02,685 - MultiTask_train_logger:
-Episode: 0 Timestep: 3648
-loss_0: 7.567 loss_1: 8.45 loss_2: 7.893 loss_3: 8.632
-  1%|          | 911/74409 [22:32<29:25:20,  1.44s/it]  1%|          | 912/74409 [22:32<31:17:36,  1.53s/it]  1%|          | 913/74409 [22:34<30:38:34,  1.50s/it]  1%|          | 914/74409 [22:35<30:12:13,  1.48s/it]  1%|          | 915/74409 [22:36<29:54:00,  1.46s/it]  1%|          | 916/74409 [22:38<29:47:18,  1.46s/it]  1%|          | 917/74409 [22:39<29:41:52,  1.45s/it]  1%|          | 918/74409 [22:41<29:34:08,  1.45s/it]  1%|          | 919/74409 [22:42<29:30:40,  1.45s/it]                                                      (INFO) 2024-09-25 20:44:14,502 - MultiTask_train_logger:
-Episode: 0 Timestep: 3680
-loss_0: 7.626 loss_1: 8.582 loss_2: 7.906 loss_3: 8.115
-  1%|          | 919/74409 [22:44<29:30:40,  1.45s/it]  1%|          | 920/74409 [22:44<31:29:28,  1.54s/it]  1%|          | 921/74409 [22:45<30:45:31,  1.51s/it]  1%|          | 922/74409 [22:47<30:24:01,  1.49s/it]  1%|          | 923/74409 [22:48<30:04:03,  1.47s/it]  1%|          | 924/74409 [22:50<29:50:01,  1.46s/it]  1%|          | 925/74409 [22:51<29:41:56,  1.45s/it]  1%|          | 926/74409 [22:53<29:35:58,  1.45s/it]  1%|          | 927/74409 [22:54<29:30:35,  1.45s/it]                                                      (INFO) 2024-09-25 20:44:26,310 - MultiTask_train_logger:
-Episode: 0 Timestep: 3712
-loss_0: 7.48 loss_1: 8.724 loss_2: 7.871 loss_3: 8.286
-  1%|          | 927/74409 [22:55<29:30:35,  1.45s/it]  1%|          | 928/74409 [22:56<31:21:11,  1.54s/it]  1%|          | 929/74409 [22:57<30:45:46,  1.51s/it]  1%|          | 930/74409 [22:59<30:30:16,  1.49s/it]  1%|▏         | 931/74409 [23:00<30:12:14,  1.48s/it]  1%|▏         | 932/74409 [23:02<29:59:36,  1.47s/it]  1%|▏         | 933/74409 [23:03<29:44:27,  1.46s/it]  1%|▏         | 934/74409 [23:04<29:36:10,  1.45s/it]  1%|▏         | 935/74409 [23:06<29:26:48,  1.44s/it]                                                      (INFO) 2024-09-25 20:44:38,145 - MultiTask_train_logger:
-Episode: 0 Timestep: 3744
-loss_0: 7.75 loss_1: 8.31 loss_2: 7.878 loss_3: 8.293
-  1%|▏         | 935/74409 [23:07<29:26:48,  1.44s/it]  1%|▏         | 936/74409 [23:08<31:20:55,  1.54s/it]  1%|▏         | 937/74409 [23:09<30:38:48,  1.50s/it]  1%|▏         | 938/74409 [23:10<30:08:26,  1.48s/it]  1%|▏         | 939/74409 [23:12<29:50:21,  1.46s/it]  1%|▏         | 940/74409 [23:13<29:41:20,  1.45s/it]  1%|▏         | 941/74409 [23:15<29:34:41,  1.45s/it]  1%|▏         | 942/74409 [23:16<29:29:04,  1.44s/it]  1%|▏         | 943/74409 [23:18<29:28:36,  1.44s/it]                                                      (INFO) 2024-09-25 20:44:50,038 - MultiTask_train_logger:
-Episode: 0 Timestep: 3776
-loss_0: 7.416 loss_1: 8.792 loss_2: 7.807 loss_3: 8.256
-  1%|▏         | 943/74409 [23:19<29:28:36,  1.44s/it]  1%|▏         | 944/74409 [23:20<32:07:13,  1.57s/it]  1%|▏         | 945/74409 [23:21<31:10:21,  1.53s/it]  1%|▏         | 946/74409 [23:22<30:36:24,  1.50s/it]  1%|▏         | 947/74409 [23:24<30:10:15,  1.48s/it]  1%|▏         | 948/74409 [23:25<29:53:01,  1.46s/it]  1%|▏         | 949/74409 [23:27<29:41:54,  1.46s/it]  1%|▏         | 950/74409 [23:28<29:34:18,  1.45s/it]  1%|▏         | 951/74409 [23:30<29:54:09,  1.47s/it]                                                      (INFO) 2024-09-25 20:45:01,875 - MultiTask_train_logger:
-Episode: 0 Timestep: 3808
-loss_0: 7.472 loss_1: 8.462 loss_2: 7.781 loss_3: 8.286
-  1%|▏         | 951/74409 [23:31<29:54:09,  1.47s/it]  1%|▏         | 952/74409 [23:31<31:36:22,  1.55s/it]  1%|▏         | 953/74409 [23:33<30:54:08,  1.51s/it]  1%|▏         | 954/74409 [23:34<30:27:36,  1.49s/it]  1%|▏         | 955/74409 [23:36<30:08:31,  1.48s/it]  1%|▏         | 956/74409 [23:37<29:53:29,  1.47s/it]  1%|▏         | 957/74409 [23:39<29:41:20,  1.46s/it]  1%|▏         | 958/74409 [23:40<29:31:54,  1.45s/it]  1%|▏         | 959/74409 [23:41<29:30:52,  1.45s/it]                                                      (INFO) 2024-09-25 20:45:13,677 - MultiTask_train_logger:
-Episode: 0 Timestep: 3840
-loss_0: 7.611 loss_1: 8.659 loss_2: 7.86 loss_3: 8.28
-  1%|▏         | 959/74409 [23:43<29:30:52,  1.45s/it]  1%|▏         | 960/74409 [23:43<31:21:27,  1.54s/it]  1%|▏         | 961/74409 [23:45<30:42:16,  1.50s/it]  1%|▏         | 962/74409 [23:46<30:16:00,  1.48s/it]  1%|▏         | 963/74409 [23:47<29:54:44,  1.47s/it]  1%|▏         | 964/74409 [23:49<29:40:56,  1.45s/it]  1%|▏         | 965/74409 [23:50<29:33:11,  1.45s/it]  1%|▏         | 966/74409 [23:52<29:28:58,  1.45s/it]  1%|▏         | 967/74409 [23:53<29:22:06,  1.44s/it]                                                      (INFO) 2024-09-25 20:45:25,442 - MultiTask_train_logger:
-Episode: 0 Timestep: 3872
-loss_0: 7.436 loss_1: 8.615 loss_2: 7.745 loss_3: 8.309
-  1%|▏         | 967/74409 [23:55<29:22:06,  1.44s/it]  1%|▏         | 968/74409 [23:55<31:15:34,  1.53s/it]  1%|▏         | 969/74409 [23:56<30:33:50,  1.50s/it]  1%|▏         | 970/74409 [23:58<30:06:58,  1.48s/it]  1%|▏         | 971/74409 [23:59<29:53:21,  1.47s/it]  1%|▏         | 972/74409 [24:01<29:40:30,  1.45s/it]  1%|▏         | 973/74409 [24:02<29:31:14,  1.45s/it]  1%|▏         | 974/74409 [24:03<29:25:30,  1.44s/it]  1%|▏         | 975/74409 [24:05<29:21:41,  1.44s/it]                                                      (INFO) 2024-09-25 20:45:37,202 - MultiTask_train_logger:
-Episode: 0 Timestep: 3904
-loss_0: 7.373 loss_1: 8.575 loss_2: 7.7 loss_3: 8.188
-  1%|▏         | 975/74409 [24:06<29:21:41,  1.44s/it]  1%|▏         | 976/74409 [24:07<31:16:09,  1.53s/it]  1%|▏         | 977/74409 [24:08<30:33:16,  1.50s/it]  1%|▏         | 978/74409 [24:10<30:10:07,  1.48s/it]  1%|▏         | 979/74409 [24:11<29:53:08,  1.47s/it]  1%|▏         | 980/74409 [24:12<29:41:25,  1.46s/it]  1%|▏         | 981/74409 [24:14<29:37:15,  1.45s/it]  1%|▏         | 982/74409 [24:15<29:30:05,  1.45s/it]  1%|▏         | 983/74409 [24:17<29:31:25,  1.45s/it]                                                      (INFO) 2024-09-25 20:45:49,032 - MultiTask_train_logger:
-Episode: 0 Timestep: 3936
-loss_0: 7.267 loss_1: 8.407 loss_2: 7.703 loss_3: 8.199
-  1%|▏         | 983/74409 [24:18<29:31:25,  1.45s/it]  1%|▏         | 984/74409 [24:18<31:34:32,  1.55s/it]  1%|▏         | 985/74409 [24:20<30:52:10,  1.51s/it]  1%|▏         | 986/74409 [24:21<30:24:29,  1.49s/it]  1%|▏         | 987/74409 [24:23<30:05:57,  1.48s/it]  1%|▏         | 988/74409 [24:24<29:50:52,  1.46s/it]  1%|▏         | 989/74409 [24:26<29:44:23,  1.46s/it]  1%|▏         | 990/74409 [24:27<29:35:24,  1.45s/it]  1%|▏         | 991/74409 [24:29<29:28:25,  1.45s/it]                                                      (INFO) 2024-09-25 20:46:00,841 - MultiTask_train_logger:
-Episode: 0 Timestep: 3968
-loss_0: 7.596 loss_1: 8.004 loss_2: 7.794 loss_3: 8.133
-  1%|▏         | 991/74409 [24:30<29:28:25,  1.45s/it]  1%|▏         | 992/74409 [24:30<31:20:52,  1.54s/it]  1%|▏         | 993/74409 [24:32<30:42:57,  1.51s/it]  1%|▏         | 994/74409 [24:33<30:19:04,  1.49s/it]  1%|▏         | 995/74409 [24:35<30:08:01,  1.48s/it]  1%|▏         | 996/74409 [24:36<29:55:17,  1.47s/it]  1%|▏         | 997/74409 [24:38<29:49:13,  1.46s/it]  1%|▏         | 998/74409 [24:39<29:42:30,  1.46s/it]  1%|▏         | 999/74409 [24:40<29:36:21,  1.45s/it]                                                      (INFO) 2024-09-25 20:46:12,690 - MultiTask_train_logger:
-Episode: 0 Timestep: 4000
-loss_0: 7.328 loss_1: 8.57 loss_2: 7.612 loss_3: 8.434
-  1%|▏         | 999/74409 [24:42<29:36:21,  1.45s/it]  1%|▏         | 1000/74409 [24:42<31:21:27,  1.54s/it]  1%|▏         | 1001/74409 [24:44<30:44:27,  1.51s/it]  1%|▏         | 1002/74409 [24:45<30:16:50,  1.49s/it]  1%|▏         | 1003/74409 [24:46<29:57:44,  1.47s/it]  1%|▏         | 1004/74409 [24:48<29:42:16,  1.46s/it]  1%|▏         | 1005/74409 [24:49<29:33:20,  1.45s/it]  1%|▏         | 1006/74409 [24:51<29:25:29,  1.44s/it]  1%|▏         | 1007/74409 [24:52<29:26:38,  1.44s/it]                                                       (INFO) 2024-09-25 20:46:24,472 - MultiTask_train_logger:
-Episode: 0 Timestep: 4032
-loss_0: 7.265 loss_1: 8.488 loss_2: 7.769 loss_3: 8.205
-  1%|▏         | 1007/74409 [24:54<29:26:38,  1.44s/it]  1%|▏         | 1008/74409 [24:54<31:17:15,  1.53s/it]  1%|▏         | 1009/74409 [24:55<30:40:49,  1.50s/it]  1%|▏         | 1010/74409 [24:57<30:25:52,  1.49s/it]  1%|▏         | 1011/74409 [24:58<30:03:53,  1.47s/it]  1%|▏         | 1012/74409 [25:00<29:55:13,  1.47s/it]  1%|▏         | 1013/74409 [25:01<29:42:11,  1.46s/it]  1%|▏         | 1014/74409 [25:03<29:33:39,  1.45s/it]  1%|▏         | 1015/74409 [25:04<29:28:08,  1.45s/it]                                                       (INFO) 2024-09-25 20:46:36,307 - MultiTask_train_logger:
-Episode: 0 Timestep: 4064
-loss_0: 7.615 loss_1: 8.719 loss_2: 7.743 loss_3: 8.157
-  1%|▏         | 1015/74409 [25:05<29:28:08,  1.45s/it]  1%|▏         | 1016/74409 [25:06<31:20:59,  1.54s/it]  1%|▏         | 1017/74409 [25:07<30:41:38,  1.51s/it]  1%|▏         | 1018/74409 [25:09<30:14:34,  1.48s/it]  1%|▏         | 1019/74409 [25:10<29:56:52,  1.47s/it]  1%|▏         | 1020/74409 [25:12<29:44:30,  1.46s/it]  1%|▏         | 1021/74409 [25:13<29:44:07,  1.46s/it]  1%|▏         | 1022/74409 [25:14<29:38:27,  1.45s/it]  1%|▏         | 1023/74409 [25:16<29:48:07,  1.46s/it]                                                       (INFO) 2024-09-25 20:46:48,172 - MultiTask_train_logger:
-Episode: 0 Timestep: 4096
-loss_0: 7.657 loss_1: 8.537 loss_2: 7.779 loss_3: 8.08
-  1%|▏         | 1023/74409 [25:17<29:48:07,  1.46s/it]519 [96, 96, 96, 96]
-519 [96, 96, 96, 96]
-519 [96, 96, 96, 96]
-                                                       (INFO) 2024-09-25 20:46:48,491 - MultiTask_train_logger:
-svd lora layer update:
-module.pretrained_model.transformer.h.0.attn.attention.k_proj_0 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.k_proj_1 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.k_proj_2 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.k_proj_3 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.k_proj_5 1->0
-module.pretrained_model.transformer.h.0.attn.attention.k_proj_6 2->0
-module.pretrained_model.transformer.h.0.attn.attention.v_proj_0 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.v_proj_1 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.v_proj_2 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.v_proj_3 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.v_proj_5 1->0
-module.pretrained_model.transformer.h.0.attn.attention.v_proj_6 2->0
-module.pretrained_model.transformer.h.0.attn.attention.q_proj_0 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.q_proj_1 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.q_proj_2 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.q_proj_3 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.q_proj_5 1->0
-module.pretrained_model.transformer.h.0.attn.attention.q_proj_6 2->0
-module.pretrained_model.transformer.h.0.attn.attention.out_proj_0 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.out_proj_1 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.out_proj_2 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.out_proj_3 -1->3
-module.pretrained_model.transformer.h.0.attn.attention.out_proj_5 1->0
-module.pretrained_model.transformer.h.0.attn.attention.out_proj_6 2->0
-module.pretrained_model.transformer.h.1.attn.attention.k_proj_0 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.k_proj_1 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.k_proj_2 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.k_proj_3 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.k_proj_5 1->0
-module.pretrained_model.transformer.h.1.attn.attention.k_proj_6 2->0
-module.pretrained_model.transformer.h.1.attn.attention.v_proj_0 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.v_proj_1 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.v_proj_2 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.v_proj_3 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.v_proj_5 1->0
-module.pretrained_model.transformer.h.1.attn.attention.v_proj_6 2->0
-module.pretrained_model.transformer.h.1.attn.attention.q_proj_0 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.q_proj_1 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.q_proj_2 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.q_proj_3 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.q_proj_5 1->0
-module.pretrained_model.transformer.h.1.attn.attention.q_proj_6 2->0
-module.pretrained_model.transformer.h.1.attn.attention.out_proj_0 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.out_proj_1 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.out_proj_2 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.out_proj_3 -1->3
-module.pretrained_model.transformer.h.1.attn.attention.out_proj_5 1->0
-module.pretrained_model.transformer.h.1.attn.attention.out_proj_6 2->0
-module.pretrained_model.transformer.h.2.attn.attention.k_proj_0 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.k_proj_1 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.k_proj_2 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.k_proj_3 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.k_proj_5 1->0
-module.pretrained_model.transformer.h.2.attn.attention.k_proj_6 2->0
-module.pretrained_model.transformer.h.2.attn.attention.v_proj_0 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.v_proj_1 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.v_proj_2 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.v_proj_3 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.v_proj_5 1->0
-module.pretrained_model.transformer.h.2.attn.attention.v_proj_6 2->0
-module.pretrained_model.transformer.h.2.attn.attention.q_proj_0 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.q_proj_1 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.q_proj_2 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.q_proj_3 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.q_proj_5 1->0
-module.pretrained_model.transformer.h.2.attn.attention.q_proj_6 2->0
-module.pretrained_model.transformer.h.2.attn.attention.out_proj_0 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.out_proj_1 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.out_proj_2 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.out_proj_3 -1->3
-module.pretrained_model.transformer.h.2.attn.attention.out_proj_5 1->0
-module.pretrained_model.transformer.h.2.attn.attention.out_proj_6 2->0
-module.pretrained_model.transformer.h.3.attn.attention.k_proj_0 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.k_proj_1 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.k_proj_2 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.k_proj_3 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.k_proj_5 1->0
-module.pretrained_model.transformer.h.3.attn.attention.k_proj_6 2->0
-module.pretrained_model.transformer.h.3.attn.attention.v_proj_0 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.v_proj_1 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.v_proj_2 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.v_proj_3 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.v_proj_5 1->0
-module.pretrained_model.transformer.h.3.attn.attention.v_proj_6 2->0
-module.pretrained_model.transformer.h.3.attn.attention.q_proj_0 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.q_proj_1 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.q_proj_2 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.q_proj_3 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.q_proj_5 1->0
-module.pretrained_model.transformer.h.3.attn.attention.q_proj_6 2->0
-module.pretrained_model.transformer.h.3.attn.attention.out_proj_0 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.out_proj_1 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.out_proj_2 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.out_proj_3 -1->3
-module.pretrained_model.transformer.h.3.attn.attention.out_proj_5 1->0
-module.pretrained_model.transformer.h.3.attn.attention.out_proj_6 2->0
-module.pretrained_model.transformer.h.4.attn.attention.k_proj_0 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.k_proj_1 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.k_proj_2 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.k_proj_3 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.k_proj_5 1->0
-module.pretrained_model.transformer.h.4.attn.attention.k_proj_6 2->0
-module.pretrained_model.transformer.h.4.attn.attention.v_proj_0 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.v_proj_1 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.v_proj_2 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.v_proj_3 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.v_proj_5 1->0
-module.pretrained_model.transformer.h.4.attn.attention.v_proj_6 2->0
-module.pretrained_model.transformer.h.4.attn.attention.q_proj_0 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.q_proj_1 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.q_proj_2 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.q_proj_3 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.q_proj_5 1->0
-module.pretrained_model.transformer.h.4.attn.attention.q_proj_6 2->0
-module.pretrained_model.transformer.h.4.attn.attention.out_proj_0 -1->3
-module.pretrained_model.transformer.h.4.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.4.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.5.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.5.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.5.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.5.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.5.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.5.attn.attention.q_proj_5 1->2
-module.pretrained_model.transformer.h.5.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.5.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.6.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.6.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.6.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.6.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.6.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.6.attn.attention.q_proj_5 1->2
-module.pretrained_model.transformer.h.6.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.6.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.7.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.7.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.7.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.7.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.7.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.7.attn.attention.q_proj_5 1->2
-module.pretrained_model.transformer.h.7.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.7.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.8.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.8.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.8.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.8.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.8.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.8.attn.attention.q_proj_5 1->2
-module.pretrained_model.transformer.h.8.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.8.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.9.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.9.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.9.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.9.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.9.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.9.attn.attention.q_proj_5 1->2
-module.pretrained_model.transformer.h.9.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.9.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.10.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.10.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.10.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.10.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.10.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.10.attn.attention.q_proj_5 1->2
-module.pretrained_model.transformer.h.10.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.10.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.11.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.11.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.11.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.11.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.11.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.11.attn.attention.q_proj_5 1->2
-module.pretrained_model.transformer.h.11.attn.attention.out_proj_4 0->2
-module.pretrained_model.transformer.h.11.attn.attention.out_proj_5 1->2
-module.pretrained_model.transformer.h.12.attn.attention.k_proj_4 0->2
-module.pretrained_model.transformer.h.12.attn.attention.k_proj_5 1->2
-module.pretrained_model.transformer.h.12.attn.attention.v_proj_4 0->2
-module.pretrained_model.transformer.h.12.attn.attention.v_proj_5 1->2
-module.pretrained_model.transformer.h.12.attn.attention.q_proj_4 0->2
-module.pretrained_model.transformer.h.12.attn.attention.q_proj_5 1->2
-  1%|▏         | 1023/74409 [25:18<29:48:07,  1.46s/it]519 [96, 96, 96, 96]
-  1%|▏         | 1024/74409 [25:18<32:01:39,  1.57s/it]  1%|▏         | 1025/74409 [25:19<31:15:51,  1.53s/it]  1%|▏         | 1026/74409 [25:21<30:38:34,  1.50s/it]  1%|▏         | 1027/74409 [25:22<30:20:10,  1.49s/it]  1%|▏         | 1028/74409 [25:23<30:00:08,  1.47s/it]  1%|▏         | 1029/74409 [25:25<29:48:24,  1.46s/it]  1%|▏         | 1030/74409 [25:26<29:40:57,  1.46s/it]  1%|▏         | 1031/74409 [25:28<29:40:57,  1.46s/it]                                                       (INFO) 2024-09-25 20:47:00,104 - MultiTask_train_logger:
-Episode: 0 Timestep: 4128
-loss_0: 7.373 loss_1: 8.627 loss_2: 7.781 loss_3: 8.171
-  1%|▏         | 1031/74409 [25:29<29:40:57,  1.46s/it]  1%|▏         | 1032/74409 [25:30<31:28:24,  1.54s/it]  1%|▏         | 1033/74409 [25:31<30:43:10,  1.51s/it]  1%|▏         | 1034/74409 [25:32<30:14:14,  1.48s/it]  1%|▏         | 1035/74409 [25:34<30:01:24,  1.47s/it]  1%|▏         | 1036/74409 [25:35<29:45:37,  1.46s/it]  1%|▏         | 1037/74409 [25:37<29:46:10,  1.46s/it]  1%|▏         | 1038/74409 [25:38<29:38:35,  1.45s/it]  1%|▏         | 1039/74409 [25:40<29:28:54,  1.45s/it]                                                       (INFO) 2024-09-25 20:47:11,909 - MultiTask_train_logger:
-Episode: 0 Timestep: 4160
-loss_0: 7.197 loss_1: 8.351 loss_2: 7.8 loss_3: 8.323
-  1%|▏         | 1039/74409 [25:41<29:28:54,  1.45s/it]  1%|▏         | 1040/74409 [25:41<31:18:39,  1.54s/it]  1%|▏         | 1041/74409 [25:43<30:38:54,  1.50s/it]  1%|▏         | 1042/74409 [25:44<30:14:01,  1.48s/it]  1%|▏         | 1043/74409 [25:46<30:01:57,  1.47s/it]  1%|▏         | 1044/74409 [25:47<29:49:07,  1.46s/it]  1%|▏         | 1045/74409 [25:49<29:36:56,  1.45s/it]  1%|▏         | 1046/74409 [25:50<29:27:43,  1.45s/it]  1%|▏         | 1047/74409 [25:52<29:55:32,  1.47s/it]                                                       (INFO) 2024-09-25 20:47:23,780 - MultiTask_train_logger:
-Episode: 0 Timestep: 4192
-loss_0: 7.559 loss_1: 8.393 loss_2: 7.794 loss_3: 8.177
-  1%|▏         | 1047/74409 [25:53<29:55:32,  1.47s/it]  1%|▏         | 1048/74409 [25:53<31:34:03,  1.55s/it]  1%|▏         | 1049/74409 [25:55<30:47:34,  1.51s/it]  1%|▏         | 1050/74409 [25:56<30:16:43,  1.49s/it]  1%|▏         | 1051/74409 [25:58<29:58:07,  1.47s/it]  1%|▏         | 1052/74409 [25:59<29:47:22,  1.46s/it]  1%|▏         | 1053/74409 [26:00<29:39:36,  1.46s/it]  1%|▏         | 1054/74409 [26:02<29:36:37,  1.45s/it]  1%|▏         | 1055/74409 [26:03<29:37:08,  1.45s/it]                                                       (INFO) 2024-09-25 20:47:35,590 - MultiTask_train_logger:
-Episode: 0 Timestep: 4224
-loss_0: 7.272 loss_1: 8.758 loss_2: 7.724 loss_3: 8.171
-  1%|▏         | 1055/74409 [26:05<29:37:08,  1.45s/it]  1%|▏         | 1056/74409 [26:05<31:23:45,  1.54s/it]  1%|▏         | 1057/74409 [26:06<30:41:11,  1.51s/it]  1%|▏         | 1058/74409 [26:08<30:13:29,  1.48s/it]  1%|▏         | 1059/74409 [26:09<29:55:14,  1.47s/it]  1%|▏         | 1060/74409 [26:11<29:41:30,  1.46s/it]  1%|▏         | 1061/74409 [26:12<29:30:33,  1.45s/it]  1%|▏         | 1062/74409 [26:14<29:29:20,  1.45s/it]  1%|▏         | 1063/74409 [26:15<29:26:22,  1.44s/it]                                                       (INFO) 2024-09-25 20:47:47,367 - MultiTask_train_logger:
-Episode: 0 Timestep: 4256
-loss_0: 7.528 loss_1: 8.36 loss_2: 7.613 loss_3: 8.239
-  1%|▏         | 1063/74409 [26:17<29:26:22,  1.44s/it]  1%|▏         | 1064/74409 [26:17<31:15:00,  1.53s/it]  1%|▏         | 1065/74409 [26:18<30:37:39,  1.50s/it]  1%|▏         | 1066/74409 [26:20<30:09:58,  1.48s/it]  1%|▏         | 1067/74409 [26:21<29:53:37,  1.47s/it]  1%|▏         | 1068/74409 [26:23<29:38:47,  1.46s/it]  1%|▏         | 1069/74409 [26:24<29:35:58,  1.45s/it]  1%|▏         | 1070/74409 [26:25<29:38:15,  1.45s/it]  1%|▏         | 1071/74409 [26:27<29:34:04,  1.45s/it]                                                       (INFO) 2024-09-25 20:47:59,187 - MultiTask_train_logger:
-Episode: 0 Timestep: 4288
-loss_0: 7.417 loss_1: 8.435 loss_2: 7.724 loss_3: 8.13
-  1%|▏         | 1071/74409 [26:28<29:34:04,  1.45s/it]  1%|▏         | 1072/74409 [26:29<31:24:06,  1.54s/it]  1%|▏         | 1073/74409 [26:30<30:40:55,  1.51s/it]  1%|▏         | 1074/74409 [26:32<30:14:51,  1.48s/it]  1%|▏         | 1075/74409 [26:33<29:58:52,  1.47s/it]  1%|▏         | 1076/74409 [26:34<29:42:51,  1.46s/it]  1%|▏         | 1077/74409 [26:36<29:33:16,  1.45s/it]  1%|▏         | 1078/74409 [26:37<29:25:08,  1.44s/it]  1%|▏         | 1079/74409 [26:39<29:22:55,  1.44s/it]                                                       (INFO) 2024-09-25 20:48:10,965 - MultiTask_train_logger:
-Episode: 0 Timestep: 4320
-loss_0: 6.974 loss_1: 8.526 loss_2: 7.634 loss_3: 8.13
-  1%|▏         | 1079/74409 [26:40<29:22:55,  1.44s/it]  1%|▏         | 1080/74409 [26:40<31:13:58,  1.53s/it]  1%|▏         | 1081/74409 [26:42<30:34:54,  1.50s/it]  1%|▏         | 1082/74409 [26:43<30:16:27,  1.49s/it]  1%|▏         | 1083/74409 [26:45<29:57:33,  1.47s/it]  1%|▏         | 1084/74409 [26:46<29:44:47,  1.46s/it]  1%|▏         | 1085/74409 [26:48<29:33:55,  1.45s/it]  1%|▏         | 1086/74409 [26:49<29:26:38,  1.45s/it]  1%|▏         | 1087/74409 [26:50<29:19:34,  1.44s/it]                                                       (INFO) 2024-09-25 20:48:22,738 - MultiTask_train_logger:
-Episode: 0 Timestep: 4352
-loss_0: 7.328 loss_1: 8.373 loss_2: 7.697 loss_3: 8.042
-  1%|▏         | 1087/74409 [26:52<29:19:34,  1.44s/it]  1%|▏         | 1088/74409 [26:52<31:07:58,  1.53s/it]  1%|▏         | 1089/74409 [26:54<30:30:02,  1.50s/it]  1%|▏         | 1090/74409 [26:55<30:10:10,  1.48s/it]  1%|▏         | 1091/74409 [26:57<29:54:48,  1.47s/it]  1%|▏         | 1092/74409 [26:58<29:43:45,  1.46s/it]  1%|▏         | 1093/74409 [26:59<29:33:31,  1.45s/it]  1%|▏         | 1094/74409 [27:01<29:32:43,  1.45s/it]  1%|▏         | 1095/74409 [27:02<29:40:47,  1.46s/it]                                                       (INFO) 2024-09-25 20:48:34,581 - MultiTask_train_logger:
-Episode: 0 Timestep: 4384
-loss_0: 7.227 loss_1: 8.379 loss_2: 7.742 loss_3: 8.059
-  1%|▏         | 1095/74409 [27:04<29:40:47,  1.46s/it]  1%|▏         | 1096/74409 [27:04<31:26:10,  1.54s/it]  1%|▏         | 1097/74409 [27:05<30:38:23,  1.50s/it]  1%|▏         | 1098/74409 [27:07<30:12:46,  1.48s/it]  1%|▏         | 1099/74409 [27:08<29:53:38,  1.47s/it]  1%|▏         | 1100/74409 [27:10<29:40:25,  1.46s/it]  1%|▏         | 1101/74409 [27:11<29:41:44,  1.46s/it]  1%|▏         | 1102/74409 [27:13<29:29:20,  1.45s/it]  1%|▏         | 1103/74409 [27:14<29:27:03,  1.45s/it]                                                       (INFO) 2024-09-25 20:48:46,368 - MultiTask_train_logger:
-Episode: 0 Timestep: 4416
-loss_0: 7.188 loss_1: 8.244 loss_2: 7.64 loss_3: 7.91
-  1%|▏         | 1103/74409 [27:16<29:27:03,  1.45s/it]  1%|▏         | 1104/74409 [27:16<31:17:25,  1.54s/it]  1%|▏         | 1105/74409 [27:17<30:37:24,  1.50s/it]  1%|▏         | 1106/74409 [27:19<30:13:07,  1.48s/it]  1%|▏         | 1107/74409 [27:20<29:53:44,  1.47s/it]  1%|▏         | 1108/74409 [27:22<29:43:24,  1.46s/it]  1%|▏         | 1109/74409 [27:23<29:37:53,  1.46s/it]  1%|▏         | 1110/74409 [27:24<29:27:22,  1.45s/it]  1%|▏         | 1111/74409 [27:26<29:22:44,  1.44s/it]                                                       (INFO) 2024-09-25 20:48:58,152 - MultiTask_train_logger:
-Episode: 0 Timestep: 4448
-loss_0: 6.99 loss_1: 8.651 loss_2: 7.657 loss_3: 8.005
-  1%|▏         | 1111/74409 [27:27<29:22:44,  1.44s/it]  1%|▏         | 1112/74409 [27:28<31:11:33,  1.53s/it]  1%|▏         | 1113/74409 [27:29<30:34:21,  1.50s/it]  1%|▏         | 1114/74409 [27:30<30:09:19,  1.48s/it]  1%|▏         | 1115/74409 [27:32<30:07:16,  1.48s/it]  1%|▏         | 1116/74409 [27:33<29:53:30,  1.47s/it]  2%|▏         | 1117/74409 [27:35<29:43:29,  1.46s/it]  2%|▏         | 1118/74409 [27:36<29:34:55,  1.45s/it]  2%|▏         | 1119/74409 [27:38<29:33:25,  1.45s/it]                                                       (INFO) 2024-09-25 20:49:10,005 - MultiTask_train_logger:
-Episode: 0 Timestep: 4480
-loss_0: 7.394 loss_1: 8.262 loss_2: 7.599 loss_3: 7.978
-  2%|▏         | 1119/74409 [27:39<29:33:25,  1.45s/it]  2%|▏         | 1120/74409 [27:39<31:21:45,  1.54s/it]  2%|▏         | 1121/74409 [27:41<30:43:37,  1.51s/it]  2%|▏         | 1122/74409 [27:42<30:12:49,  1.48s/it]  2%|▏         | 1123/74409 [27:44<30:05:07,  1.48s/it]  2%|▏         | 1124/74409 [27:45<29:52:37,  1.47s/it]  2%|▏         | 1125/74409 [27:47<29:43:24,  1.46s/it]  2%|▏         | 1126/74409 [27:48<29:33:29,  1.45s/it]  2%|▏         | 1127/74409 [27:50<29:28:29,  1.45s/it]                                                       (INFO) 2024-09-25 20:49:21,848 - MultiTask_train_logger:
-Episode: 0 Timestep: 4512
-loss_0: 7.129 loss_1: 8.581 loss_2: 7.686 loss_3: 8.002
-  2%|▏         | 1127/74409 [27:51<29:28:29,  1.45s/it]  2%|▏         | 1128/74409 [27:51<31:23:55,  1.54s/it]  2%|▏         | 1129/74409 [27:53<30:56:09,  1.52s/it]  2%|▏         | 1130/74409 [27:54<30:21:40,  1.49s/it]  2%|▏         | 1131/74409 [27:56<30:09:32,  1.48s/it]  2%|▏         | 1132/74409 [27:57<29:48:38,  1.46s/it]  2%|▏         | 1133/74409 [27:59<29:38:00,  1.46s/it]  2%|▏         | 1134/74409 [28:00<29:31:08,  1.45s/it]  2%|▏         | 1135/74409 [28:01<29:22:27,  1.44s/it]                                                       (INFO) 2024-09-25 20:49:33,691 - MultiTask_train_logger:
-Episode: 0 Timestep: 4544
-loss_0: 7.265 loss_1: 8.243 loss_2: 7.694 loss_3: 8.062
-  2%|▏         | 1135/74409 [28:03<29:22:27,  1.44s/it]  2%|▏         | 1136/74409 [28:03<31:20:15,  1.54s/it]  2%|▏         | 1137/74409 [28:05<30:39:05,  1.51s/it]  2%|▏         | 1138/74409 [28:06<30:10:10,  1.48s/it]  2%|▏         | 1139/74409 [28:07<29:52:58,  1.47s/it]  2%|▏         | 1140/74409 [28:09<29:37:14,  1.46s/it]  2%|▏         | 1141/74409 [28:10<29:28:32,  1.45s/it]  2%|▏         | 1142/74409 [28:12<29:26:18,  1.45s/it]  2%|▏         | 1143/74409 [28:13<29:23:30,  1.44s/it]                                                       (INFO) 2024-09-25 20:49:45,479 - MultiTask_train_logger:
-Episode: 0 Timestep: 4576
-loss_0: 7.191 loss_1: 8.213 loss_2: 7.543 loss_3: 8.013
-  2%|▏         | 1143/74409 [28:15<29:23:30,  1.44s/it]  2%|▏         | 1144/74409 [28:15<31:17:44,  1.54s/it]  2%|▏         | 1145/74409 [28:16<30:41:47,  1.51s/it]  2%|▏         | 1146/74409 [28:18<30:11:52,  1.48s/it]  2%|▏         | 1147/74409 [28:19<29:54:40,  1.47s/it]  2%|▏         | 1148/74409 [28:21<29:39:02,  1.46s/it]  2%|▏         | 1149/74409 [28:22<29:31:46,  1.45s/it]  2%|▏         | 1150/74409 [28:24<29:33:06,  1.45s/it]  2%|▏         | 1151/74409 [28:25<29:25:55,  1.45s/it]                                                       (INFO) 2024-09-25 20:49:57,282 - MultiTask_train_logger:
-Episode: 0 Timestep: 4608
-loss_0: 6.935 loss_1: 8.334 loss_2: 7.556 loss_3: 7.933
-  2%|▏         | 1151/74409 [28:26<29:25:55,  1.45s/it]  2%|▏         | 1152/74409 [28:27<31:16:39,  1.54s/it]  2%|▏         | 1153/74409 [28:28<30:33:38,  1.50s/it]  2%|▏         | 1154/74409 [28:30<30:09:07,  1.48s/it]  2%|▏         | 1155/74409 [28:31<29:52:17,  1.47s/it]  2%|▏         | 1156/74409 [28:32<29:41:37,  1.46s/it]  2%|▏         | 1157/74409 [28:34<29:29:41,  1.45s/it]  2%|▏         | 1158/74409 [28:35<29:25:10,  1.45s/it]  2%|▏         | 1159/74409 [28:37<29:17:21,  1.44s/it]                                                       (INFO) 2024-09-25 20:50:09,048 - MultiTask_train_logger:
-Episode: 0 Timestep: 4640
-loss_0: 7.029 loss_1: 8.316 loss_2: 7.558 loss_3: 7.988
-  2%|▏         | 1159/74409 [28:38<29:17:21,  1.44s/it]  2%|▏         | 1160/74409 [28:39<31:10:31,  1.53s/it]  2%|▏         | 1161/74409 [28:40<30:39:23,  1.51s/it]  2%|▏         | 1162/74409 [28:41<30:12:53,  1.49s/it]  2%|▏         | 1163/74409 [28:43<29:57:26,  1.47s/it]  2%|▏         | 1164/74409 [28:44<29:44:23,  1.46s/it]  2%|▏         | 1165/74409 [28:46<29:31:46,  1.45s/it]  2%|▏         | 1166/74409 [28:47<29:24:21,  1.45s/it]  2%|▏         | 1167/74409 [28:49<29:18:53,  1.44s/it]                                                       (INFO) 2024-09-25 20:50:20,842 - MultiTask_train_logger:
-Episode: 0 Timestep: 4672
-loss_0: 7.406 loss_1: 8.187 loss_2: 7.609 loss_3: 8.053
-  2%|▏         | 1167/74409 [28:50<29:18:53,  1.44s/it]  2%|▏         | 1168/74409 [28:50<31:09:23,  1.53s/it]  2%|▏         | 1169/74409 [28:52<30:29:02,  1.50s/it]  2%|▏         | 1170/74409 [28:53<30:05:22,  1.48s/it]  2%|▏         | 1171/74409 [28:55<29:46:18,  1.46s/it]  2%|▏         | 1172/74409 [28:56<29:35:00,  1.45s/it]  2%|▏         | 1173/74409 [28:57<29:31:43,  1.45s/it]  2%|▏         | 1174/74409 [28:59<29:26:27,  1.45s/it]  2%|▏         | 1175/74409 [29:00<29:22:33,  1.44s/it]                                                       (INFO) 2024-09-25 20:50:32,620 - MultiTask_train_logger:
-Episode: 0 Timestep: 4704
-loss_0: 7.261 loss_1: 8.116 loss_2: 7.476 loss_3: 7.903
-  2%|▏         | 1175/74409 [29:02<29:22:33,  1.44s/it]  2%|▏         | 1176/74409 [29:02<31:12:16,  1.53s/it]  2%|▏         | 1177/74409 [29:04<30:37:27,  1.51s/it]  2%|▏         | 1178/74409 [29:05<30:09:15,  1.48s/it]  2%|▏         | 1179/74409 [29:06<29:55:44,  1.47s/it]  2%|▏         | 1180/74409 [29:08<29:40:10,  1.46s/it]  2%|▏         | 1181/74409 [29:09<29:31:50,  1.45s/it]  2%|▏         | 1182/74409 [29:11<29:30:03,  1.45s/it]  2%|▏         | 1183/74409 [29:12<29:25:31,  1.45s/it]                                                       (INFO) 2024-09-25 20:50:44,450 - MultiTask_train_logger:
-Episode: 0 Timestep: 4736
-loss_0: 6.892 loss_1: 8.303 loss_2: 7.63 loss_3: 7.944
-  2%|▏         | 1183/74409 [29:14<29:25:31,  1.45s/it]  2%|▏         | 1184/74409 [29:14<31:24:29,  1.54s/it]  2%|▏         | 1185/74409 [29:15<30:37:32,  1.51s/it]  2%|▏         | 1186/74409 [29:17<30:13:27,  1.49s/it]  2%|▏         | 1187/74409 [29:18<29:54:30,  1.47s/it]  2%|▏         | 1188/74409 [29:20<29:39:05,  1.46s/it]  2%|▏         | 1189/74409 [29:21<29:29:15,  1.45s/it]  2%|▏         | 1190/74409 [29:23<29:27:21,  1.45s/it]  2%|▏         | 1191/74409 [29:24<29:23:06,  1.44s/it]                                                       (INFO) 2024-09-25 20:50:56,234 - MultiTask_train_logger:
-Episode: 0 Timestep: 4768
-loss_0: 7.011 loss_1: 8.23 loss_2: 7.432 loss_3: 7.877
-  2%|▏         | 1191/74409 [29:25<29:23:06,  1.44s/it]  2%|▏         | 1192/74409 [29:26<31:13:50,  1.54s/it]  2%|▏         | 1193/74409 [29:27<30:42:47,  1.51s/it]  2%|▏         | 1194/74409 [29:29<30:15:06,  1.49s/it]  2%|▏         | 1195/74409 [29:30<29:55:52,  1.47s/it]  2%|▏         | 1196/74409 [29:31<29:48:35,  1.47s/it]  2%|▏         | 1197/74409 [29:33<29:38:18,  1.46s/it]  2%|▏         | 1198/74409 [29:34<29:26:49,  1.45s/it]  2%|▏         | 1199/74409 [29:36<29:22:48,  1.44s/it]                                                       (INFO) 2024-09-25 20:51:08,049 - MultiTask_train_logger:
-Episode: 0 Timestep: 4800
-loss_0: 7.217 loss_1: 8.229 loss_2: 7.472 loss_3: 8.051
-  2%|▏         | 1199/74409 [29:37<29:22:48,  1.44s/it]  2%|▏         | 1200/74409 [29:38<31:11:31,  1.53s/it]  2%|▏         | 1201/74409 [29:39<30:30:38,  1.50s/it]  2%|▏         | 1202/74409 [29:40<30:07:16,  1.48s/it]  2%|▏         | 1203/74409 [29:42<29:47:26,  1.46s/it]  2%|▏         | 1204/74409 [29:43<29:39:23,  1.46s/it]  2%|▏         | 1205/74409 [29:45<29:32:46,  1.45s/it]  2%|▏         | 1206/74409 [29:46<29:29:44,  1.45s/it]  2%|▏         | 1207/74409 [29:48<29:23:24,  1.45s/it]                                                       (INFO) 2024-09-25 20:51:19,843 - MultiTask_train_logger:
-Episode: 0 Timestep: 4832
-loss_0: 7.215 loss_1: 7.945 loss_2: 7.485 loss_3: 7.956
-  2%|▏         | 1207/74409 [29:49<29:23:24,  1.45s/it]  2%|▏         | 1208/74409 [29:49<31:14:50,  1.54s/it]  2%|▏         | 1209/74409 [29:51<30:40:52,  1.51s/it]  2%|▏         | 1210/74409 [29:52<30:11:00,  1.48s/it]  2%|▏         | 1211/74409 [29:54<29:53:34,  1.47s/it]  2%|▏         | 1212/74409 [29:55<29:39:42,  1.46s/it]  2%|▏         | 1213/74409 [29:56<29:30:29,  1.45s/it]  2%|▏         | 1214/74409 [29:58<29:28:29,  1.45s/it]  2%|▏         | 1215/74409 [29:59<29:21:10,  1.44s/it]                                                       (INFO) 2024-09-25 20:51:31,641 - MultiTask_train_logger:
-Episode: 0 Timestep: 4864
-loss_0: 6.967 loss_1: 8.166 loss_2: 7.502 loss_3: 7.969
-  2%|▏         | 1215/74409 [30:01<29:21:10,  1.44s/it]  2%|▏         | 1216/74409 [30:01<31:15:34,  1.54s/it]  2%|▏         | 1217/74409 [30:03<30:29:40,  1.50s/it]  2%|▏         | 1218/74409 [30:04<30:06:08,  1.48s/it]  2%|▏         | 1219/74409 [30:05<29:50:05,  1.47s/it]  2%|▏         | 1220/74409 [30:07<29:37:00,  1.46s/it]  2%|▏         | 1221/74409 [30:08<29:29:57,  1.45s/it]  2%|▏         | 1222/74409 [30:10<29:26:36,  1.45s/it]  2%|▏         | 1223/74409 [30:11<29:21:23,  1.44s/it]                                                       (INFO) 2024-09-25 20:51:43,417 - MultiTask_train_logger:
-Episode: 0 Timestep: 4896
-loss_0: 7.211 loss_1: 8.134 loss_2: 7.495 loss_3: 7.969
-  2%|▏         | 1223/74409 [30:13<29:21:23,  1.44s/it]  2%|▏         | 1224/74409 [30:13<31:10:13,  1.53s/it]  2%|▏         | 1225/74409 [30:14<30:31:00,  1.50s/it]  2%|▏         | 1226/74409 [30:16<30:07:24,  1.48s/it]  2%|▏         | 1227/74409 [30:17<30:07:54,  1.48s/it]  2%|▏         | 1228/74409 [30:19<29:51:46,  1.47s/it]  2%|▏         | 1229/74409 [30:20<29:47:53,  1.47s/it]  2%|▏         | 1230/74409 [30:22<29:32:12,  1.45s/it]  2%|▏         | 1231/74409 [30:23<29:24:37,  1.45s/it]                                                       (INFO) 2024-09-25 20:51:55,271 - MultiTask_train_logger:
-Episode: 0 Timestep: 4928
-loss_0: 7.156 loss_1: 8.001 loss_2: 7.582 loss_3: 7.945
-  2%|▏         | 1231/74409 [30:24<29:24:37,  1.45s/it]  2%|▏         | 1232/74409 [30:25<31:15:52,  1.54s/it]  2%|▏         | 1233/74409 [30:26<30:30:47,  1.50s/it]  2%|▏         | 1234/74409 [30:28<30:10:02,  1.48s/it]  2%|▏         | 1235/74409 [30:29<29:53:48,  1.47s/it]  2%|▏         | 1236/74409 [30:30<29:39:38,  1.46s/it]  2%|▏         | 1237/74409 [30:32<29:28:44,  1.45s/it]  2%|▏         | 1238/74409 [30:33<29:20:44,  1.44s/it]  2%|▏         | 1239/74409 [30:35<29:18:59,  1.44s/it]                                                       (INFO) 2024-09-25 20:52:07,068 - MultiTask_train_logger:
-Episode: 0 Timestep: 4960
-loss_0: 7.338 loss_1: 8.052 loss_2: 7.542 loss_3: 7.932
-  2%|▏         | 1239/74409 [30:36<29:18:59,  1.44s/it]  2%|▏         | 1240/74409 [30:37<31:21:46,  1.54s/it]  2%|▏         | 1241/74409 [30:38<30:40:06,  1.51s/it]  2%|▏         | 1242/74409 [30:39<30:30:52,  1.50s/it]  2%|▏         | 1243/74409 [30:41<30:08:08,  1.48s/it]  2%|▏         | 1244/74409 [30:42<29:50:25,  1.47s/it]  2%|▏         | 1245/74409 [30:44<29:39:06,  1.46s/it]  2%|▏         | 1246/74409 [30:45<29:34:17,  1.46s/it]  2%|▏         | 1247/74409 [30:47<29:25:36,  1.45s/it]                                                       (INFO) 2024-09-25 20:52:18,917 - MultiTask_train_logger:
-Episode: 0 Timestep: 4992
-loss_0: 7.261 loss_1: 8.105 loss_2: 7.553 loss_3: 7.867
-  2%|▏         | 1247/74409 [30:48<29:25:36,  1.45s/it]  2%|▏         | 1248/74409 [30:48<31:11:54,  1.54s/it]  2%|▏         | 1249/74409 [30:50<30:32:09,  1.50s/it]  2%|▏         | 1250/74409 [30:51<30:07:05,  1.48s/it]  2%|▏         | 1251/74409 [30:53<29:48:30,  1.47s/it]  2%|▏         | 1252/74409 [30:54<29:36:23,  1.46s/it]  2%|▏         | 1253/74409 [30:56<29:27:35,  1.45s/it]  2%|▏         | 1254/74409 [30:57<29:20:32,  1.44s/it]  2%|▏         | 1255/74409 [30:58<29:18:38,  1.44s/it]                                                       (INFO) 2024-09-25 20:52:30,707 - MultiTask_train_logger:
-Episode: 0 Timestep: 5024
-loss_0: 7.164 loss_1: 8.164 loss_2: 7.467 loss_3: 7.947
-  2%|▏         | 1255/74409 [31:00<29:18:38,  1.44s/it]  2%|▏         | 1256/74409 [31:00<31:15:02,  1.54s/it]  2%|▏         | 1257/74409 [31:02<30:36:56,  1.51s/it]  2%|▏         | 1258/74409 [31:03<30:13:04,  1.49s/it]  2%|▏         | 1259/74409 [31:04<29:52:20,  1.47s/it]  2%|▏         | 1260/74409 [31:06<29:42:35,  1.46s/it]  2%|▏         | 1261/74409 [31:07<29:35:55,  1.46s/it]  2%|▏         | 1262/74409 [31:09<29:29:06,  1.45s/it]  2%|▏         | 1263/74409 [31:10<29:20:22,  1.44s/it]                                                       (INFO) 2024-09-25 20:52:42,509 - MultiTask_train_logger:
-Episode: 0 Timestep: 5056
-loss_0: 7.038 loss_1: 8.031 loss_2: 7.476 loss_3: 7.719
-  2%|▏         | 1263/74409 [31:12<29:20:22,  1.44s/it]  2%|▏         | 1264/74409 [31:12<31:09:03,  1.53s/it]  2%|▏         | 1265/74409 [31:13<30:32:56,  1.50s/it]  2%|▏         | 1266/74409 [31:15<30:04:22,  1.48s/it]  2%|▏         | 1267/74409 [31:16<29:47:52,  1.47s/it]  2%|▏         | 1268/74409 [31:18<29:38:06,  1.46s/it]  2%|▏         | 1269/74409 [31:19<29:34:36,  1.46s/it]  2%|▏         | 1270/74409 [31:21<29:27:23,  1.45s/it]  2%|▏         | 1271/74409 [31:22<29:23:49,  1.45s/it]                                                       (INFO) 2024-09-25 20:52:54,321 - MultiTask_train_logger:
-Episode: 0 Timestep: 5088
-loss_0: 7.288 loss_1: 8.047 loss_2: 7.446 loss_3: 7.978
-  2%|▏         | 1271/74409 [31:23<29:23:49,  1.45s/it]  2%|▏         | 1272/74409 [31:24<31:15:19,  1.54s/it]  2%|▏         | 1273/74409 [31:25<30:39:41,  1.51s/it]  2%|▏         | 1274/74409 [31:27<30:14:30,  1.49s/it]  2%|▏         | 1275/74409 [31:28<29:53:59,  1.47s/it]  2%|▏         | 1276/74409 [31:30<29:53:01,  1.47s/it]  2%|▏         | 1277/74409 [31:31<29:37:50,  1.46s/it]  2%|▏         | 1278/74409 [31:32<29:39:43,  1.46s/it]  2%|▏         | 1279/74409 [31:34<29:31:04,  1.45s/it]                                                       (INFO) 2024-09-25 20:53:06,187 - MultiTask_train_logger:
-Episode: 0 Timestep: 5120
-loss_0: 7.009 loss_1: 8.034 loss_2: 7.41 loss_3: 7.961
-  2%|▏         | 1279/74409 [31:35<29:31:04,  1.45s/it]  2%|▏         | 1280/74409 [31:36<31:22:24,  1.54s/it]  2%|▏         | 1281/74409 [31:37<30:42:56,  1.51s/it]  2%|▏         | 1282/74409 [31:39<30:29:01,  1.50s/it]  2%|▏         | 1283/74409 [31:40<30:06:29,  1.48s/it]  2%|▏         | 1284/74409 [31:41<29:50:03,  1.47s/it]  2%|▏         | 1285/74409 [31:43<29:39:30,  1.46s/it]  2%|▏         | 1286/74409 [31:44<29:32:42,  1.45s/it]  2%|▏         | 1287/74409 [31:46<29:39:07,  1.46s/it]                                                       (INFO) 2024-09-25 20:53:18,084 - MultiTask_train_logger:
-Episode: 0 Timestep: 5152
-loss_0: 7.051 loss_1: 8.323 loss_2: 7.477 loss_3: 7.96
-  2%|▏         | 1287/74409 [31:47<29:39:07,  1.46s/it]  2%|▏         | 1288/74409 [31:48<31:29:29,  1.55s/it]  2%|▏         | 1289/74409 [31:49<30:50:10,  1.52s/it]  2%|▏         | 1290/74409 [31:50<30:19:07,  1.49s/it]  2%|▏         | 1291/74409 [31:52<30:10:34,  1.49s/it]  2%|▏         | 1292/74409 [31:53<29:49:20,  1.47s/it]  2%|▏         | 1293/74409 [31:55<29:32:31,  1.45s/it]  2%|▏         | 1294/74409 [31:56<29:26:10,  1.45s/it]  2%|▏         | 1295/74409 [31:58<29:30:19,  1.45s/it]                                                       (INFO) 2024-09-25 20:53:29,945 - MultiTask_train_logger:
-Episode: 0 Timestep: 5184
-loss_0: 7.189 loss_1: 8.018 loss_2: 7.488 loss_3: 7.997
-  2%|▏         | 1295/74409 [31:59<29:30:19,  1.45s/it]  2%|▏         | 1296/74409 [31:59<31:21:40,  1.54s/it]  2%|▏         | 1297/74409 [32:01<30:39:00,  1.51s/it]  2%|▏         | 1298/74409 [32:02<30:14:44,  1.49s/it]  2%|▏         | 1299/74409 [32:04<29:54:25,  1.47s/it]  2%|▏         | 1300/74409 [32:05<29:41:26,  1.46s/it]  2%|▏         | 1301/74409 [32:07<29:38:01,  1.46s/it]  2%|▏         | 1302/74409 [32:08<29:29:17,  1.45s/it]  2%|▏         | 1303/74409 [32:09<29:20:46,  1.45s/it]                                                       (INFO) 2024-09-25 20:53:41,851 - MultiTask_train_logger:
-Episode: 0 Timestep: 5216
-loss_0: 6.995 loss_1: 8.317 loss_2: 7.478 loss_3: 7.771
-  2%|▏         | 1303/74409 [32:11<29:20:46,  1.45s/it]  2%|▏         | 1304/74409 [32:11<31:48:55,  1.57s/it]  2%|▏         | 1305/74409 [32:13<30:54:48,  1.52s/it]  2%|▏         | 1306/74409 [32:14<30:22:28,  1.50s/it]  2%|▏         | 1307/74409 [32:16<30:00:57,  1.48s/it]  2%|▏         | 1308/74409 [32:17<29:42:42,  1.46s/it]  2%|▏         | 1309/74409 [32:18<29:29:25,  1.45s/it]  2%|▏         | 1310/74409 [32:20<29:23:22,  1.45s/it]  2%|▏         | 1311/74409 [32:21<29:19:20,  1.44s/it]                                                       (INFO) 2024-09-25 20:53:53,634 - MultiTask_train_logger:
-Episode: 0 Timestep: 5248
-loss_0: 6.875 loss_1: 7.983 loss_2: 7.502 loss_3: 7.799
-  2%|▏         | 1311/74409 [32:23<29:19:20,  1.44s/it]  2%|▏         | 1312/74409 [32:23<31:16:16,  1.54s/it]  2%|▏         | 1313/74409 [32:25<30:35:08,  1.51s/it]  2%|▏         | 1314/74409 [32:26<30:09:36,  1.49s/it]  2%|▏         | 1315/74409 [32:27<29:54:15,  1.47s/it]  2%|▏         | 1316/74409 [32:29<29:38:43,  1.46s/it]  2%|▏         | 1317/74409 [32:30<29:35:16,  1.46s/it]  2%|▏         | 1318/74409 [32:32<29:25:13,  1.45s/it]  2%|▏         | 1319/74409 [32:33<29:21:20,  1.45s/it]                                                       (INFO) 2024-09-25 20:54:05,448 - MultiTask_train_logger:
-Episode: 0 Timestep: 5280
-loss_0: 6.974 loss_1: 8.133 loss_2: 7.475 loss_3: 7.863
-  2%|▏         | 1319/74409 [32:35<29:21:20,  1.45s/it]  2%|▏         | 1320/74409 [32:35<31:14:04,  1.54s/it]  2%|▏         | 1321/74409 [32:36<30:43:39,  1.51s/it]  2%|▏         | 1322/74409 [32:38<30:17:23,  1.49s/it]  2%|▏         | 1323/74409 [32:39<30:00:14,  1.48s/it]  2%|▏         | 1324/74409 [32:41<29:45:09,  1.47s/it]  2%|▏         | 1325/74409 [32:42<29:37:09,  1.46s/it]  2%|▏         | 1326/74409 [32:44<29:28:46,  1.45s/it]  2%|▏         | 1327/74409 [32:45<29:23:26,  1.45s/it]                                                       (INFO) 2024-09-25 20:54:17,313 - MultiTask_train_logger:
-Episode: 0 Timestep: 5312
-loss_0: 6.981 loss_1: 8.098 loss_2: 7.469 loss_3: 7.881
-  2%|▏         | 1327/74409 [32:46<29:23:26,  1.45s/it]  2%|▏         | 1328/74409 [32:47<31:20:39,  1.54s/it]  2%|▏         | 1329/74409 [32:48<30:43:25,  1.51s/it]  2%|▏         | 1330/74409 [32:50<30:15:08,  1.49s/it]  2%|▏         | 1331/74409 [32:51<29:55:08,  1.47s/it]  2%|▏         | 1332/74409 [32:53<29:40:10,  1.46s/it]  2%|▏         | 1333/74409 [32:54<29:28:56,  1.45s/it]  2%|▏         | 1334/74409 [32:55<29:25:18,  1.45s/it]  2%|▏         | 1335/74409 [32:57<29:18:13,  1.44s/it]                                                       (INFO) 2024-09-25 20:54:29,102 - MultiTask_train_logger:
-Episode: 0 Timestep: 5344
-loss_0: 6.978 loss_1: 8.044 loss_2: 7.418 loss_3: 7.817
-  2%|▏         | 1335/74409 [32:58<29:18:13,  1.44s/it]  2%|▏         | 1336/74409 [32:59<31:08:12,  1.53s/it]  2%|▏         | 1337/74409 [33:00<30:30:59,  1.50s/it]  2%|▏         | 1338/74409 [33:01<30:06:38,  1.48s/it]  2%|▏         | 1339/74409 [33:03<29:46:04,  1.47s/it]  2%|▏         | 1340/74409 [33:04<29:31:02,  1.45s/it]  2%|▏         | 1341/74409 [33:06<29:29:57,  1.45s/it]  2%|▏         | 1342/74409 [33:07<29:20:08,  1.45s/it]  2%|▏         | 1343/74409 [33:09<29:30:25,  1.45s/it]                                                       (INFO) 2024-09-25 20:54:40,944 - MultiTask_train_logger:
-Episode: 0 Timestep: 5376
-loss_0: 6.955 loss_1: 8.121 loss_2: 7.464 loss_3: 7.799
-  2%|▏         | 1343/74409 [33:10<29:30:25,  1.45s/it]  2%|▏         | 1344/74409 [33:10<31:23:28,  1.55s/it]  2%|▏         | 1345/74409 [33:12<30:44:03,  1.51s/it]  2%|▏         | 1346/74409 [33:13<30:20:53,  1.50s/it]  2%|▏         | 1347/74409 [33:15<29:58:03,  1.48s/it]  2%|▏         | 1348/74409 [33:16<29:39:58,  1.46s/it]  2%|▏         | 1349/74409 [33:18<29:32:35,  1.46s/it]  2%|▏         | 1350/74409 [33:19<29:25:53,  1.45s/it]  2%|▏         | 1351/74409 [33:20<29:18:59,  1.44s/it]                                                       (INFO) 2024-09-25 20:54:52,763 - MultiTask_train_logger:
-Episode: 0 Timestep: 5408
-loss_0: 7.096 loss_1: 8.04 loss_2: 7.504 loss_3: 7.82
-  2%|▏         | 1351/74409 [33:22<29:18:59,  1.44s/it]  2%|▏         | 1352/74409 [33:22<31:14:38,  1.54s/it]  2%|▏         | 1353/74409 [33:24<30:38:25,  1.51s/it]  2%|▏         | 1354/74409 [33:25<30:19:17,  1.49s/it]  2%|▏         | 1355/74409 [33:27<30:03:43,  1.48s/it]  2%|▏         | 1356/74409 [33:28<29:45:09,  1.47s/it]  2%|▏         | 1357/74409 [33:29<29:31:30,  1.45s/it]  2%|▏         | 1358/74409 [33:31<29:26:29,  1.45s/it]  2%|▏         | 1359/74409 [33:32<29:18:32,  1.44s/it]                                                       (INFO) 2024-09-25 20:55:04,594 - MultiTask_train_logger:
-Episode: 0 Timestep: 5440
-loss_0: 7.056 loss_1: 7.834 loss_2: 7.375 loss_3: 7.839
-  2%|▏         | 1359/74409 [33:34<29:18:32,  1.44s/it]  2%|▏         | 1360/74409 [33:34<31:09:22,  1.54s/it]  2%|▏         | 1361/74409 [33:35<30:30:25,  1.50s/it]  2%|▏         | 1362/74409 [33:37<30:07:42,  1.48s/it]  2%|▏         | 1363/74409 [33:38<29:49:38,  1.47s/it]  2%|▏         | 1364/74409 [33:40<29:39:18,  1.46s/it]  2%|▏         | 1365/74409 [33:41<29:29:24,  1.45s/it]  2%|▏         | 1366/74409 [33:43<29:24:49,  1.45s/it]  2%|▏         | 1367/74409 [33:44<29:37:23,  1.46s/it]                                                       (INFO) 2024-09-25 20:55:16,439 - MultiTask_train_logger:
-Episode: 0 Timestep: 5472
-loss_0: 6.96 loss_1: 8.081 loss_2: 7.5 loss_3: 7.962
-  2%|▏         | 1367/74409 [33:46<29:37:23,  1.46s/it]  2%|▏         | 1368/74409 [33:46<31:19:43,  1.54s/it]  2%|▏         | 1369/74409 [33:47<30:43:36,  1.51s/it]  2%|▏         | 1370/74409 [33:49<30:12:15,  1.49s/it]  2%|▏         | 1371/74409 [33:50<29:49:47,  1.47s/it]  2%|▏         | 1372/74409 [33:52<29:35:20,  1.46s/it]  2%|▏         | 1373/74409 [33:53<29:20:48,  1.45s/it]  2%|▏         | 1374/74409 [33:54<29:17:11,  1.44s/it]  2%|▏         | 1375/74409 [33:56<29:14:29,  1.44s/it]                                                       (INFO) 2024-09-25 20:55:28,225 - MultiTask_train_logger:
-Episode: 0 Timestep: 5504
-loss_0: 6.979 loss_1: 7.879 loss_2: 7.4 loss_3: 7.812
-  2%|▏         | 1375/74409 [33:57<29:14:29,  1.44s/it]  2%|▏         | 1376/74409 [33:58<31:11:21,  1.54s/it]  2%|▏         | 1377/74409 [33:59<30:34:24,  1.51s/it]  2%|▏         | 1378/74409 [34:01<30:06:49,  1.48s/it]  2%|▏         | 1379/74409 [34:02<29:49:09,  1.47s/it]  2%|▏         | 1380/74409 [34:03<29:35:04,  1.46s/it]  2%|▏         | 1381/74409 [34:05<29:24:50,  1.45s/it]  2%|▏         | 1382/74409 [34:06<29:21:41,  1.45s/it]  2%|▏         | 1383/74409 [34:08<29:16:18,  1.44s/it]                                                       (INFO) 2024-09-25 20:55:40,017 - MultiTask_train_logger:
-Episode: 0 Timestep: 5536
-loss_0: 6.924 loss_1: 8.106 loss_2: 7.496 loss_3: 7.812
-  2%|▏         | 1383/74409 [34:09<29:16:18,  1.44s/it]  2%|▏         | 1384/74409 [34:09<31:08:08,  1.53s/it]  2%|▏         | 1385/74409 [34:11<30:35:51,  1.51s/it]  2%|▏         | 1386/74409 [34:12<30:09:25,  1.49s/it]  2%|▏         | 1387/74409 [34:14<29:52:44,  1.47s/it]  2%|▏         | 1388/74409 [34:15<29:39:16,  1.46s/it]  2%|▏         | 1389/74409 [34:17<29:32:15,  1.46s/it]  2%|▏         | 1390/74409 [34:18<29:26:53,  1.45s/it]  2%|▏         | 1391/74409 [34:20<29:22:40,  1.45s/it]                                                       (INFO) 2024-09-25 20:55:51,846 - MultiTask_train_logger:
-Episode: 0 Timestep: 5568
-loss_0: 7.102 loss_1: 8.164 loss_2: 7.377 loss_3: 7.933
-  2%|▏         | 1391/74409 [34:21<29:22:40,  1.45s/it]  2%|▏         | 1392/74409 [34:21<31:12:39,  1.54s/it]  2%|▏         | 1393/74409 [34:23<30:29:49,  1.50s/it]  2%|▏         | 1394/74409 [34:24<30:01:11,  1.48s/it]  2%|▏         | 1395/74409 [34:26<29:38:41,  1.46s/it]  2%|▏         | 1396/74409 [34:27<29:25:04,  1.45s/it]  2%|▏         | 1397/74409 [34:28<29:14:57,  1.44s/it]  2%|▏         | 1398/74409 [34:30<29:08:28,  1.44s/it]  2%|▏         | 1399/74409 [34:31<29:06:23,  1.44s/it]                                                       (INFO) 2024-09-25 20:56:03,541 - MultiTask_train_logger:
-Episode: 0 Timestep: 5600
-loss_0: 6.836 loss_1: 7.985 loss_2: 7.528 loss_3: 7.91
-  2%|▏         | 1399/74409 [34:33<29:06:23,  1.44s/it]  2%|▏         | 1400/74409 [34:33<30:51:47,  1.52s/it]  2%|▏         | 1401/74409 [34:34<30:24:55,  1.50s/it]  2%|▏         | 1402/74409 [34:36<30:03:58,  1.48s/it]  2%|▏         | 1403/74409 [34:37<29:45:46,  1.47s/it]  2%|▏         | 1404/74409 [34:39<29:33:58,  1.46s/it]  2%|▏         | 1405/74409 [34:40<29:25:49,  1.45s/it]  2%|▏         | 1406/74409 [34:42<29:21:19,  1.45s/it]  2%|▏         | 1407/74409 [34:43<29:22:20,  1.45s/it]                                                       (INFO) 2024-09-25 20:56:15,367 - MultiTask_train_logger:
-Episode: 0 Timestep: 5632
-loss_0: 6.809 loss_1: 8.006 loss_2: 7.323 loss_3: 7.778
-  2%|▏         | 1407/74409 [34:45<29:22:20,  1.45s/it]  2%|▏         | 1408/74409 [34:45<31:08:43,  1.54s/it]  2%|▏         | 1409/74409 [34:46<30:40:02,  1.51s/it]  2%|▏         | 1410/74409 [34:48<30:11:43,  1.49s/it]  2%|▏         | 1411/74409 [34:49<29:50:49,  1.47s/it]  2%|▏         | 1412/74409 [34:51<29:36:41,  1.46s/it]  2%|▏         | 1413/74409 [34:52<29:28:04,  1.45s/it]  2%|▏         | 1414/74409 [34:53<29:28:08,  1.45s/it]  2%|▏         | 1415/74409 [34:55<29:19:30,  1.45s/it]                                                       (INFO) 2024-09-25 20:56:27,187 - MultiTask_train_logger:
-Episode: 0 Timestep: 5664
-loss_0: 6.754 loss_1: 7.898 loss_2: 7.414 loss_3: 7.752
-  2%|▏         | 1415/74409 [34:56<29:19:30,  1.45s/it]  2%|▏         | 1416/74409 [34:57<31:12:39,  1.54s/it]  2%|▏         | 1417/74409 [34:58<30:26:30,  1.50s/it]  2%|▏         | 1418/74409 [35:00<30:02:18,  1.48s/it]  2%|▏         | 1419/74409 [35:01<29:43:28,  1.47s/it]  2%|▏         | 1420/74409 [35:02<29:31:25,  1.46s/it]  2%|▏         | 1421/74409 [35:04<29:22:35,  1.45s/it]  2%|▏         | 1422/74409 [35:05<29:15:35,  1.44s/it]  2%|▏         | 1423/74409 [35:07<29:10:36,  1.44s/it]                                                       (INFO) 2024-09-25 20:56:38,952 - MultiTask_train_logger:
-Episode: 0 Timestep: 5696
-loss_0: 7.128 loss_1: 7.958 loss_2: 7.422 loss_3: 7.787
-  2%|▏         | 1423/74409 [35:08<29:10:36,  1.44s/it]  2%|▏         | 1424/74409 [35:08<31:02:57,  1.53s/it]  2%|▏         | 1425/74409 [35:10<30:25:22,  1.50s/it]  2%|▏         | 1426/74409 [35:11<29:57:42,  1.48s/it]  2%|▏         | 1427/74409 [35:13<29:42:11,  1.47s/it]  2%|▏         | 1428/74409 [35:14<29:28:46,  1.45s/it]  2%|▏         | 1429/74409 [35:16<29:29:30,  1.45s/it]  2%|▏         | 1430/74409 [35:17<29:22:24,  1.45s/it]  2%|▏         | 1431/74409 [35:18<29:16:04,  1.44s/it]                                                       (INFO) 2024-09-25 20:56:50,725 - MultiTask_train_logger:
-Episode: 0 Timestep: 5728
-loss_0: 7.051 loss_1: 8.042 loss_2: 7.333 loss_3: 7.816
-  2%|▏         | 1431/74409 [35:20<29:16:04,  1.44s/it]  2%|▏         | 1432/74409 [35:20<31:02:04,  1.53s/it]  2%|▏         | 1433/74409 [35:22<30:27:23,  1.50s/it]  2%|▏         | 1434/74409 [35:23<30:00:58,  1.48s/it]  2%|▏         | 1435/74409 [35:24<29:47:26,  1.47s/it]  2%|▏         | 1436/74409 [35:26<29:33:52,  1.46s/it]  2%|▏         | 1437/74409 [35:27<29:27:33,  1.45s/it]  2%|▏         | 1438/74409 [35:29<29:17:36,  1.45s/it]  2%|▏         | 1439/74409 [35:30<29:12:08,  1.44s/it]                                                       (INFO) 2024-09-25 20:57:02,518 - MultiTask_train_logger:
-Episode: 0 Timestep: 5760
-loss_0: 6.941 loss_1: 7.942 loss_2: 7.396 loss_3: 7.789
-  2%|▏         | 1439/74409 [35:32<29:12:08,  1.44s/it]  2%|▏         | 1440/74409 [35:32<31:07:27,  1.54s/it]  2%|▏         | 1441/74409 [35:33<30:25:08,  1.50s/it]  2%|▏         | 1442/74409 [35:35<30:02:09,  1.48s/it]  2%|▏         | 1443/74409 [35:36<29:42:41,  1.47s/it]  2%|▏         | 1444/74409 [35:38<29:33:03,  1.46s/it]  2%|▏         | 1445/74409 [35:39<29:23:34,  1.45s/it]  2%|▏         | 1446/74409 [35:41<29:19:30,  1.45s/it]  2%|▏         | 1447/74409 [35:42<29:14:24,  1.44s/it]                                                       (INFO) 2024-09-25 20:57:14,291 - MultiTask_train_logger:
-Episode: 0 Timestep: 5792
-loss_0: 6.846 loss_1: 7.982 loss_2: 7.402 loss_3: 7.769
-  2%|▏         | 1447/74409 [35:43<29:14:24,  1.44s/it]  2%|▏         | 1448/74409 [35:44<31:02:06,  1.53s/it]  2%|▏         | 1449/74409 [35:45<30:20:55,  1.50s/it]  2%|▏         | 1450/74409 [35:47<29:59:05,  1.48s/it]  2%|▏         | 1451/74409 [35:48<29:46:10,  1.47s/it]  2%|▏         | 1452/74409 [35:49<29:34:28,  1.46s/it]  2%|▏         | 1453/74409 [35:51<29:25:12,  1.45s/it]  2%|▏         | 1454/74409 [35:52<29:23:27,  1.45s/it]  2%|▏         | 1455/74409 [35:54<29:18:05,  1.45s/it]                                                       (INFO) 2024-09-25 20:57:26,097 - MultiTask_train_logger:
-Episode: 0 Timestep: 5824
-loss_0: 7.013 loss_1: 7.961 loss_2: 7.352 loss_3: 7.793
-  2%|▏         | 1455/74409 [35:55<29:18:05,  1.45s/it]  2%|▏         | 1456/74409 [35:56<31:10:59,  1.54s/it]  2%|▏         | 1457/74409 [35:57<30:31:13,  1.51s/it]  2%|▏         | 1458/74409 [35:58<30:12:40,  1.49s/it]  2%|▏         | 1459/74409 [36:00<29:52:39,  1.47s/it]  2%|▏         | 1460/74409 [36:01<29:46:32,  1.47s/it]  2%|▏         | 1461/74409 [36:03<29:29:34,  1.46s/it]  2%|▏         | 1462/74409 [36:04<29:24:37,  1.45s/it]

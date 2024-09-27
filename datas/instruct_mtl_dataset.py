@@ -80,8 +80,11 @@ class Instruct_MTL_Dataset():
     ):
         self.pre_tokenize = pre_tokenize
         self.all_datas = []
+        all_texts = []
         for dataset_parser in self.dataset_parsers:
             texts = dataset_parser.parse_dataset(mode = mode, max_sample = max_sample)
+            all_texts.append(texts)
+        for texts in all_texts:
             if pre_tokenize:
                 self.all_datas.append(self.tokenize_parsed_texts(texts))
             else:
@@ -190,7 +193,7 @@ if __name__ == '__main__':
         tokenize_type = 'prompt_response'
     )
     config2 = Instruct_Dataset_Config(
-        data_path = '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/commonsense',
+        data_path = '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective',
         tokenizer_pretrain_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0',
         tokenize_type = 'prompt_response'
     )
