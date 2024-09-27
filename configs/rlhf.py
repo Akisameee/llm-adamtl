@@ -12,7 +12,7 @@ class RLHF_Config(PPO_Config):
 
     task_name: str = 'RLHF_train'
     accelertor_cfg: Accelertor_Config = Accelertor_Config(
-        gradient_accumulation_steps = 4
+        gradient_accumulation_steps = 8
     )
     dateset_cfg: Instruct_Dataset_Config = Instruct_Dataset_Config(
         data_path = os.path.join('/home', 'smliu', 'datasets', 'instruct', 'sharegpt'),
@@ -57,7 +57,7 @@ class RLHF_Config(PPO_Config):
     n_episode: int = 1
     sample_batch_size: int = 1
     n_sample_reuse: int = 1
-    n_update_timestep: int = 16
+    n_update_timestep: int = 32
     train_batch_size: int = 2
     n_update_epoch: int = 2
 

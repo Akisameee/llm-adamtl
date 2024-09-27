@@ -1,7 +1,7 @@
 import torch
 import time
 
-from datas.instruct_dataset import Instruct_Dataset
+from datas.instruct_dataset import Instruct_Pref_Dataset
 from configs import SFT_Train_Config
 from modules.lms import BaseLM
 from torch.utils.data import DataLoader
@@ -115,7 +115,7 @@ class Trainer():
 if __name__ == '__main__':
     
     config = SFT_Train_Config()
-    dataset = Instruct_Dataset(config.instruct_dataset_config)
+    dataset = Instruct_Pref_Dataset(config.instruct_dataset_config)
 
     train_generator, val_generator = dataset.get_generator()
     train_loader = DataLoader(train_generator, batch_size=config.train_batch_size, shuffle=True)

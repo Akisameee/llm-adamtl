@@ -17,7 +17,12 @@ class Dataset_Config(Base_Config):
 
     @property
     def name(self):
-        return os.path.split(self.data_path)[-1]
+        if 'Infinity-Instruct' in self.data_path.split('/'):
+            # path_split = os.path.split(self.data_path)
+            # return '/'.join(path_split[path_split.index('Infinity_Instruct'):])
+            return 'infinity-instruct'
+        else:
+            return os.path.split(self.data_path)[-1]
     
     @property
     def model_info(self):

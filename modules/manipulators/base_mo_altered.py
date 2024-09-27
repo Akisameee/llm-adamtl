@@ -84,6 +84,8 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
                     'sh_ts_score': torch.zeros(self.pref_dim),
                     'ts_ts_score': torch.zeros(self.pref_dim, self.pref_dim)
                 }
+        
+        self.task_step = 0
 
     def accumulate_gradient(
         self,
@@ -300,6 +302,7 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
         self
     ):
         self.gradient_accumulation_step += 1
+        self.task_step = 0
         if self.gradient_accumulation_step == self.n_gradient_accumulation_step:
             self.restore_gradient()
             self.optimizer.step()
@@ -328,4 +331,27 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
             self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
         
         return torch.sum(weighted_losses), weighted_losses
+    
+    def backward_single(
+        self,
+        loss: torch.Tensor
+    ):
+        
+        self.accelerator.backward(
+            loss,
+            retain_graph = self.task_step != self.pref_dim - 1
+        )
+        if self.use_ddp and self.task_step != self.pref_dim - 1:
+            # ddp reducer gradient sync
+            self.model.reducer._rebuild_buckets()
+            self.model.reducer.prepare_for_backward([])
+        
+        self.accumulate_gradient(self.task_step)
+
+        self.task_step += 1
+        
+        if self.max_norm is not None and self.accelerator.sync_gradients:
+            self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
+        
+        return loss
 

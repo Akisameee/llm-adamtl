@@ -508,6 +508,7 @@ class PPO_Trainer(nn.Module):
                     masks = action_masks
                 )
 
+                old_values = old_values.squeeze()
                 old_values, advantages, returns = self.compute_advantages(
                     values = old_values,
                     rewards = rewards,
@@ -523,7 +524,7 @@ class PPO_Trainer(nn.Module):
                 probs = logits.softmax(dim = -1)
                 logprobs = log_prob(probs, sequences)
                 
-                values = shift(values, shift = 1, dim = -1)
+                values = shift(values.squeeze(), shift = 1, dim = -1)
 
                 policy_loss, value_loss = self.loss(
                     logprobs,

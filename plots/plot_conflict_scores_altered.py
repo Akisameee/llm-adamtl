@@ -9,6 +9,13 @@ pref_names = {
     0: 'helpful',
     1: 'harmless'
 }
+pref_names = {
+    -1: 'shared',
+    0: 'code',
+    1: 'commonsense',
+    2: 'math',
+    3: 'subjective'
+}
 
 def plot_lines(
     axe,
@@ -28,7 +35,7 @@ def plot_lines(
 if __name__ == '__main__':
 
     # dir_path = './output/rand02-32-half-1'
-    dir_path = './output/completed/sh_ts_joint_compare/Panacea_train 61-32-full-ada-2'
+    dir_path = './output/mtl-50k-ada1'
     data_path = os.path.join(dir_path, 'conflict_scores')
     res_path = os.path.join(dir_path, 'conflict_scores_plot')
     if not os.path.exists(res_path):

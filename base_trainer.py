@@ -14,7 +14,6 @@ from transformers import PreTrainedModel
 from accelerate import DistributedDataParallelKwargs
 import numpy as np
 
-from datas.instruct_dataset import Instruct_Dataset, instruct_collator
 from configs import RLHF_Config, LM_Config, RM_Config, Accelertor_Config, Trainer_Config
 # from modules.lms import BaseLM, RewardLM, get_model
 from modules.ppo import PPO_Trainer, PPOMemory
@@ -171,6 +170,7 @@ class Base_Trainer(nn.Module):
     def load(self, model, ckpt_path = './checkpoint.pt'):
 
         unwrapped_model = self.accelerator.unwrap_model(model)
+        # print(torch.load(ckpt_path))
         unwrapped_model.load_state_dict(torch.load(ckpt_path))
 
     @property

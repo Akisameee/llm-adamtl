@@ -12,7 +12,7 @@ from trl import AutoModelForCausalLMWithValueHead
 from accelerate import Accelerator, dispatch_model
 
 from base_trainer import Base_Trainer
-from datas.instruct_dataset import Instruct_Dataset, instruct_collator
+from datas.instruct_dataset import Instruct_Pref_Dataset, instruct_prompt_collator
 from configs import RLHF_Config, model_infos
 # from modules.lms import BaseLM, RewardLM, get_model
 from modules import BaseLMWithValueHeads
@@ -21,6 +21,8 @@ from modules.pefts import replace_peft_layers, set_all_adapters
 from modules.utils import shift, log_prob, default, masked_mean, merge_dict
 from logger import Logger
 from trl.core import LengthSampler
+
+TEST = 0
 
 class RLHF_Trainer(Base_Trainer):
 
@@ -45,7 +47,6 @@ class RLHF_Trainer(Base_Trainer):
             logger = self.logger
         )
         
-        self.retokenization = config.retokenization
         self.n_sample_reuse = config.n_sample_reuse
         self.kl_ref_coef = config.kl_ref_coef
         self.n_save_time = config.n_save_time
@@ -167,7 +168,7 @@ class RLHF_Trainer(Base_Trainer):
             dataset = ds_generator,
             batch_size = sample_batch_size,
             shuffle = True,
-            collate_fn = instruct_collator,
+            collate_fn = instruct_prompt_collator,
             drop_last = True
         )
         dataloader = self.accelerator.prepare(dataloader)
@@ -198,21 +199,9 @@ class RLHF_Trainer(Base_Trainer):
                 ) = self.ppo_trainer.generate_batch(
                     prompts_ids = prompts_ids,
                     attention_masks = attention_masks,
-                    # length_sampler = length_sampler,
                     return_padding = True,
                     **self.generation_config.to_dict()
                 )
-
-                # with torch.no_grad():
-                #     logits, values = self.ppo_trainer.batch_forward(
-                #         sequences,
-                #         mask = masks
-                #     )
-                #     logits = shift(logits, shift = 1, dim = -2)
-                #     probs = logits.softmax(dim = -1)
-                #     logprobs = log_prob(probs, sequences)
-
-                #     values = shift(values, shift = 1, dim = -1)
 
                 rm_rewards = self.get_rm_rewards(
                     reward_model = self.reward_model,
@@ -228,28 +217,19 @@ class RLHF_Trainer(Base_Trainer):
                     sequence,
                     mask,
                     action_mask,
-                    # prob,
-                    # logprob,
-                    rm_reward,
-                    # value
+                    rm_reward
                 ) in zip(
                     sequences,
                     masks,
                     action_masks,
-                    # probs,
-                    # logprobs,
-                    rm_rewards,
-                    # values
+                    rm_rewards
                 ):
                     seq_len = torch.sum(mask).item()
                     memories.append(PPOMemory(*map(detach_to_cpu_, (
                         sequence[: seq_len],
                         mask[: seq_len],
                         action_mask[: seq_len],
-                        # prob[: seq_len, :],
-                        # logprob[: seq_len],
-                        rm_reward,
-                        # value[: seq_len]
+                        rm_reward
                     ))))
 
                 if self.clean_cache_every_iter:
@@ -257,10 +237,7 @@ class RLHF_Trainer(Base_Trainer):
                         sequences,
                         masks,
                         action_masks,
-                        # probs,
-                        # logprobs,
-                        rm_rewards,
-                        # values
+                        rm_rewards
                     )
                     torch.cuda.empty_cache()
                 
@@ -301,7 +278,7 @@ def main():
     config = RLHF_Config()
 
     data_path = os.path.join('/home', 'smliu', 'datasets', 'hf', 'hh-rlhf')
-    sub_data_path = ['helpful-base']
+    sub_data_path = ['harmless-base']
     config.dateset_cfg.data_path = data_path
     config.dateset_cfg.sub_data_path = sub_data_path
 
@@ -311,8 +288,31 @@ def main():
     config.model_cfg.model_pretrain_path = model_path
     config.ref_cfg.model_pretrain_path = model_path
     
-    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-helpful-reward_model')
+    rm_path = os.path.join('/home', 'smliu', 'huggingface', 'Ray2333', 'gpt2-large-harmless-reward_model')
     config.reward_cfg.model_pretrain_path = rm_path
+
+    # whole dataset
+    # max_sample = 0
+    # config.n_update_timestep = 64
+    # config.accelertor_cfg.gradient_accumulation_steps = 8
+    # config.train_batch_size = 2
+    # config.manipulator_cfg.n_adapt_step = 128
+
+    # 1/2 dataset
+    # max_sample = 20000
+    max_sample = 15000
+    config.n_update_timestep = 16
+    config.accelertor_cfg.gradient_accumulation_steps = 4
+    config.train_batch_size = 2
+
+    config.value_loss_coef = 0.1
+    config.n_update_epoch = 2
+
+    if TEST:
+        config.accelertor_cfg.gradient_accumulation_steps = 2
+        config.n_update_timestep = 8
+        config.n_save_step = 1
+
     config.parse_args()
 
     trainer = RLHF_Trainer(
@@ -320,8 +320,8 @@ def main():
     )
     
     config.dateset_cfg.tokenize_type = 'prompt_not_pad'
-    dataset = Instruct_Dataset(config.dateset_cfg)
-    dataset.load(mode = 'train')
+    dataset = Instruct_Pref_Dataset(config.dateset_cfg)
+    dataset.load(mode = 'train', max_sample = max_sample)
     trainer.train(
         ds_generator = dataset.get_generator(),
         n_episode = config.n_episode,

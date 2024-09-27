@@ -78,6 +78,8 @@ class Logger():
         for key, value in stat_dict.items():
             if isinstance(value, (int, float)):
                 stat_strs.append(f'{key}: {value:.4g}')
+            elif isinstance(value, (torch.Tensor)) and len(value.shape) == 0:
+                stat_strs.append(f'{key}: {value.item():.4g}')
             else:
                 if isinstance(value, torch.Tensor):
                     value = value.detach().numpy().tolist()
@@ -237,6 +239,9 @@ class Logger():
         self,
         model
     ):
+        if self.disable:
+            return
+        
         save_path = os.path.join(self.dir, 'conflict_scores')
         if not os.path.exists(save_path):
             os.mkdir(save_path)

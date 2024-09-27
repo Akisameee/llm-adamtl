@@ -95,16 +95,16 @@ class Base_Manipulator(WeightedLoss_Mixin):
         self,
         losses: torch.Tensor
     ):
-        weigthed_loss = self.get_weighted_loss(losses)
+        weighted_loss = self.get_weighted_loss(losses)
 
-        self.accelerator.backward(weigthed_loss)
+        self.accelerator.backward(weighted_loss)
         if self.max_norm is not None and self.accelerator.sync_gradients:
             self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
         
         if self.n_gradient_accumulation_step > 1:
             self.accumulate_gradient()
         
-        return weigthed_loss, losses
+        return weighted_loss, losses
 
 # scalarize loss before backward(joint training)
 class Base_Weight_Manipulator(Base_Manipulator):
@@ -131,3 +131,15 @@ class Base_Weight_Manipulator(Base_Manipulator):
         for i in range(self.pref_dim):
             self.pref_vec[i] = pref_vec[i]
 
+    def backward_single(
+        self,
+        loss: torch.Tensor
+    ):
+        self.accelerator.backward(loss)
+        if self.max_norm is not None and self.accelerator.sync_gradients:
+            self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
+        
+        if self.n_gradient_accumulation_step > 1:
+            self.accumulate_gradient()
+        
+        return loss
