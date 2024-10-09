@@ -193,7 +193,7 @@ class Dataset_Parser(object):
         
         return res
     
-    def parse_infinity_instruct_dataset(self, data_path, mode, max_sample = None):
+    def parse_infinity_instruct_dataset(self, data_path, mode = None, max_sample = None):
 
         dataset_raw = load_dataset(data_path, split = 'train')
 

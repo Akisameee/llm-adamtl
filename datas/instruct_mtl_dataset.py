@@ -51,7 +51,8 @@ class Instruct_MTL_Dataset():
 
     def __init__(
         self,
-        configs: list[Instruct_Dataset_Config]
+        configs: list[Instruct_Dataset_Config],
+        # group_key_labels: tuple
     ):
         self.tokenizer = AutoTokenizer.from_pretrained(configs[0].tokenizer_pretrain_path, padding_side = configs[0].padding_side)
         if not self.tokenizer.pad_token:
@@ -81,9 +82,12 @@ class Instruct_MTL_Dataset():
         self.pre_tokenize = pre_tokenize
         self.all_datas = []
         all_texts = []
-        for dataset_parser in self.dataset_parsers:
-            texts = dataset_parser.parse_dataset(mode = mode, max_sample = max_sample)
-            all_texts.append(texts)
+        if len(self.dataset_parsers) > 1:
+            for dataset_parser in self.dataset_parsers:
+                texts = dataset_parser.parse_dataset(mode = mode, max_sample = max_sample)
+                all_texts.append(texts)
+        else:
+            all_texts = self.dataset_parsers[0].parse_dataset(mode = mode, max_sample = max_sample)
         for texts in all_texts:
             if pre_tokenize:
                 self.all_datas.append(self.tokenize_parsed_texts(texts))
@@ -197,12 +201,14 @@ if __name__ == '__main__':
         tokenizer_pretrain_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0',
         tokenize_type = 'prompt_response'
     )
+    # config = Instruct_Dataset_Config(
+    #     data_path = '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/3M',
+    #     tokenizer_pretrain_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0',
+    #     tokenize_type = 'prompt_response'
+    # )
 
     dataset = Instruct_MTL_Dataset(
-        configs = [
-            config1,
-            config2
-        ]
+        configs = [config1, config2]
     )
     dataset.load(max_sample = 100)
     print(dataset)

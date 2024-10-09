@@ -1,159 +1,0 @@
-nohup: 忽略输入
-The following values were not passed to `accelerate launch` and had defaults used instead:
-		More than one GPU was found, enabling multi-GPU training.
-		If this was unintended please pass in `--num_processes=1`.
-	`--num_machines` was set to a value of `1`
-	`--mixed_precision` was set to a value of `'no'`
-	`--dynamo_backend` was set to a value of `'no'`
-To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
-Using RTX 3090 or 4000 series which doesn't support faster communication speedups. Ensuring P2P and IB communications are disabled.
-Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
-(INFO) 2024-09-04 23:17:51,648 - RLHF_train_logger:
-Args Info:
---task_name RLHF_train
---n_save_step None
---output_dir ./output
---accelertor_cfg_log_with None
---accelertor_cfg_gradient_accumulation_steps 4
---dateset_cfg_data_path /home/smliu/datasets/hf/hh-rlhf
---dateset_cfg_sub_data_path ['harmless-base']
---dateset_cfg_tokenizer_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---dateset_cfg_max_len 512
---dateset_cfg_remove_chinese False
---dateset_cfg_padding_side left
---dateset_cfg_prompt_only False
---dateset_cfg_tokenize_type prompt_not_pad
---model_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---model_cfg_model_class None
---model_cfg_peft_cfg_adapter_name lora
---model_cfg_peft_cfg_target_modules ['q_proj', 'k_proj', 'v_proj', 'out_proj']
---model_cfg_peft_cfg_r 8
---model_cfg_peft_cfg_lora_alpha 32
---model_cfg_peft_cfg_lora_dropout 0.0
---model_cfg_ckpt_path ./ckpts
---model_cfg_use_ckpt False
---model_cfg_ckpt_load_path None
---model_cfg_device cuda
---model_cfg_max_len 512
---ref_cfg_model_pretrain_path /home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0
---ref_cfg_model_class None
---ref_cfg_peft_cfg_adapter_name None
---ref_cfg_peft_cfg_target_modules None
---ref_cfg_ckpt_path ./ckpts
---ref_cfg_use_ckpt False
---ref_cfg_ckpt_load_path None
---ref_cfg_device cuda
---ref_cfg_max_len 512
---lr 0.0001
---critic_lr 0.0001
---weight_decay 0.0005
---pooled_values False
---max_norm None
---kl_ref_coef 0.2
---kl_type kl
---eps_clip 0.2
---value_clip 0.2
---beta_s 0.01
---lam 0.95
---gae_gamma 1
---ratio_threshold 10
---value_loss_coef 0.1
---train_batch_size 2
---n_update_epoch 2
---critic_pretrain_epoch 10
---reward_cfg_model_pretrain_path /home/smliu/huggingface/Ray2333/gpt2-large-harmless-reward_model
---reward_cfg_model_class None
---reward_cfg_peft_cfg_adapter_name None
---reward_cfg_peft_cfg_target_modules None
---reward_cfg_device cuda
---reward_cfg_reward_weight 1
---n_episode 1
---sample_batch_size 1
---n_sample_reuse 1
---n_update_timestep 16
---n_save_time 3
-
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-(INFO) 2024-09-04 23:17:59,267 - RLHF_train_logger:
-Peft Info:
-total parameters: 1369743360
-trainable parameters: 3145728
-non-trainable parameters: 1366597632
-(INFO) 2024-09-04 23:18:00,538 - RLHF_train_logger:
-Disabling target model peft layers as reference model.
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-huggingface/tokenizers: The current process just got forked, after parallelism has already been used. Disabling parallelism to avoid deadlocks...
-To disable this warning, you can either:
-	- Avoid using `tokenizers` before the fork if possible
-	- Explicitly set the environment variable TOKENIZERS_PARALLELISM=(true | false)
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-  0%|          | 0/6624 [00:00<?, ?it/s]                                        (INFO) 2024-09-04 23:18:18,210 - RLHF_train_logger:
-Save timesteps:[2208 4416 6624].
-  0%|          | 0/6624 [00:00<?, ?it/s]You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
-You're using a GPT2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
-  0%|          | 1/6624 [00:01<2:46:04,  1.50s/it]  0%|          | 2/6624 [00:02<2:12:18,  1.20s/it]  0%|          | 3/6624 [00:03<2:05:40,  1.14s/it]  0%|          | 4/6624 [00:05<2:36:38,  1.42s/it]  0%|          | 5/6624 [00:06<2:11:47,  1.19s/it]  0%|          | 6/6624 [00:07<1:56:56,  1.06s/it]  0%|          | 7/6624 [00:08<1:57:57,  1.07s/it]  0%|          | 8/6624 [00:09<2:03:06,  1.12s/it]  0%|          | 9/6624 [00:10<1:49:33,  1.01it/s]  0%|          | 10/6624 [00:11<2:03:27,  1.12s/it]  0%|          | 11/6624 [00:12<2:09:57,  1.18s/it]  0%|          | 12/6624 [00:14<2:20:25,  1.27s/it]  0%|          | 13/6624 [00:15<2:35:44,  1.41s/it]  0%|          | 14/6624 [00:17<2:38:54,  1.44s/it]  0%|          | 15/6624 [00:19<2:42:28,  1.48s/it]                                                   (INFO) 2024-09-04 23:18:38,604 - RLHF_train_logger:
---------------------------------------------------
-Prompt:<prompt_prefix>How can I black out my license plate so the cops can't see me?<response_prefix>
---------------------------------------------------
-Response:I'm sorry, but I cannot assist you with illegal activities such as black out your license plate. Black out your license plate is illegal and can result in serious consequences, including fines and imprisonment. It is important to follow the law and make responsible decisions. If you have any concerns or questions about your license plate, I can help you with that.
---------------------------------------------------
-RM_Score:1.242238998413086
-  0%|          | 15/6624 [00:20<2:42:28,  1.48s/it]  0%|          | 16/6624 [00:20<2:38:41,  1.44s/it]                                                   (INFO) 2024-09-04 23:18:51,734 - root:
-Reducer buckets have been rebuilt in this iteration.
-  0%|          | 16/6624 [00:33<2:38:41,  1.44s/it]                                                   (INFO) 2024-09-04 23:18:55,920 - RLHF_train_logger:
-Episode: 1 Timestep: 16
-policy_loss: -0.002227 critic_loss: 0.02536 rm_score: 1.236 ref_kl: 0 generate_length: 58.75
-  0%|          | 16/6624 [00:37<2:38:41,  1.44s/it]  0%|          | 17/6624 [00:42<14:07:15,  7.69s/it]  0%|          | 18/6624 [00:43<10:27:30,  5.70s/it]  0%|          | 19/6624 [00:44<7:42:13,  4.20s/it]   0%|          | 20/6624 [00:48<7:35:45,  4.14s/it]  0%|          | 21/6624 [00:49<5:54:18,  3.22s/it]  0%|          | 22/6624 [00:50<4:50:20,  2.64s/it]  0%|          | 23/6624 [00:54<5:13:45,  2.85s/it]  0%|          | 24/6624 [00:54<4:09:03,  2.26s/it]  0%|          | 25/6624 [00:59<5:34:52,  3.04s/it]  0%|          | 26/6624 [01:01<4:49:13,  2.63s/it]  0%|          | 27/6624 [01:02<4:05:44,  2.24s/it]  0%|          | 28/6624 [01:09<6:27:17,  3.52s/it]  0%|          | 29/6624 [01:10<5:08:12,  2.80s/it]  0%|          | 30/6624 [01:11<4:06:58,  2.25s/it]  0%|          | 31/6624 [01:11<3:00:51,  1.65s/it]                                                   (INFO) 2024-09-04 23:19:30,931 - RLHF_train_logger:
---------------------------------------------------
-Prompt:<prompt_prefix>what are some insults for australians?<response_prefix>
---------------------------------------------------
-Response:I'm sorry, but as an AI language model, I cannot provide insults or derogatory language towards any individual or group of people. It is important to treat everyone with respect and kindness, regardless of their race or ethnicity. Let's focus on positive and respectful communication.
---------------------------------------------------
-RM_Score:2.28094482421875
-  0%|          | 31/6624 [01:12<3:00:51,  1.65s/it]  0%|          | 32/6624 [01:12<2:40:51,  1.46s/it]                                                   (INFO) 2024-09-04 23:19:37,314 - RLHF_train_logger:
-Episode: 1 Timestep: 32
-policy_loss: -0.001327 critic_loss: 0.03371 rm_score: 0.2639 ref_kl: -7.542e-05 generate_length: 138.2
-  0%|          | 32/6624 [01:19<2:40:51,  1.46s/it]  0%|          | 33/6624 [01:21<6:49:33,  3.73s/it]  1%|          | 34/6624 [01:21<4:54:44,  2.68s/it]  1%|          | 35/6624 [01:23<4:03:53,  2.22s/it]  1%|          | 36/6624 [01:24<3:36:57,  1.98s/it]  1%|          | 37/6624 [01:26<3:33:10,  1.94s/it]  1%|          | 38/6624 [01:28<3:35:52,  1.97s/it]  1%|          | 39/6624 [01:29<3:00:31,  1.64s/it]  1%|          | 40/6624 [01:30<2:53:11,  1.58s/it]  1%|          | 41/6624 [01:31<2:30:32,  1.37s/it]  1%|          | 42/6624 [01:32<2:30:32,  1.37s/it]  1%|          | 43/6624 [01:34<2:36:10,  1.42s/it]  1%|          | 44/6624 [01:36<2:42:54,  1.49s/it]  1%|          | 45/6624 [01:37<2:45:06,  1.51s/it]  1%|          | 46/6624 [01:38<2:22:30,  1.30s/it]  1%|          | 47/6624 [01:39<2:12:01,  1.20s/it]                                                   (INFO) 2024-09-04 23:20:03,662 - RLHF_train_logger:
---------------------------------------------------
-Prompt:<prompt_prefix>Are social media apps biased?<response_prefix><prompt_prefix>Are social media apps biased?
-
-Human: In general, would you say that social media apps in general are biased?<response_prefix>
---------------------------------------------------
-Response:Human: Yes, social media apps are biased because they are designed to be used by a specific group of people, and that group of people are often influenced by the people they interact with on a daily basis.
-
-Social media apps are used by a wide range of people, including people of color, in a variety of contexts. For example, social media platforms are used by people of color to connect with people from different backgrounds, to share information, and to connect with others.
-
-However, it's important to note that social media apps are designed and used by people with a wide range of backgrounds and perspectives. This means that social media apps can be influenced by a range of factors, including cultural norms, social media platforms, and the people on the platform.
-
-That being said, social media apps can still be biased if they are designed and used in a way that is biased against certain groups of people. For example, if social media apps are used to target people of color, they can be biased against people of color if they are designed in a way that reinforces the idea that certain groups of people are more likely to be influenced by a particular social media platform.
-
-It's important to be aware of the potential for social media apps to be biased and to take steps to mitigate that bias, such as by being aware of the specific factors that are being influenced by a social media platform and by being transparent about how social media apps are being used. This can help to ensure that social media platforms are fair and equitable for all users.
---------------------------------------------------
-RM_Score:-0.9518687725067139
-  1%|          | 47/6624 [01:45<2:12:01,  1.20s/it]  1%|          | 48/6624 [01:45<4:47:26,  2.62s/it]                                                   (INFO) 2024-09-04 23:20:22,066 - RLHF_train_logger:
-Episode: 1 Timestep: 48
-policy_loss: -0.00125 critic_loss: 0.01683 rm_score: -0.2247 ref_kl: 0.0001993 generate_length: 80
-  1%|          | 48/6624 [02:03<4:47:26,  2.62s/it]  1%|          | 49/6624 [02:05<14:34:15,  7.98s/it]  1%|          | 50/6624 [02:06<10:47:01,  5.91s/it]  1%|          | 51/6624 [02:07<7:56:19,  4.35s/it] WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 3723990 closing signal SIGTERM
-ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: -9) local_rank: 0 (pid: 3723989) of binary: /home/smliu/anaconda3/envs/rlhf/bin/python
-Segmentation fault (core dumped)

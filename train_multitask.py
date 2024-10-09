@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -21,7 +21,7 @@ from modules.manipulators import Base_MO_Manipulator_Altered, Base_Weight_Manipu
 from modules.pefts import set_all_adapters, SVD_Lora_Linear, SVD_Lora_Linear_Altered
 from modules.utils import shift, log_prob, merge_dict, get_model
 
-TEST = 0
+TEST = 1
 
 class MTL_Trainer(Base_Trainer):
 
@@ -45,7 +45,7 @@ class MTL_Trainer(Base_Trainer):
             logger = self.logger,
             pref_dim = len(config.dataset_data_paths),
             weighted_loss_type = 'mols' if self.task_type == 'ada' else None,
-            svd_lora_type = 'adaptive'
+            svd_lora_type = config.manipulator_cfg.svd_lora_type
         )
 
     def set_pref_vec(
@@ -135,22 +135,23 @@ def main():
     config.dataset_data_paths = [
         '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/code',
         '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/commonsense',
-        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/math',
-        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective'
+        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/math'
+        # '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective'
     ]
 
-    config.task_type = 'ada'
+    config.task_type = 'mix'
 
-    # config.model_cfg.peft_cfg = Lora_Config()
-    # config.model_cfg.peft_cfg.r = 8
-    # config.model_cfg.peft_cfg.lora_alpha = 32
-
-    config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = len(config.dataset_data_paths))
-    config.model_cfg.peft_cfg.r = 7
-    config.model_cfg.peft_cfg.pref_r = 1
-    config.model_cfg.peft_cfg.lora_alpha = 32
-    # config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
-    config.model_cfg.peft_cfg.init_strategy = 'b_zero'
+    if config.task_type != 'ada':
+        config.model_cfg.peft_cfg = Lora_Config()
+        config.model_cfg.peft_cfg.r = 8
+        config.model_cfg.peft_cfg.lora_alpha = 32
+    else:
+        config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = len(config.dataset_data_paths))
+        config.model_cfg.peft_cfg.r = 5
+        config.model_cfg.peft_cfg.pref_r = 1
+        config.model_cfg.peft_cfg.lora_alpha = 32
+        # config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
+        config.model_cfg.peft_cfg.init_strategy = 'b_zero'
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -161,7 +162,9 @@ def main():
     config.base_dateset_cfg.tokenizer_pretrain_path = model_path
     config.model_cfg.model_pretrain_path = model_path
 
-    config.manipulator_cfg.svd_lora_type = 'adaptive'
+    config.manipulator_cfg.svd_lora_type = 'adaptive' \
+    if config.task_type == 'ada' else None
+    # config.manipulator_cfg.svd_lora_type = None
     # config.manipulator_cfg.svd_lora_random_init = True
     config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
