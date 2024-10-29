@@ -11,7 +11,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from datas.dataset_parser import Dataset_Parser
-from configs import Instruct_Dataset_Config
+from configs import Instruct_Dataset_Config, Instruct_MTL_Config
 
 def instruct_mtl_collator(batch):
     
@@ -30,22 +30,40 @@ def instruct_mtl_collator(batch):
 
 class Instruct_MTL_Generator(Dataset):
 
-    def __init__(self, all_datas, tokenize_func = None) -> None:
+    def __init__(self, all_datas, category_padding = False, tokenize_func = None) -> None:
         super().__init__()
 
         self.all_datas = all_datas
         self.tokenize_func = tokenize_func
+        self.category_padding = category_padding
+        self.data_lens = [len(datas) for datas in self.all_datas]
+        self.data_flags = [torch.zeros(data_len) for data_len in self.data_lens]
 
     def __getitem__(self, index):
+        
+        items = []
+        for cls_idx, (data_len, datas) in enumerate(self.data_lens, self.all_datas):
+            data_index = index % data_len
+            data_flag = self.data_flags[cls_idx]
+            if torch.all(data_flag != 0):
+                data_flag.zero_()
+            if data_flag[data_index]:
+                data_index = torch.multinomial(data_flag.nonzero(), num_samples = 1)
+            data_flag[data_index] = 1
+        
+            if self.tokenize_func is not None:
+                items.append(self.tokenize_func(datas[data_index]))
+            else:
+                items.append(datas[data_index])
 
-        if self.tokenize_func is not None:
-            return [self.tokenize_func(datas[index]) for datas in self.all_datas]
-        else:
-            return [datas[index] for datas in self.all_datas]
+        return items
     
     def __len__(self):
 
-        return min([len(datas) for datas in self.all_datas])
+        if self.category_padding: 
+            return max(self.data_lens)
+        else:
+            return min(self.data_lens)
 
 class Instruct_MTL_Dataset():
 
@@ -166,6 +184,7 @@ class Instruct_MTL_Dataset():
 
         generator = Instruct_MTL_Generator(
             all_datas = self.all_datas,
+            category_padding = True,
             tokenize_func = None if self.pre_tokenize else self.tokenize
         )
         return generator
@@ -191,24 +210,22 @@ if __name__ == '__main__':
     # outid = tokenizer.build_inputs_with_special_tokens(id1, id2)
     # print(outid, tokenizer.decode(outid))
 
-    config1 = Instruct_Dataset_Config(
-        data_path = '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/code',
-        tokenizer_pretrain_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0',
-        tokenize_type = 'prompt_response'
-    )
-    config2 = Instruct_Dataset_Config(
-        data_path = '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective',
-        tokenizer_pretrain_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0',
-        tokenize_type = 'prompt_response'
-    )
-    # config = Instruct_Dataset_Config(
-    #     data_path = '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/3M',
-    #     tokenizer_pretrain_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0',
-    #     tokenize_type = 'prompt_response'
-    # )
+    config = Instruct_MTL_Config()
+    # config.dataset_data_paths = [
+    #     '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/code',
+    #     '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective',
+    # ]
+    config.dataset_data_paths = [
+        '/home/smliu/datasets/instruct/sciq/biology',
+        '/home/smliu/datasets/instruct/sciq/physics',
+        '/home/smliu/datasets/instruct/sciq/chemistry',
+        '/home/smliu/datasets/instruct/sciq/geography'
+    ]
+
+    config
 
     dataset = Instruct_MTL_Dataset(
-        configs = [config1, config2]
+        configs = config.get_dataset_cfgs()
     )
     dataset.load(max_sample = 100)
     print(dataset)

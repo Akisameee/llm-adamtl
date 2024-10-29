@@ -78,6 +78,12 @@ class Dataset_Parser(object):
                 mode = mode,
                 max_sample = max_sample
             )
+        elif self.dataset_name == 'sciq':
+            datas += self.parse_sciqa_dataset(
+                self.data_dir,
+                mode = mode,
+                max_sample = max_sample
+            )
 
         return datas
 
@@ -227,6 +233,24 @@ class Dataset_Parser(object):
 
             if len(datas) == max_sample:
                 break
+
+        return datas
+    
+    def parse_sciqa_dataset(self, data_path, mode = 'train', max_sample = None):
+
+        topic = os.path.split(data_path)[-1]
+        json_path = os.path.join(data_path, f'sci_qa_{topic}_{mode}.json')
+        datas = []
+        with open(json_path, 'r') as f:
+            raw_datas = json.load(f)
+            for raw_data in raw_datas:
+                data = self.add_instruct_prompt(
+                    [(raw_data['instruct'], raw_data['response'])]
+                )
+                datas.append(data)
+
+                if len(datas) == max_sample:
+                    break
 
         return datas
 

@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -45,7 +45,8 @@ class MTL_Trainer(Base_Trainer):
             logger = self.logger,
             pref_dim = len(config.dataset_data_paths),
             weighted_loss_type = 'mols' if self.task_type == 'ada' else None,
-            svd_lora_type = config.manipulator_cfg.svd_lora_type
+            svd_lora_type = config.manipulator_cfg.svd_lora_type,
+            n_adapt_step = config.manipulator_cfg.n_adapt_step
         )
 
     def set_pref_vec(
@@ -71,9 +72,6 @@ class MTL_Trainer(Base_Trainer):
         )
 
         pref_dim = self.manipulator.pref_dim
-        self.manipulator.set_pref_vec(
-            pref_vec = torch.ones(pref_dim).float()
-        )
         self.set_pref_vec(torch.ones(pref_dim).float())
 
         dataloader = DataLoader(
@@ -132,26 +130,36 @@ class MTL_Trainer(Base_Trainer):
 def main():
 
     config = Instruct_MTL_Config()
+    # config.dataset_data_paths = [
+    #     '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/code',
+    #     '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/commonsense',
+    #     '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/math'
+    #     # '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective'
+    # ]
     config.dataset_data_paths = [
-        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/code',
-        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/commonsense',
-        '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/math'
-        # '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective'
-    ]
+        '/home/smliu/datasets/instruct/sciq/biology',
+        '/home/smliu/datasets/instruct/sciq/physics',
+        '/home/smliu/datasets/instruct/sciq/chemistry',
+        '/home/smliu/datasets/instruct/sciq/geography'
+    ]    
 
-    config.task_type = 'mix'
+    config.task_type = 'ada'
 
     if config.task_type != 'ada':
         config.model_cfg.peft_cfg = Lora_Config()
-        config.model_cfg.peft_cfg.r = 8
+        config.model_cfg.peft_cfg.r = 4
         config.model_cfg.peft_cfg.lora_alpha = 32
     else:
+        pref_dim = len(config.dataset_data_paths)
         config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = len(config.dataset_data_paths))
-        config.model_cfg.peft_cfg.r = 5
+        config.model_cfg.peft_cfg.r = 7
         config.model_cfg.peft_cfg.pref_r = 1
         config.model_cfg.peft_cfg.lora_alpha = 32
-        # config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
-        config.model_cfg.peft_cfg.init_strategy = 'b_zero'
+        config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
+        # config.model_cfg.peft_cfg.init_strategy = 'b_zero'
+
+        config.manipulator_cfg.svd_lora_split_percentage = 0.125
+        config.lr = 1e-4
     
     model_path = '/home/smliu/huggingface/bit-dny/MindLLM-1b3-chat-zh-v2.0'
     config.model_cfg.peft_cfg.target_modules = ['q_proj', 'k_proj', 'v_proj', 'out_proj']
@@ -166,13 +174,12 @@ def main():
     if config.task_type == 'ada' else None
     # config.manipulator_cfg.svd_lora_type = None
     # config.manipulator_cfg.svd_lora_random_init = True
-    config.manipulator_cfg.svd_lora_split_percentage = 0.125
 
     config.lr = 1e-5
 
     # whole dataset
     max_sample = 50000
-    config.accelertor_cfg.gradient_accumulation_steps = 8
+    config.accelertor_cfg.gradient_accumulation_steps = 16
     config.train_batch_size = 2
     config.manipulator_cfg.n_adapt_step = 128
 

@@ -21,8 +21,11 @@ class Dataset_Config(Base_Config):
             # path_split = os.path.split(self.data_path)
             # return '/'.join(path_split[path_split.index('Infinity_Instruct'):])
             return 'infinity-instruct'
+        elif 'sciq' in self.data_path.split('/'):
+            return 'sciq'
         else:
             return os.path.split(self.data_path)[-1]
+        
     
     @property
     def model_info(self):

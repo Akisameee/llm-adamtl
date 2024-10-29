@@ -240,7 +240,7 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
             conflict_scores.items()
         ):
             m_scores = conflict_scores[name]
-            m_scores['ts_flags'] = -1
+            m_scores['ts_flag'] = -1
             sh_params_new[name] = m_scores
 
         return sh_params_new, ts_param_groups_new

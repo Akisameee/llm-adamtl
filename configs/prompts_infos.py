@@ -15,6 +15,11 @@ dataset_infos = {
     'infinity-instruct': {
         'prompt_prefix': '',
         'response_prefix': ''
+    },
+
+    'sciq': {
+        'prompt_prefix': '',
+        'response_prefix': ''
     }
 }
 
