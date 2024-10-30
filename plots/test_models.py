@@ -1,7 +1,6 @@
 import os
 os.environ['CUDA_VISIBLE_DEVICES'] = '4,7'
 import sys
-sys.path.insert(0, '/home/smliu/RLHF')
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, TextGenerationPipeline, AutoModelForSequenceClassification, LlamaTokenizer, LlamaForCausalLM
 from transformers.generation.configuration_utils import GenerationConfig

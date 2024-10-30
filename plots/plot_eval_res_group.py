@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(0, '/home/smliu/RLHF')
 import os
 import re
 from logger import plot_pareto_fronts_2d

@@ -1,6 +1,5 @@
 import sys
 import os
-sys.path.insert(0, '/home/smliu/RLHF')
 import torch
 import torch.nn as nn
 import math

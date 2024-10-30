@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -21,7 +21,7 @@ from modules.manipulators import Base_MO_Manipulator_Altered, Base_Weight_Manipu
 from modules.pefts import set_all_adapters, SVD_Lora_Linear, SVD_Lora_Linear_Altered
 from modules.utils import shift, log_prob, merge_dict, get_model
 
-TEST = 1
+TEST = 0
 
 class MTL_Trainer(Base_Trainer):
 
@@ -136,14 +136,17 @@ def main():
     #     '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/math'
     #     # '/home/smliu/datasets/instruct/BAAI/Infinity-Instruct/7M_domains/subjective'
     # ]
+    
     config.dataset_data_paths = [
         '/home/smliu/datasets/instruct/sciq/biology',
         '/home/smliu/datasets/instruct/sciq/physics',
         '/home/smliu/datasets/instruct/sciq/chemistry',
         '/home/smliu/datasets/instruct/sciq/geography'
-    ]    
+    ]
+    # config.base_dateset_cfg.data_path = config.dataset_data_paths[0]
 
-    config.task_type = 'ada'
+    config.task_type = 'seq'
+    # config.task_type = 'ada'
 
     if config.task_type != 'ada':
         config.model_cfg.peft_cfg = Lora_Config()
@@ -194,6 +197,7 @@ def main():
         config.accelertor_cfg.gradient_accumulation_steps = 2
         config.n_save_step = 1
         config.manipulator_cfg.n_adapt_step = 2
+        # config.n_episode = 4
 
     config.parse_args()
 
@@ -203,7 +207,7 @@ def main():
     
     config.base_dateset_cfg.tokenize_type = 'prompt_response'
     train_dataset = Instruct_MTL_Dataset(config.get_dataset_cfgs())
-    train_dataset.load(mode = 'train', max_sample = max_sample if not TEST else 120)
+    train_dataset.load(mode = 'train', max_sample = max_sample if not TEST else 10)
     trainer.train(
         train_dataset = train_dataset.get_generator(),
         # eval_dataset = None,

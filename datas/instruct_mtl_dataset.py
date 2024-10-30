@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 import os
-import csv
+import random
 import re
 from transformers import AutoTokenizer, AutoConfig, GPT2Tokenizer
 from datasets import load_dataset
@@ -37,22 +37,24 @@ class Instruct_MTL_Generator(Dataset):
         self.tokenize_func = tokenize_func
         self.category_padding = category_padding
         self.data_lens = [len(datas) for datas in self.all_datas]
-        self.data_flags = [torch.zeros(data_len) for data_len in self.data_lens]
+        self.data_flags = [torch.zeros(data_len).long() for data_len in self.data_lens]
 
     def __getitem__(self, index):
         
         items = []
-        for cls_idx, (data_len, datas) in enumerate(self.data_lens, self.all_datas):
-            data_index = index % data_len
+        for cls_idx, datas in enumerate(self.all_datas):
+            data_index = index % self.data_lens[cls_idx]
             data_flag = self.data_flags[cls_idx]
-            if torch.all(data_flag != 0):
+            nonzero_indexs = (data_flag == 0).nonzero().squeeze()
+            if len(nonzero_indexs.shape) == 0:
                 data_flag.zero_()
+                nonzero_indexs = (data_flag == 0).nonzero().squeeze()
             if data_flag[data_index]:
-                data_index = torch.multinomial(data_flag.nonzero(), num_samples = 1)
+                data_index = nonzero_indexs[random.randint(0, nonzero_indexs.size(0) - 1)].item()
             data_flag[data_index] = 1
         
             if self.tokenize_func is not None:
-                items.append(self.tokenize_func(datas[data_index]))
+                items.append(self.tokenize_func([datas[data_index]]))
             else:
                 items.append(datas[data_index])
 
@@ -221,8 +223,6 @@ if __name__ == '__main__':
         '/home/smliu/datasets/instruct/sciq/chemistry',
         '/home/smliu/datasets/instruct/sciq/geography'
     ]
-
-    config
 
     dataset = Instruct_MTL_Dataset(
         configs = config.get_dataset_cfgs()
