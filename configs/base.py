@@ -1,8 +1,9 @@
 import os
-# from peft.config import PeftConfig
+import json
 from transformers.generation.configuration_utils import GenerationConfig
 import typing
 from typing import Literal, Optional
+from types import SimpleNamespace
 import json
 import numpy as np
 import dataclasses
@@ -17,11 +18,21 @@ JSONDict = Annotated[Optional[dict], tyro.conf.arg(metavar="JSON", constructor=j
 @dataclass
 class Base_Config(object):
 
-    __args_namespace: dict = None
-
     def to_dict(self):
 
         return asdict(self)
+    
+    def from_dict(self, input_dict: dict):
+        
+        for name, value in input_dict.items():
+            if hasattr(self, name):
+                if isinstance(value, dict):
+                    sub_dataclass = getattr(self, name)
+                    sub_dataclass.from_dict(value)
+                else:
+                    setattr(self, name, value)
+            else:
+                raise KeyError(f'Invalid key \'{name}\' in dataclass \'{type(self)}\'.')
 
     def get_dataclass_fields(
         self,
@@ -37,9 +48,9 @@ class Base_Config(object):
         fields = []
         
         for field in dataclasses.fields(dataclass):
-            if field.name.endswith('__args_namespace'):
+            if field.name.endswith('__args_namespace__'):
                 continue
-            name_new = '_'.join([prefix, field.name]) if prefix is not None else field.name
+            name_new = '.'.join([prefix, field.name]) if prefix is not None else field.name
             if dataclasses.is_dataclass(field.type):
                 sub_branch, sub_field = self.get_dataclass_fields(
                     field.type,
@@ -63,7 +74,8 @@ class Base_Config(object):
                 fields.append((
                     name_new,
                     field.type,
-                    field.default if default is None else getattr(default, field.name)
+                    # field.default if default is None else getattr(default, field.name)
+                    getattr(default, field.name)
                 ))
 
         return {
@@ -114,19 +126,32 @@ class Base_Config(object):
         
         args_namespace = parser.parse_args()
         args_dataclass = self.parse_args_into_dataclass(branches, vars(args_namespace))
-        self.__args_namespace = vars(args_namespace)
 
         return args_dataclass
 
     def get_args_info(self):
 
+        _, fields = self.get_dataclass_fields(
+            dataclass = type(self),
+            default = self
+        )
+
         args_info_str = 'Args Info:\n'
-        if self.__args_namespace is not None:
-            for key, value in self.__args_namespace.items():
-                if key != 'args_namespace':
-                    args_info_str += f'--{key} {value}\n'
+        for (name_parse, ftype, value) in fields:
+            args_info_str += f'--{name_parse} {value}\n'
 
         return args_info_str
+    
+    def to_json(self, path):
+
+        with open(path, 'w') as f:
+            json.dump(self.to_dict(), f)
+
+    def from_json(self, path):
+
+        with open(path, 'r') as f:
+            self.from_dict(json.load(f))
+        
 
 # generation_config = GenerationConfig(
 #     top_k = 0.0,
@@ -256,4 +281,4 @@ def parse_args_into_dataclasses(
 
 if __name__ == '__main__':
 
-    config = Base_Config
+    config = Base_Config()

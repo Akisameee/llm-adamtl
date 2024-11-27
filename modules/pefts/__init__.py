@@ -2,6 +2,10 @@ from .lora import (
     Lora_Linear
 )
 
+from .lora_altered import (
+    Lora_Linear_Altered
+)
+
 from .panacea_svd import (
     SVD_Lora_Linear
 )

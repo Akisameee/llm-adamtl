@@ -15,6 +15,13 @@ class Lora_Config(Peft_Config):
     lora_dropout: float = 0.0
 
 @dataclass
+class Lora_Altered_Config(Lora_Config):
+
+    adapter_name: str = 'lora-altered'
+    pref_dim: int = 2
+    pref_r: int = 1
+
+@dataclass
 class SVD_Lora_Config(Peft_Config):
 
     adapter_name: str = 'panacea'

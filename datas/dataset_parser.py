@@ -7,7 +7,7 @@ import json
 import csv
 import re
 import numpy as np
-from transformers import AutoTokenizer, AutoConfig
+from transformers import AutoTokenizer, AutoConfig, PreTrainedTokenizer
 from datasets import load_dataset
 
 from configs import dataset_infos, model_infos, Dataset_Config, Panacea_PPO_Config
@@ -26,7 +26,8 @@ class Dataset_Parser(object):
 
     def __init__(
         self,
-        config: Dataset_Config
+        config: Dataset_Config,
+        tokenizer: PreTrainedTokenizer
     ) -> None:
         
         self.data_dir = config.data_path
@@ -35,6 +36,8 @@ class Dataset_Parser(object):
         self.dataset_info = config.dataset_info
         self.model_info = config.model_info
         self.remove_chinese = config.remove_chinese
+
+        self.tokenizer = tokenizer
 
     def is_data_valid(
         self,
@@ -84,6 +87,14 @@ class Dataset_Parser(object):
                 mode = mode,
                 max_sample = max_sample
             )
+        elif self.dataset_name == 'bigbench':
+            datas += self.parse_bigbench_dataset(
+                self.data_dir,
+                mode = mode,
+                max_sample = max_sample
+            )
+        else:
+            raise NotImplementedError
 
         return datas
 
@@ -209,12 +220,12 @@ class Dataset_Parser(object):
             dataset_df = dataset_df[: max_sample + 100]
         dataset_dicts = dataset_df.to_dict(orient = 'records')
         
-        datas = []
+        chats = []
         for dataset_dict in dataset_dicts:
             conversations = dataset_dict['conversations']
             if conversations.shape[0] % 2 != 0:
                 continue
-            text_splitted = []
+            msg = []
             role_flag = 0
             for text in conversations:
                 if text['from'] == 'human':
@@ -226,33 +237,80 @@ class Dataset_Parser(object):
                     if role_flag != 1:
                         continue
                     role_flag = 0
-                    text_splitted.append((prompt_splitted, text['value']))
+                    msg += [
+                        {'role': 'user', 'content': prompt_splitted},
+                        {'role': 'assistant', 'content': text['value']}
+                    ]
                 
-            data = self.add_instruct_prompt(text_splitted, merge = False)
-            datas.append(data)
+            chat = self.apply_chat_template(msg, merge = False)
+            chats.append(chat)
 
-            if len(datas) == max_sample:
+            if len(chats) == max_sample:
                 break
 
-        return datas
+        return chats
     
     def parse_sciqa_dataset(self, data_path, mode = 'train', max_sample = None):
 
         topic = os.path.split(data_path)[-1]
         json_path = os.path.join(data_path, f'sci_qa_{topic}_{mode}.json')
-        datas = []
+        chats = []
         with open(json_path, 'r') as f:
             raw_datas = json.load(f)
             for raw_data in raw_datas:
-                data = self.add_instruct_prompt(
-                    [(raw_data['instruct'], raw_data['response'])]
-                )
-                datas.append(data)
+                # data = self.add_instruct_prompt(
+                #     [(raw_data['instruct'], raw_data['response'])]
+                # )
+                chat = self.apply_chat_template([
+                    {'role': 'user', 'content': raw_data['instruct']},
+                    {'role': 'assistant', 'content': raw_data['response']}
+                ])
+                chats.append(chat)
 
-                if len(datas) == max_sample:
+                if len(chats) == max_sample:
                     break
 
-        return datas
+        return chats
+    
+    def parse_bigbench_dataset(self, data_path, mode = 'train', max_sample = None):
+        
+        file_name = 'train.jsonl' if mode == 'train' else 'validation.jsonl'
+        json_path = data_path + f'_{file_name}'
+        chats = []
+        with open(json_path, 'r') as f:
+            for line in f.readlines():
+                raw_data = json.loads(line)
+                chat = self.apply_chat_template([
+                    {'role': 'user', 'content': raw_data['instruction']},
+                    {'role': 'assistant', 'content': raw_data['references'][0]}
+                ])
+                chats.append(chat)
+
+                if len(chats) == max_sample:
+                    break
+
+        return chats
+
+    def apply_chat_template(self, msg, merge = True):
+
+        if self.tokenizer.chat_template is not None:
+            if merge:
+                assert msg[-1]['role'] == 'assistant'
+                return (
+                    self.tokenizer.apply_chat_template(msg[: -1], tokenize = False),
+                    self.tokenizer.apply_chat_template([msg[-1]], tokenize = False)
+                )
+            else:
+                return self.tokenizer.apply_chat_template(msg, tokenize = False)
+        else:
+            text_splitted = []
+            for idx in range(0, len(msg), 2):
+                p_msg = msg[idx]
+                r_msg = msg[idx + 1]
+                assert p_msg['role'] == 'user' and r_msg['role'] == 'assistant'
+                text_splitted.append((p_msg['content'], r_msg['content']))
+
+            return self.add_instruct_prompt(text_splitted, merge = merge)
 
     def add_instruct_prompt(self, text_splitted, merge = True):
         

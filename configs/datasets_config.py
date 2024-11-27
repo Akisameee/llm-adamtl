@@ -23,6 +23,8 @@ class Dataset_Config(Base_Config):
             return 'infinity-instruct'
         elif 'sciq' in self.data_path.split('/'):
             return 'sciq'
+        elif 'bigbench' in self.data_path.split('/'):
+            return 'bigbench'
         else:
             return os.path.split(self.data_path)[-1]
         

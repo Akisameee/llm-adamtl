@@ -51,7 +51,7 @@ class Base_Trainer(nn.Module):
             task_name = config.task_name,
             disable = not self.accelerator.is_main_process
         )
-        self.logger.info(config.get_args_info())
+        self.logger.log_config(config, 'train_config.json')
         
         # models
         self.model, model_peft_info = get_model(

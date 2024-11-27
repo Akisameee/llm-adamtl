@@ -1,7 +1,7 @@
 import torch
 import time
 
-from datas.instruct_dataset import Instruct_Pref_Dataset
+from datas.instruct_mtl_dataset import Instruct_Pref_Dataset
 from configs import SFT_Train_Config
 from modules.lms import BaseLM
 from torch.utils.data import DataLoader

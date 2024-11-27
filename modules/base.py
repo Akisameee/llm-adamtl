@@ -1,6 +1,7 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import sys
+import inspect
 # sys.path.insert(0, '/home/smliu/RLHF')
 from collections import OrderedDict
 import torch
@@ -199,6 +200,11 @@ class BaseLM(Base_Warpper):
     ):
         kwargs["output_hidden_states"] = True  # this had already been set in the LORA / PEFT examples
         kwargs["past_key_values"] = past_key_values
+
+        input_keys = list(kwargs.keys())
+        for input_key in input_keys:
+            if input_key not in inspect.signature(self.pretrained_model.forward).parameters:
+                kwargs.pop(input_key)
 
         base_model_output = self.pretrained_model(
             input_ids=input_ids,

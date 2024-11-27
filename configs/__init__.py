@@ -58,6 +58,7 @@ from .instruct_mtl import (
 from .pefts import (
     Peft_Config,
     Lora_Config,
+    Lora_Altered_Config,
     SVD_Lora_Config,
     SVD_Lora_Altered_Config
 )

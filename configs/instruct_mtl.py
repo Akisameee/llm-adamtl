@@ -44,7 +44,9 @@ class Instruct_MTL_Config(Trainer_Config):
 
     n_episode: int = 1
     train_batch_size: int = 8
+    val_batch_size: int = 8
 
+    n_save_step: int = 3
     output_dir: str = os.path.join('.', 'output')
 
     def get_dataset_cfgs(self):

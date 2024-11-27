@@ -16,6 +16,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 from scipy import spatial
 from tqdm.auto import tqdm
 
+from configs.base import Base_Config
 from modules.pefts import get_adapter_iter
     
 def get_logger(name='logger', file_name='./log.txt'):
@@ -52,21 +53,32 @@ class TqdmLoggingHandler(logging.StreamHandler):
     
 class Logger():
 
-    def __init__(self, output_dir, task_name, disable = False) -> None:
+    def __init__(self, output_dir, task_name, disable = False, sub_dir = None) -> None:
         
         self.disable = disable
-        self.output_dir = output_dir
-        current_time = datetime.datetime.now()
-        time_str = current_time.strftime('%Y-%m-%d %H-%M-%S')
-        self.dir_name = f'{task_name} {time_str}'
-        self.dir = os.path.join(output_dir, self.dir_name)
+        if sub_dir is None:
+            current_time = datetime.datetime.now()
+            time_str = current_time.strftime('%Y-%m-%d %H-%M-%S')
+            self.dir_name = f'{task_name} {time_str}'
+            self.dir = os.path.join(output_dir, self.dir_name)
+        else:
+            self.dir = os.path.join(output_dir, sub_dir)
         self.train_historys = None
         self.eval_historys = []
         if self.disable:
             return
         
-        os.mkdir(self.dir)
-        self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}.log'))
+        if sub_dir is None:
+            os.mkdir(self.dir)
+            self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}.log'))
+
+    def log_config(self, config: Base_Config, json_name):
+
+        if self.disable:
+            return
+        
+        self.info(config.get_args_info())
+        config.to_json(os.path.join(self.dir, json_name))
         
     def step(self, episode, timestep, stat_dict = None, eval_step = None):
 
@@ -80,6 +92,8 @@ class Logger():
                 stat_strs.append(f'{key}: {value:.4g}')
             elif isinstance(value, (torch.Tensor)) and len(value.shape) == 0:
                 stat_strs.append(f'{key}: {value.item():.4g}')
+            elif isinstance(value, str):
+                stat_strs.append(f'{key}: {value}')
             else:
                 if isinstance(value, torch.Tensor):
                     value = value.detach().numpy().tolist()
@@ -88,7 +102,7 @@ class Logger():
                 value = [f'{num:.3f}' for num in value]
                 stat_strs.append(f'{key}: {value}')
         
-        log_str += ' '.join(stat_strs)
+        log_str += ' '.join(stat_strs) + '\n'
         self.info(log_str)
 
         columns = ['Episode', 'Timestep'] + list(stat_dict.keys())
@@ -127,8 +141,9 @@ class Logger():
         save_dir = self.dir if save_dir is None else save_dir
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
-
+    
         if self.train_historys is not None:
+            loss_fig, loss_ax = plt.subplots()
             self.train_historys.to_csv(os.path.join(save_dir, 'train_result.csv'))
             for col_name in self.train_historys.columns:
                 if col_name in ['Episode', 'Timestep']:
@@ -136,16 +151,30 @@ class Logger():
                 elif not np.issubdtype(self.train_historys[col_name].dtype, np.number):
                     continue
                 else:
-                    figure = sns.lineplot(
-                        data = self.train_historys,
-                        x = 'Timestep',
-                        y = col_name
-                    )
-                    figure.get_figure().savefig(
-                        os.path.join(save_dir, col_name),
-                        dpi = 400
-                    )
-                    plt.close()
+                    if col_name.startswith('loss_'):  
+                        # Plot all 'loss_' columns in the same figure  
+                        figure = sns.lineplot(  
+                            data=self.train_historys,  
+                            x='Timestep',  
+                            y=col_name,  
+                            ax=loss_ax  
+                        )
+                    else:
+                        figure = sns.lineplot(
+                            data = self.train_historys,
+                            x = 'Timestep',
+                            y = col_name
+                        )
+                        figure.get_figure().savefig(
+                            os.path.join(save_dir, col_name),
+                            dpi = 400
+                        )
+                        plt.close(figure.figure)
+            loss_fig.savefig(  
+                os.path.join(save_dir, "loss.png"),  
+                dpi = 400  
+            )   
+            plt.close(loss_fig) 
         else:
             if len(self.eval_historys) > 0:
                 for eval_step, eval_history in enumerate(self.eval_historys):
