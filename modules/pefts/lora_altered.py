@@ -137,16 +137,16 @@ class Lora_Linear_Altered(Base_Adapter):
             ], dim = 1
         )
         conflict_cos_sim = compute_consine_similarities(lora_AB_grads, dim = 1)
-        sh_ts_conflict_score, ts_ts_conflict_score = compute_conflict_scores(
-            grads = lora_AB_grads,
-            params = lora_AB,
-            weight = self.pref_vec.to(lora_AB_grads[0].device),
-            dim = 1
-        )
+        # sh_ts_conflict_score, ts_ts_conflict_score = compute_conflict_scores(
+        #     grads = lora_AB_grads,
+        #     params = lora_AB,
+        #     weight = self.pref_vec.to(lora_AB_grads[0].device),
+        #     dim = 1
+        # )
         self.record_step(**dict(
             conflict_cos_sims = conflict_cos_sim,
-            sh_ts_conflict_scores = sh_ts_conflict_score,
-            ts_ts_conflict_scores = ts_ts_conflict_score,
+            # sh_ts_conflict_scores = sh_ts_conflict_score,
+            # ts_ts_conflict_scores = ts_ts_conflict_score,
             task_flags = self.get_task_flag()
         ))
 

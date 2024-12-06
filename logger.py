@@ -53,24 +53,24 @@ class TqdmLoggingHandler(logging.StreamHandler):
     
 class Logger():
 
-    def __init__(self, output_dir, task_name, disable = False, sub_dir = None) -> None:
+    def __init__(self, output_dir, task_name, disable = False, make_dir = True) -> None:
         
         self.disable = disable
-        if sub_dir is None:
+        if make_dir:
             current_time = datetime.datetime.now()
             time_str = current_time.strftime('%Y-%m-%d %H-%M-%S')
             self.dir_name = f'{task_name} {time_str}'
             self.dir = os.path.join(output_dir, self.dir_name)
         else:
-            self.dir = os.path.join(output_dir, sub_dir)
+            self.dir = output_dir
         self.train_historys = None
         self.eval_historys = []
         if self.disable:
             return
         
-        if sub_dir is None:
+        if make_dir and not disable:
             os.mkdir(self.dir)
-            self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}.log'))
+        self.logger = get_logger(f'{task_name}_logger', os.path.join(self.dir, f'{task_name}.log'))
 
     def log_config(self, config: Base_Config, json_name):
 
@@ -102,7 +102,7 @@ class Logger():
                 value = [f'{num:.3f}' for num in value]
                 stat_strs.append(f'{key}: {value}')
         
-        log_str += ' '.join(stat_strs) + '\n'
+        log_str += '\n'.join(stat_strs)
         self.info(log_str)
 
         columns = ['Episode', 'Timestep'] + list(stat_dict.keys())

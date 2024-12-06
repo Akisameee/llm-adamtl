@@ -8,12 +8,12 @@ import torch.distributed as dist
 from functools import reduce
 
 from logger import Logger
-from modules.pefts import SVD_Lora_Linear_Altered
-from modules.manipulators.base import Base_Weight_Manipulator
+from modules.pefts import SVD_Lora_Linear_Altered, Lora_Linear_Altered
+from modules.manipulators.base import Base_MTL_Manipulator
 from modules.manipulators.utils import get_random_splits
 
 # backward multi-objective losses separately
-class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
+class MOE_Manipulator_Altered(Base_MTL_Manipulator):
 
     def __init__(
         self,
@@ -21,41 +21,49 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
         accelerator: Accelerator,
         optimizer: Optimizer,
         logger: Logger,
+        n_task: int,
         **kwargs
     ) -> None:
-        super().__init__(model, accelerator, optimizer, logger, **kwargs)
+        super().__init__(model, accelerator, optimizer, logger, n_task, **kwargs)
 
         self.svd_lora_type = kwargs.pop('svd_lora_type', None)
         split_percentage = kwargs.pop('svd_lora_split_percentage', None)
         random_init = kwargs.pop('svd_lora_random_init', False)
-        self.svd_lora_layers = {name: module for name, module in model.named_modules() if isinstance(module, SVD_Lora_Linear_Altered)}
+        self.svd_lora_layers = {
+            name: module 
+            for name, module in model.named_modules()
+            if isinstance(
+                module,
+                (SVD_Lora_Linear_Altered, Lora_Linear_Altered)
+            )
+        }
         # print(self.svd_lora_layers.values())
         self.n_rs = [sum(sum(module.task_flag == -1).item() for module in self.svd_lora_layers.values())]
-        for t_idx in range(self.pref_dim):
+        for t_idx in range(self.n_task):
             self.n_rs.append(sum(sum(module.task_flag == t_idx).item() for module in self.svd_lora_layers.values()))
         
         if split_percentage is not None:
             n_tsr = int(sum(self.n_rs) * split_percentage)
-            n_rs_new = [sum(self.n_rs) - n_tsr * self.pref_dim] + [n_tsr] * self.pref_dim
+            n_rs_new = [sum(self.n_rs) - n_tsr * self.n_task] + [n_tsr] * self.n_task
             self.n_rs = n_rs_new
         
         self.logger.info(
             f'shared params: {self.n_rs[0]}\n' + \
-            '\n'.join([f'task {t_idx} specific params: {self.n_rs[t_idx + 1]}' for t_idx in range(self.pref_dim)])
+            '\n'.join([f'task {t_idx} specific params: {self.n_rs[t_idx + 1]}' for t_idx in range(self.n_task)])
         )
         
         if random_init:
 
             n_svd_lora = len(self.svd_lora_layers.values())
             max_rs = [len(module.task_flag) for module in self.svd_lora_layers.values()]
-            random_splits = get_random_splits(n_svd_lora, self.n_rs[1:], max_rs, self.pref_dim)
+            random_splits = get_random_splits(n_svd_lora, self.n_rs[1:], max_rs, self.n_task)
 
             random_splits = broadcast(torch.LongTensor(random_splits).transpose(0, 1).to(self.device)).cpu()
             print(random_splits)
             
             for module, n_tsr in zip(self.svd_lora_layers.values(), random_splits):
                 n_to_tsrs = torch.LongTensor(
-                    [sum(module.task_flag == t_idx).item() for t_idx in range(self.pref_dim)]
+                    [sum(module.task_flag == t_idx).item() for t_idx in range(self.n_task)]
                 ) - n_tsr
                 for t_idx, n_to_tsr in enumerate(n_to_tsrs):
                     if n_to_tsr > 0:
@@ -69,7 +77,7 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
             
             assert all(
                 sum(sum(module.task_flag == t_idx).item() for module in self.svd_lora_layers.values()) == \
-                self.n_rs[t_idx + 1] for t_idx in range(self.pref_dim)
+                self.n_rs[t_idx + 1] for t_idx in range(self.n_task)
             )
 
         self.n_adapt_step = kwargs.pop('n_adapt_step', 128)
@@ -81,26 +89,26 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
             for r_idx, t_flag in enumerate(module.get_task_flag().tolist()):
                 self.conflict_scores[f'{name}_{r_idx}'] = {
                     'ts_flag': t_flag,
-                    'sh_ts_score': torch.zeros(self.pref_dim),
-                    'ts_ts_score': torch.zeros(self.pref_dim, self.pref_dim)
+                    'sh_ts_score': torch.zeros(self.n_task),
+                    'ts_ts_score': torch.zeros(self.n_task, self.n_task)
                 }
         
         self.task_step = 0
 
     def accumulate_gradient(
         self,
-        obj_idx: int
+        task_idx: int
     ):
         # flag = 1
         for name, param in self.get_named_parameters():
             if name in self.grad_dict.keys():
-                assert len(self.grad_dict[name]) >= obj_idx
-                if len(self.grad_dict[name]) == obj_idx:
+                assert len(self.grad_dict[name]) >= task_idx
+                if len(self.grad_dict[name]) == task_idx:
                     self.grad_dict[name].append(param.grad.detach().cpu())
                 else:
-                    self.grad_dict[name][obj_idx] += param.grad.detach().cpu()
+                    self.grad_dict[name][task_idx] += param.grad.detach().cpu()
             else:
-                assert obj_idx == 0
+                assert task_idx == 0
                 self.grad_dict[name] = [param.grad.detach().cpu()]
             # self.accelerator.wait_for_everyone()
             # if flag:
@@ -168,7 +176,7 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
             sh_params = dict(filter(lambda item: item[1]['ts_flag'] == -1, self.conflict_scores.items()))
             ts_param_groups = [
                 dict(filter(lambda item: item[1]['ts_flag'] == t_idx, self.conflict_scores.items()))
-                for t_idx in range(self.pref_dim)
+                for t_idx in range(self.n_task)
             ]
             
             sh_params, ts_param_groups = self.convers_sh_ts(self.conflict_scores)
@@ -195,13 +203,13 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
                     reverse = True
                 ))
             }
-            for t_idx in range(self.pref_dim)
+            for t_idx in range(self.n_task)
         ]
         
         n_rank_top = [n_r for n_r in self.n_rs]
         ts_param_groups_new = [
             {name: conflict_scores[name] for name, rank in sh_ts_ranks[t_idx].items() if rank < n_rank_top[t_idx + 1]}
-            for t_idx in range(self.pref_dim)
+            for t_idx in range(self.n_task)
         ]
         conflict_params = reduce(
             lambda a, b: a & set(b.keys()),
@@ -223,7 +231,7 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
                         n_rank_top[t_idx + 1] += 1
             ts_param_groups_new = [
                 {name: conflict_scores[name] for name, rank in sh_ts_ranks[t_idx].items() if rank < n_rank_top[t_idx + 1]}
-                for t_idx in range(self.pref_dim)
+                for t_idx in range(self.n_task)
             ]
             conflict_params = reduce(
                 lambda a, b: a & set(b.keys()),
@@ -249,10 +257,10 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
         self,
         conflict_scores: dict
     ):
-        ts_param_groups_new = [{} for _ in range(self.pref_dim)]
-        ts_ts_ranks = [{} for _ in range(self.pref_dim)]
-        for t_idx_1 in range(self.pref_dim):
-            for t_idx_2 in range(t_idx_1 + 1, self.pref_dim):
+        ts_param_groups_new = [{} for _ in range(self.n_task)]
+        ts_ts_ranks = [{} for _ in range(self.n_task)]
+        for t_idx_1 in range(self.n_task):
+            for t_idx_2 in range(t_idx_1 + 1, self.n_task):
                 ts_ts_rank = {
                     name: rank for rank, (name, s) in \
                     enumerate(sorted(
@@ -312,20 +320,20 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
         self,
         losses: torch.Tensor
     ):
-        assert len(losses) == self.pref_dim
+        assert len(losses) == self.n_task
         weighted_losses = self.get_weighted_loss(losses)
         
-        for obj_idx, weighted_loss in enumerate(weighted_losses):
+        for task_idx, weighted_loss in enumerate(weighted_losses):
             self.accelerator.backward(
                 weighted_loss,
-                retain_graph = obj_idx != self.pref_dim - 1
+                retain_graph = task_idx != self.n_task - 1
             )
-            if self.use_ddp and obj_idx != self.pref_dim - 1:
+            if self.use_ddp and task_idx != self.n_task - 1:
                 # ddp reducer gradient sync
                 self.model.reducer._rebuild_buckets()
                 self.model.reducer.prepare_for_backward([])
             
-            self.accumulate_gradient(obj_idx)
+            self.accumulate_gradient(task_idx)
         
         if self.max_norm is not None and self.accelerator.sync_gradients:
             self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
@@ -334,14 +342,15 @@ class Base_MO_Manipulator_Altered(Base_Weight_Manipulator):
     
     def backward_single(
         self,
-        loss: torch.Tensor
+        loss: torch.Tensor,
+        task_idx: int
     ):
-        
+        assert task_idx == self.task_step
         self.accelerator.backward(
             loss,
-            retain_graph = self.task_step != self.pref_dim - 1
+            retain_graph = self.task_step != self.n_task - 1
         )
-        if self.use_ddp and self.task_step != self.pref_dim - 1:
+        if self.use_ddp and self.task_step != self.n_task - 1:
             # ddp reducer gradient sync
             self.model.reducer._rebuild_buckets()
             self.model.reducer.prepare_for_backward([])

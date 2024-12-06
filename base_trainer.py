@@ -155,10 +155,8 @@ class Base_Trainer(nn.Module):
         self.generation_config = self.model_info['generation_config']
         self.clean_cache_every_iter = False
 
-    def save(self, model, ckpt_dir = './output', wait_for_everyone = False, safetensor = False):
+    def save(self, model, ckpt_dir = './output', safetensor = False):
 
-        if wait_for_everyone:
-            self.accelerator.wait_for_everyone()
         if safetensor:
             self.accelerator.save_model(model, ckpt_dir)
         else:

@@ -1,5 +1,5 @@
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -14,22 +14,35 @@ from datas import Instruct_MTL_Dataset, Instruct_MTL_Train_Generator
 from configs import Lora_Config, Lora_Altered_Config, SVD_Lora_Altered_Config, Instruct_MTL_Config, dataset_infos
 # from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHeads
-from modules.manipulators import Base_MO_Manipulator_Altered, Base_Weight_Manipulator
+from modules.manipulators import MOE_Manipulator_Altered, Base_MTL_Manipulator
 from modules.pefts import set_all_adapters, Lora_Linear_Altered, SVD_Lora_Linear_Altered
 from modules.utils import shift, log_prob, merge_dict, get_model
 
-TEST = 1
+TEST = 0
 
 class MTL_Evaluator(Base_Evaluator):
 
     def __init__(
         self,
         config: Instruct_MTL_Config,
-        res_dir: str = None,
-        ckpt_path: str = None
+        res_dir: str = None
     ) -> None:
         
         config.task_name = 'MultiTask_eval'
+        if res_dir is not None:
+            if not os.path.exists(res_dir):
+                res_dir = os.path.join(config.output_dir, res_dir)
+            if not os.path.split(res_dir)[-1].startswith(config.model_cfg.model_name):
+                ckpt_paths = []
+                for ckpt_path in os.listdir(res_dir):
+                    if ckpt_path.startswith(config.model_cfg.model_name):
+                        ckpt_paths.append(ckpt_path)
+
+                ckpt_path = max(ckpt_paths, key = lambda x: eval(x.split('_')[-1]))
+                res_dir = os.path.join(res_dir, ckpt_path)
+            else:
+                ckpt_path = None
+        
         super().__init__(
             config = config,
             accelerator_cfg = config.accelertor_cfg,
@@ -37,10 +50,11 @@ class MTL_Evaluator(Base_Evaluator):
             res_dir = res_dir
         )
 
-        if ckpt_path is not None:
+        # TODO: model_cfg is a model then
+        if res_dir is not None:
             self.load(
                 self.model,
-                ckpt_path = ckpt_path
+                ckpt_path = os.path.join(res_dir, 'checkpoint.pt')
             )
         
         self.n_task = len(config.dataset_data_paths)
@@ -106,7 +120,7 @@ class MTL_Evaluator(Base_Evaluator):
             for batch in dataloader:
                 target_texts = batch['target_texts']
                 timestep += len(target_texts)
-                response_ids = self.model.generate(
+                response_ids = self.accelerator.unwrap_model(self.model).generate(
                     input_ids = batch['input_ids'],
                     attention_mask = batch['attention_mask'],
                     **self.generation_kwargs
@@ -128,13 +142,13 @@ class MTL_Evaluator(Base_Evaluator):
             scores_mean = torch.FloatTensor(scores).mean()
             scores_mean = self.accelerator.reduce(scores_mean.to(self.accelerator.device), reduction = 'mean').item()
             self.logger.step(
-                episode = 1,
+                episode = 0,
                 timestep = timestep,
                 stat_dict = {
                     'Task Name': generator.dataset.subset_names[task_idx],
                     'Rouge-L Score': scores_mean
                 },
-                eval_step = task_idx
+                eval_step = 0
             )
 
         self.accelerator.wait_for_everyone()
@@ -143,9 +157,10 @@ class MTL_Evaluator(Base_Evaluator):
 
 if __name__ == '__main__':
 
-    res_dir = 'MultiTask_train 2024-11-27 14-33-05'
+    res_dir = 'bigbench-loramix48'
 
     config = Instruct_MTL_Config()
+    config.model_cfg.peft_cfg = Lora_Altered_Config()
     config.from_json(
         os.path.join(
             config.output_dir,
@@ -155,14 +170,14 @@ if __name__ == '__main__':
     )
 
     dataset = Instruct_MTL_Dataset(configs = config.get_dataset_cfgs())
-    dataset.load(mode = 'val', max_sample = 4 if TEST else None, pre_tokenize = True)
+    dataset.load(mode = 'val', max_sample = 4 if TEST else None, pre_tokenize = False)
 
     evaluator = MTL_Evaluator(
         config = config,
-        # res_dir = 'MultiTask_train 2024-11-27 14-33-05'
+        res_dir = res_dir
     )
     evaluator.evaluate_mtl(
         val_generators = dataset.get_generator(),
-        val_batch_size = 2,
-        enable_adapters = False
+        val_batch_size = 1,
+        enable_adapters = True
     )

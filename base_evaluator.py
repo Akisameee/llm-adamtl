@@ -47,10 +47,10 @@ class Base_Evaluator(nn.Module):
         self.dispatch_models = self.accelerator.state.num_processes == 1 and torch.cuda.device_count() > 1
 
         self.logger = Logger(
-            output_dir = config.output_dir,
+            output_dir = config.output_dir if res_dir is None else res_dir,
             task_name = config.task_name,
             disable = not self.accelerator.is_main_process,
-            sub_dir = res_dir
+            make_dir = True if res_dir is None else False
         )
         self.logger.log_config(config, './eval_config.json')
         
@@ -96,7 +96,7 @@ class Base_Evaluator(nn.Module):
 
         unwrapped_model = self.accelerator.unwrap_model(model)
         # print(torch.load(ckpt_path))
-        unwrapped_model.load_state_dict(torch.load(ckpt_path))
+        unwrapped_model.load_state_dict(torch.load(ckpt_path, map_location = 'cpu'))
 
     @property
     def device(self):

@@ -28,8 +28,10 @@ class Instruct_MTL_Dataset():
         self.add_bos_token = self.tokenizer.bos_token_id is not None
         self.add_sep_token = self.tokenizer.sep_token_id is not None
         self.add_eos_token = self.tokenizer.eos_token_id is not None
-        self.max_len = int(self.tokenizer.model_max_length / 2)
-        # self.model_config = AutoConfig.from_pretrained(configs[0].tokenizer_pretrain_path)
+        self.model_config = AutoConfig.from_pretrained(configs[0].tokenizer_pretrain_path)
+        self.max_len = int(min(
+            self.tokenizer.model_max_length, self.model_config.max_position_embeddings
+        ) / 2)
         
         self.subset_names = [
             os.path.split(config.data_path)[-1]
@@ -378,7 +380,7 @@ class Instruct_MTL_Val_Generator(Dataset):
     def __getitem__(self, index):
         
         if not self.pre_tokenize:
-            return self.dataset.tokenize_func(self.datas[index])
+            return self.dataset.tokenize_func([self.datas[index]])
         else:
             return self.datas[index]
     

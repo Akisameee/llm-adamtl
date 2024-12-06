@@ -16,9 +16,9 @@ import os
 from configs import MOPPO_Config, SVD_Lora_Config, SVD_Lora_Altered_Config
 from modules.ppo import PPO_Trainer, PPOMemory, pad_sequence_fixed
 from modules.manipulators import (
-    Base_Weight_Manipulator,
+    Base_MTL_Manipulator,
     Base_MO_Manipulator,
-    Base_MO_Manipulator_Altered
+    MOE_Manipulator_Altered
 )
 from modules.pefts import SVD_Lora_Linear, SVD_Lora_Linear_Altered
 from modules.base import BaseLMWithValueHeads
@@ -26,9 +26,9 @@ from modules.utils import masked_mean, ExperienceDataset, shift, log_prob, defau
 from logger import Logger
 
 manipulator_map = {
-    None: Base_Weight_Manipulator,
-    'ls': Base_Weight_Manipulator,
-    'sils': Base_Weight_Manipulator,
+    None: Base_MTL_Manipulator,
+    'ls': Base_MTL_Manipulator,
+    'sils': Base_MTL_Manipulator,
     'mols': Base_MO_Manipulator,
     'mosils': Base_MO_Manipulator
 }
@@ -57,7 +57,7 @@ class MOPPO_Trainer(PPO_Trainer):
 
         manipulator_type = manipulator_map[config.manipulator_cfg.weighted_loss_type]
         self.is_alted = isinstance(config.model_cfg.peft_cfg, SVD_Lora_Altered_Config)
-        manipulator_type = Base_MO_Manipulator_Altered \
+        manipulator_type = MOE_Manipulator_Altered \
             if self.is_alted and manipulator_type == Base_MO_Manipulator else manipulator_type
         
         self.manipulator = manipulator_type(

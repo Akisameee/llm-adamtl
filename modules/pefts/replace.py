@@ -4,8 +4,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import torch
 import torch.nn as nn
 
-from configs.pefts import Peft_Config, Lora_Config, SVD_Lora_Config, SVD_Lora_Altered_Config
-from modules.pefts import Lora_Linear, SVD_Lora_Linear, SVD_Lora_Linear_Altered
+from configs.pefts import Peft_Config, Lora_Config, SVD_Lora_Config, SVD_Lora_Altered_Config, Lora_Altered_Config
+from modules.pefts import Lora_Linear, SVD_Lora_Linear, SVD_Lora_Linear_Altered, Lora_Linear_Altered
 
 adapter_maps = {
     Lora_Config: {
@@ -18,6 +18,10 @@ adapter_maps = {
     SVD_Lora_Altered_Config: {
         nn.Linear: SVD_Lora_Linear_Altered,
         Lora_Linear: SVD_Lora_Linear_Altered
+    },
+    Lora_Altered_Config: {
+        nn.Linear: Lora_Linear_Altered,
+        Lora_Linear: Lora_Linear_Altered
     }
 }
 

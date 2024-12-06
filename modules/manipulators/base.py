@@ -79,8 +79,11 @@ class Base_Manipulator(WeightedLoss_Mixin):
         self.restore_step += 1
         for name, param in self.get_named_parameters():
             if name in self.grad_dict.keys():
-                param.grad = self.grad_dict[name].to(param.device)
-    
+                # param.grad = self.grad_dict[name].to(param.device)
+                if isinstance(self.grad_dict[name], list):
+                    param.grad = torch.stack(self.grad_dict[name], dim = 0).sum(dim = 0).to(param.device)
+                else:
+                    param.grad = self.grad_dict[name].to(param.device)
     def step(
         self
     ):
@@ -107,7 +110,7 @@ class Base_Manipulator(WeightedLoss_Mixin):
         return weighted_loss, losses
 
 # scalarize loss before backward(joint training)
-class Base_Weight_Manipulator(Base_Manipulator):
+class Base_MTL_Manipulator(Base_Manipulator):
 
     def __init__(
         self,
@@ -115,12 +118,14 @@ class Base_Weight_Manipulator(Base_Manipulator):
         accelerator: Accelerator,
         optimizer: Optimizer,
         logger: Logger,
+        n_task: int,
         **kwargs
     ) -> None:
         super().__init__(model, accelerator, optimizer, logger, **kwargs)
 
-        self.pref_dim = kwargs.pop('pref_dim')
-        self.pref_vec = torch.FloatTensor(self.pref_dim).to(self.device)
+        self.n_task = n_task
+        self.pref_vec = torch.FloatTensor(self.n_task).to(self.device)
+        self.task_step = 0
 
     def set_pref_vec(
         self,
@@ -128,18 +133,84 @@ class Base_Weight_Manipulator(Base_Manipulator):
     ):
         assert len(self.pref_vec) == len(pref_vec)
         
-        for i in range(self.pref_dim):
+        for i in range(self.n_task):
             self.pref_vec[i] = pref_vec[i]
 
-    def backward_single(
-        self,
-        loss: torch.Tensor
+    def step(
+        self
     ):
-        self.accelerator.backward(loss)
+        self.gradient_accumulation_step += 1
+        self.task_step = 0
+        if self.gradient_accumulation_step == self.n_gradient_accumulation_step:
+            self.restore_gradient()
+            self.optimizer.step()
+            self.clear()
+
+    def accumulate_gradient(
+        self,
+        task_idx: int
+    ):
+        # flag = 1
+        for name, param in self.get_named_parameters():
+            if name in self.grad_dict.keys():
+                assert len(self.grad_dict[name]) >= task_idx
+                if len(self.grad_dict[name]) == task_idx:
+                    self.grad_dict[name].append(param.grad.detach().cpu())
+                else:
+                    self.grad_dict[name][task_idx] += param.grad.detach().cpu()
+            else:
+                assert task_idx == 0
+                self.grad_dict[name] = [param.grad.detach().cpu()]
+            # self.accelerator.wait_for_everyone()
+            # if flag:
+            #     print(f'{os.getpid()}: {name}\n{param.shape}\n{param}\n{param.grad}')
+            #     flag -= 1
+            param.grad.zero_()
+
+    def backward(
+        self,
+        losses: torch.Tensor
+    ):
+        assert len(losses) == self.n_task
+        weighted_losses = self.get_weighted_loss(losses)
+        
+        for task_idx, weighted_loss in enumerate(weighted_losses):
+            self.accelerator.backward(
+                weighted_loss,
+                retain_graph = task_idx != self.n_task - 1
+            )
+            if self.use_ddp and task_idx != self.n_task - 1:
+                # ddp reducer gradient sync
+                self.model.reducer._rebuild_buckets()
+                self.model.reducer.prepare_for_backward([])
+            
+            self.accumulate_gradient(task_idx)
+        
         if self.max_norm is not None and self.accelerator.sync_gradients:
             self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
         
-        if self.n_gradient_accumulation_step > 1:
-            self.accumulate_gradient()
+        return torch.sum(weighted_losses), weighted_losses
+
+    def backward_single(
+        self,
+        loss: torch.Tensor,
+        task_idx: int
+    ):
+        assert task_idx == self.task_step
+        self.accelerator.backward(
+            loss,
+            retain_graph = self.task_step != self.n_task - 1
+        )
+        if self.use_ddp and self.task_step != self.n_task - 1:
+            # ddp reducer gradient sync
+            self.model.reducer._rebuild_buckets()
+            self.model.reducer.prepare_for_backward([])
+        
+        self.accumulate_gradient(self.task_step)
+
+        self.task_step += 1
+        
+        if self.max_norm is not None and self.accelerator.sync_gradients:
+            self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
         
         return loss
