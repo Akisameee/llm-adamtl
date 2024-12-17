@@ -3,163 +3,107 @@ import os
 import json
 import matplotlib.pyplot as plt
 
-def plot_lines(
-    axe,
-    x, ys,
-    labels,
-    colors = None
+tab10_colors = plt.colormaps.get_cmap('tab10')
+
+def signed_log(array: np.ndarray):
+
+    return np.sign(array) * np.log(np.abs(array) + 1)
+
+def plot_scores_line(
+    ax,
+    x,
+    ys: np.ndarray,
+    t_idx
 ):
-    if colors is None:
-        for y, label in zip(ys, labels):
-            axe.plot(x, y, label = label, alpha = 0.75)
-    else:
-        for y, label, color in zip(ys, labels, colors):
-            for (s, e, c) in color:
-                axe.plot(x[s: e], y[s: e], label = label, color = c, alpha = 0.5)
-    return axe
+    # ys = np.log(ys)
+    y_mean = ys.sum(axis = -1)
+    y_std = ys.std(axis = -1)
+    y_max = ys.max(axis = -1)
+    y_min = ys.min(axis = -1)
+    # y_max = signed_log(y_max)
+    # y_min = signed_log(y_min)
+    # ax.plot(x, y_mean, alpha = 0.2)
+    ax.set_xlabel('Layer Depth')
+    ax.set_ylabel('Scores')
+    # ax.fill_between(x, y_mean - y_std, y_mean + y_std, alpha = 0.1)
+    ax.fill_between(
+        x,
+        y_min,
+        y_max,
+        alpha = 0.05
+    )
+
+def plot_scores_bar(
+    ax,
+    x,
+    ys: np.ndarray,
+    t_idx
+):
+    y_mean = ys.sum(axis = -1)
+    y_std = ys.std(axis = -1)
+    ax.bar(x, y_mean, alpha = 0.1, color = 'gray')
+    ax.errorbar(x, y_mean, yerr = y_std, fmt = 'o', alpha = 0.05, color = 'gray')
+
+def plot_scores_scatter(
+    ax,
+    x,
+    ys: np.ndarray,
+    t_idx: int
+):
+    # ys = ys.reshape(ys.)
+    for timestep in range(ys.shape[-1]):
+        ax.scatter(x, ys[:, timestep], alpha = 0.05, color = tab10_colors(t_idx + 1))
+
+# def plot_scores_violin(
+#     ax,
+#     x,
+#     ys: np.ndarray,
+#     t_idx
+# ):
+#     data_to_plot = [collectn_1, collectn_2, collectn_3, collectn_4]  
+
+#     ax = fig.add_axes([0,0,1,1])  
+#     ax.violinplot(data_to_plot)
 
 if __name__ == '__main__':
 
-    dir_path = './output/Panacea_train 71-128-diagzero'
+    dir_path = './output/bigbench-mindllm1b3-ada48_test-2'
     # dir_path = './output/completed/Panacea_train 71 random'
     data_path = os.path.join(dir_path, 'conflict_scores')
     res_path = os.path.join(dir_path, 'conflict_scores_plot')
     if not os.path.exists(res_path):
         os.mkdir(res_path)
     
-    diags = np.load(os.path.join(data_path, 'diags.npy'))
-    n_svd_lora = diags.shape[0]
-    n_timestep = diags.shape[1]
-    n_rs = diags.shape[2]
-
-    timesteps = np.arange(1, n_timestep + 1)[np.newaxis, :, np.newaxis].repeat(n_svd_lora, axis = 0).repeat(n_rs, axis = 2)
-    conflict_cos_sims = np.load(os.path.join(data_path, 'conflict_cos_sims.npy'))
-    conflict_cos_sims = np.cumsum(conflict_cos_sims, axis = 1) / timesteps
-    grad_conflict_scores = np.load(os.path.join(data_path, 'grad_conflict_scores.npy'))
-    grad_conflict_scores = np.cumsum(grad_conflict_scores, axis = 1) / timesteps
-    if os.path.exists(os.path.join(data_path, 'split_flags.npy')):
-        split_flags = np.load(os.path.join(data_path, 'split_flags.npy'))
-    else:
-        split_flags = None
-    if os.path.exists(os.path.join(data_path, 'module_names.json')):
-        with open(os.path.join(data_path, 'module_names.json'), 'r') as f:
-            module_names = json.load(f)
-            module_names = {
-                int(k): v.replace('.', '_') for k, v in module_names.items()
-            }
-    else:
-        module_names = None
+    with open(os.path.join(data_path, 'module_names.json'), 'r') as f:
+        module_names = json.load(f)
+        module_names = {
+            int(k): v.replace('.', '_') for k, v in module_names.items()
+        }
     
-    # barplot
-    plt.figure(figsize = (10, 5))
-    n_bin = 10
-    bar_width = 0.35
-    x_ranges = np.linspace(-1.0, 1.0, num = n_bin + 1)
-    tick_label = [f'({x_ranges[idx + 1]:.1f}, {x_ranges[idx]:.1f})' for idx in reversed(range(len(x_ranges) - 1))]
-    x_idx = np.arange(n_bin)
-    if split_flags is not None:
-        split_distribution = []
-        unsplit_distribution = []
-        split_cos_sims = conflict_cos_sims[:, -1, :][split_flags[:, -1, :] == 1]
-        unsplit_cos_sims = conflict_cos_sims[:, -1, :][split_flags[:, -1, :] == 0]
-        for idx in reversed(range(len(x_ranges) - 1)):
-            split_distribution.append(
-                np.sum((split_cos_sims <= x_ranges[idx + 1]) & (split_cos_sims > x_ranges[idx]))
-            )
-            unsplit_distribution.append(
-                np.sum((unsplit_cos_sims <= x_ranges[idx + 1]) & (unsplit_cos_sims > x_ranges[idx]))
-            )
-        plt.bar(
-            x_idx, unsplit_distribution,
-            # align = 'center',
-            color = 'C0',
-            tick_label = tick_label,
-            label = 'unsplit'
-        )
-        plt.bar(
-            x_idx, split_distribution,
-            # align = 'center',
-            bottom = unsplit_distribution,
-            color = 'C1',
-            label = 'split'
-        )
-        plt.legend()
-    else:
-        distribution = []
-        cos_sims = conflict_cos_sims[:, -1, :].reshape(-1)
-        for idx in reversed(range(len(x_ranges) - 1)):
-            distribution.append(
-                np.sum((cos_sims <= x_ranges[idx + 1]) & (cos_sims > x_ranges[idx]))
-            )
-        plt.bar(
-            x_idx, distribution,
-            # align = 'center',
-            color = 'C0',
-            tick_label = tick_label,
-            # label = 'unsplit'
-        )
-            
-    plt.tight_layout()
-    save_path = os.path.join(res_path, f'conflict_cos_sims_distribution')
-    plt.savefig(save_path, dpi = 400)
-    plt.close()
+    # cf_scores = np.load(os.path.join(data_path, 'cf_scores.npy'))
+    cf_scores = np.load(os.path.join(data_path, 'cos_sims.npy'))
+    n_layer, n_timestep, n_r, n_task = cf_scores.shape
 
-    # lineplot
-    for idx in range(n_svd_lora):
-        if split_flags is None:
-            fig, axes = plt.subplots(1, 3, figsize=(12, 3))
-        else:
-            fig, axes = plt.subplots(2, 3, figsize=(12, 6))
-        for subgragh_idx, (name, tensor, axe) in enumerate(zip(
-            ['diags', 'conflict_cos_sims', 'grad_conflict_scores'],
-            [diags, conflict_cos_sims, grad_conflict_scores],
-            axes if split_flags is None else axes[0]
-        )):
-            axe = plot_lines(
-                axe = axe,
-                x = np.arange(n_timestep),
-                ys = [tensor[idx, :, r_idx] for r_idx in range(tensor.shape[2])],
-                labels = [f'r_idx={r_idx}' for r_idx in range(tensor.shape[2])]
-            )
-            axe.set_xlabel('timestep')
-            axe.set_ylabel(name)
-            
-            if name == 'diags':
-                axe.legend()
-        # plt.legend()
+    timesteps = np.arange(1, n_timestep + 1)
+    
 
-        if split_flags is not None:
-            split_flag = split_flags[idx]
-            colors = []
-            for r_idx in range(n_rs):
-                color = []
-                flag = split_flag[: , r_idx]
-                start = 0
-                change_points = np.where(np.diff(flag) != 0)[0] + 1
-                change_points = np.concatenate(([0], change_points, [n_timestep]))
-                for i in range(len(change_points) - 1):
-                    start = change_points[i]
-                    end = change_points[i + 1]
-                    color.append((start if start == 0 else start - 1, end, f'C{int(flag[start])}'))
-                colors.append(color)
-                            
-            for subgragh_idx, (name, tensor, axe) in enumerate(zip(
-                ['diags', 'conflict_cos_sims', 'grad_conflict_scores'],
-                [diags, conflict_cos_sims, grad_conflict_scores],
-                axes[1]
-            )):
-                axe = plot_lines(
-                    axe = axe,
-                    x = np.arange(n_timestep),
-                    ys = [tensor[idx, :, r_idx] for r_idx in range(tensor.shape[2])],
-                    labels = [f'r_idx={r_idx}' for r_idx in range(tensor.shape[2])],
-                    colors = colors
-                )
-                axe.set_xlabel('timestep')
-                axe.set_ylabel(name)
-            # plt.legend()
-        
-        plt.tight_layout()
-        save_path = os.path.join(res_path, f'{module_names[idx]}_scores')
-        plt.savefig(save_path, dpi = 400)
-        plt.close()
+    for layer_type in ['k_proj', 'v_proj', 'q_proj', 'out_proj']:
+        l_idxs = [i for i, name in module_names.items() if name.endswith(layer_type)]
+        x_layers = np.arange(1, len(l_idxs) + 1)
+        y_scores = np.array([cf_scores[l_idx] for l_idx in l_idxs])
+        fig, ax = plt.subplots()
+        for t_idx in range(n_task):
+            plot_scores_line(
+                ax = ax,
+                x = x_layers,
+                ys = y_scores[:, :, :, t_idx].mean(axis = -1),
+                t_idx = t_idx
+            )
+        ax.set_title(f'{layer_type} Scores')
+        fig.tight_layout()
+        fig.savefig(os.path.join(res_path, f'{layer_type}_cf_scores.png'), dpi = 400)
+
+    # for layer_type in ['k_proj', 'v_proj', 'q_proj', 'out_proj']:
+    #     l_idxs = [i for i, name in module_names.items() if name.endswith(layer_type)]
+    #     x_layers = np.arange(1, len(l_idxs) + 1)
+    #     y_scores = np.array([cf_scores[l_idx] for l_idx in l_idxs])

@@ -157,9 +157,10 @@ class MTL_Evaluator(Base_Evaluator):
 
 if __name__ == '__main__':
 
-    res_dir = 'bigbench-loramix48'
+    res_dir = 'bigbench-mindllm1b3-ada48-2'
 
     config = Instruct_MTL_Config()
+    # config.model_cfg.peft_cfg = Lora_Config()
     config.model_cfg.peft_cfg = Lora_Altered_Config()
     config.from_json(
         os.path.join(

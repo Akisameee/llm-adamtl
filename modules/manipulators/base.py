@@ -36,6 +36,8 @@ class Base_Manipulator(WeightedLoss_Mixin):
         self.weighted_loss_type = kwargs.pop('weighted_loss_type', None)
 
         self.restore_step = 0
+        self.curr_losses = torch.zeros(1)
+        self.prev_losses = []
 
     @property
     def device(self):
@@ -46,6 +48,8 @@ class Base_Manipulator(WeightedLoss_Mixin):
     ):
         self.gradient_accumulation_step = 0
         self.grad_dict.clear()
+        self.prev_losses.append(self.curr_losses.clone())
+        self.curr_losses.zero_()
         self.optimizer.zero_grad()
 
     def get_parameters(
@@ -84,11 +88,29 @@ class Base_Manipulator(WeightedLoss_Mixin):
                     param.grad = torch.stack(self.grad_dict[name], dim = 0).sum(dim = 0).to(param.device)
                 else:
                     param.grad = self.grad_dict[name].to(param.device)
+    
+    def gather_losses(
+        self
+    ):
+        device = self.curr_losses.device
+        losses = self.curr_losses.to(self.device)
+
+        nan_mask = torch.isnan(losses)
+        losses[nan_mask] = 0  
+        n_non_nan = (~nan_mask).float()
+
+        losses_gather = self.accelerator.reduce(losses, reduction = 'sum')
+        n_non_nan = self.accelerator.reduce(n_non_nan, reduction = 'sum')
+
+        losses_gather = torch.where(n_non_nan > 0, losses_gather / n_non_nan, float('nan'))
+        self.curr_losses = losses_gather.to(device)
+    
     def step(
         self
     ):
         self.gradient_accumulation_step += 1
         if self.gradient_accumulation_step == self.n_gradient_accumulation_step:
+            self.gather_losses()
             if self.n_gradient_accumulation_step > 1:
                 self.restore_gradient()
             self.optimizer.step()
@@ -96,18 +118,19 @@ class Base_Manipulator(WeightedLoss_Mixin):
     
     def backward(
         self,
-        losses: torch.Tensor
+        loss: torch.Tensor
     ):
-        weighted_loss = self.get_weighted_loss(losses)
+        # weighted_loss = self.get_weighted_loss(losses)
 
-        self.accelerator.backward(weighted_loss)
+        self.curr_losses += loss.item()
+        self.accelerator.backward(loss)
         if self.max_norm is not None and self.accelerator.sync_gradients:
             self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
         
         if self.n_gradient_accumulation_step > 1:
             self.accumulate_gradient()
         
-        return weighted_loss, losses
+        return loss
 
 # scalarize loss before backward(joint training)
 class Base_MTL_Manipulator(Base_Manipulator):
@@ -124,6 +147,7 @@ class Base_MTL_Manipulator(Base_Manipulator):
         super().__init__(model, accelerator, optimizer, logger, **kwargs)
 
         self.n_task = n_task
+        self.curr_losses = torch.zeros(n_task)
         self.pref_vec = torch.FloatTensor(self.n_task).to(self.device)
         self.task_step = 0
 
@@ -142,7 +166,11 @@ class Base_MTL_Manipulator(Base_Manipulator):
         self.gradient_accumulation_step += 1
         self.task_step = 0
         if self.gradient_accumulation_step == self.n_gradient_accumulation_step:
+            self.gather_losses()
             self.restore_gradient()
+            if self.max_norm is not None and self.accelerator.sync_gradients:
+                self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
+            
             self.optimizer.step()
             self.clear()
 
@@ -150,7 +178,7 @@ class Base_MTL_Manipulator(Base_Manipulator):
         self,
         task_idx: int
     ):
-        # flag = 1
+        # flag = 4
         for name, param in self.get_named_parameters():
             if name in self.grad_dict.keys():
                 assert len(self.grad_dict[name]) >= task_idx
@@ -186,8 +214,8 @@ class Base_MTL_Manipulator(Base_Manipulator):
             
             self.accumulate_gradient(task_idx)
         
-        if self.max_norm is not None and self.accelerator.sync_gradients:
-            self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
+        # if self.max_norm is not None and self.accelerator.sync_gradients:
+        #     self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
         
         return torch.sum(weighted_losses), weighted_losses
 
@@ -197,6 +225,7 @@ class Base_MTL_Manipulator(Base_Manipulator):
         task_idx: int
     ):
         assert task_idx == self.task_step
+        self.curr_losses[task_idx] += loss.item() / self.n_gradient_accumulation_step
         self.accelerator.backward(
             loss,
             retain_graph = self.task_step != self.n_task - 1
@@ -207,10 +236,6 @@ class Base_MTL_Manipulator(Base_Manipulator):
             self.model.reducer.prepare_for_backward([])
         
         self.accumulate_gradient(self.task_step)
-
         self.task_step += 1
-        
-        if self.max_norm is not None and self.accelerator.sync_gradients:
-            self.accelerator.clip_grad_norm_(self.get_parameters(), self.max_norm)
         
         return loss

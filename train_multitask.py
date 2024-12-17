@@ -1,5 +1,5 @@
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 import torch
 import torch.nn as nn
 import numpy as np
@@ -13,7 +13,7 @@ from datas import Instruct_MTL_Dataset, Instruct_MTL_Train_Generator
 from configs import Lora_Config, Lora_Altered_Config, SVD_Lora_Altered_Config, Instruct_MTL_Config, dataset_infos
 # from modules.lms import BaseLM, RewardLM
 from modules.base import BaseLMWithValueHeads
-from modules.manipulators import ADA_Manipulator, Base_MTL_Manipulator, MGDA
+from modules.manipulators import *
 from modules.pefts import set_all_adapters, Lora_Linear_Altered, SVD_Lora_Linear_Altered
 from modules.utils import shift, log_prob, merge_dict, get_model
 
@@ -31,12 +31,7 @@ class MTL_Trainer(Base_Trainer):
             model_cfg = config.model_cfg
         )
         self.task_type = config.task_type
-        
-        manipulator_map = {
-            'mix': Base_MTL_Manipulator,
-            'ada': ADA_Manipulator,
-            'mgda': MGDA
-        }
+
         self.manipulator_cls = manipulator_map[self.task_type]
         self.manipulator = self.manipulator_cls(
             model = self.model,
@@ -150,9 +145,13 @@ def main():
         config.dataset_data_paths.append(os.path.join(config.base_dateset_cfg.data_path, sub_class))
     # config.base_dateset_cfg.data_path = config.dataset_data_paths[0]
 
-    # config.task_type = 'mix'
-    # config.task_type = 'ada'
-    config.task_type = 'mgda'
+    config.task_type = 'mix'
+    config.task_type = 'ada'
+    # config.task_type = 'mgda'
+    # config.task_type = 'pcgrad'
+    # config.task_type = 'cagrad'
+    # config.task_type = 'nashmtl'
+    # config.task_type = 'famo'
 
     if config.task_type != 'ada':
         config.model_cfg.peft_cfg = Lora_Config()
@@ -162,8 +161,8 @@ def main():
         pref_dim = len(config.dataset_data_paths)
         config.model_cfg.peft_cfg = Lora_Altered_Config(pref_dim = pref_dim)
         # config.model_cfg.peft_cfg = SVD_Lora_Altered_Config(pref_dim = pref_dim)
-        config.model_cfg.peft_cfg.r = 3
-        config.model_cfg.peft_cfg.pref_r = 1
+        config.model_cfg.peft_cfg.r = 48
+        # config.model_cfg.peft_cfg.pref_r = 1
         config.model_cfg.peft_cfg.lora_alpha = 32
         # config.model_cfg.peft_cfg.init_strategy = 'diag_zero'
         # config.model_cfg.peft_cfg.init_strategy = 'b_zero'

@@ -23,6 +23,7 @@ class Lora_Linear(Base_Adapter):
             raise ValueError(f'Expected r > 0, but got r = {config.r}.')
 
         self.in_features, self.out_features = base_layer.in_features, base_layer.out_features
+        self.r = config.r
         self.lora_alpha = config.lora_alpha
         self.lora_A = nn.Linear(in_features = self.in_features, out_features = config.r, bias = False)
         self.lora_B = nn.Linear(in_features = config.r, out_features = self.out_features, bias = False)

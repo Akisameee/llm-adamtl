@@ -27,8 +27,10 @@ class PCGrad(Base_MTL_Manipulator):
         assert reduction in ['mean', 'sum']
         self.reduction = reduction
 
-    def restore_gradients(self):
-
+    def restore_gradient(self):
+        
+        self.restore_step += 1
+        
         # shared part
         shared_parameters_name = []
         shared_parameters = []
@@ -37,15 +39,17 @@ class PCGrad(Base_MTL_Manipulator):
             shared_parameters.append(param)
         shared_grads = []
         for t_idx in range(self.n_task):
-            shared_grads.append((self.grad_dict[n][t_idx] for n in shared_parameters_name))
+            shared_grads.append(
+                tuple([self.grad_dict[n][t_idx] for n in shared_parameters_name])
+            )
 
         if isinstance(shared_parameters, torch.Tensor):
             shared_parameters = [shared_parameters]
         non_conflict_shared_grads = self._project_conflicting(shared_grads)
         for param, g in zip(shared_parameters, non_conflict_shared_grads):
-            param.grad = g
-
-        # # task specific part
+            param.grad = g.to(param.device)
+        
+        # TODO: task specific part
         # if task_specific_parameters is not None:
         #     task_specific_grads = torch.autograd.grad(
         #         losses.sum(), task_specific_parameters

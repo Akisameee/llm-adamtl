@@ -97,6 +97,7 @@ class Base_Evaluator(nn.Module):
         unwrapped_model = self.accelerator.unwrap_model(model)
         # print(torch.load(ckpt_path))
         unwrapped_model.load_state_dict(torch.load(ckpt_path, map_location = 'cpu'))
+        self.logger.info(f'Loaded checkpoint from \'{ckpt_path}\'')
 
     @property
     def device(self):
